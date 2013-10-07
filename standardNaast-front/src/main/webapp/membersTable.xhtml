@@ -1,30 +1,35 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html" template="WEB-INF/templates/template.xhtml"
-	xmlns:p="http://primefaces.org/ui">
-	<ui:define name="membersTable">
-		<p:dataTable var="member" value="#{membersTable.members}"
-			filteredValue="#{membersTable.members}" widgetVar="membersTable" scrollable="true" scrollHeight="2%" tableStyle="width:98%" selectionMode="single" rowKey="member.personneId">
-			<p:column headerText="#{messages['NUMERO.MEMBRE']}" footerText="#{messages['NUMERO.MEMBRE']}" >
-				<h:outputText value="#{member.memberNumber}" />
-			</p:column>
-			<p:column headerText="#{messages['NOM']}" footerText="#{messages['NOM']}" filterBy="#{member.name}" filterMatchMode="startsWith">
-				<h:outputText value="#{member.name}" />
-			</p:column>
-			<p:column headerText="#{messages['PRENOM']}" footerText="#{messages['PRENOM']}" filterBy="#{member.firstname}" filterMatchMode="startsWith">
-				<h:outputText value="#{member.firstname}" />
-			</p:column>
-			<p:column headerText="#{messages['ADRESSE']}" footerText="#{messages['ADRESSE']}">
-				<h:outputText value="#{member.address}" />
-			</p:column>
-			<p:column headerText="#{messages['VILLE']}" footerText="#{messages['VILLE']}">
-				<h:outputText value="#{member.postalCode} #{member.city}" />
-			</p:column>
-			<p:column headerText="#{messages['TELEPHONE']}" footerText="#{messages['TELEPHONE']}">
-				<h:outputText value="#{member.phone}" />
-			</p:column>
-		</p:dataTable>
-	</ui:define>
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html" template="standardNaastTabs.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="membersTable">
+        <p:dataTable var="member" value="#{membersTable.members}"
+                     filteredValue="#{membersTable.filteredMembers}" widgetVar="membersTable" scrollable="true" scrollHeight="2%" tableStyle="width:98%" selectionMode="single" rowKey="member.personneId">
+            <f:facet name="header">
+                <p:outputPanel>
+                    <h:outputText value="Search all fields:" />
+                    <p:inputText id="globalFilter" onkeyup="PF('membersTable').filter()" style="width:150px" />
+                </p:outputPanel>
+            </f:facet>
+            <p:column headerText="#{messages['NUMERO.MEMBRE']}" footerText="#{messages['NUMERO.MEMBRE']}" >
+                <h:outputText value="#{member.memberNumber}" />
+            </p:column>
+            <p:column headerText="#{messages['NOM']}" footerText="#{messages['NOM']}" filterBy="#{member.name}" filterMatchMode="startsWith">
+                <h:outputText value="#{member.name}" />
+            </p:column>
+            <p:column headerText="#{messages['PRENOM']}" footerText="#{messages['PRENOM']}" filterBy="#{member.firstname}" filterMatchMode="startsWith">
+                <h:outputText value="#{member.firstname}" />
+            </p:column>
+            <p:column headerText="#{messages['ADRESSE']}" footerText="#{messages['ADRESSE']}">
+                <h:outputText value="#{member.address}" />
+            </p:column>
+            <p:column headerText="#{messages['VILLE']}" footerText="#{messages['VILLE']}">
+                <h:outputText value="#{member.postalCode} #{member.city}" />
+            </p:column>
+            <p:column headerText="#{messages['TELEPHONE']}" footerText="#{messages['TELEPHONE']}">
+                <h:outputText value="#{member.phone}" />
+            </p:column>
+        </p:dataTable>
+    </ui:define>
 </ui:composition>

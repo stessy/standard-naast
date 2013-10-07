@@ -1,71 +1,30 @@
-<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" -->
-<!--    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> -->
-<!-- <html xmlns="http://www.w3.org/1999/xhtml" -->
-<!-- 	xmlns:h="http://java.sun.com/jsf/html" -->
-<!-- 	xmlns:ui="http://java.sun.com/jsf/facelets" -->
-<!-- 	xmlns:p="http://primefaces.org/ui"> -->
-<!-- <h:head> -->
-<!-- 	<title>Application du Standard de Naast</title> -->
-<!-- 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> -->
-<!-- 	<h:outputStylesheet name="css/screen.css" /> -->
-<!-- </h:head> -->
-<!-- <h:body> -->
-<!-- 	<h:panelGroup id="page" layout="block"> -->
-<!-- 		<h:panelGroup id="header" layout="block"> -->
-<!-- 			<img src="images/banniere_club.png" alt="Banniere" height="140" -->
-<!-- 				width="900" /> -->
-<!-- 		</h:panelGroup> -->
-<!-- 		<h:panelGroup id="container" layout="block"> -->
-<!-- 			<h:panelGroup id="content" layout="block"> -->
-<!-- 				<p:tabView style="WIDTH:98%"> -->
-<!-- 					<p:tab title="Membres"> -->
-<!-- 						<p:tabView style="WIDTH:98%"> -->
-<!-- 							<p:tab title="Liste des membres"> -->
-<!-- 								<ui:insert name="membersTable" /> -->
-<!-- 							</p:tab> -->
-<!-- 							<p:tab title="Ajout/Modification d'un membre"> -->
-<!-- 								<ui:insert name="memberForm" /> -->
-<!-- 							</p:tab> -->
-<!-- 							<p:tab title="Cotisations"></p:tab> -->
-<!-- 							<p:tab title="Lettre d'information"></p:tab> -->
-<!-- 						</p:tabView> -->
-<!-- 					</p:tab> -->
-<!-- 					<p:tab title="Abonnements"></p:tab> -->
-<!-- 					<p:tab title="Matchs"></p:tab> -->
-<!-- 				</p:tabView> -->
-<!-- 			</h:panelGroup> -->
-<!-- 		</h:panelGroup> -->
-<!-- 		<h:panelGroup id="footer" layout="block">#{messages.footerText}<br />Generated using the Knappsack Java EE Maven Archetypes from <a -->
-<!-- 				href="http://www.AndyGibson.net">www.AndyGibson.net</a> -->
-<!-- 		</h:panelGroup> -->
-<!-- 	</h:panelGroup> -->
-
-<!-- </h:body> -->
-<!-- </html> -->
-
 <?xml version="1.0" encoding="UTF-8" ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	template="../../home.xhtml"
-	xmlns:p="http://primefaces.org/ui">
-	<ui:define name="template">
-		<p:tabView style="WIDTH:98%">
-			<p:tab title="Membres">
-				<p:tabView style="WIDTH:98%">
-					<p:tab title="Liste des membres">
-						<ui:insert name="membersTable" />
-					</p:tab>
-					<p:tab title="Ajout/Modification d'un membre">
-						<ui:insert name="memberForm" />
-					</p:tab>
-					<p:tab title="Cotisations"></p:tab>
-					<p:tab title="Lettre d'information"></p:tab>
-				</p:tabView>
-			</p:tab>
-			<p:tab title="Abonnements"></p:tab>
-			<p:tab title="Matchs"></p:tab>
-		</p:tabView>
-	</ui:define>
-</ui:composition>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Application du Standard de Naast</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <h:outputStylesheet name="css/screen.css" />
+    </h:head>
+    <h:body>
+        <h:panelGroup id="page" layout="block">
+            <h:panelGroup id="header" layout="block">
+                <img src="images/banniere_club.png" alt="Banniere" height="140"
+                     width="900" />
+            </h:panelGroup>
+            <h:panelGroup id="container" layout="block">
+                <h:panelGroup id="content" layout="block">
+                    <ui:insert name="standardNaastTabs"/>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup id="footer" layout="block"><br />Generated using the Knappsack Java EE Maven Archetypes from <a
+                    href="http://www.AndyGibson.net">www.AndyGibson.net</a>
+            </h:panelGroup>
+        </h:panelGroup>
+
+    </h:body>
+</html>
