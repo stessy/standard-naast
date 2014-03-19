@@ -1,4 +1,4 @@
-package com.standardNaast.standardNaastSpring.managedBeans;
+package standardNaast.beans;
 
 import java.io.Serializable;
 import java.util.Collections;

@@ -1,20 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-  <context-param>
-    <param-name>primefaces.THEME</param-name>
-    <param-value>blitzer</param-value>
-  </context-param>
-  <context-param>
-    <param-name>facelets.DEVELOPMENT</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  <servlet>
-    <servlet-name>Faces Servlet</servlet-name>
-    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Faces Servlet</servlet-name>
-    <url-pattern>*.jsf</url-pattern>
-  </servlet-mapping>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+<!-- 	<context-param> -->
+<!-- 		<param-name>primefaces.THEME</param-name> -->
+<!-- 		<param-value>standardNaast-theme</param-value> -->
+<!-- 	</context-param> -->
+	<context-param>
+		<param-name>facelets.DEVELOPMENT</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	<context-param>
+		<description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>client</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+		<param-value>resources.application</param-value>
+	</context-param>
+	<listener>
+		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+	</listener>
+	 <!-- Spring Context Configuration' s Path definition -->
+      <context-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>
+      /WEB-INF/beans.xml
+      </param-value>
+   </context-param>
+
+   <!-- The Bootstrap listener to start up and shut down Spring's root WebApplicationContext. It is registered to Servlet Container -->
+   <listener>
+  <listener-class>
+   org.springframework.web.context.ContextLoaderListener
+  </listener-class>
+   </listener>
+   <listener>
+  <listener-class>
+   org.springframework.web.context.request.RequestContextListener
+  </listener-class>
+   </listener>
 </web-app>

@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+		<h:form id="memberAbonnements">
+			<p:dataTable id="memberAbonnementsTable" var="abonnement" value="#{memberAbonnement.abonnements}" scrollable="true" scrollHeight="1%" tableStyle="width:98%" selectionMode="single" selection="#{membersTable.selectedMember}"
+				rowKey="#{abonnement}">
+				<p:column headerText="#{messages['SAISON']}">
+					<h:outputText value="#{abonnement.saison.id}" />
+				</p:column>
+				<p:column headerText="#{messages['BLOC']}">
+					<h:outputText value="#{abonnement.blocId.blocValue}" />
+				</p:column>
+				<p:column headerText="#{messages['RANG']}">
+					<h:outputText value="#{abonnement.rang}" />
+				</p:column>
+				<p:column headerText="#{messages['PLACE']}">
+					<h:outputText value="#{abonnement.place}" />
+				</p:column>
+				<p:column headerText="#{messages['REDUCTION']}">
+					<h:outputText value="#{abonnement.reduction}" />
+				</p:column>
+				<p:column headerText="#{messages['PAYE']}">
+					<p:selectBooleanCheckbox value="#{abonnement.paye}" />
+				</p:column>
+				<p:column headerText="#{messages['ACOMPTE']}">
+					<h:outputText value="#{abonnement.acompte}" />
+				</p:column>
+				<p:column headerText="#{messages['PLACE.COMMANDEE']}">
+					<h:outputText value="#{abonnement.placeCommandee}" />
+				</p:column>
+				<f:facet name="footer">
+					<h:outputText value=" " />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+</ui:composition>
