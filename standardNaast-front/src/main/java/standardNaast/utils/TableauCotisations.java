@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
@@ -22,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import standardNaast.entities.Personne;
-import standardNaast.entities.PersonnesCotisation;
+import standardNaast.entities.PersonneCotisation;
 import standardNaast.entities.Saison;
 import standardNaast.service.PersonneService;
 import standardNaast.service.SaisonService;
@@ -99,11 +98,11 @@ public class TableauCotisations {
 			cell.setHorizontalAlignment(1);
 			mainTable.addCell(cell);
 			TableauCotisations.setHeaders(mainTable);
-			List<PersonneCotisation> personneCotisationList = this
+			List<PersonneCotisationRow> personneCotisationList = this
 					.buildPersonCotisation();
 			int cotisationsSize = personneCotisationList.size();
 			int resteModulo = cotisationsSize % 4;
-			for (PersonneCotisation personneCotisation : personneCotisationList) {
+			for (PersonneCotisationRow personneCotisation : personneCotisationList) {
 				TableauCotisations.writeNumber(mainTable,
 						String.valueOf(personneCotisation.getMemberNumber()));
 				String fullName = MessageFormat.format("{0} {1}",
@@ -199,12 +198,12 @@ public class TableauCotisations {
 		}
 	}
 
-	private List<PersonneCotisation> buildPersonCotisation() {
+	private List<PersonneCotisationRow> buildPersonCotisation() {
 		Date advantageDate = new DateTime(TableauCotisations.YEAR, 4, 1, 0, 0)
 				.toDate();
 		List<Saison> seasonList = this.getSeasons();
 		List<Personne> personList = this.getMembers();
-		List<PersonneCotisation> personCotisationList = new ArrayList<TableauCotisations.PersonneCotisation>();
+		List<PersonneCotisationRow> personCotisationList = new ArrayList<>();
 		Date today = new Date();
 		Calendar todayCalendar = GregorianCalendar.getInstance();
 		todayCalendar.setTime(today);
@@ -218,13 +217,13 @@ public class TableauCotisations {
 		// dernière saison en cours, alors les compteurs sont remis à zéro.
 		if (todayYear == seasonYear) {
 			for (Personne member : personList) {
-				PersonneCotisation personneCotisation = new PersonneCotisation();
+				PersonneCotisationRow personneCotisation = new PersonneCotisationRow();
 				personneCotisation.setFirstname(member.getFirstname());
 				personneCotisation.setName(member.getName());
 				personneCotisation.setMemberNumber(member.getMemberNumber());
-				List<PersonnesCotisation> memberCotisationList = member
+				List<PersonneCotisation> memberCotisationList = member
 						.getPersonnesCotisations();
-				for (PersonnesCotisation memberCotisation : memberCotisationList) {
+				for (PersonneCotisation memberCotisation : memberCotisationList) {
 					if (memberCotisation.getCotisation().getAnneeCotisation2() == todayYear) {
 						// La cotisation a été payée
 						personneCotisation.setPaied("P");
@@ -243,13 +242,13 @@ public class TableauCotisations {
 		} else {
 			for (Personne member : personList) {
 				int bonus = 0;
-				PersonneCotisation personneCotisation = new PersonneCotisation();
+				PersonneCotisationRow personneCotisation = new PersonneCotisationRow();
 				personneCotisation.setFirstname(member.getFirstname());
 				personneCotisation.setName(member.getName());
 				personneCotisation.setMemberNumber(member.getMemberNumber());
-				List<PersonnesCotisation> memberCotisationList = member
+				List<PersonneCotisation> memberCotisationList = member
 						.getPersonnesCotisations();
-				for (PersonnesCotisation memberCotisation : memberCotisationList) {
+				for (PersonneCotisation memberCotisation : memberCotisationList) {
 					Date paymentDate = memberCotisation.getDatePaiement();
 					Calendar paymentDateCalendar = Calendar.getInstance();
 					paymentDateCalendar.setTime(paymentDate);
@@ -314,7 +313,7 @@ public class TableauCotisations {
 		return this.saisonService;
 	}
 
-	static class PersonneCotisation {
+	static class PersonneCotisationRow {
 
 		long memberNumber;
 
@@ -326,94 +325,46 @@ public class TableauCotisations {
 
 		int bonus;
 
-		/**
-		 * @return the memberNumber
-		 */
 		long getMemberNumber() {
 			return this.memberNumber;
 		}
 
-		/**
-		 * @param memberNumber
-		 *            the memberNumber to set
-		 */
 		void setMemberNumber(final long memberNumber) {
 			this.memberNumber = memberNumber;
 		}
 
-		/**
-		 * @return the name
-		 */
 		String getName() {
 			return this.name;
 		}
 
-		/**
-		 * @param name
-		 *            the name to set
-		 */
 		void setName(final String name) {
 			this.name = name;
 		}
 
-		/**
-		 * @return the firstname
-		 */
 		String getFirstname() {
 			return this.firstname;
 		}
 
-		/**
-		 * @param firstname
-		 *            the firstname to set
-		 */
 		void setFirstname(final String firstname) {
 			this.firstname = firstname;
 		}
 
-		/**
-		 * @return the paied
-		 */
 		String getPaied() {
 			return this.paied;
 		}
 
-		/**
-		 * @param paied
-		 *            the paied to set
-		 */
 		void setPaied(final String paied) {
 			this.paied = paied;
 		}
 
-		/**
-		 * @return the bonus
-		 */
 		int getBonus() {
 			return this.bonus;
 		}
 
-		/**
-		 * @param bonus
-		 *            the bonus to set
-		 */
 		void setBonus(final int bonus) {
 			this.bonus = bonus;
 		}
 
 	}
 
-	static Properties props = new Properties();
-
-	static String username = "";
-
-	static String smtpHost = "";
-
-	String password;
-
-	static File directory = null;
-
-	String mailFrom;
-
-	String nameFrom;
 }

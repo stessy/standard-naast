@@ -1,6 +1,5 @@
 package standardNaast.entities;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,10 +19,10 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "PERSONNES_COTISATIONS")
 @IdClass(PersonnesCotisationsId.class)
-public class PersonnesCotisation {
+public class PersonneCotisation {
 
-	@Column(name = "CARTE_MEMBRE_ENVOYEE", precision = 22)
-	private BigDecimal carteMembreEnvoyee;
+	@Column(name = "CARTE_MEMBRE_ENVOYEE")
+	private boolean carteMembreEnvoyee;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "DATE_PAIEMENT")
@@ -38,14 +37,14 @@ public class PersonnesCotisation {
 	@JoinColumn(name = "ANNEE_COTISATION2", insertable = true, updatable = true)
 	private Cotisation cotisation;
 
-	public PersonnesCotisation() {
+	public PersonneCotisation() {
 	}
 
-	public BigDecimal getCarteMembreEnvoyee() {
+	public boolean getCarteMembreEnvoyee() {
 		return this.carteMembreEnvoyee;
 	}
 
-	public void setCarteMembreEnvoyee(final BigDecimal carteMembreEnvoyee) {
+	public void setCarteMembreEnvoyee(final boolean carteMembreEnvoyee) {
 		this.carteMembreEnvoyee = carteMembreEnvoyee;
 	}
 

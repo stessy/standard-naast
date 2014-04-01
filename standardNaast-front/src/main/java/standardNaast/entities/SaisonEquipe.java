@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ import javax.persistence.Table;
 public class SaisonEquipe implements Serializable {
 
 	@JoinColumn(name = "SAISON_ID", referencedColumnName = "SAISON_ID")
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Saison saison;
 
 	private static final long serialVersionUID = 1L;
@@ -33,11 +34,11 @@ public class SaisonEquipe implements Serializable {
 	private long saisonEquipeId;
 	// bi-directional many-to-one association to Match
 
-	@OneToMany(mappedBy = "saisonEquipe")
+	@OneToMany(mappedBy = "saisonEquipe", fetch = FetchType.LAZY)
 	private List<Match> matches;
 	// bi-directional many-to-one association to Equipe
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EQUIPE_ID", unique = true, nullable = false)
 	private Team equipe;
 

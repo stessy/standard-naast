@@ -1,6 +1,7 @@
 package standardNaast.beans;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
@@ -20,7 +21,8 @@ public class MemberAbonnementBean implements Serializable {
 		return this.abonnements;
 	}
 
-	public void setAbonnements(final List<Abonnement> abonnements) {
+	public void setAbonnements(List<Abonnement> abonnements) {
+		Collections.reverse(abonnements);
 		this.abonnements = abonnements;
 	}
 }

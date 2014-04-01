@@ -38,7 +38,7 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 	 * The personnes.
 	 */
 	@OneToMany(mappedBy = "cotisation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<PersonnesCotisation> personnesCotisationsList;
+	private List<PersonneCotisation> personneCotisations;
 
 	public Cotisation() {
 	}
@@ -79,8 +79,8 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 				+ ((this.montantCotisation == null) ? 0
 						: this.montantCotisation.hashCode());
 		result = (prime * result)
-				+ ((this.personnesCotisationsList == null) ? 0
-						: this.personnesCotisationsList.hashCode());
+				+ ((this.personneCotisations == null) ? 0
+						: this.personneCotisations.hashCode());
 		return result;
 	}
 
@@ -106,12 +106,12 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 		} else if (!this.montantCotisation.equals(other.montantCotisation)) {
 			return false;
 		}
-		if (this.personnesCotisationsList == null) {
-			if (other.personnesCotisationsList != null) {
+		if (this.personneCotisations == null) {
+			if (other.personneCotisations != null) {
 				return false;
 			}
-		} else if (!this.personnesCotisationsList
-				.equals(other.personnesCotisationsList)) {
+		} else if (!this.personneCotisations
+				.equals(other.personneCotisations)) {
 			return false;
 		}
 		return true;
@@ -119,7 +119,7 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 
 	@Override
 	public int compareTo(final Cotisation o) {
-		// TODO Auto-generated method stub
+		// return this.anneeCotisation2 > o.anneeCotisation2 ? ;
 		return 0;
 	}
 }

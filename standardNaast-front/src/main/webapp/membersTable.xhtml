@@ -1,31 +1,32 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
-		<h:form id="memberTableForm">
-			<p:dataTable var="member" value="#{membersTable.members}" filteredValue="#{membersTable.filteredMembers}" widgetVar="membersTableVar" scrollable="true" scrollHeight="1%" tableStyle="width:98%" selectionMode="single" selection="#{membersTable.selectedMember}"
-				rowKey="#{member}">
-<!-- 				<p:ajax event="rowSelect" listener="#{membersTable.onRowSelect}" update="@([id$=memberFormId], [id$=memberAbonnementsTable])" /> -->
-				<p:ajax event="rowSelect" listener="#{membersTable.onRowSelect}" update="@([id$=memberFormId]) :masterTabView:memberAbonnements:memberAbonnementsTable" />
-				
-				<p:column headerText="#{messages['NUMERO.MEMBRE']}">
-					<h:outputText value="#{member.memberNumber}"/>
-				</p:column>
-				<p:column headerText="#{messages['NOM']}" filterBy="#{member.name}" filterMatchMode="startsWith">
-					<h:outputText value="#{member.name}" />
-				</p:column>
-				<p:column headerText="#{messages['PRENOM']}" filterBy="#{member.firstname}" filterMatchMode="startsWith">
-					<h:outputText value="#{member.firstname}" />
-				</p:column>
-				<p:column headerText="#{messages['ADRESSE']}">
-					<h:outputText value="#{member.address}" />
-				</p:column>
-				<p:column headerText="#{messages['VILLE']}">
-					<h:outputText value="#{member.postalCode} #{member.city}" />
-				</p:column>
-				<p:column headerText="#{messages['TELEPHONE']}">
-					<h:outputText value="#{member.phone}" />
-				</p:column>
-				<f:facet name="footer">
-					<h:outputText value=" " />
-				</f:facet>
-			</p:dataTable>
-		</h:form>
+	<p:dialog modal="true" widgetVar="statusDialog" header="#{messages['MEMBER.DATA.LOADING']}" draggable="false" closable="false">
+		<p:graphicImage value="/images/ajaxloadingbar.gif" />
+	</p:dialog>
+	<p:dataTable var="member" value="#{membersTable.members}" filteredValue="#{membersTable.filteredMembers}" widgetVar="membersTableVar" paginator="true" rows="10" tableStyle="width:98%" selectionMode="single" selection="#{membersTable.selectedMember}"
+		rowKey="#{member}" paginatorPosition="bottom">
+		<p:ajax event="rowSelect" onstart="PF('statusDialog').show();" oncomplete="PF('statusDialog').hide();" listener="#{membersTable.onRowSelect}"
+			update="@([id$=memberFormGrid], [id$=memberAbonnementsTable], [id$=memberCotisationsTable], [id$=memberBenevolatsTable]) :mainForm:masterTabView:memberAbonnementsTable" />
+
+		<p:column headerText="#{messages['NUMERO.MEMBRE']}">
+			<h:outputText value="#{member.memberNumber}" />
+		</p:column>
+		<p:column headerText="#{messages['NOM']}" filterBy="#{member.name}" filterMatchMode="startsWith">
+			<h:outputText value="#{member.name}" />
+		</p:column>
+		<p:column headerText="#{messages['PRENOM']}" filterBy="#{member.firstname}" filterMatchMode="startsWith">
+			<h:outputText value="#{member.firstname}" />
+		</p:column>
+		<p:column headerText="#{messages['ADRESSE']}">
+			<h:outputText value="#{member.address}" />
+		</p:column>
+		<p:column headerText="#{messages['VILLE']}">
+			<h:outputText value="#{member.postalCode} #{member.city}" />
+		</p:column>
+		<p:column headerText="#{messages['TELEPHONE']}">
+			<h:outputText value="#{member.phone}" />
+		</p:column>
+		<f:facet name="footer">
+			<h:outputText value=" " />
+		</f:facet>
+	</p:dataTable>
 </ui:composition>

@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<context:component-scan
-		base-package="standardNaast.service,standardNaast.beans,standardNaast.entities,standardNaast.dao" />
+		base-package="standardNaast.service,standardNaast.beans,standardNaast.entities,standardNaast.dao,standardNaast.converters" />
 	<context:spring-configured />
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

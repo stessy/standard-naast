@@ -1,5 +1,4 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
-	<!-- 	<ui:define name="members"> -->
 	<ui:debug />
 	<p:panelGrid id="membersGrid" style="width:100%">
 		<p:row>
@@ -10,27 +9,34 @@
 			</p:column>
 		</p:row>
 		<p:row>
-			<p:column colspan="3" style="width:50%">
+			<p:column colspan="4" style="width:70%;vertical-align:top;">
 				<p:panel id="memberFormPanel" header="Donnée du membre" style="text-align:center;">
 					<ui:include src="/displayMemberForm.xhtml" />
 				</p:panel>
 			</p:column>
-			<p:column colspan="3" style="width:50%">
-				<p:panel header="Liste des abonnements" style="text-align:center;">
-					<ui:include src="/abonnementsTable.xhtml" />
+			<p:column colspan="2" style="width:30%;vertical-align:top;">
+				<p:panel header="Liste des déplacements par saison" style="text-align:center;">
+					<ui:include src="/memberTravels.xhtml" />
 				</p:panel>
 			</p:column>
 		</p:row>
 		<p:row>
-			<p:column colspan="2" style="width:33%">
-				<p:panel header="Liste des cotisations" style="text-align:center;"></p:panel>
+			<p:column colspan="2" style="width:33%;vertical-align:top;">
+				<p:panel header="Liste des abonnements" style="text-align:center;">
+					<ui:include src="/memberAbonnementsTable.xhtml" />
+				</p:panel>
 			</p:column>
-			<p:column colspan="2" style="width:33%">
-				<p:panel header="Liste des déplacements par saison" style="text-align:center;"></p:panel>
+			<p:column colspan="2" style="width:33%;vertical-align:top;">
+				<p:panel header="Liste des cotisations" style="text-align:center;">
+					<ui:include src="/memberCotisationsTable.xhtml" />
+				</p:panel>
 			</p:column>
-			<p:column colspan="2" style="width:33%">
-				<p:panel header="Liste des bénévolats" style="text-align:center;"></p:panel>
+			<p:column colspan="2" style="width:33%;vertical-align:top;">
+				<p:panel header="Liste des bénévolats" style="text-align:center;">
+					<ui:include src="/memberBenevolatsTable.xhtml" />
+				</p:panel>
 			</p:column>
+
 		</p:row>
 	</p:panelGrid>
 </ui:composition>

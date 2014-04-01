@@ -18,417 +18,350 @@
 			<img src="images/banniere_club.png" alt="Banniere" height="140" width="900" />
 		</div>
 		<div id="content">
-			<div id="j_idt7" class="ui-tabs ui-widget ui-widget-content ui-corner-all ui-hidden-container ui-tabs-top" style="width: 100%" data-widget="widget_j_idt7">
-				<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
-					<li class="ui-state-default ui-tabs-selected ui-state-active ui-corner-top" role="tab" aria-expanded="true"><a href="#j_idt7:j_idt8">Membres</a></li>
-					<li class="ui-state-default ui-corner-top" role="tab" aria-expanded="false"><a href="#j_idt7:j_idt94">Abonnements</a></li>
-					<li class="ui-state-default ui-corner-top" role="tab" aria-expanded="false"><a href="#j_idt7:j_idt95">Matchs</a></li>
-				</ul>
-				<div class="ui-tabs-panels">
-					<div id="j_idt7:j_idt8" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-hidden="false">
-						<div id="j_idt7:j_idt9" class="ui-tabs ui-widget ui-widget-content ui-corner-all ui-hidden-container ui-tabs-top" style="width: 100%" data-widget="widget_j_idt7_j_idt9">
-							<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
-								<li class="ui-state-default ui-tabs-selected ui-state-active ui-corner-top" role="tab" aria-expanded="true"><a href="#j_idt7:j_idt9:j_idt10">Liste des membres</a></li>
-								<li class="ui-state-default ui-corner-top" role="tab" aria-expanded="false"><a href="#j_idt7:j_idt9:j_idt90">Ajout/Modification d'un membre</a></li>
-								<li class="ui-state-default ui-corner-top" role="tab" aria-expanded="false"><a href="#j_idt7:j_idt9:j_idt92">Cotisations</a></li>
-								<li class="ui-state-default ui-corner-top" role="tab" aria-expanded="false"><a href="#j_idt7:j_idt9:j_idt93">Lettre d'information</a></li>
-							</ul>
-							<div class="ui-tabs-panels">
-								<div id="j_idt7:j_idt9:j_idt10" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-hidden="false">
-									<!-- 							&lt;ui:include src=&quot;membersTable.xhtml&quot; /&gt; -->
-									<table id="j_idt7:j_idt9:j_idt219" class="ui-panelgrid ui-widget" role="grid">
-										<tbody>
-											<tr class="ui-widget-content ui-panelgrid-even" role="row">
-												<td role="gridcell" colspan="2"><div id="j_idt7:j_idt9:j_idt14" class="ui-panel ui-widget ui-widget-content ui-corner-all" style="text-align: center;" data-widget="widget_j_idt7_j_idt9_j_idt14">
-														<div id="j_idt7:j_idt9:j_idt14_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all">
-															<span class="ui-panel-title">Liste des membres</span>
+			<form id="mainForm" name="mainForm" method="post" action="/standardNaast-front/home.jsf" enctype="application/x-www-form-urlencoded">
+				<input type="hidden" name="mainForm" value="mainForm" />
+				<div id="mainForm:masterTabView" class="ui-tabs ui-widget ui-widget-content ui-corner-all ui-hidden-container ui-tabs-top" style="width: 100%" data-widget="widget_mainForm_masterTabView">
+					<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+						<li class="ui-state-default ui-tabs-selected ui-state-active ui-corner-top" role="tab" aria-expanded="true"><a href="#mainForm:masterTabView:membersTab">Membres</a></li>
+						<li class="ui-state-default ui-corner-top" role="tab" aria-expanded="false"><a href="#mainForm:masterTabView:j_idt112">Cotisations</a></li>
+						<li class="ui-state-default ui-corner-top" role="tab" aria-expanded="false"><a href="#mainForm:masterTabView:j_idt113">Lettre d'information</a></li>
+						<li class="ui-state-default ui-corner-top" role="tab" aria-expanded="false"><a href="#mainForm:masterTabView:j_idt114">Abonnements</a></li>
+						<li class="ui-state-default ui-corner-top" role="tab" aria-expanded="false"><a href="#mainForm:masterTabView:j_idt115">Matchs</a></li>
+					</ul>
+					<div class="ui-tabs-panels">
+						<div id="mainForm:masterTabView:membersTab" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-hidden="false">
+							<span id="mainForm:masterTabView:j_idt7"><script language="javascript" type="text/javascript">//<![CDATA[
+function faceletsDebug(URL) { day = new Date(); id = day.getTime(); eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=800,height=600,left = 240,top = 212');"); };var faceletsOrigKeyup = document.onkeyup; document.onkeyup = function(e) { if (window.event) e = window.event; if (String.fromCharCode(e.keyCode) == 'D' & e.shiftKey & e.ctrlKey) faceletsDebug('/standardNaast-front/home.jsf?facelets.ui.DebugOutput=1395475723155'); else if (faceletsOrigKeyup) faceletsOrigKeyup(e); };
+//]]>
+</script></span>
+							<table id="mainForm:masterTabView:membersGrid" class="ui-panelgrid ui-widget" style="width: 100%" role="grid">
+								<tbody>
+									<tr class="ui-widget-content ui-panelgrid-even" role="row">
+										<td role="gridcell" style="width: 100%" colspan="6"><div id="mainForm:masterTabView:j_idt10" class="ui-panel ui-widget ui-widget-content ui-corner-all" style="text-align: center;" data-widget="widget_mainForm_masterTabView_j_idt10">
+												<div id="mainForm:masterTabView:j_idt10_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all">
+													<span class="ui-panel-title">Liste des membres</span>
+												</div>
+												<div id="mainForm:masterTabView:j_idt10_content" class="ui-panel-content ui-widget-content">
+													<!-- 		&lt;h:form id=&quot;memberTableForm&quot;&gt; -->
+													<div id="mainForm:masterTabView:j_idt12" class="ui-datatable ui-widget">
+														<div id="mainForm:masterTabView:j_idt12_paginator_top" class="ui-paginator ui-paginator-top ui-widget-header ui-corner-top">
+															<span class="ui-paginator-first ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-first">p</span></span><span class="ui-paginator-prev ui-state-default ui-corner-all ui-state-disabled"><span
+																class="ui-icon ui-icon-seek-prev">p</span></span><span class="ui-paginator-pages"><span class="ui-paginator-page ui-state-default ui-state-active ui-corner-all">1</span><span class="ui-paginator-page ui-state-default ui-corner-all">2</span><span
+																class="ui-paginator-page ui-state-default ui-corner-all">3</span><span class="ui-paginator-page ui-state-default ui-corner-all">4</span><span class="ui-paginator-page ui-state-default ui-corner-all">5</span><span
+																class="ui-paginator-page ui-state-default ui-corner-all">6</span><span class="ui-paginator-page ui-state-default ui-corner-all">7</span><span class="ui-paginator-page ui-state-default ui-corner-all">8</span><span
+																class="ui-paginator-page ui-state-default ui-corner-all">9</span><span class="ui-paginator-page ui-state-default ui-corner-all">10</span></span><span class="ui-paginator-next ui-state-default ui-corner-all"><span
+																class="ui-icon ui-icon-seek-next">p</span></span><span class="ui-paginator-last ui-state-default ui-corner-all"><span class="ui-icon ui-icon-seek-end">p</span></span>
 														</div>
-														<div id="j_idt7:j_idt9:j_idt14_content" class="ui-panel-content ui-widget-content">
-															<form id="j_idt7:j_idt9:memberTableForm" name="j_idt7:j_idt9:memberTableForm" method="post" action="/standardNaast-front/membersTable.jsf" enctype="application/x-www-form-urlencoded">
-																<input type="hidden" name="j_idt7:j_idt9:memberTableForm" value="j_idt7:j_idt9:memberTableForm" />
-																<div id="j_idt7:j_idt9:j_idt16" class="ui-datatable ui-widget">
-																	<div id="j_idt7:j_idt9:j_idt16_paginator_top" class="ui-paginator ui-paginator-top ui-widget-header ui-corner-top">
-																		<span class="ui-paginator-first ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-first">p</span></span><span class="ui-paginator-prev ui-state-default ui-corner-all ui-state-disabled"><span
-																			class="ui-icon ui-icon-seek-prev">p</span></span><span class="ui-paginator-pages"><span class="ui-paginator-page ui-state-default ui-state-active ui-corner-all">1</span><span class="ui-paginator-page ui-state-default ui-corner-all">2</span><span
-																			class="ui-paginator-page ui-state-default ui-corner-all">3</span><span class="ui-paginator-page ui-state-default ui-corner-all">4</span><span class="ui-paginator-page ui-state-default ui-corner-all">5</span><span
-																			class="ui-paginator-page ui-state-default ui-corner-all">6</span><span class="ui-paginator-page ui-state-default ui-corner-all">7</span><span class="ui-paginator-page ui-state-default ui-corner-all">8</span><span
-																			class="ui-paginator-page ui-state-default ui-corner-all">9</span><span class="ui-paginator-page ui-state-default ui-corner-all">10</span></span><span class="ui-paginator-next ui-state-default ui-corner-all"><span
-																			class="ui-icon ui-icon-seek-next">p</span></span><span class="ui-paginator-last ui-state-default ui-corner-all"><span class="ui-icon ui-icon-seek-end">p</span></span>
-																	</div>
-																	<div class="ui-datatable-tablewrapper">
-																		<table role="grid" style="width: 98%">
-																			<thead id="j_idt7:j_idt9:j_idt16_head">
-																				<tr role="row">
-																					<th id="j_idt7:j_idt9:j_idt16:j_idt99" class="ui-state-default" role="columnheader"><span>Numéro de membre</span></th>
-																					<th id="j_idt7:j_idt9:j_idt16:j_idt18" class="ui-state-default ui-filter-column" role="columnheader"><span>Nom</span><input id="j_idt7:j_idt9:j_idt16:j_idt18:filter" name="j_idt7:j_idt9:j_idt16:j_idt18:filter"
-																						class="ui-column-filter ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value="" autocomplete="off" /></th>
-																					<th id="j_idt7:j_idt9:j_idt16:j_idt20" class="ui-state-default ui-filter-column" role="columnheader"><span>Prénom</span><input id="j_idt7:j_idt9:j_idt16:j_idt20:filter" name="j_idt7:j_idt9:j_idt16:j_idt20:filter"
-																						class="ui-column-filter ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value="" autocomplete="off" /></th>
-																					<th id="j_idt7:j_idt9:j_idt16:j_idt22" class="ui-state-default" role="columnheader"><span>Adresse</span></th>
-																					<th id="j_idt7:j_idt9:j_idt16:j_idt24" class="ui-state-default" role="columnheader"><span>Ville</span></th>
-																					<th id="j_idt7:j_idt9:j_idt16:j_idt26" class="ui-state-default" role="columnheader"><span>Téléphone</span></th>
-																				</tr>
-																			</thead>
-																			<tfoot></tfoot>
-																			<tbody id="j_idt7:j_idt9:j_idt16_data" class="ui-datatable-data ui-widget-content">
-																				<tr data-ri="0" data-rk="standardNaast.entities.Personne@1921b556" class="ui-widget-content ui-datatable-even ui-datatable-selectable ui-state-highlight" role="row" aria-selected="true">
-																					<td role="gridcell">0</td>
-																					<td role="gridcell">TEST NAME</td>
-																					<td role="gridcell">TEST FIRST NAME</td>
-																					<td role="gridcell"></td>
-																					<td role="gridcell"></td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="1" data-rk="standardNaast.entities.Personne@44943f24" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">1</td>
-																					<td role="gridcell">DANIEL</td>
-																					<td role="gridcell">Martine</td>
-																					<td role="gridcell">rue Max Fassiaux,7</td>
-																					<td role="gridcell">7062 Naast</td>
-																					<td role="gridcell">067/33.23.12</td>
-																				</tr>
-																				<tr data-ri="2" data-rk="standardNaast.entities.Personne@60bd77a8" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">2</td>
-																					<td role="gridcell">BOTTEMANNE</td>
-																					<td role="gridcell">Richard</td>
-																					<td role="gridcell">cité Vital Parée,26</td>
-																					<td role="gridcell">7062 Naast</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="3" data-rk="standardNaast.entities.Personne@36fae836" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">3</td>
-																					<td role="gridcell">SLUYS</td>
-																					<td role="gridcell">Léon</td>
-																					<td role="gridcell">rue Haute Folie,47</td>
-																					<td role="gridcell">7062 Naast</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="4" data-rk="standardNaast.entities.Personne@12a34d6d" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">4</td>
-																					<td role="gridcell">POLART</td>
-																					<td role="gridcell">Octave</td>
-																					<td role="gridcell">rue d'Ecaussinnes,4</td>
-																					<td role="gridcell">7062 Naast</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="5" data-rk="standardNaast.entities.Personne@1f3038aa" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">5</td>
-																					<td role="gridcell">PERREMAN</td>
-																					<td role="gridcell">Michel</td>
-																					<td role="gridcell">chemin de Casteau,190</td>
-																					<td role="gridcell">7061 Casteau</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="6" data-rk="standardNaast.entities.Personne@16d830e5" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">6</td>
-																					<td role="gridcell">EHRLER</td>
-																					<td role="gridcell">Chantal</td>
-																					<td role="gridcell">0</td>
-																					<td role="gridcell">Casteau</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="7" data-rk="standardNaast.entities.Personne@2f092ba8" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">7</td>
-																					<td role="gridcell">MAQUESTIAU</td>
-																					<td role="gridcell">Jean-Pierre</td>
-																					<td role="gridcell">rue Caulier,36</td>
-																					<td role="gridcell">7063 Neufvilles</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="8" data-rk="standardNaast.entities.Personne@3113ab8" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">8</td>
-																					<td role="gridcell">SABIAU</td>
-																					<td role="gridcell">Irène</td>
-																					<td role="gridcell">0</td>
-																					<td role="gridcell">Neufvilles</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="9" data-rk="standardNaast.entities.Personne@6026079a" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">9</td>
-																					<td role="gridcell">BLONDIAU</td>
-																					<td role="gridcell">Christian</td>
-																					<td role="gridcell">chemin Tinette,18</td>
-																					<td role="gridcell">7063 Neufvilles</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="10" data-rk="standardNaast.entities.Personne@60bd40c6" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">10</td>
-																					<td role="gridcell">LEGREVE</td>
-																					<td role="gridcell">André</td>
-																					<td role="gridcell">rue Max Fassiaux, 7</td>
-																					<td role="gridcell">7062 Naast</td>
-																					<td role="gridcell">067/33.23.12</td>
-																				</tr>
-																				<tr data-ri="11" data-rk="standardNaast.entities.Personne@28e7b8c8" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">11</td>
-																					<td role="gridcell">LEGREVE</td>
-																					<td role="gridcell">Julien</td>
-																					<td role="gridcell">0</td>
-																					<td role="gridcell">7062 Naast</td>
-																					<td role="gridcell">067/332312</td>
-																				</tr>
-																				<tr data-ri="12" data-rk="standardNaast.entities.Personne@5146773" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">12</td>
-																					<td role="gridcell">DE PREE</td>
-																					<td role="gridcell">Pascal</td>
-																					<td role="gridcell">rue Grande, 45</td>
-																					<td role="gridcell">7110 Boussoit</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="13" data-rk="standardNaast.entities.Personne@7e93b19f" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">13</td>
-																					<td role="gridcell">DEPRET</td>
-																					<td role="gridcell">Florence</td>
-																					<td role="gridcell">rue Haute Folie,143</td>
-																					<td role="gridcell">7062 Naast</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="14" data-rk="standardNaast.entities.Personne@12727ea5" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">14</td>
-																					<td role="gridcell">DEHOUX</td>
-																					<td role="gridcell">Emile</td>
-																					<td role="gridcell">val de la Marquette,3</td>
-																					<td role="gridcell">7870 Lens</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="15" data-rk="standardNaast.entities.Personne@1ad88c19" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">15</td>
-																					<td role="gridcell">PIAT</td>
-																					<td role="gridcell">Jean-Jacques</td>
-																					<td role="gridcell">clos de l'Escabaille,3</td>
-																					<td role="gridcell">7063 Neufvilles</td>
-																					<td role="gridcell">067/335953</td>
-																				</tr>
-																				<tr data-ri="16" data-rk="standardNaast.entities.Personne@7ed5cb13" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">16</td>
-																					<td role="gridcell">DE LANGE</td>
-																					<td role="gridcell">Robert</td>
-																					<td role="gridcell">rue de Godimont,134</td>
-																					<td role="gridcell">7063 Chaussée</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="17" data-rk="standardNaast.entities.Personne@6078d73" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">17</td>
-																					<td role="gridcell">GILLEROT</td>
-																					<td role="gridcell">Michel</td>
-																					<td role="gridcell">rue de Godimont,135</td>
-																					<td role="gridcell">7063 Chaussée</td>
-																					<td role="gridcell">067/45.83.08</td>
-																				</tr>
-																				<tr data-ri="18" data-rk="standardNaast.entities.Personne@59d77c1c" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">18</td>
-																					<td role="gridcell">COLLIGNON</td>
-																					<td role="gridcell">Yves</td>
-																					<td role="gridcell">rue du Curé,11</td>
-																					<td role="gridcell">7850 Enghien</td>
-																					<td role="gridcell">02/3960846 (Privé)</td>
-																				</tr>
-																				<tr data-ri="19" data-rk="standardNaast.entities.Personne@52154058" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">19</td>
-																					<td role="gridcell">MAQUESTIAU</td>
-																					<td role="gridcell">Lucile</td>
-																					<td role="gridcell">0</td>
-																					<td role="gridcell">Neufvilles</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="20" data-rk="standardNaast.entities.Personne@71337b81" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">20</td>
-																					<td role="gridcell">LEGREVE</td>
-																					<td role="gridcell">Lucien</td>
-																					<td role="gridcell">rue Saint Roch,2D04</td>
-																					<td role="gridcell">7190 Ecaussinnes</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="21" data-rk="standardNaast.entities.Personne@6af18c36" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">21</td>
-																					<td role="gridcell">LEGREVE</td>
-																					<td role="gridcell">Michael</td>
-																					<td role="gridcell">chaussée de Braine,97</td>
-																					<td role="gridcell">7190 Ecaussinnes</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="22" data-rk="standardNaast.entities.Personne@3c5cc0af" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">22</td>
-																					<td role="gridcell">PERSYN</td>
-																					<td role="gridcell">Norbert</td>
-																					<td role="gridcell">rue de la Tannerie,9</td>
-																					<td role="gridcell">7811 Arbre</td>
-																					<td role="gridcell">068/657848</td>
-																				</tr>
-																				<tr data-ri="23" data-rk="standardNaast.entities.Personne@6d6e401e" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">23</td>
-																					<td role="gridcell">GILMAND</td>
-																					<td role="gridcell">Steve</td>
-																					<td role="gridcell">rue du Donjon,4</td>
-																					<td role="gridcell">7062 Naast</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																				<tr data-ri="24" data-rk="standardNaast.entities.Personne@6ca16f9" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
-																					<td role="gridcell">24</td>
-																					<td role="gridcell">ROCH</td>
-																					<td role="gridcell">Yves</td>
-																					<td role="gridcell">rue des Houilleurs, 7</td>
-																					<td role="gridcell">7134 Péronnes-lez-Binche</td>
-																					<td role="gridcell"></td>
-																				</tr>
-																			</tbody>
-																		</table>
-																	</div>
-																	<div id="j_idt7:j_idt9:j_idt16_paginator_bottom" class="ui-paginator ui-paginator-bottom ui-widget-header">
-																		<span class="ui-paginator-first ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-first">p</span></span><span class="ui-paginator-prev ui-state-default ui-corner-all ui-state-disabled"><span
-																			class="ui-icon ui-icon-seek-prev">p</span></span><span class="ui-paginator-pages"><span class="ui-paginator-page ui-state-default ui-state-active ui-corner-all">1</span><span class="ui-paginator-page ui-state-default ui-corner-all">2</span><span
-																			class="ui-paginator-page ui-state-default ui-corner-all">3</span><span class="ui-paginator-page ui-state-default ui-corner-all">4</span><span class="ui-paginator-page ui-state-default ui-corner-all">5</span><span
-																			class="ui-paginator-page ui-state-default ui-corner-all">6</span><span class="ui-paginator-page ui-state-default ui-corner-all">7</span><span class="ui-paginator-page ui-state-default ui-corner-all">8</span><span
-																			class="ui-paginator-page ui-state-default ui-corner-all">9</span><span class="ui-paginator-page ui-state-default ui-corner-all">10</span></span><span class="ui-paginator-next ui-state-default ui-corner-all"><span
-																			class="ui-icon ui-icon-seek-next">p</span></span><span class="ui-paginator-last ui-state-default ui-corner-all"><span class="ui-icon ui-icon-seek-end">p</span></span>
-																	</div>
-																	<div class="ui-datatable-footer ui-widget-header ui-corner-bottom"></div>
-																	<input type="hidden" id="j_idt7:j_idt9:j_idt16_selection" name="j_idt7:j_idt9:j_idt16_selection" autocomplete="off" value="standardNaast.entities.Personne@1921b556" />
-																</div>
-																<script id="j_idt7:j_idt9:j_idt16_s" type="text/javascript">$(function(){PrimeFaces.cw('DataTable','membersTableVar',{id:'j_idt7:j_idt9:j_idt16',paginator:{id:['j_idt7:j_idt9:j_idt16_paginator_top','j_idt7:j_idt9:j_idt16_paginator_bottom'],rows:25,rowCount:1221,page:0,currentPageTemplate:'({currentPage} of {totalPages})'},selectionMode:'single',filter:true});});</script>
-																<input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:0"
-																	value="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"
-																	autocomplete="off" />
-															</form>
+														<div class="ui-datatable-tablewrapper">
+															<table role="grid" style="width: 98%">
+																<thead id="mainForm:masterTabView:j_idt12_head">
+																	<tr role="row">
+																		<th id="mainForm:masterTabView:j_idt12:j_idt14" class="ui-state-default" role="columnheader"><span>Numéro de membre</span></th>
+																		<th id="mainForm:masterTabView:j_idt12:j_idt16" class="ui-state-default ui-filter-column" role="columnheader"><span>Nom</span><input id="mainForm:masterTabView:j_idt12:j_idt16:filter"
+																			name="mainForm:masterTabView:j_idt12:j_idt16:filter" class="ui-column-filter ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value="" autocomplete="off" /></th>
+																		<th id="mainForm:masterTabView:j_idt12:j_idt18" class="ui-state-default ui-filter-column" role="columnheader"><span>Prénom</span><input id="mainForm:masterTabView:j_idt12:j_idt18:filter"
+																			name="mainForm:masterTabView:j_idt12:j_idt18:filter" class="ui-column-filter ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value="" autocomplete="off" /></th>
+																		<th id="mainForm:masterTabView:j_idt12:j_idt20" class="ui-state-default" role="columnheader"><span>Adresse</span></th>
+																		<th id="mainForm:masterTabView:j_idt12:j_idt22" class="ui-state-default" role="columnheader"><span>Ville</span></th>
+																		<th id="mainForm:masterTabView:j_idt12:j_idt24" class="ui-state-default" role="columnheader"><span>Téléphone</span></th>
+																	</tr>
+																</thead>
+																<tfoot></tfoot>
+																<tbody id="mainForm:masterTabView:j_idt12_data" class="ui-datatable-data ui-widget-content">
+																	<tr data-ri="0" data-rk="standardNaast.entities.Personne@51d22f73" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">0</td>
+																		<td role="gridcell">TEST NAME</td>
+																		<td role="gridcell">TEST FIRST NAME</td>
+																		<td role="gridcell"></td>
+																		<td role="gridcell"></td>
+																		<td role="gridcell"></td>
+																	</tr>
+																	<tr data-ri="1" data-rk="standardNaast.entities.Personne@1f56b37a" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">1</td>
+																		<td role="gridcell">DANIEL</td>
+																		<td role="gridcell">Martine</td>
+																		<td role="gridcell">rue Max Fassiaux,7</td>
+																		<td role="gridcell">7062 Naast</td>
+																		<td role="gridcell">067/33.23.12</td>
+																	</tr>
+																	<tr data-ri="2" data-rk="standardNaast.entities.Personne@75211ea8" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">2</td>
+																		<td role="gridcell">BOTTEMANNE</td>
+																		<td role="gridcell">Richard</td>
+																		<td role="gridcell">cité Vital Parée,26</td>
+																		<td role="gridcell">7062 Naast</td>
+																		<td role="gridcell"></td>
+																	</tr>
+																	<tr data-ri="3" data-rk="standardNaast.entities.Personne@5163e3ab" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">3</td>
+																		<td role="gridcell">SLUYS</td>
+																		<td role="gridcell">Léon</td>
+																		<td role="gridcell">rue Haute Folie,47</td>
+																		<td role="gridcell">7062 Naast</td>
+																		<td role="gridcell"></td>
+																	</tr>
+																	<tr data-ri="4" data-rk="standardNaast.entities.Personne@74f8194b" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">4</td>
+																		<td role="gridcell">POLART</td>
+																		<td role="gridcell">Octave</td>
+																		<td role="gridcell">rue d'Ecaussinnes,4</td>
+																		<td role="gridcell">7062 Naast</td>
+																		<td role="gridcell"></td>
+																	</tr>
+																	<tr data-ri="5" data-rk="standardNaast.entities.Personne@4c44c6eb" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">5</td>
+																		<td role="gridcell">PERREMAN</td>
+																		<td role="gridcell">Michel</td>
+																		<td role="gridcell">chemin de Casteau,190</td>
+																		<td role="gridcell">7061 Casteau</td>
+																		<td role="gridcell"></td>
+																	</tr>
+																	<tr data-ri="6" data-rk="standardNaast.entities.Personne@375f956b" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">6</td>
+																		<td role="gridcell">EHRLER</td>
+																		<td role="gridcell">Chantal</td>
+																		<td role="gridcell">0</td>
+																		<td role="gridcell">Casteau</td>
+																		<td role="gridcell"></td>
+																	</tr>
+																	<tr data-ri="7" data-rk="standardNaast.entities.Personne@679087b5" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">7</td>
+																		<td role="gridcell">MAQUESTIAU</td>
+																		<td role="gridcell">Jean-Pierre</td>
+																		<td role="gridcell">rue Caulier,36</td>
+																		<td role="gridcell">7063 Neufvilles</td>
+																		<td role="gridcell"></td>
+																	</tr>
+																	<tr data-ri="8" data-rk="standardNaast.entities.Personne@41bdb131" class="ui-widget-content ui-datatable-even ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">8</td>
+																		<td role="gridcell">SABIAU</td>
+																		<td role="gridcell">Irène</td>
+																		<td role="gridcell">0</td>
+																		<td role="gridcell">Neufvilles</td>
+																		<td role="gridcell"></td>
+																	</tr>
+																	<tr data-ri="9" data-rk="standardNaast.entities.Personne@cbc29af" class="ui-widget-content ui-datatable-odd ui-datatable-selectable" role="row" aria-selected="false">
+																		<td role="gridcell">9</td>
+																		<td role="gridcell">BLONDIAU</td>
+																		<td role="gridcell">Christian</td>
+																		<td role="gridcell">chemin Tinette,18</td>
+																		<td role="gridcell">7063 Neufvilles</td>
+																		<td role="gridcell"></td>
+																	</tr>
+																</tbody>
+															</table>
 														</div>
+														<div id="mainForm:masterTabView:j_idt12_paginator_bottom" class="ui-paginator ui-paginator-bottom ui-widget-header">
+															<span class="ui-paginator-first ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-first">p</span></span><span class="ui-paginator-prev ui-state-default ui-corner-all ui-state-disabled"><span
+																class="ui-icon ui-icon-seek-prev">p</span></span><span class="ui-paginator-pages"><span class="ui-paginator-page ui-state-default ui-state-active ui-corner-all">1</span><span class="ui-paginator-page ui-state-default ui-corner-all">2</span><span
+																class="ui-paginator-page ui-state-default ui-corner-all">3</span><span class="ui-paginator-page ui-state-default ui-corner-all">4</span><span class="ui-paginator-page ui-state-default ui-corner-all">5</span><span
+																class="ui-paginator-page ui-state-default ui-corner-all">6</span><span class="ui-paginator-page ui-state-default ui-corner-all">7</span><span class="ui-paginator-page ui-state-default ui-corner-all">8</span><span
+																class="ui-paginator-page ui-state-default ui-corner-all">9</span><span class="ui-paginator-page ui-state-default ui-corner-all">10</span></span><span class="ui-paginator-next ui-state-default ui-corner-all"><span
+																class="ui-icon ui-icon-seek-next">p</span></span><span class="ui-paginator-last ui-state-default ui-corner-all"><span class="ui-icon ui-icon-seek-end">p</span></span>
+														</div>
+														<div class="ui-datatable-footer ui-widget-header ui-corner-bottom"></div>
+														<input type="hidden" id="mainForm:masterTabView:j_idt12_selection" name="mainForm:masterTabView:j_idt12_selection" autocomplete="off" value="standardNaast.entities.Personne@75fe45c5" />
 													</div>
-													<script id="j_idt7:j_idt9:j_idt14_s" type="text/javascript">PrimeFaces.cw('Panel','widget_j_idt7_j_idt9_j_idt14',{id:'j_idt7:j_idt9:j_idt14'});</script></td>
-											</tr>
-											<tr class="ui-widget-content ui-panelgrid-odd" role="row">
-												<td role="gridcell" style="width: 60%"><div id="j_idt7:j_idt9:j_idt108" class="ui-panel ui-widget ui-widget-content ui-corner-all" style="text-align: center;" data-widget="widget_j_idt7_j_idt9_j_idt108">
-														<div id="j_idt7:j_idt9:j_idt108_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all">
-															<span class="ui-panel-title">Donnée du membre</span>
+													<script id="mainForm:masterTabView:j_idt12_s" type="text/javascript">$(function(){PrimeFaces.cw('DataTable','membersTableVar',{id:'mainForm:masterTabView:j_idt12',paginator:{id:['mainForm:masterTabView:j_idt12_paginator_top','mainForm:masterTabView:j_idt12_paginator_bottom'],rows:10,rowCount:1221,page:0,currentPageTemplate:'({currentPage} of {totalPages})'},selectionMode:'single',filter:true,behaviors:{rowSelect:function(event,ext){PrimeFaces.bc(this,event,ext,['PrimeFaces.ab({source:\'mainForm:masterTabView:j_idt12\',event:\'rowSelect\',process:\'mainForm:masterTabView:j_idt12\',update:\'@([id$=memberFormGrid], [id$=memberAbonnementsTable]) mainForm:masterTabView:memberAbonnementsTable\'}, arguments[1]);']);}}});});</script>
+													<!-- 		&lt;/h:form&gt; -->
+												</div>
+											</div>
+											<script id="mainForm:masterTabView:j_idt10_s" type="text/javascript">PrimeFaces.cw('Panel','widget_mainForm_masterTabView_j_idt10',{id:'mainForm:masterTabView:j_idt10'});</script></td>
+									</tr>
+									<tr class="ui-widget-content ui-panelgrid-odd" role="row">
+										<td role="gridcell" style="width: 50%" colspan="3"><div id="mainForm:masterTabView:memberFormPanel" class="ui-panel ui-widget ui-widget-content ui-corner-all" style="text-align: center;"
+												data-widget="widget_mainForm_masterTabView_memberFormPanel">
+												<div id="mainForm:masterTabView:memberFormPanel_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all">
+													<span class="ui-panel-title">Donnée du membre</span>
+												</div>
+												<div id="mainForm:masterTabView:memberFormPanel_content" class="ui-panel-content ui-widget-content">
+													<!-- 	&lt;h:form id=&quot;memberFormId&quot;&gt; -->
+													<div id="mainForm:masterTabView:messages" class="ui-messages ui-widget" aria-live="polite"></div>
+													<table id="mainForm:masterTabView:memberFormGrid" class="ui-panelgrid ui-widget memberForm" style="width: 100%" role="grid">
+														<tfoot class="ui-panelgrid-footer">
+															<tr class="ui-widget-header" role="row">
+																<td role="columnheader" class="ui-widget-header" colspan="8"><button id="mainForm:masterTabView:j_idt81" name="mainForm:masterTabView:j_idt81" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
+																		onclick="PrimeFaces.ab({source:'mainForm:masterTabView:j_idt81',update:'mainForm:masterTabView:memberFormGrid'});return false;" style="margin: 5px;" type="submit">
+																		<span class="ui-button-icon-left ui-icon ui-c ui-icon-check"></span><span class="ui-button-text ui-c">Ajouter le membre</span>
+																	</button>
+																	<script id="mainForm:masterTabView:j_idt81_s" type="text/javascript">PrimeFaces.cw('CommandButton','widget_mainForm_masterTabView_j_idt81',{id:'mainForm:masterTabView:j_idt81'});</script>
+																	<button id="mainForm:masterTabView:j_idt82" name="mainForm:masterTabView:j_idt82" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
+																		onclick="PrimeFaces.ab({source:'mainForm:masterTabView:j_idt82'});return false;" style="margin: 5px;" type="submit">
+																		<span class="ui-button-icon-left ui-icon ui-c ui-icon-trash"></span><span class="ui-button-text ui-c">Remove</span>
+																	</button>
+																	<script id="mainForm:masterTabView:j_idt82_s" type="text/javascript">PrimeFaces.cw('CommandButton','widget_mainForm_masterTabView_j_idt82',{id:'mainForm:masterTabView:j_idt82'});</script></td>
+															</tr>
+														</tfoot>
+														<tbody>
+															<tr class="ui-widget-content ui-panelgrid-even" role="row">
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt33" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:lastName">Nom<span class="ui-outputlabel-rfi">*</span></label></td>
+																<td role="gridcell" style="align: left;"><input id="mainForm:masterTabView:lastName" name="mainForm:masterTabView:lastName" type="text" value="DEPOOTER" style="width: 98%;"
+																	class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+																<script id="mainForm:masterTabView:lastName_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_lastName',{id:'mainForm:masterTabView:lastName'});</script>
+																	<div id="mainForm:masterTabView:j_idt35" aria-live="polite" class="ui-message ui-helper-hidden"></div>
+																	<script id="mainForm:masterTabView:j_idt35_s" type="text/javascript">$(function(){PrimeFaces.cw('Message','widget_mainForm_masterTabView_j_idt35',{id:'mainForm:masterTabView:j_idt35',target:'mainForm:masterTabView:lastName'});});</script></td>
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt37" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:firstName">Prénom<span class="ui-outputlabel-rfi">*</span></label></td>
+																<td role="gridcell"><input id="mainForm:masterTabView:firstName" name="mainForm:masterTabView:firstName" type="text" value="Vincent" style="width: 98%;" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+																<script id="mainForm:masterTabView:firstName_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_firstName',{id:'mainForm:masterTabView:firstName'});</script>
+																	<div id="mainForm:masterTabView:j_idt39" aria-live="polite" class="ui-message ui-helper-hidden"></div>
+																	<script id="mainForm:masterTabView:j_idt39_s" type="text/javascript">$(function(){PrimeFaces.cw('Message','widget_mainForm_masterTabView_j_idt39',{id:'mainForm:masterTabView:j_idt39',target:'mainForm:masterTabView:firstName'});});</script></td>
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt41" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:birthDate_input">Date de naissance<span class="ui-outputlabel-rfi">*</span></label></td>
+																<td role="gridcell" style="margin-left: 0;"><span id="mainForm:masterTabView:birthDate"><input id="mainForm:masterTabView:birthDate_input" name="mainForm:masterTabView:birthDate_input" type="text" value="09/02/1975"
+																		class="ui-inputfield ui-widget ui-state-default ui-corner-all" /></span>
+																<script id="mainForm:masterTabView:birthDate_s" type="text/javascript">$(function(){PrimeFaces.cw('Calendar','widget_mainForm_masterTabView_birthDate',{id:'mainForm:masterTabView:birthDate',popup:true,locale:'en_GB',dateFormat:'dd/mm/yy',defaultDate:'09/02/1975',changeMonth:true,changeYear:true});});</script>
+																	<div id="mainForm:masterTabView:j_idt43" aria-live="polite" class="ui-message ui-helper-hidden"></div>
+																	<script id="mainForm:masterTabView:j_idt43_s" type="text/javascript">$(function(){PrimeFaces.cw('Message','widget_mainForm_masterTabView_j_idt43',{id:'mainForm:masterTabView:j_idt43',target:'mainForm:masterTabView:birthDate'});});</script></td>
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt45" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:memberNumber">Numéro de membre</label></td>
+																<td role="gridcell"><input id="mainForm:masterTabView:memberNumber" name="mainForm:masterTabView:memberNumber" type="text" value="10000" size="3" disabled="disabled" readonly="readonly"
+																	class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ui-state-disabled" />
+																<script id="mainForm:masterTabView:memberNumber_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_memberNumber',{id:'mainForm:masterTabView:memberNumber'});</script></td>
+															</tr>
+															<tr class="ui-widget-content ui-panelgrid-odd" role="row">
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt49" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:address">Adresse</label></td>
+																<td role="gridcell" colspan="3"><input id="mainForm:masterTabView:address" name="mainForm:masterTabView:address" type="text" style="width: 98%;" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+																<script id="mainForm:masterTabView:address_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_address',{id:'mainForm:masterTabView:address'});</script></td>
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt52" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:postalCode">Code postal</label></td>
+																<td role="gridcell"><input id="mainForm:masterTabView:postalCode" name="mainForm:masterTabView:postalCode" type="text" size="4" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+																<script id="mainForm:masterTabView:postalCode_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_postalCode',{id:'mainForm:masterTabView:postalCode'});</script></td>
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt55" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:city">Ville</label></td>
+																<td role="gridcell"><input id="mainForm:masterTabView:city" name="mainForm:masterTabView:city" type="text" style="width: 98%;" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+																<script id="mainForm:masterTabView:city_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_city',{id:'mainForm:masterTabView:city'});</script></td>
+															</tr>
+															<tr class="ui-widget-content ui-panelgrid-even" role="row">
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt59" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:email">Email</label></td>
+																<td role="gridcell" colspan="3"><input id="mainForm:masterTabView:email" name="mainForm:masterTabView:email" type="text" style="width: 98%;" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+																<script id="mainForm:masterTabView:email_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_email',{id:'mainForm:masterTabView:email'});</script></td>
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt62" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:phoneNumber">Téléphone</label></td>
+																<td role="gridcell"><input id="mainForm:masterTabView:phoneNumber" name="mainForm:masterTabView:phoneNumber" type="text" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+																<script id="mainForm:masterTabView:phoneNumber_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_phoneNumber',{id:'mainForm:masterTabView:phoneNumber'});</script></td>
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt65" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:mobilePhone">GSM</label></td>
+																<td role="gridcell"><input id="mainForm:masterTabView:mobilePhone" name="mainForm:masterTabView:mobilePhone" type="text" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+																<script id="mainForm:masterTabView:mobilePhone_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_mobilePhone',{id:'mainForm:masterTabView:mobilePhone'});</script></td>
+															</tr>
+															<tr class="ui-widget-content ui-panelgrid-odd" role="row">
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt69" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:identityCard">Carte d'identité</label></td>
+																<td role="gridcell"><input id="mainForm:masterTabView:identityCard" name="mainForm:masterTabView:identityCard" type="text" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+																<script id="mainForm:masterTabView:identityCard_s" type="text/javascript">PrimeFaces.cw('InputText','widget_mainForm_masterTabView_identityCard',{id:'mainForm:masterTabView:identityCard'});</script></td>
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt72" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:identityCardValidity_input">Validité carte</label></td>
+																<td role="gridcell"><span id="mainForm:masterTabView:identityCardValidity"><input id="mainForm:masterTabView:identityCardValidity_input" name="mainForm:masterTabView:identityCardValidity_input" type="text"
+																		class="ui-inputfield ui-widget ui-state-default ui-corner-all" /></span>
+																<script id="mainForm:masterTabView:identityCardValidity_s" type="text/javascript">$(function(){PrimeFaces.cw('Calendar','widget_mainForm_masterTabView_identityCardValidity',{id:'mainForm:masterTabView:identityCardValidity',popup:true,locale:'en_GB',dateFormat:'dd/mm/yy',changeMonth:true,changeYear:true});});</script></td>
+																<td role="gridcell" style="text-align: right;"><label id="mainForm:masterTabView:j_idt75" class="ui-outputlabel ui-widget" for="mainForm:masterTabView:student">Etudiant</label></td>
+																<td role="gridcell"><table id="mainForm:masterTabView:student" class="ui-selectoneradio ui-widget">
+																		<tr>
+																			<td><div class="ui-radiobutton ui-widget">
+																					<div class="ui-helper-hidden-accessible">
+																						<input id="mainForm:masterTabView:student:0" name="mainForm:masterTabView:student" type="radio" value="true" />
+																					</div>
+																					<div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default">
+																						<span class="ui-radiobutton-icon"></span>
+																					</div>
+																				</div></td>
+																			<td><label for="mainForm:masterTabView:student:0">OUI</label></td>
+																			<td><div class="ui-radiobutton ui-widget">
+																					<div class="ui-helper-hidden-accessible">
+																						<input id="mainForm:masterTabView:student:1" name="mainForm:masterTabView:student" type="radio" value="false" checked="checked" />
+																					</div>
+																					<div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default ui-state-active">
+																						<span class="ui-radiobutton-icon ui-icon ui-icon-bullet"></span>
+																					</div>
+																				</div></td>
+																			<td><label for="mainForm:masterTabView:student:1">NON</label></td>
+																		</tr>
+																	</table>
+																	<script id="mainForm:masterTabView:student_s" type="text/javascript">$(function(){PrimeFaces.cw('SelectOneRadio','widget_mainForm_masterTabView_student',{id:'mainForm:masterTabView:student'});});</script></td>
+															</tr>
+														</tbody>
+													</table>
+													<!-- 	&lt;/h:form&gt; -->
+												</div>
+											</div>
+											<script id="mainForm:masterTabView:memberFormPanel_s" type="text/javascript">PrimeFaces.cw('Panel','widget_mainForm_masterTabView_memberFormPanel',{id:'mainForm:masterTabView:memberFormPanel'});</script></td>
+										<td role="gridcell" style="width: 50%" colspan="3"><div id="mainForm:masterTabView:j_idt85" class="ui-panel ui-widget ui-widget-content ui-corner-all" style="text-align: center;" data-widget="widget_mainForm_masterTabView_j_idt85">
+												<div id="mainForm:masterTabView:j_idt85_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all">
+													<span class="ui-panel-title">Liste des abonnements</span>
+												</div>
+												<div id="mainForm:masterTabView:j_idt85_content" class="ui-panel-content ui-widget-content">
+													<!-- 		&lt;h:form id=&quot;memberAbonnements&quot;&gt; -->
+													<div id="mainForm:masterTabView:memberAbonnementsTable" class="ui-datatable ui-widget">
+														<div id="mainForm:masterTabView:memberAbonnementsTable_paginator_top" class="ui-paginator ui-paginator-top ui-widget-header ui-corner-top">
+															<span class="ui-paginator-first ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-first">p</span></span><span class="ui-paginator-prev ui-state-default ui-corner-all ui-state-disabled"><span
+																class="ui-icon ui-icon-seek-prev">p</span></span><span class="ui-paginator-pages"></span><span class="ui-paginator-next ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-next">p</span></span><span
+																class="ui-paginator-last ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-end">p</span></span>
 														</div>
-														<div id="j_idt7:j_idt9:j_idt108_content" class="ui-panel-content ui-widget-content">
-															<!-- 	&lt;p:log /&gt; -->
-															<form id="j_idt7:j_idt9:memberForm" name="j_idt7:j_idt9:memberForm" method="post" action="/standardNaast-front/membersTable.jsf" enctype="application/x-www-form-urlencoded">
-																<input type="hidden" name="j_idt7:j_idt9:memberForm" value="j_idt7:j_idt9:memberForm" />
-																<div id="j_idt7:j_idt9:memberForm:messages" class="ui-messages ui-widget" aria-live="polite"></div>
-																<table id="j_idt7:j_idt9:memberForm:memberFormGrid" class="ui-panelgrid ui-widget memberForm" style="width: 100%" role="grid">
-																	<tfoot class="ui-panelgrid-footer">
-																		<tr class="ui-widget-header" role="row">
-																			<td role="columnheader" class="ui-widget-header" colspan="8"><button id="j_idt7:j_idt9:memberForm:j_idt86" name="j_idt7:j_idt9:memberForm:j_idt86" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
-																					onclick="PrimeFaces.ab({source:'j_idt7:j_idt9:memberForm:j_idt86',update:'j_idt7:j_idt9:memberForm:memberFormGrid'});return false;" style="margin: 5px;" type="submit">
-																					<span class="ui-button-icon-left ui-icon ui-c ui-icon-check"></span><span class="ui-button-text ui-c">Ajouter le membre</span>
-																				</button>
-																				<script id="j_idt7:j_idt9:memberForm:j_idt86_s" type="text/javascript">PrimeFaces.cw('CommandButton','widget_j_idt7_j_idt9_memberForm_j_idt86',{id:'j_idt7:j_idt9:memberForm:j_idt86'});</script>
-																				<button id="j_idt7:j_idt9:memberForm:j_idt87" name="j_idt7:j_idt9:memberForm:j_idt87" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
-																					onclick="PrimeFaces.ab({source:'j_idt7:j_idt9:memberForm:j_idt87'});return false;" style="margin: 5px;" type="submit">
-																					<span class="ui-button-icon-left ui-icon ui-c ui-icon-trash"></span><span class="ui-button-text ui-c">Remove</span>
-																				</button>
-																				<script id="j_idt7:j_idt9:memberForm:j_idt87_s" type="text/javascript">PrimeFaces.cw('CommandButton','widget_j_idt7_j_idt9_memberForm_j_idt87',{id:'j_idt7:j_idt9:memberForm:j_idt87'});</script></td>
-																		</tr>
-																	</tfoot>
-																	<tbody>
-																		<tr class="ui-widget-content ui-panelgrid-odd" role="row">
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt37" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:lastName">Nom<span class="ui-outputlabel-rfi">*</span></label></td>
-																			<td role="gridcell" style="align: left;"><input id="j_idt7:j_idt9:memberForm:lastName" name="j_idt7:j_idt9:memberForm:lastName" type="text" value="TEST NAME" style="width: 98%;"
-																				class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
-																			<script id="j_idt7:j_idt9:memberForm:lastName_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_lastName',{id:'j_idt7:j_idt9:memberForm:lastName'});</script>
-																				<div id="j_idt7:j_idt9:memberForm:j_idt39" aria-live="polite" class="ui-message ui-helper-hidden"></div>
-																				<script id="j_idt7:j_idt9:memberForm:j_idt39_s" type="text/javascript">$(function(){PrimeFaces.cw('Message','widget_j_idt7_j_idt9_memberForm_j_idt39',{id:'j_idt7:j_idt9:memberForm:j_idt39',target:'j_idt7:j_idt9:memberForm:lastName'});});</script></td>
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt41" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:firstName">Prénom<span class="ui-outputlabel-rfi">*</span></label></td>
-																			<td role="gridcell"><input id="j_idt7:j_idt9:memberForm:firstName" name="j_idt7:j_idt9:memberForm:firstName" type="text" value="TEST FIRST NAME" style="width: 98%;"
-																				class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
-																			<script id="j_idt7:j_idt9:memberForm:firstName_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_firstName',{id:'j_idt7:j_idt9:memberForm:firstName'});</script>
-																				<div id="j_idt7:j_idt9:memberForm:j_idt43" aria-live="polite" class="ui-message ui-helper-hidden"></div>
-																				<script id="j_idt7:j_idt9:memberForm:j_idt43_s" type="text/javascript">$(function(){PrimeFaces.cw('Message','widget_j_idt7_j_idt9_memberForm_j_idt43',{id:'j_idt7:j_idt9:memberForm:j_idt43',target:'j_idt7:j_idt9:memberForm:firstName'});});</script></td>
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt45" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:birthDate_input">Date de naissance<span class="ui-outputlabel-rfi">*</span></label></td>
-																			<td role="gridcell" style="margin-left: 0;"><span id="j_idt7:j_idt9:memberForm:birthDate"><input id="j_idt7:j_idt9:memberForm:birthDate_input" name="j_idt7:j_idt9:memberForm:birthDate_input" type="text" value="12/02/13"
-																					class="ui-inputfield ui-widget ui-state-default ui-corner-all" /></span>
-																			<script id="j_idt7:j_idt9:memberForm:birthDate_s" type="text/javascript">$(function(){PrimeFaces.cw('Calendar','widget_j_idt7_j_idt9_memberForm_birthDate',{id:'j_idt7:j_idt9:memberForm:birthDate',popup:true,locale:'en_GB',dateFormat:'dd/mm/y',defaultDate:'12/02/13',changeMonth:true,changeYear:true});});</script>
-																				<div id="j_idt7:j_idt9:memberForm:j_idt47" aria-live="polite" class="ui-message ui-helper-hidden"></div>
-																				<script id="j_idt7:j_idt9:memberForm:j_idt47_s" type="text/javascript">$(function(){PrimeFaces.cw('Message','widget_j_idt7_j_idt9_memberForm_j_idt47',{id:'j_idt7:j_idt9:memberForm:j_idt47',target:'j_idt7:j_idt9:memberForm:birthDate'});});</script></td>
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt49" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:memberNumber">Numéro de membre</label></td>
-																			<td role="gridcell"><input id="j_idt7:j_idt9:memberForm:memberNumber" name="j_idt7:j_idt9:memberForm:memberNumber" type="text" value="0" size="3" disabled="disabled" readonly="readonly"
-																				class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ui-state-disabled" />
-																			<script id="j_idt7:j_idt9:memberForm:memberNumber_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_memberNumber',{id:'j_idt7:j_idt9:memberForm:memberNumber'});</script></td>
-																		</tr>
-																		<tr class="ui-widget-content ui-panelgrid-even" role="row">
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt53" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:address">Adresse</label></td>
-																			<td role="gridcell" colspan="3"><input id="j_idt7:j_idt9:memberForm:address" name="j_idt7:j_idt9:memberForm:address" type="text" style="width: 98%;" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
-																			<script id="j_idt7:j_idt9:memberForm:address_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_address',{id:'j_idt7:j_idt9:memberForm:address'});</script></td>
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt56" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:postalCode">Code postal</label></td>
-																			<td role="gridcell"><input id="j_idt7:j_idt9:memberForm:postalCode" name="j_idt7:j_idt9:memberForm:postalCode" type="text" size="4" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
-																			<script id="j_idt7:j_idt9:memberForm:postalCode_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_postalCode',{id:'j_idt7:j_idt9:memberForm:postalCode'});</script></td>
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt59" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:city">Ville</label></td>
-																			<td role="gridcell"><input id="j_idt7:j_idt9:memberForm:city" name="j_idt7:j_idt9:memberForm:city" type="text" style="width: 98%;" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
-																			<script id="j_idt7:j_idt9:memberForm:city_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_city',{id:'j_idt7:j_idt9:memberForm:city'});</script></td>
-																		</tr>
-																		<tr class="ui-widget-content ui-panelgrid-odd" role="row">
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt63" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:email">Email</label></td>
-																			<td role="gridcell" colspan="3"><input id="j_idt7:j_idt9:memberForm:email" name="j_idt7:j_idt9:memberForm:email" type="text" style="width: 98%;" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
-																			<script id="j_idt7:j_idt9:memberForm:email_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_email',{id:'j_idt7:j_idt9:memberForm:email'});</script></td>
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt66" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:phoneNumber">Téléphone</label></td>
-																			<td role="gridcell"><input id="j_idt7:j_idt9:memberForm:phoneNumber" name="j_idt7:j_idt9:memberForm:phoneNumber" type="text" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
-																			<script id="j_idt7:j_idt9:memberForm:phoneNumber_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_phoneNumber',{id:'j_idt7:j_idt9:memberForm:phoneNumber'});</script></td>
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt69" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:mobilePhone">GSM</label></td>
-																			<td role="gridcell"><input id="j_idt7:j_idt9:memberForm:mobilePhone" name="j_idt7:j_idt9:memberForm:mobilePhone" type="text" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
-																			<script id="j_idt7:j_idt9:memberForm:mobilePhone_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_mobilePhone',{id:'j_idt7:j_idt9:memberForm:mobilePhone'});</script></td>
-																		</tr>
-																		<tr class="ui-widget-content ui-panelgrid-even" role="row">
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt73" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:identityCard">Carte d'identité</label></td>
-																			<td role="gridcell"><input id="j_idt7:j_idt9:memberForm:identityCard" name="j_idt7:j_idt9:memberForm:identityCard" type="text" class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
-																			<script id="j_idt7:j_idt9:memberForm:identityCard_s" type="text/javascript">PrimeFaces.cw('InputText','widget_j_idt7_j_idt9_memberForm_identityCard',{id:'j_idt7:j_idt9:memberForm:identityCard'});</script></td>
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt76" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:identityCardValidity_input">Validité carte</label></td>
-																			<td role="gridcell"><span id="j_idt7:j_idt9:memberForm:identityCardValidity"><input id="j_idt7:j_idt9:memberForm:identityCardValidity_input" name="j_idt7:j_idt9:memberForm:identityCardValidity_input" type="text"
-																					value="22/02/13" class="ui-inputfield ui-widget ui-state-default ui-corner-all" /></span>
-																			<script id="j_idt7:j_idt9:memberForm:identityCardValidity_s" type="text/javascript">$(function(){PrimeFaces.cw('Calendar','widget_j_idt7_j_idt9_memberForm_identityCardValidity',{id:'j_idt7:j_idt9:memberForm:identityCardValidity',popup:true,locale:'en_GB',dateFormat:'dd/mm/y',defaultDate:'22/02/13',changeMonth:true,changeYear:true});});</script></td>
-																			<td role="gridcell" style="text-align: right;"><label id="j_idt7:j_idt9:memberForm:j_idt79" class="ui-outputlabel ui-widget" for="j_idt7:j_idt9:memberForm:student">Etudiant</label></td>
-																			<td role="gridcell"><table id="j_idt7:j_idt9:memberForm:student" class="ui-selectoneradio ui-widget">
-																					<tr>
-																						<td><div class="ui-radiobutton ui-widget">
-																								<div class="ui-helper-hidden-accessible">
-																									<input id="j_idt7:j_idt9:memberForm:student:0" name="j_idt7:j_idt9:memberForm:student" type="radio" value="true" checked="checked" />
-																								</div>
-																								<div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default ui-state-active">
-																									<span class="ui-radiobutton-icon ui-icon ui-icon-bullet"></span>
-																								</div>
-																							</div></td>
-																						<td><label for="j_idt7:j_idt9:memberForm:student:0">OUI</label></td>
-																						<td><div class="ui-radiobutton ui-widget">
-																								<div class="ui-helper-hidden-accessible">
-																									<input id="j_idt7:j_idt9:memberForm:student:1" name="j_idt7:j_idt9:memberForm:student" type="radio" value="false" />
-																								</div>
-																								<div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default">
-																									<span class="ui-radiobutton-icon"></span>
-																								</div>
-																							</div></td>
-																						<td><label for="j_idt7:j_idt9:memberForm:student:1">NON</label></td>
-																					</tr>
-																				</table>
-																				<script id="j_idt7:j_idt9:memberForm:student_s" type="text/javascript">$(function(){PrimeFaces.cw('SelectOneRadio','widget_j_idt7_j_idt9_memberForm_student',{id:'j_idt7:j_idt9:memberForm:student'});});</script></td>
-																		</tr>
-																	</tbody>
-																</table>
-																<input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:0"
-																	value="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"
-																	autocomplete="off" />
-															</form>
+														<div class="ui-datatable-tablewrapper">
+															<table role="grid" style="width: 98%">
+																<thead id="mainForm:masterTabView:memberAbonnementsTable_head">
+																	<tr role="row">
+																		<th id="mainForm:masterTabView:memberAbonnementsTable:j_idt87" class="ui-state-default" role="columnheader"><span>Saison</span></th>
+																		<th id="mainForm:masterTabView:memberAbonnementsTable:j_idt89" class="ui-state-default" role="columnheader"><span>Bloc</span></th>
+																		<th id="mainForm:masterTabView:memberAbonnementsTable:j_idt91" class="ui-state-default" role="columnheader"><span>Rang</span></th>
+																		<th id="mainForm:masterTabView:memberAbonnementsTable:j_idt93" class="ui-state-default" role="columnheader"><span>Place</span></th>
+																		<th id="mainForm:masterTabView:memberAbonnementsTable:j_idt95" class="ui-state-default" role="columnheader"><span>Réduction</span></th>
+																		<th id="mainForm:masterTabView:memberAbonnementsTable:j_idt97" class="ui-state-default" role="columnheader"><span>Payé</span></th>
+																		<th id="mainForm:masterTabView:memberAbonnementsTable:j_idt99" class="ui-state-default" role="columnheader"><span>Acompte</span></th>
+																		<th id="mainForm:masterTabView:memberAbonnementsTable:j_idt101" class="ui-state-default" role="columnheader"><span>Place commandée</span></th>
+																	</tr>
+																</thead>
+																<tfoot></tfoot>
+																<tbody id="mainForm:masterTabView:memberAbonnementsTable_data" class="ui-datatable-data ui-widget-content">
+																	<tr class="ui-widget-content ui-datatable-empty-message">
+																		<td colspan="8">No records found.</td>
+																	</tr>
+																</tbody>
+															</table>
 														</div>
+														<div id="mainForm:masterTabView:memberAbonnementsTable_paginator_bottom" class="ui-paginator ui-paginator-bottom ui-widget-header ui-corner-bottom">
+															<span class="ui-paginator-first ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-first">p</span></span><span class="ui-paginator-prev ui-state-default ui-corner-all ui-state-disabled"><span
+																class="ui-icon ui-icon-seek-prev">p</span></span><span class="ui-paginator-pages"></span><span class="ui-paginator-next ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-next">p</span></span><span
+																class="ui-paginator-last ui-state-default ui-corner-all ui-state-disabled"><span class="ui-icon ui-icon-seek-end">p</span></span>
+														</div>
+														<input type="hidden" id="mainForm:masterTabView:memberAbonnementsTable_selection" name="mainForm:masterTabView:memberAbonnementsTable_selection" autocomplete="off" value="standardNaast.entities.Personne@75fe45c5" />
 													</div>
-													<script id="j_idt7:j_idt9:j_idt108_s" type="text/javascript">PrimeFaces.cw('Panel','widget_j_idt7_j_idt9_j_idt108',{id:'j_idt7:j_idt9:j_idt108'});</script></td>
-												<td role="gridcell" style="width: 40%"><label id="j_idt7:j_idt9:j_idt110" class="ui-outputlabel ui-widget">test</label></td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<div id="j_idt7:j_idt9:j_idt90" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-helper-hidden" role="tabpanel" aria-hidden="true">
-									<!-- 							&lt;ui:include src=&quot;memberForm.xhtml&quot; /&gt; -->
-								</div>
-								<div id="j_idt7:j_idt9:j_idt92" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-helper-hidden" role="tabpanel" aria-hidden="true"></div>
-								<div id="j_idt7:j_idt9:j_idt93" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-helper-hidden" role="tabpanel" aria-hidden="true"></div>
-							</div>
-							<input type="hidden" id="j_idt7:j_idt9_activeIndex" name="j_idt7:j_idt9_activeIndex" value="0" autocomplete="off" />
+													<script id="mainForm:masterTabView:memberAbonnementsTable_s" type="text/javascript">$(function(){PrimeFaces.cw('DataTable','widget_mainForm_masterTabView_memberAbonnementsTable',{id:'mainForm:masterTabView:memberAbonnementsTable',paginator:{id:['mainForm:masterTabView:memberAbonnementsTable_paginator_top','mainForm:masterTabView:memberAbonnementsTable_paginator_bottom'],rows:5,rowCount:0,page:0,currentPageTemplate:'({currentPage} of {totalPages})'},selectionMode:'single'});});</script>
+													<!-- 		&lt;/h:form&gt; -->
+												</div>
+											</div>
+											<script id="mainForm:masterTabView:j_idt85_s" type="text/javascript">PrimeFaces.cw('Panel','widget_mainForm_masterTabView_j_idt85',{id:'mainForm:masterTabView:j_idt85'});</script></td>
+									</tr>
+									<tr class="ui-widget-content ui-panelgrid-even" role="row">
+										<td role="gridcell" style="width: 33%" colspan="2"><div id="mainForm:masterTabView:j_idt107" class="ui-panel ui-widget ui-widget-content ui-corner-all" style="text-align: center;" data-widget="widget_mainForm_masterTabView_j_idt107">
+												<div id="mainForm:masterTabView:j_idt107_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all">
+													<span class="ui-panel-title">Liste des cotisations</span>
+												</div>
+												<div id="mainForm:masterTabView:j_idt107_content" class="ui-panel-content ui-widget-content"></div>
+											</div>
+											<script id="mainForm:masterTabView:j_idt107_s" type="text/javascript">PrimeFaces.cw('Panel','widget_mainForm_masterTabView_j_idt107',{id:'mainForm:masterTabView:j_idt107'});</script></td>
+										<td role="gridcell" style="width: 33%" colspan="2"><div id="mainForm:masterTabView:j_idt109" class="ui-panel ui-widget ui-widget-content ui-corner-all" style="text-align: center;" data-widget="widget_mainForm_masterTabView_j_idt109">
+												<div id="mainForm:masterTabView:j_idt109_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all">
+													<span class="ui-panel-title">Liste des déplacements par saison</span>
+												</div>
+												<div id="mainForm:masterTabView:j_idt109_content" class="ui-panel-content ui-widget-content"></div>
+											</div>
+											<script id="mainForm:masterTabView:j_idt109_s" type="text/javascript">PrimeFaces.cw('Panel','widget_mainForm_masterTabView_j_idt109',{id:'mainForm:masterTabView:j_idt109'});</script></td>
+										<td role="gridcell" style="width: 33%" colspan="2"><div id="mainForm:masterTabView:j_idt111" class="ui-panel ui-widget ui-widget-content ui-corner-all" style="text-align: center;" data-widget="widget_mainForm_masterTabView_j_idt111">
+												<div id="mainForm:masterTabView:j_idt111_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all">
+													<span class="ui-panel-title">Liste des bénévolats</span>
+												</div>
+												<div id="mainForm:masterTabView:j_idt111_content" class="ui-panel-content ui-widget-content"></div>
+											</div>
+											<script id="mainForm:masterTabView:j_idt111_s" type="text/javascript">PrimeFaces.cw('Panel','widget_mainForm_masterTabView_j_idt111',{id:'mainForm:masterTabView:j_idt111'});</script></td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
-						<script id="j_idt7:j_idt9_s" type="text/javascript">PrimeFaces.cw('TabView','widget_j_idt7_j_idt9',{id:'j_idt7:j_idt9',effectDuration:'normal',scrollable:false});</script>
+						<div id="mainForm:masterTabView:j_idt112" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-helper-hidden" role="tabpanel" aria-hidden="true"></div>
+						<div id="mainForm:masterTabView:j_idt113" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-helper-hidden" role="tabpanel" aria-hidden="true"></div>
+						<div id="mainForm:masterTabView:j_idt114" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-helper-hidden" role="tabpanel" aria-hidden="true"></div>
+						<div id="mainForm:masterTabView:j_idt115" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-helper-hidden" role="tabpanel" aria-hidden="true"></div>
 					</div>
-					<div id="j_idt7:j_idt94" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-helper-hidden" role="tabpanel" aria-hidden="true"></div>
-					<div id="j_idt7:j_idt95" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-helper-hidden" role="tabpanel" aria-hidden="true"></div>
+					<input type="hidden" id="mainForm:masterTabView_activeIndex" name="mainForm:masterTabView_activeIndex" value="0" autocomplete="off" />
 				</div>
-				<input type="hidden" id="j_idt7_activeIndex" name="j_idt7_activeIndex" value="0" autocomplete="off" />
-			</div>
-			<script id="j_idt7_s" type="text/javascript">PrimeFaces.cw('TabView','widget_j_idt7',{id:'j_idt7',effectDuration:'normal',scrollable:false});</script>
+				<script id="mainForm:masterTabView_s" type="text/javascript">PrimeFaces.cw('TabView','widget_mainForm_masterTabView',{id:'mainForm:masterTabView',effectDuration:'normal',scrollable:false});</script>
+				<input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:0"
+					value="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"
+					autocomplete="off" />
+			</form>
 		</div>
 		<div id="footer"></div>
 	</div>

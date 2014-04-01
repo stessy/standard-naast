@@ -5,13 +5,13 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  * The persistent class for the PRIX_PLACE database table.
@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
 public class PrixPlace implements Serializable {
 
 	@Basic(optional = false)
-	//@NotNull
+	// @NotNull
 	@Column(name = "MONTANT")
 	private long montant;
 
@@ -33,7 +33,7 @@ public class PrixPlace implements Serializable {
 	private boolean abonne;
 
 	@JoinColumn(name = "SAISON", referencedColumnName = "SAISON_ID")
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Saison saison;
 
 	private static final long serialVersionUID = 1L;
@@ -45,14 +45,13 @@ public class PrixPlace implements Serializable {
 
 	@Column(name = "BLOC_ID", nullable = false, length = 100)
 	private String blocId;
-	// bi-directional many-to-one association to TypeMatch
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TYPE_MATCH_ID", nullable = false)
 	private TypeMatch typeMatch;
 	// bi-directional many-to-one association to TypePersonne
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TYPE_PERSONNE_ID", nullable = false)
 	private TypePersonne typePersonne;
 

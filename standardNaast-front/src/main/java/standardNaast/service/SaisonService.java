@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import standardNaast.beans.Travels;
 import standardNaast.dao.SaisonDAO;
+import standardNaast.entities.Personne;
 import standardNaast.entities.Saison;
 
 /**
@@ -32,4 +34,17 @@ public class SaisonService {
 	public List<Saison> findAllSaison() {
 		return this.saisonDAO.getAllSeasons();
 	}
+
+	public Travels getTravelsPerSeason(String season, Personne member) {
+		Travels travels = new Travels();
+		Saison saison = this.saisonDAO.getSeasonById(season);
+		travels.setAway(this.saisonDAO.getTravelsPerSeasonAway(saison, member));
+		travels.setHome(this.saisonDAO.getTravelsPerSeasonHome(saison, member));
+		return travels;
+	}
+
+	public Saison getSaisonById(String saisonId) {
+		return this.saisonDAO.getSeasonById(saisonId);
+	}
+
 }

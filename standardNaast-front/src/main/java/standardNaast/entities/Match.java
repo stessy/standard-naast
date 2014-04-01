@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -28,31 +28,37 @@ import javax.validation.constraints.Size;
 public class Match implements Serializable {
 
 	@Basic(optional = false)
-	//@NotNull
+	// @NotNull
 	@Size(min = 1, max = 50)
 	@Column(name = "LIEU")
 	private String lieu;
+
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "MATCH_ID", unique = true, nullable = false, precision = 10)
 	private long matchId;
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "DATE_MATCH")
 	private Date dateMatch;
+
 	// bi-directional many-to-one association to CommandePlace
-	@OneToMany(mappedBy = "match")
+	@OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
 	private List<CommandePlace> commandePlaces;
+
 	// bi-directional many-to-one association to SaisonEquipe
 	@ManyToOne
 	@JoinColumn(name = "SAISON_EQUIPE_ID", nullable = false)
 	private SaisonEquipe saisonEquipe;
+
 	// bi-directional many-to-one association to TypeMatch
 	@ManyToOne
 	@JoinColumn(name = "TYPE_MATCH", nullable = false)
 	private TypeMatch typeMatchBean;
 	// bi-directional many-to-one association to PersonnesMatch
-	@OneToMany(mappedBy = "match")
+	@OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
 	private List<PersonnesMatch> personnesMatches;
 
 	public Match() {

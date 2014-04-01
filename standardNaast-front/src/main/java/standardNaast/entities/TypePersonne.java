@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,7 +46,7 @@ public class TypePersonne implements Serializable {
 	private String denominationTypePersonne;
 	// bi-directional many-to-one association to PrixPlace
 
-	@OneToMany(mappedBy = "typePersonne")
+	@OneToMany(mappedBy = "typePersonne", fetch = FetchType.LAZY)
 	private List<PrixPlace> prixPlaces;
 
 	public TypePersonne() {

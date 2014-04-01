@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
-	<h:form id="memberFormId">
+<!-- 	<h:form id="memberFormId"> -->
 		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 		<p:panelGrid style="width:100%" styleClass="memberForm" id="memberFormGrid">
 			<p:row>
@@ -83,7 +83,7 @@
 					<p:outputLabel for="identityCardValidity" value="#{messages['IDENTITY.VALIDITY']}" />
 				</p:column>
 				<p:column>
-					<p:calendar id="identityCardValidity" navigator="true" value="#{memberForm.personne.passportValidity}"  pattern="dd/MM/yyyy" />
+					<p:calendar id="identityCardValidity" navigator="true" value="#{memberForm.personne.passportValidity}" pattern="dd/MM/yyyy" />
 				</p:column>
 				<p:column style="text-align:right;">
 					<p:outputLabel for="student" value="#{messages['ETUDIANT']}" />
@@ -105,6 +105,5 @@
 
 			</f:facet>
 		</p:panelGrid>
-	</h:form>
-
+<!-- 	</h:form> -->
 </ui:composition>

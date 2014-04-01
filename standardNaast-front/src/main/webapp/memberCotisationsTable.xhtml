@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+			<p:dataTable id="memberCotisationsTable"  var="cotisations" value="#{memberCotisations.cotisations}" widgetVar="membersCotisationsTableVar" paginator="true" row="5" selectionMode="single" selection="#{cotisationsTable.selectedCotisation}"
+				rowKey="#{cotisations}" paginatorPosition="bottom">
+				<p:ajax event="rowSelect" listener="#{membersTable.onRowSelect}" update="@([id$=memberFormGrid], [id$=memberAbonnementsTable]) :mainForm:masterTabView:memberAbonnementsTable" />
+				
+				<p:column headerText="#{messages['COTISATION.ANNEE']}">
+					<h:outputText value="#{cotisations.cotisation.anneeCotisation2}"/>
+				</p:column>
+				<p:column headerText="#{messages['PAYMENT.DATE.COTISATION']}">
+					<h:outputText value="#{cotisations.datePaiement}" ><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></h:outputText>
+				</p:column>
+				<p:column headerText="#{messages['MEMBER.CARD.SENT']}">
+					<p:selectBooleanCheckbox value="#{cotisations.carteMembreEnvoyee}" />
+				</p:column>
+				<f:facet name="footer">
+					<h:outputText value=" " />
+				</f:facet>
+			</p:dataTable>
+</ui:composition>

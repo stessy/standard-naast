@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+<!--     <persistence-unit name="StandardNaastPeristenceUnit" transaction-type="RESOURCE_LOCAL"> -->
     <persistence-unit name="StandardNaastPeristenceUnit" transaction-type="JTA">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <jta-data-source>jdbc/__defaultPool</jta-data-source>
+<!--         <jta-data-source>jdbc/__defaultPool</jta-data-source> -->
         <class>standardNaast.entities.Abonnement</class>
         <class>standardNaast.entities.Personne</class>
         <class>standardNaast.entities.Saison</class>
@@ -12,7 +14,7 @@
         <class>standardNaast.entities.CommandePlace</class>
         <class>standardNaast.entities.Team</class>
         <class>standardNaast.entities.Match</class>
-        <class>standardNaast.entities.PersonnesCotisation</class>
+        <class>standardNaast.entities.PersonneCotisation</class>
         <class>standardNaast.entities.PersonnesMatch</class>
         <class>standardNaast.entities.PersonnesMatchPK</class>
         <class>standardNaast.entities.PrixLocomotion</class>
@@ -31,6 +33,7 @@
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
             <property name="javax.persistence.validation.mode" value="NONE" />
+            <property name="eclipselink.logging.level" value="FINE"/>
         </properties>
     </persistence-unit>
 </persistence>

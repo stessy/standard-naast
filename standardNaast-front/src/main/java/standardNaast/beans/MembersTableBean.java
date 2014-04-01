@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import standardNaast.entities.Abonnement;
 import standardNaast.entities.Personne;
 import standardNaast.service.PersonneService;
 
@@ -28,16 +27,23 @@ public class MembersTableBean implements Serializable {
 
 	private Personne selectedMember;
 
-	private List<Abonnement> abonnements;
-
 	@Autowired
 	private MemberAbonnementBean memberAbonnementBean;
+
+	@Autowired
+	private MemberCotisationsBean memberCotisationsBean;
+
+	@Autowired
+	private MemberBenevolatBean memberBenevolatBean;
 
 	@Autowired
 	private MemberFormBean memberForm;
 
 	@Autowired
 	private PersonneService personneService;
+
+	@Autowired
+	private MemberTravelsBean memberTravelsBean;
 
 	@PostConstruct
 	public void init() {
@@ -56,7 +62,7 @@ public class MembersTableBean implements Serializable {
 		return this.filteredMembers;
 	}
 
-	public void setFilteredMembers(final List<Personne> filteredMembers) {
+	public void setFilteredMembers(List<Personne> filteredMembers) {
 		this.filteredMembers = filteredMembers;
 	}
 
@@ -64,21 +70,19 @@ public class MembersTableBean implements Serializable {
 		return this.selectedMember;
 	}
 
-	public void setSelectedMember(final Personne selectedMember) {
+	public void setSelectedMember(Personne selectedMember) {
 		this.selectedMember = selectedMember;
-		this.setAbonnements(this.getSelectedMember().getAbonnementList());
 	}
 
-	public void onRowSelect(final SelectEvent event) {
+	public void onRowSelect(SelectEvent event) {
 		this.memberForm.setPersonne(this.getSelectedMember());
-		this.memberAbonnementBean.setAbonnements(this.getAbonnements());
+		this.memberAbonnementBean.setAbonnements(this.getSelectedMember()
+				.getAbonnementList());
+		this.memberCotisationsBean.setCotisations(this.getSelectedMember()
+				.getPersonnesCotisations());
+		this.memberBenevolatBean.setBenevolats(this.getSelectedMember()
+				.getBenevolatList());
+		this.memberTravelsBean.setSelectedMember(this.getSelectedMember());
 	}
 
-	public List<Abonnement> getAbonnements() {
-		return this.abonnements;
-	}
-
-	public void setAbonnements(final List<Abonnement> abonnements) {
-		this.abonnements = abonnements;
-	}
 }
