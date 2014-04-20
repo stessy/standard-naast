@@ -1,15 +1,21 @@
 package standardNaast.beans;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import java.io.Serializable;
+
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import standardNaast.entities.Personne;
 import standardNaast.service.SaisonService;
 
-@Controller("memberTravelsBean")
-@Scope("session")
-public class MemberTravelsBean {
+//@Controller("memberTravelsBean")
+//@Scope("session")
+@Named(value = "memberTravelsBean")
+@SessionScoped
+public class MemberTravelsBean implements Serializable {
+
+	private static final long serialVersionUID = -6906759511098537955L;
 
 	private String selectedSeason;
 
@@ -21,7 +27,8 @@ public class MemberTravelsBean {
 
 	private int total;
 
-	@Autowired
+	// @Autowired
+	@Inject
 	private SaisonService saisonService;
 
 	public MemberTravelsBean() {

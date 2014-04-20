@@ -224,7 +224,7 @@ public class TableauCotisations {
 				List<PersonneCotisation> memberCotisationList = member
 						.getPersonnesCotisations();
 				for (PersonneCotisation memberCotisation : memberCotisationList) {
-					if (memberCotisation.getCotisation().getAnneeCotisation2() == todayYear) {
+					if (memberCotisation.getCotisation().getAnneeCotisation() == todayYear) {
 						// La cotisation a été payée
 						personneCotisation.setPaied("P");
 						personneCotisation.setBonus(1);

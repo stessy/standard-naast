@@ -3,12 +3,17 @@ package standardNaast.entities;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -17,6 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "EQUIPE")
+@Access(AccessType.FIELD)
 public class Team implements Serializable, Comparable<Team> {
 
 	private static final long serialVersionUID = 1L;
@@ -29,19 +35,15 @@ public class Team implements Serializable, Comparable<Team> {
 	@Column(name = "NOM_EQUIPE", nullable = false, length = 150)
 	private String nomEquipe;
 
-	// bi-directional many-to-one association to SaisonEquipe
-	@OneToMany(mappedBy = "equipe")
-	private List<SaisonEquipe> saisonEquipes;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "SAISON_EQUIPE", joinColumns = { @JoinColumn(name = "EQUIPE_ID") }, inverseJoinColumns = { @JoinColumn(name = "SAISON_ID") })
+	private List<Saison> saisons;
 
 	public Team() {
 	}
 
 	public long getEquipeId() {
 		return this.equipeId;
-	}
-
-	public void setEquipeId(final long equipeId) {
-		this.equipeId = equipeId;
 	}
 
 	public String getNomEquipe() {
@@ -52,12 +54,12 @@ public class Team implements Serializable, Comparable<Team> {
 		this.nomEquipe = nomEquipe;
 	}
 
-	public List<SaisonEquipe> getSaisonEquipes() {
-		return this.saisonEquipes;
+	public List<Saison> getSaisons() {
+		return this.saisons;
 	}
 
-	public void setSaisonEquipes(final List<SaisonEquipe> saisonEquipes) {
-		this.saisonEquipes = saisonEquipes;
+	public void setSaisons(List<Saison> saisons) {
+		this.saisons = saisons;
 	}
 
 	@Override

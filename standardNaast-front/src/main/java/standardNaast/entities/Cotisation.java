@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +22,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "COTISATIONS")
+@Access(AccessType.FIELD)
 public class Cotisation implements Serializable, Comparable<Cotisation> {
 
 	/** The serialVersionUID. */
@@ -29,14 +32,11 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 	@Basic(optional = false)
 	@NotNull
 	@Column(name = "ANNEE_COTISATION2")
-	private long anneeCotisation2;
+	private long anneeCotisation;
 
 	@Column(name = "MONTANT_COTISATION", nullable = false, precision = 10, scale = 2)
 	private BigDecimal montantCotisation;
 
-	/**
-	 * The personnes.
-	 */
 	@OneToMany(mappedBy = "cotisation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<PersonneCotisation> personneCotisations;
 
@@ -52,21 +52,21 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 	}
 
 	public Cotisation(final Short anneeCotisation2) {
-		this.anneeCotisation2 = anneeCotisation2;
+		this.anneeCotisation = anneeCotisation2;
 	}
 
-	public long getAnneeCotisation2() {
-		return this.anneeCotisation2;
+	public long getAnneeCotisation() {
+		return this.anneeCotisation;
 	}
 
-	public void setAnneeCotisation2(final long anneeCotisation2) {
-		this.anneeCotisation2 = anneeCotisation2;
+	public void setAnneeCotisation(final long anneeCotisation) {
+		this.anneeCotisation = anneeCotisation;
 	}
 
 	@Override
 	public String toString() {
-		return "standardNaast.entities.Cotisation[ anneeCotisation2="
-				+ this.anneeCotisation2 + " ]";
+		return "standardNaast.entities.Cotisation[ anneeCotisation="
+				+ this.anneeCotisation + " ]";
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result)
-				+ (int) (this.anneeCotisation2 ^ (this.anneeCotisation2 >>> 32));
+				+ (int) (this.anneeCotisation ^ (this.anneeCotisation >>> 32));
 		result = (prime * result)
 				+ ((this.montantCotisation == null) ? 0
 						: this.montantCotisation.hashCode());
@@ -96,7 +96,7 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 			return false;
 		}
 		Cotisation other = (Cotisation) obj;
-		if (this.anneeCotisation2 != other.anneeCotisation2) {
+		if (this.anneeCotisation != other.anneeCotisation) {
 			return false;
 		}
 		if (this.montantCotisation == null) {
@@ -110,8 +110,7 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 			if (other.personneCotisations != null) {
 				return false;
 			}
-		} else if (!this.personneCotisations
-				.equals(other.personneCotisations)) {
+		} else if (!this.personneCotisations.equals(other.personneCotisations)) {
 			return false;
 		}
 		return true;
@@ -119,7 +118,6 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 
 	@Override
 	public int compareTo(final Cotisation o) {
-		// return this.anneeCotisation2 > o.anneeCotisation2 ? ;
-		return 0;
+		return this.anneeCotisation > o.anneeCotisation ? 1 : -1;
 	}
 }

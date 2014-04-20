@@ -3,15 +3,14 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-<!-- 	<context-param> -->
-<!-- 		<param-name>primefaces.THEME</param-name> -->
-<!-- 		<param-value>standardNaast-theme</param-value> -->
-<!-- 	</context-param> -->
+	<!-- <context-param> -->
+	<!-- <param-name>primefaces.THEME</param-name> -->
+	<!-- <param-value>standardNaast-theme</param-value> -->
+	<!-- </context-param> -->
 	<context-param>
 		<param-name>facelets.DEVELOPMENT</param-name>
 		<param-value>true</param-value>
 	</context-param>
-	
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -33,23 +32,8 @@
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
 	</listener>
-	 <!-- Spring Context Configuration' s Path definition -->
-      <context-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>
-      /WEB-INF/beans.xml
-      </param-value>
-   </context-param>
-
-   <!-- The Bootstrap listener to start up and shut down Spring's root WebApplicationContext. It is registered to Servlet Container -->
-   <listener>
-  <listener-class>
-   org.springframework.web.context.ContextLoaderListener
-  </listener-class>
-   </listener>
-   <listener>
-  <listener-class>
-   org.springframework.web.context.request.RequestContextListener
-  </listener-class>
-   </listener>
+	<resource-env-ref>
+		<resource-env-ref-name>BeanManager</resource-env-ref-name>
+		<resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type>
+	</resource-env-ref>
 </web-app>

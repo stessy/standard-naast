@@ -4,7 +4,7 @@
 				<p:ajax event="rowSelect" listener="#{membersTable.onRowSelect}" update="@([id$=memberFormGrid], [id$=memberAbonnementsTable]) :mainForm:masterTabView:memberAbonnementsTable" />
 				
 				<p:column headerText="#{messages['COTISATION.ANNEE']}">
-					<h:outputText value="#{cotisations.cotisation.anneeCotisation2}"/>
+					<h:outputText value="#{cotisations.cotisation.anneeCotisation}"/>
 				</p:column>
 				<p:column headerText="#{messages['PAYMENT.DATE.COTISATION']}">
 					<h:outputText value="#{cotisations.datePaiement}" ><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></h:outputText>

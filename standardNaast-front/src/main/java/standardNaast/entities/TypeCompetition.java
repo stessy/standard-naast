@@ -2,6 +2,8 @@ package standardNaast.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,13 +17,16 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TYPE_COMPETITION")
+@Access(AccessType.FIELD)
 public class TypeCompetition implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "TYPE_COMPETITION_ID", unique = true, nullable = false, precision = 4)
 	private long typeCompetitionId;
+
 	@Column(name = "TYPE_COMPETITION_VALUE", nullable = false, length = 100)
 	private String typeCompetitionValue;
 

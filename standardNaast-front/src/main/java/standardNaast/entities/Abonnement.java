@@ -3,6 +3,8 @@ package standardNaast.entities;
 import java.io.Serializable;
 import java.math.BigInteger;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +25,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "ABONNEMENT")
+@Access(AccessType.FIELD)
 public class Abonnement implements Serializable {
 
 	@Size(max = 100)

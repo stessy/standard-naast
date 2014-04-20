@@ -5,16 +5,15 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import standardNaast.entities.Saison;
 import standardNaast.service.SaisonService;
 
-@Controller("seasonsBean")
-@Scope("session")
+@Named(value = "seasonsBean")
+@SessionScoped
 public class SeasonBean implements Serializable {
 
 	private static final long serialVersionUID = 7004625731973211539L;
@@ -23,7 +22,7 @@ public class SeasonBean implements Serializable {
 
 	private List<Saison> seasons;
 
-	@Autowired
+	@Inject
 	private SaisonService saisonService;
 
 	@PostConstruct

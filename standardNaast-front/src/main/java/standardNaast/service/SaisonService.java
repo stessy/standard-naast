@@ -3,14 +3,12 @@
  */
 package standardNaast.service;
 
+import java.io.Serializable;
 import java.util.List;
 
-import javax.inject.Named;
+import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import standardNaast.beans.Travels;
 import standardNaast.dao.SaisonDAO;
@@ -21,12 +19,13 @@ import standardNaast.entities.Saison;
  * @author stessy
  * 
  */
-@Named
-@Service("saisonService")
-@Transactional(readOnly = true)
-public class SaisonService {
+// @Named
+// @Service("saisonService")
+// @Transactional(readOnly = true)
+public class SaisonService implements Serializable {
 
-	@Autowired
+	// @Autowired
+	@Inject
 	SaisonDAO saisonDAO;
 
 	private static final Logger LOGGER = Logger.getLogger(SaisonService.class);

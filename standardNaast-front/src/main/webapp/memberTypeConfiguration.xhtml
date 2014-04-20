@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<p:dataTable id="memberTypeConfigurationTable" var="typePersonne" value="#{typePersonneBean.typePersonnes}" paginator="true" rows="5" tableStyle="width:98%" selectionMode="single" selection="#{typePersonneBean.selectedTypePersonne}" rowKey="#{typePersonneBean}"
+		emptyMessage="#{messages['NO.TYPE.PERSONNE']}" paginatorPosition="bottom">
+		<p:column headerText="#{messages['denomination']}">
+			<h:outputText value="#{typePersonne.denominationTypePersonne}" />
+		</p:column>
+		<p:column headerText="#{messages['age.minimum']}">
+			<h:outputText value="#{typePersonne.ageMinimum}" />
+		</p:column>
+		<p:column headerText="#{messages['age.maximum']}">
+			<h:outputText value="#{typePersonne.ageMaximum}" />
+		</p:column>
+		<p:column headerText="#{messages['student']}">
+			<p:selectBooleanCheckbox value="#{typePersonne.etudiant}" />
+		</p:column>
+		<p:column headerText="#{messages['member']}">
+			<p:selectBooleanCheckbox value="#{typePersonne.membre}" />
+		</p:column>
+		<p:column headerText="#{messages['tarif']}">
+			<h:outputText value="#{typePersonne.tarif}" />
+		</p:column>
+		<f:facet name="footer">
+			<h:outputText value=" " />
+		</f:facet>
+	</p:dataTable>
+</ui:composition>

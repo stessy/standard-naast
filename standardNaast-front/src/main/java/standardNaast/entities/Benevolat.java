@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +25,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "BENEVOLAT")
+@Access(AccessType.FIELD)
 public class Benevolat implements Serializable {
 
 	@Transient

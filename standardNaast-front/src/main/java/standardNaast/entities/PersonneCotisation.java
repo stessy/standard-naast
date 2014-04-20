@@ -2,6 +2,8 @@ package standardNaast.entities;
 
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,6 +21,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "PERSONNES_COTISATIONS")
 @IdClass(PersonnesCotisationsId.class)
+@Access(AccessType.FIELD)
 public class PersonneCotisation {
 
 	@Column(name = "CARTE_MEMBRE_ENVOYEE")
@@ -32,6 +35,7 @@ public class PersonneCotisation {
 	@ManyToOne
 	@JoinColumn(name = "PERSONNE_ID", insertable = true, updatable = false)
 	private Personne personne;
+
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "ANNEE_COTISATION2", insertable = true, updatable = true)

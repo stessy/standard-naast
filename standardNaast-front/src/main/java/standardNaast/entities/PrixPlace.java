@@ -2,6 +2,8 @@ package standardNaast.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PRIX_PLACE")
+@Access(AccessType.FIELD)
 public class PrixPlace implements Serializable {
 
 	@Basic(optional = false)
@@ -49,6 +52,7 @@ public class PrixPlace implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TYPE_MATCH_ID", nullable = false)
 	private TypeMatch typeMatch;
+
 	// bi-directional many-to-one association to TypePersonne
 
 	@ManyToOne(fetch = FetchType.LAZY)

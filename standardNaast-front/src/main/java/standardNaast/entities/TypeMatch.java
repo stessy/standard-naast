@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  * The persistent class for the TYPE_MATCH database table.
@@ -20,10 +21,11 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "TYPE_MATCH")
+@Access(AccessType.FIELD)
 public class TypeMatch implements Serializable {
 
 	@Basic(optional = false)
-	//@NotNull
+	// @NotNull
 	@Column(name = "TYPE_COMPETITION_ID")
 	private BigInteger typeCompetitionId;
 
@@ -36,10 +38,12 @@ public class TypeMatch implements Serializable {
 
 	@Column(name = "DENOMINATION_MATCH", nullable = false, length = 100)
 	private String denominationMatch;
+
 	// bi-directional many-to-one association to Match
 
 	@OneToMany(mappedBy = "typeMatchBean")
 	private List<Match> matches;
+
 	// bi-directional many-to-one association to PrixPlace
 
 	@OneToMany(mappedBy = "typeMatch")

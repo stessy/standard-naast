@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Basic;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +20,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
+
+import types.CompetitionType;
+import types.MatchType;
 
 /**
  * The persistent class for the "MATCH" database table.
@@ -25,39 +30,46 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "MATCH")
+@Access(AccessType.FIELD)
 public class Match implements Serializable {
-
-	@Basic(optional = false)
-	// @NotNull
-	@Size(min = 1, max = 50)
-	@Column(name = "LIEU")
-	private String lieu;
-
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "MATCH_ID", unique = true, nullable = false, precision = 10)
-	private long matchId;
+	private long id;
+
+	@JoinColumn(name = "OPPONENT", nullable = false)
+	private Team opponent;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "DATE_MATCH")
 	private Date dateMatch;
 
-	// bi-directional many-to-one association to CommandePlace
+	@Column(name = "LIEU", nullable = false)
+	private String lieu;
+
 	@OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
 	private List<CommandePlace> commandePlaces;
 
-	// bi-directional many-to-one association to SaisonEquipe
+	@JoinColumn(name = "SAISON_ID", nullable = false)
+	private Saison saison;
+
 	@ManyToOne
 	@JoinColumn(name = "SAISON_EQUIPE_ID", nullable = false)
 	private SaisonEquipe saisonEquipe;
 
-	// bi-directional many-to-one association to TypeMatch
 	@ManyToOne
 	@JoinColumn(name = "TYPE_MATCH", nullable = false)
 	private TypeMatch typeMatchBean;
-	// bi-directional many-to-one association to PersonnesMatch
+
+	@Column(name = "COMPETITION_TYPE", nullable = false, length = CompetitionType.COMPETITION_TYPE_MAX_LENGTH)
+	@Enumerated(EnumType.STRING)
+	private CompetitionType typeCompetition;
+
+	@Column(name = "MATCH_TYPE", nullable = true, length = MatchType.MATCH_TYPE_MAX_LENGTH)
+	@Enumerated(EnumType.STRING)
+	private MatchType matchType;
+
 	@OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
 	private List<PersonnesMatch> personnesMatches;
 
@@ -65,11 +77,11 @@ public class Match implements Serializable {
 	}
 
 	public long getMatchId() {
-		return this.matchId;
+		return this.id;
 	}
 
 	public void setMatchId(final long matchId) {
-		this.matchId = matchId;
+		this.id = matchId;
 	}
 
 	public Date getDateMatch() {
@@ -78,14 +90,6 @@ public class Match implements Serializable {
 
 	public void setDateMatch(final Date dateMatch) {
 		this.dateMatch = dateMatch;
-	}
-
-	public String getLieu() {
-		return this.lieu;
-	}
-
-	public void setLieu(final String lieu) {
-		this.lieu = lieu;
 	}
 
 	public List<CommandePlace> getCommandePlaces() {
@@ -118,5 +122,25 @@ public class Match implements Serializable {
 
 	public void setPersonnesMatches(final List<PersonnesMatch> personnesMatches) {
 		this.personnesMatches = personnesMatches;
+	}
+
+	public Team getOpponent() {
+		return this.opponent;
+	}
+
+	public void setOpponent(Team opponent) {
+		this.opponent = opponent;
+	}
+
+	public String getLieu() {
+		return this.lieu;
+	}
+
+	public void setLieu(String lieu) {
+		this.lieu = lieu;
+	}
+
+	public long getId() {
+		return this.id;
 	}
 }

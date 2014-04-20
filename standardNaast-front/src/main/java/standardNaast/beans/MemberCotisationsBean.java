@@ -1,17 +1,20 @@
 package standardNaast.beans;
 
+import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import standardNaast.entities.PersonneCotisation;
-import standardNaast.service.PersonneCotisationsService;
+import standardNaast.service.CotisationsService;
 
-@Controller("memberCotisations")
-@Scope("session")
-public class MemberCotisationsBean {
+//@Controller("memberCotisations")
+//@Scope("session")
+@Named(value = "memberCotisations")
+@SessionScoped
+public class MemberCotisationsBean implements Serializable {
 
 	private List<PersonneCotisation> cotisations;
 
@@ -21,8 +24,8 @@ public class MemberCotisationsBean {
 
 	private PersonneCotisation personneCotisation;
 
-	@Autowired
-	private PersonneCotisationsService cotisationService;
+	@Inject
+	private CotisationsService cotisationService;
 
 	public List<PersonneCotisation> getCotisations() {
 		return this.cotisations;

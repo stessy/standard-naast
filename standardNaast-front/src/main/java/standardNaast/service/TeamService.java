@@ -3,10 +3,12 @@
  */
 package standardNaast.service;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import standardNaast.dao.TeamDAO;
 import standardNaast.entities.Team;
@@ -15,9 +17,10 @@ import standardNaast.entities.Team;
  * @author stessy
  * 
  */
-public class TeamService {
+public class TeamService implements Serializable {
 
-	@Autowired
+	// @Autowired
+	@Inject
 	TeamDAO TeamDAO;
 
 	private static final Logger LOGGER = Logger

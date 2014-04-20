@@ -4,12 +4,17 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -21,6 +26,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "SAISON")
+@Access(AccessType.FIELD)
 public class Saison implements Serializable, Comparable<Saison> {
 
 	@Basic(optional = false)
@@ -34,8 +40,9 @@ public class Saison implements Serializable, Comparable<Saison> {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "saison", fetch = FetchType.LAZY)
 	private List<PrixPlace> prixPlaceList;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "saison", fetch = FetchType.LAZY)
-	private List<SaisonEquipe> saisonEquipeList;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "SAISON_EQUIPE", joinColumns = { @JoinColumn(name = "SAISON_ID") }, inverseJoinColumns = { @JoinColumn(name = "EQUIPE_ID") })
+	private List<Team> equipes;
 
 	private static final long serialVersionUID = -2532912588458658209L;
 
@@ -118,12 +125,12 @@ public class Saison implements Serializable, Comparable<Saison> {
 		this.prixPlaceList = prixPlaceList;
 	}
 
-	public List<SaisonEquipe> getSaisonEquipeList() {
-		return this.saisonEquipeList;
+	public List<Team> getEquipes() {
+		return this.equipes;
 	}
 
-	public void setSaisonEquipeList(final List<SaisonEquipe> saisonEquipeList) {
-		this.saisonEquipeList = saisonEquipeList;
+	public void setEquipes(List<Team> equipes) {
+		this.equipes = equipes;
 	}
 
 	@Override
@@ -154,8 +161,7 @@ public class Saison implements Serializable, Comparable<Saison> {
 				+ ((this.prixPlaceList == null) ? 0 : this.prixPlaceList
 						.hashCode());
 		result = (prime * result)
-				+ ((this.saisonEquipeList == null) ? 0 : this.saisonEquipeList
-						.hashCode());
+				+ ((this.equipes == null) ? 0 : this.equipes.hashCode());
 		return result;
 	}
 
@@ -217,11 +223,11 @@ public class Saison implements Serializable, Comparable<Saison> {
 		} else if (!this.prixPlaceList.equals(other.prixPlaceList)) {
 			return false;
 		}
-		if (this.saisonEquipeList == null) {
-			if (other.saisonEquipeList != null) {
+		if (this.equipes == null) {
+			if (other.equipes != null) {
 				return false;
 			}
-		} else if (!this.saisonEquipeList.equals(other.saisonEquipeList)) {
+		} else if (!this.equipes.equals(other.equipes)) {
 			return false;
 		}
 		return true;

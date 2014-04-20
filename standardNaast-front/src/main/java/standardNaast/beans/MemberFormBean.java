@@ -3,24 +3,23 @@ package standardNaast.beans;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
-
 import standardNaast.entities.Personne;
 import standardNaast.service.PersonneService;
 
-@Controller("memberForm")
-@Scope("session")
+//@Controller("memberForm")
+//@Scope("session")
+@Named(value = "memberForm")
+@SessionScoped
 public class MemberFormBean implements Serializable {
 
 	private Personne personne;
 
 	@Inject
-	@Named("personneService")
 	private PersonneService personneService;
 
 	@PostConstruct

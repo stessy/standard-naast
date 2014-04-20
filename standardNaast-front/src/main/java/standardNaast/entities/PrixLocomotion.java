@@ -2,17 +2,16 @@ package standardNaast.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -21,39 +20,41 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "PRIX_LOCOMOTION")
+@Access(AccessType.FIELD)
 public class PrixLocomotion implements Serializable {
 
 	@Basic(optional = false)
-	//@NotNull
+	// @NotNull
 	@Size(min = 1, max = 4)
 	@Column(name = "ANNEE")
 	private String annee;
+
 	// @Max(value=?) @Min(value=?)//if you know range of your decimal fields
 	// consider using these annotations to enforce field validation
 
 	@Basic(optional = false)
-	//@NotNull
+	// @NotNull
 	@Column(name = "MONTANT")
 	private BigDecimal montant;
 
 	@Basic(optional = false)
-	//@NotNull
+	// @NotNull
 	@Size(min = 1, max = 20)
 	@Column(name = "LIEU")
 	private String lieu;
 
 	@Basic(optional = false)
-	//@NotNull
+	// @NotNull
 	@Column(name = "MEMBRE")
 	private boolean membre;
 
 	@Basic(optional = false)
-	//@NotNull
+	// @NotNull
 	@Column(name = "AGE_MINIMUM")
 	private int ageMinimum;
 
 	@Basic(optional = false)
-	//@NotNull
+	// @NotNull
 	@Column(name = "AGE_MAXIMUM")
 	private int ageMaximum;
 
@@ -66,10 +67,6 @@ public class PrixLocomotion implements Serializable {
 
 	@Column(name = "TYPE_PERSONNE", length = 20)
 	private String typePersonne;
-	// bi-directional many-to-one association to PersonnesMatch
-
-	@OneToMany(mappedBy = "prixLocomotion")
-	private List<PersonnesMatch> personnesMatches;
 
 	public PrixLocomotion() {
 	}
@@ -138,11 +135,4 @@ public class PrixLocomotion implements Serializable {
 		this.typePersonne = typePersonne;
 	}
 
-	public List<PersonnesMatch> getPersonnesMatches() {
-		return this.personnesMatches;
-	}
-
-	public void setPersonnesMatches(final List<PersonnesMatch> personnesMatches) {
-		this.personnesMatches = personnesMatches;
-	}
 }

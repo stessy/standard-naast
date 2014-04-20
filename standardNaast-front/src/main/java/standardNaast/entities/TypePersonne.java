@@ -3,6 +3,8 @@ package standardNaast.entities;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TYPE_PERSONNE")
+@Access(AccessType.FIELD)
 public class TypePersonne implements Serializable {
 
 	@Column(name = "AGE_MINIMUM")
@@ -44,7 +47,6 @@ public class TypePersonne implements Serializable {
 
 	@Column(name = "DENOMINATION_TYPE_PERSONNE", nullable = false, length = 100)
 	private String denominationTypePersonne;
-	// bi-directional many-to-one association to PrixPlace
 
 	@OneToMany(mappedBy = "typePersonne", fetch = FetchType.LAZY)
 	private List<PrixPlace> prixPlaces;

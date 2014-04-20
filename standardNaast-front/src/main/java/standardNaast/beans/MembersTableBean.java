@@ -6,17 +6,19 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import standardNaast.entities.Personne;
 import standardNaast.service.PersonneService;
 
-@Controller("membersTable")
-@Scope("session")
+//@Controller("membersTable")
+//@Scope("session")
+@Named(value = "membersTable")
+@SessionScoped
 public class MembersTableBean implements Serializable {
 
 	private static final long serialVersionUID = 7614568701955199215L;
@@ -27,22 +29,28 @@ public class MembersTableBean implements Serializable {
 
 	private Personne selectedMember;
 
-	@Autowired
+	// @Autowired
+	@Inject
 	private MemberAbonnementBean memberAbonnementBean;
 
-	@Autowired
+	// @Autowired
+	@Inject
 	private MemberCotisationsBean memberCotisationsBean;
 
-	@Autowired
+	// @Autowired
+	@Inject
 	private MemberBenevolatBean memberBenevolatBean;
 
-	@Autowired
+	// @Autowired
+	@Inject
 	private MemberFormBean memberForm;
 
-	@Autowired
+	// @Autowired
+	@Inject
 	private PersonneService personneService;
 
-	@Autowired
+	// @Autowired
+	@Inject
 	private MemberTravelsBean memberTravelsBean;
 
 	@PostConstruct

@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<p:dataTable id="seasonConfigurationTable" var="season" value="#{seasonsBean.seasons}" paginator="true" rows="5" tableStyle="width:98%" selectionMode="single" selection="#{seasonBean.selectedSeason.selectedCotisation}" rowKey="#{season}"
+		emptyMessage="#{messages['NO.SEASON']}" paginatorPosition="bottom">
+		<p:column headerText="#{messages['SAISON']}">
+			<h:outputText value="#{season.id}" />
+		</p:column>
+		<p:column headerText="#{messages['SaisonsTable.seasonsTable.columnName_4']}">
+			<h:outputText value="#{season.dateStart}" ><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></h:outputText>
+		</p:column>
+		<p:column headerText="#{messages['SaisonsTable.seasonsTable.columnName_2']}">
+			<h:outputText value="#{season.dateEnd}" ><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></h:outputText>
+		</p:column>
+		<p:column headerText="#{messages['SaisonsTable.seasonsTable.columnName_3']}">
+			<h:outputText value="#{season.dateFirstMatchChampionship}" ><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></h:outputText>
+		</p:column>
+		<p:column headerText="#{messages['SaisonsTable.seasonsTable.columnName_5']}">
+			<p:selectBooleanCheckbox value="#{season.european}" />
+		</p:column>
+		<f:facet name="footer">
+			<h:outputText value=" " />
+		</f:facet>
+	</p:dataTable>
+</ui:composition>

@@ -6,11 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.springframework.stereotype.Repository;
-
 import standardNaast.entities.Personne;
 
-@Repository
 public class PersonDAOImpl implements PersonDAO {
 
 	@PersistenceContext
@@ -42,6 +39,7 @@ public class PersonDAOImpl implements PersonDAO {
 
 	public EntityManager getEntityManager() {
 		return this.entityManager;
+		// return this.entityManager;
 	}
 
 	public void setEntityManager(final EntityManager entityManager) {

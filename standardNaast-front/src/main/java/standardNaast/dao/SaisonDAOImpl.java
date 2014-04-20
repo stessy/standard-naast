@@ -12,8 +12,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.stereotype.Repository;
-
 import standardNaast.entities.Match;
 import standardNaast.entities.Match_;
 import standardNaast.entities.Personne;
@@ -23,7 +21,6 @@ import standardNaast.entities.Saison;
 import standardNaast.entities.SaisonEquipe;
 import standardNaast.entities.SaisonEquipe_;
 
-@Repository
 public class SaisonDAOImpl implements SaisonDAO {
 
 	@PersistenceContext
@@ -41,11 +38,6 @@ public class SaisonDAOImpl implements SaisonDAO {
 	@Override
 	public Saison getSeasonById(String season) {
 		return this.getEntityManager().find(Saison.class, season);
-		// CriteriaQuery<Saison> queryAll = this.getEntityManager()
-		// .getCriteriaBuilder().createQuery(Saison.class);
-		// queryAll.from(Saison.class);
-		// return this.getEntityManager().createQuery(queryAll).getResultList();
-
 	}
 
 	public EntityManager getEntityManager() {

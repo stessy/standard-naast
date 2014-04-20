@@ -3,8 +3,6 @@
 <!--     <persistence-unit name="StandardNaastPeristenceUnit" transaction-type="RESOURCE_LOCAL"> -->
     <persistence-unit name="StandardNaastPeristenceUnit" transaction-type="JTA">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <jta-data-source>jdbc/__defaultPool</jta-data-source>
-<!--         <jta-data-source>jdbc/__defaultPool</jta-data-source> -->
         <class>standardNaast.entities.Abonnement</class>
         <class>standardNaast.entities.Personne</class>
         <class>standardNaast.entities.Saison</class>
@@ -28,7 +26,8 @@
             <property name="eclipselink.weaving" value="false"/>
             <property name="eclipselink.target-server" value="None"/>
             <property name="eclipselink.target-database" value="HSQL"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:file:D:\SkyDrive\standard_naast.db;shutdown=true"/>
+<!--             <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:file:D:\SkyDrive\standard_naast.db;shutdown=true"/> -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/standardNaast"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>

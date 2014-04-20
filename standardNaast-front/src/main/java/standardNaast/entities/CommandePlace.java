@@ -3,6 +3,8 @@ package standardNaast.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +24,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "COMMANDE_PLACE")
+@Access(AccessType.FIELD)
 public class CommandePlace implements Serializable {
 
 	@Basic(optional = false)
@@ -60,11 +63,13 @@ public class CommandePlace implements Serializable {
 
 	@Column(name = "TYPE_PLACE", length = 4000)
 	private String typePlace;
+
 	// bi-directional many-to-one association to Bloc
 
 	@ManyToOne
 	@JoinColumn(name = "BLOC_ID")
 	private Bloc bloc;
+
 	// bi-directional many-to-one association to Match
 
 	@ManyToOne

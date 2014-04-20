@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,14 +21,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.hibernate.validator.constraints.Email;
-
 /**
  * @author stessy
  * 
  */
 @Entity
 @Table(name = "PERSONNES")
+@Access(AccessType.FIELD)
 public class Personne implements Serializable, Comparable<Personne> {
 
 	private static final long serialVersionUID = -8863656538935308776L;
@@ -71,7 +72,7 @@ public class Personne implements Serializable, Comparable<Personne> {
 	private Date birthdate;
 
 	@Column(name = "EMAIL", length = Personne.EMAIL_MAX_LENGTH)
-	@Email
+	// @Email
 	private String email;
 
 	@Column(name = "GSM", length = Personne.PHONE_MAX_LENGTH)

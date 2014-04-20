@@ -1,0 +1,14 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<p:dataTable id="cotisationConfigurationTable" var="cotisation" value="#{cotisationsTable.cotisations}" paginator="true" rows="5" tableStyle="width:98%" selectionMode="single" selection="#{cotisationsTable.selectedCotisation}" rowKey="#{cotisation}"
+		emptyMessage="#{messages['NO.COTISATIONS']}" paginatorPosition="bottom">
+		<p:column headerText="#{messages['MembreForm.cotisationTable.columnName.1']}">
+			<h:outputText value="#{cotisation.anneeCotisation}" />
+		</p:column>
+		<p:column headerText="#{messages['MembreForm.cotisationTable.columnName_2']}">
+			<h:outputText value="#{cotisation.montantCotisation}" />
+		</p:column>
+		<f:facet name="footer">
+			<h:outputText value=" " />
+		</f:facet>
+	</p:dataTable>
+</ui:composition>

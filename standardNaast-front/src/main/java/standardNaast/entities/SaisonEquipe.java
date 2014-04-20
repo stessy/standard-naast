@@ -3,6 +3,8 @@ package standardNaast.entities;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,6 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "SAISON_EQUIPE")
+@Access(AccessType.FIELD)
 public class SaisonEquipe implements Serializable {
 
 	@JoinColumn(name = "SAISON_ID", referencedColumnName = "SAISON_ID")
@@ -32,11 +35,9 @@ public class SaisonEquipe implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "SAISON_EQUIPE_ID", unique = true, nullable = false, precision = 22)
 	private long saisonEquipeId;
-	// bi-directional many-to-one association to Match
 
 	@OneToMany(mappedBy = "saisonEquipe", fetch = FetchType.LAZY)
 	private List<Match> matches;
-	// bi-directional many-to-one association to Equipe
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EQUIPE_ID", unique = true, nullable = false)

@@ -3,14 +3,13 @@
  */
 package standardNaast.service;
 
+import java.io.Serializable;
 import java.util.List;
 
-import javax.inject.Named;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import standardNaast.dao.PersonDAO;
 import standardNaast.entities.Personne;
@@ -19,12 +18,14 @@ import standardNaast.entities.Personne;
  * @author stessy
  * 
  */
-@Named
-@Service("personneService")
-@Transactional(readOnly = true)
-public class PersonneService {
+// @Named
+// @Service("personneService")
+// @Transactional(readOnly = true)
+@Default
+public class PersonneService implements Serializable {
 
-	@Autowired
+	// @Autowired
+	@Inject
 	PersonDAO personneDAO;
 
 	private static final Logger LOGGER = Logger
@@ -43,12 +44,12 @@ public class PersonneService {
 		return this.personneDAO.getPerson(id);
 	}
 
-	@Transactional(readOnly = false)
+	// @Transactional(readOnly = false)
 	public Personne savePerson(final Personne person) {
 		return this.personneDAO.updatePerson(person);
 	}
 
-	@Transactional(readOnly = false)
+	// @Transactional(readOnly = false)
 	public Personne addPerson(final Personne person) {
 		this.personneDAO.addPerson(person);
 		return person;

@@ -3,15 +3,13 @@
  */
 package standardNaast.service;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import java.io.Serializable;
 
 /**
  * @author stessy
  * 
  */
-@Stateless(mappedName = "AbonnementService")
-@LocalBean
-public class AbonnementService {
+
+public class AbonnementService implements Serializable {
 
 }

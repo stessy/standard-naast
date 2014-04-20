@@ -2,45 +2,48 @@ package standardNaast.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.primefaces.event.SelectEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import standardNaast.entities.Cotisation;
-import standardNaast.entities.PersonneCotisation;
-import standardNaast.service.PersonneCotisationsService;
+import standardNaast.service.CotisationsService;
 
-@Controller("cotisationsTable")
-@Scope("session")
+@Named(value = "cotisationsTable")
+@SessionScoped
 public class CotisationsTableBean implements Serializable {
 
 	private static final long serialVersionUID = -4747235749146019196L;
 
-	private List<PersonneCotisation> personneCotisations = new ArrayList<>();
+	private List<Cotisation> cotisations = new ArrayList<>();
 
 	private Cotisation selectedCotisation;
 
-	@Autowired
-	private PersonneCotisationsService cotisationService;
+	@Inject
+	private CotisationsService cotisationService;
 
-	// @PostConstruct
-	// public void init() {
-	// System.out.println("Initializing CotisationsTableBean");
-	// List<PersonneCotisation> findAllCotisations = this.cotisationService
-	// .findAllCotisations();
-	// this.personneCotisations = findAllCotisations;
-	// }
-
-	public List<PersonneCotisation> getCotisations() {
-		return this.personneCotisations;
+	@PostConstruct
+	public void init() {
+		System.out.println("Initializing CotisationsTableBean");
+		List<Cotisation> findAllCotisations = this.cotisationService
+				.findAllCotisations();
+		Collections.sort(findAllCotisations);
+		Collections.reverse(findAllCotisations);
+		this.cotisations = findAllCotisations;
 	}
 
-	public void setCotisations(
-			final List<PersonneCotisation> personneCotisations) {
-		this.personneCotisations = personneCotisations;
+	public List<Cotisation> getCotisations() {
+		return this.cotisations;
+	}
+
+	public void setCotisations(final List<Cotisation> cotisations) {
+		this.cotisations = cotisations;
 	}
 
 	public Cotisation getSelectedCotisation() {

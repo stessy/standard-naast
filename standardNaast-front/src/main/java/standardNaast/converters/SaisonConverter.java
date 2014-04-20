@@ -3,17 +3,18 @@ package standardNaast.converters;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import standardNaast.dao.SaisonDAO;
 
 //@FacesConverter("seasonConverter")
-@Component("seasonConverter")
+//@Component("seasonConverter")
+@Named
 public class SaisonConverter implements Converter {
 
-	@Autowired
+	// @Autowired
+	@Inject
 	SaisonDAO saisonDAO;
 
 	public SaisonConverter() {

@@ -5,10 +5,10 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2014-03-23T21:49:59.980+0100")
+@Generated(value="Dali", date="2014-04-05T12:52:23.481+0200")
 @StaticMetamodel(Team.class)
 public class Team_ {
 	public static volatile SingularAttribute<Team, Long> equipeId;
 	public static volatile SingularAttribute<Team, String> nomEquipe;
-	public static volatile ListAttribute<Team, SaisonEquipe> saisonEquipes;
+	public static volatile ListAttribute<Team, Saison> saisons;
 }

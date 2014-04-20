@@ -2,6 +2,8 @@ package standardNaast.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -15,42 +17,27 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PERSONNES_MATCH")
+@Access(AccessType.FIELD)
 public class PersonnesMatch implements Serializable {
 
 	/** The serialVersionUID. */
 	private static final long serialVersionUID = 228812753302395213L;
 
-	@Column(name = "PAYE")
-	private boolean paye;
-
-	@JoinColumn(name = "PERSONNE_ID", referencedColumnName = "PERSONNE_ID", insertable = false, updatable = false)
 	@ManyToOne(optional = false)
+	@JoinColumn(name = "PERSONNE_ID", referencedColumnName = "PERSONNE_ID", insertable = false, updatable = false)
 	private Personne personne;
 
 	@EmbeddedId
 	private PersonnesMatchPK id;
 
-	// bi-directional many-to-one association to Match
-
 	@ManyToOne
 	@JoinColumn(name = "MATCH_ID", nullable = false, insertable = false, updatable = false)
 	private Match match;
 
-	// bi-directional many-to-one association to PrixLocomotion
-
-	@ManyToOne
-	@JoinColumn(name = "PRIX_LOCOMOTION_ID", nullable = false)
-	private PrixLocomotion prixLocomotion;
+	@Column(name = "CAR_TRAVEL_AMOUNT")
+	private int carTravelAmount;
 
 	public PersonnesMatch() {
-	}
-
-	public boolean isPaye() {
-		return this.paye;
-	}
-
-	public void setPaye(final boolean paye) {
-		this.paye = paye;
 	}
 
 	public Personne getPersonne() {
@@ -77,11 +64,11 @@ public class PersonnesMatch implements Serializable {
 		this.match = match;
 	}
 
-	public PrixLocomotion getPrixLocomotion() {
-		return this.prixLocomotion;
+	public int getCarTravelAmount() {
+		return this.carTravelAmount;
 	}
 
-	public void setPrixLocomotion(final PrixLocomotion prixLocomotion) {
-		this.prixLocomotion = prixLocomotion;
+	public void setCarTravelAmount(final int carTravelAmount) {
+		this.carTravelAmount = carTravelAmount;
 	}
 }

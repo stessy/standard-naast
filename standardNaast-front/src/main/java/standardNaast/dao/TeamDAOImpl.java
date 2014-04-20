@@ -6,11 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.springframework.stereotype.Repository;
-
 import standardNaast.entities.Team;
 
-@Repository
 public class TeamDAOImpl implements TeamDAO {
 
 	@PersistenceContext
