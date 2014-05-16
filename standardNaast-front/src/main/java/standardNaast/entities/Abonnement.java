@@ -56,7 +56,7 @@ public class Abonnement implements Serializable {
 
 	@JoinColumn(name = "SAISON", referencedColumnName = "SAISON_ID")
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Saison saison;
+	private Season saison;
 
 	private static final long serialVersionUID = 3083188497640356561L;
 
@@ -145,11 +145,11 @@ public class Abonnement implements Serializable {
 		this.placeCommandee = placeCommandee;
 	}
 
-	public Saison getSaison() {
+	public Season getSaison() {
 		return this.saison;
 	}
 
-	public void setSaison(final Saison saison) {
+	public void setSaison(final Season saison) {
 		this.saison = saison;
 	}
 }

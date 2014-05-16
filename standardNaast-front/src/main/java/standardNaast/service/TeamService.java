@@ -6,6 +6,8 @@ package standardNaast.service;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
@@ -17,9 +19,10 @@ import standardNaast.entities.Team;
  * @author stessy
  * 
  */
+@Stateless
+@LocalBean
 public class TeamService implements Serializable {
 
-	// @Autowired
 	@Inject
 	TeamDAO TeamDAO;
 

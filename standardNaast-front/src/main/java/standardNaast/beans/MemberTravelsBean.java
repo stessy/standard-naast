@@ -27,7 +27,6 @@ public class MemberTravelsBean implements Serializable {
 
 	private int total;
 
-	// @Autowired
 	@Inject
 	private SaisonService saisonService;
 
@@ -76,7 +75,7 @@ public class MemberTravelsBean implements Serializable {
 	}
 
 	public void setSeasonTravels() {
-		Travels travelsPerSeason = this.saisonService.getTravelsPerSeason(
+		MemberSeasonTravels travelsPerSeason = this.saisonService.getTravelsPerSeason(
 				this.getSelectedSeason(), this.getSelectedMember());
 		int awayResult = travelsPerSeason.getAway();
 		this.setAway(awayResult);

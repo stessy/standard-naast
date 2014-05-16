@@ -10,8 +10,6 @@ import javax.inject.Named;
 import standardNaast.entities.PersonneCotisation;
 import standardNaast.service.CotisationsService;
 
-//@Controller("memberCotisations")
-//@Scope("session")
 @Named(value = "memberCotisations")
 @SessionScoped
 public class MemberCotisationsBean implements Serializable {

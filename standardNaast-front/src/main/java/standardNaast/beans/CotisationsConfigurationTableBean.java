@@ -2,6 +2,7 @@ package standardNaast.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,16 +13,15 @@ import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
 import standardNaast.entities.Cotisation;
-import standardNaast.entities.PersonneCotisation;
 import standardNaast.service.CotisationsService;
 
-@Named(value = "cotisationsTable")
+@Named(value = "cotisationsConfigurationTable")
 @SessionScoped
-public class CotisationsTableBean implements Serializable {
+public class CotisationsConfigurationTableBean implements Serializable {
 
 	private static final long serialVersionUID = -4747235749146019196L;
 
-	private List<PersonneCotisation> cotisations = new ArrayList<>();
+	private List<Cotisation> cotisations = new ArrayList<>();
 
 	private Cotisation selectedCotisation;
 
@@ -30,14 +30,19 @@ public class CotisationsTableBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-
+		System.out.println("Initializing CotisationsTableBean");
+		List<Cotisation> findAllCotisations = this.cotisationService
+				.findAllCotisations();
+		Collections.sort(findAllCotisations);
+		Collections.reverse(findAllCotisations);
+		this.cotisations = findAllCotisations;
 	}
 
-	public List<PersonneCotisation> getCotisations() {
+	public List<Cotisation> getCotisations() {
 		return this.cotisations;
 	}
 
-	public void setCotisations(final List<PersonneCotisation> cotisations) {
+	public void setCotisations(final List<Cotisation> cotisations) {
 		this.cotisations = cotisations;
 	}
 

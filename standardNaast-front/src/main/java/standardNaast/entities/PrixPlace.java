@@ -37,7 +37,7 @@ public class PrixPlace implements Serializable {
 
 	@JoinColumn(name = "SAISON", referencedColumnName = "SAISON_ID")
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Saison saison;
+	private Season saison;
 
 	private static final long serialVersionUID = 1L;
 
@@ -86,11 +86,11 @@ public class PrixPlace implements Serializable {
 		this.abonne = abonne;
 	}
 
-	public Saison getSaison() {
+	public Season getSaison() {
 		return this.saison;
 	}
 
-	public void setSaison(final Saison saison) {
+	public void setSaison(final Season saison) {
 		this.saison = saison;
 	}
 

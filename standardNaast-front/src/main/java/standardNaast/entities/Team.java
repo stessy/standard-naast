@@ -37,7 +37,7 @@ public class Team implements Serializable, Comparable<Team> {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "SAISON_EQUIPE", joinColumns = { @JoinColumn(name = "EQUIPE_ID") }, inverseJoinColumns = { @JoinColumn(name = "SAISON_ID") })
-	private List<Saison> saisons;
+	private List<Season> saisons;
 
 	public Team() {
 	}
@@ -54,11 +54,11 @@ public class Team implements Serializable, Comparable<Team> {
 		this.nomEquipe = nomEquipe;
 	}
 
-	public List<Saison> getSaisons() {
+	public List<Season> getSaisons() {
 		return this.saisons;
 	}
 
-	public void setSaisons(List<Saison> saisons) {
+	public void setSaisons(List<Season> saisons) {
 		this.saisons = saisons;
 	}
 

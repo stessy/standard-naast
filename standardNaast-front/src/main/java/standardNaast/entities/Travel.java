@@ -8,11 +8,15 @@ import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
+import types.Place;
 
 /**
  * The persistent class for the PRIX_LOCOMOTION database table.
@@ -21,7 +25,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "PRIX_LOCOMOTION")
 @Access(AccessType.FIELD)
-public class PrixLocomotion implements Serializable {
+public class Travel implements Serializable {
 
 	@Basic(optional = false)
 	// @NotNull
@@ -40,8 +44,9 @@ public class PrixLocomotion implements Serializable {
 	@Basic(optional = false)
 	// @NotNull
 	@Size(min = 1, max = 20)
-	@Column(name = "LIEU")
-	private String lieu;
+	@Column(name = "PLACE")
+	@Enumerated(EnumType.STRING)
+	private Place place;
 
 	@Basic(optional = false)
 	// @NotNull
@@ -68,7 +73,7 @@ public class PrixLocomotion implements Serializable {
 	@Column(name = "TYPE_PERSONNE", length = 20)
 	private String typePersonne;
 
-	public PrixLocomotion() {
+	public Travel() {
 	}
 
 	public String getAnnee() {
@@ -87,12 +92,12 @@ public class PrixLocomotion implements Serializable {
 		this.montant = montant;
 	}
 
-	public String getLieu() {
-		return this.lieu;
+	public Place getPlace() {
+		return this.place;
 	}
 
-	public void setLieu(final String lieu) {
-		this.lieu = lieu;
+	public void setPlace(final Place place) {
+		this.place = place;
 	}
 
 	public boolean isMembre() {

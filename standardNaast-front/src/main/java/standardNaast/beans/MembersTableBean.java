@@ -15,8 +15,6 @@ import org.primefaces.event.SelectEvent;
 import standardNaast.entities.Personne;
 import standardNaast.service.PersonneService;
 
-//@Controller("membersTable")
-//@Scope("session")
 @Named(value = "membersTable")
 @SessionScoped
 public class MembersTableBean implements Serializable {

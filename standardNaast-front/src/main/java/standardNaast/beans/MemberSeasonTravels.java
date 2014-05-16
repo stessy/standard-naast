@@ -1,6 +1,6 @@
 package standardNaast.beans;
 
-public class Travels {
+public class MemberSeasonTravels {
 
 	private int home;
 

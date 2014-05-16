@@ -63,11 +63,33 @@ SET competition_type =
 		</addColumn>
 	</changeSet>
 	<changeSet id="9" author="stessy">
-	<sql><![CDATA[  UPDATE personnes_match
-SET car_travel_amount =
-  (SELECT montant
-  FROM prix_locomotion
-  WHERE personnes_match.PRIX_LOCOMOTION_ID = prix_locomotion.PRIX_LOCOMOTION_ID
-  );]]></sql>
+		<sql><![CDATA[  UPDATE personnes_match
+			SET car_travel_amount =
+  			(SELECT montant
+  			FROM prix_locomotion
+  			WHERE personnes_match.PRIX_LOCOMOTION_ID = prix_locomotion.PRIX_LOCOMOTION_ID
+  			);]]></sql>
 	</changeSet>
+	<changeSet id="10" author="stessy">
+		<sql><![CDATA[UPDATE PRIX_LOCOMOTION SET LIEU = 'HOME' WHERE LIEU = 'DOMICILE';]]></sql>
+	</changeSet>
+	<changeSet id="11" author="stessy">
+		<sql><![CDATA[UPDATE PRIX_LOCOMOTION SET LIEU = 'AWAY' WHERE LIEU = 'DEPLACEMENT';]]></sql>
+	</changeSet>
+	<changeSet id="12" author="stessy">
+		<sql><![CDATA[UPDATE MATCH SET LIEU = 'HOME' WHERE LIEU = 'DOMICILE';]]></sql>
+	</changeSet>
+	<changeSet id="13" author="stessy">
+		<sql><![CDATA[UPDATE MATCH SET LIEU = 'AWAY' WHERE LIEU = 'DEPLACEMENT';]]></sql>
+	</changeSet>
+	<changeSet id="14" author="stessy">
+		<renameColumn tableName="MATCH" oldColumnName="LIEU" newColumnName="PLACE"/>
+	</changeSet>
+	<changeSet id="15" author="stessy">
+		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="LIEU" newColumnName="PLACE"/>
+	</changeSet>
+<!-- 	<changeSet id="16" author="stessy"> -->
+<!-- 		<dropForeignKeyConstraint baseTableName="MATCH" constraintName=""/> -->
+<!-- 		<dropColumn tableName="MATCH"  columnName="SAISON_EQUIPE_ID"/> -->
+<!-- 	</changeSet> -->
 </databaseChangeLog>

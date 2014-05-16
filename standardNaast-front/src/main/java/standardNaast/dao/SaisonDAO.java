@@ -3,16 +3,16 @@ package standardNaast.dao;
 import java.util.List;
 
 import standardNaast.entities.Personne;
-import standardNaast.entities.Saison;
+import standardNaast.entities.Season;
 
 public interface SaisonDAO {
 
-	List<Saison> getAllSeasons();
+	List<Season> getAllSeasons();
 
-	int getTravelsPerSeasonAway(Saison season, Personne member);
+	int getTravelsPerSeasonAway(Season season, Personne member);
 
-	int getTravelsPerSeasonHome(Saison season, Personne member);
+	int getTravelsPerSeasonHome(Season season, Personne member);
 
-	Saison getSeasonById(String season);
+	Season getSeasonById(String season);
 
 }

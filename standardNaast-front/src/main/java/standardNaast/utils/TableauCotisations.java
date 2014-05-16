@@ -22,7 +22,7 @@ import org.joda.time.DateTime;
 
 import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
-import standardNaast.entities.Saison;
+import standardNaast.entities.Season;
 import standardNaast.service.PersonneService;
 import standardNaast.service.SaisonService;
 
@@ -201,7 +201,7 @@ public class TableauCotisations {
 	private List<PersonneCotisationRow> buildPersonCotisation() {
 		Date advantageDate = new DateTime(TableauCotisations.YEAR, 4, 1, 0, 0)
 				.toDate();
-		List<Saison> seasonList = this.getSeasons();
+		List<Season> seasonList = this.getSeasons();
 		List<Personne> personList = this.getMembers();
 		List<PersonneCotisationRow> personCotisationList = new ArrayList<>();
 		Date today = new Date();
@@ -209,7 +209,7 @@ public class TableauCotisations {
 		todayCalendar.setTime(today);
 		int todayYear = todayCalendar.get(Calendar.YEAR);
 		Calendar seasonCalendar = GregorianCalendar.getInstance();
-		Saison latestSeason = seasonList.get(0);
+		Season latestSeason = seasonList.get(0);
 		seasonCalendar.setTime(latestSeason.getDateEnd());
 		int seasonYear = seasonCalendar.get(Calendar.YEAR);
 		// Si l'année de la date d'aujourd'hui et égale à l'année de la première
@@ -254,7 +254,7 @@ public class TableauCotisations {
 					paymentDateCalendar.setTime(paymentDate);
 					int paymentDateYear = paymentDateCalendar
 							.get(Calendar.YEAR);
-					for (Saison season : seasonList) {
+					for (Season season : seasonList) {
 						Date seasonDateStart = season.getDateStart();
 						Calendar seasonDateCalendar = Calendar.getInstance();
 						seasonDateCalendar.setTime(seasonDateStart);
@@ -282,8 +282,8 @@ public class TableauCotisations {
 		return personCotisationList;
 	}
 
-	private List<Saison> getSeasons() {
-		List<Saison> seasonList = this.getSaisonService().findAllSaison();
+	private List<Season> getSeasons() {
+		List<Season> seasonList = this.getSaisonService().findAllSaison();
 		return SeasonUtils.getCotisationsEuropeanSeasons(seasonList);
 	}
 

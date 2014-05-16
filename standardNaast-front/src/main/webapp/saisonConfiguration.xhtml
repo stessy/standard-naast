@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
-	<p:dataTable id="seasonConfigurationTable" var="season" value="#{seasonsBean.seasons}" paginator="true" rows="5" tableStyle="width:98%" selectionMode="single" selection="#{seasonBean.selectedSeason.selectedCotisation}" rowKey="#{season}"
+	<p:dataTable id="seasonConfigurationTable" var="season" value="#{seasonsBean.seasons}" paginator="true" rows="5" tableStyle="width:98%" selectionMode="single" selection="#{seasonsBean.selectedSeason}" rowKey="#{season}"
 		emptyMessage="#{messages['NO.SEASON']}" paginatorPosition="bottom">
 		<p:column headerText="#{messages['SAISON']}">
 			<h:outputText value="#{season.id}" />

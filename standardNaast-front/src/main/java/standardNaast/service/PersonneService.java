@@ -6,7 +6,8 @@ package standardNaast.service;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.enterprise.inject.Default;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
@@ -18,13 +19,10 @@ import standardNaast.entities.Personne;
  * @author stessy
  * 
  */
-// @Named
-// @Service("personneService")
-// @Transactional(readOnly = true)
-@Default
+@Stateless
+@LocalBean
 public class PersonneService implements Serializable {
 
-	// @Autowired
 	@Inject
 	PersonDAO personneDAO;
 

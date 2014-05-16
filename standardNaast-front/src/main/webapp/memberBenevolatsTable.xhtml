@@ -6,7 +6,7 @@
 		<p:column headerText="#{messages['BENEVOLAT.DATE']}">
 			<h:outputText value="#{benevolats.dateBenevolat}"><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></h:outputText>
 		</p:column>
-		<p:column headerText="#{messages['BENEVOLAT.AMOUNT']}">
+		<p:column headerText="#{messages['amount']}">
 			<h:outputText value="#{benevolats.amount}" ><f:convertNumber maxFractionDigits="0" minFractionDigits="0" groupingUsed="false" /></h:outputText>
 		</p:column>
 		<p:column headerText="#{messages['BENEVOLAT.TYPE']}">

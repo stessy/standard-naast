@@ -27,7 +27,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "SAISON")
 @Access(AccessType.FIELD)
-public class Saison implements Serializable, Comparable<Saison> {
+public class Season implements Serializable, Comparable<Season> {
 
 	@Basic(optional = false)
 	// @NotNull
@@ -106,7 +106,7 @@ public class Saison implements Serializable, Comparable<Saison> {
 		this.id = id;
 	}
 
-	public Saison() {
+	public Season() {
 	}
 
 	public List<Abonnement> getAbonnementList() {
@@ -134,7 +134,7 @@ public class Saison implements Serializable, Comparable<Saison> {
 	}
 
 	@Override
-	public int compareTo(final Saison otherSaison) {
+	public int compareTo(final Season otherSaison) {
 		Date saison1 = this.getDateStart();
 		Date saison2 = otherSaison.getDateStart();
 		return (saison1.compareTo(saison2));
@@ -173,10 +173,10 @@ public class Saison implements Serializable, Comparable<Saison> {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof Saison)) {
+		if (!(obj instanceof Season)) {
 			return false;
 		}
-		Saison other = (Saison) obj;
+		Season other = (Season) obj;
 		if (this.abonnementList == null) {
 			if (other.abonnementList != null) {
 				return false;

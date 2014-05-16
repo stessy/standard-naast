@@ -1,7 +1,6 @@
 package standardNaast.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -13,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -27,7 +25,7 @@ public class SaisonEquipe implements Serializable {
 
 	@JoinColumn(name = "SAISON_ID", referencedColumnName = "SAISON_ID")
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Saison saison;
+	private Season saison;
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,8 +34,8 @@ public class SaisonEquipe implements Serializable {
 	@Column(name = "SAISON_EQUIPE_ID", unique = true, nullable = false, precision = 22)
 	private long saisonEquipeId;
 
-	@OneToMany(mappedBy = "saisonEquipe", fetch = FetchType.LAZY)
-	private List<Match> matches;
+	// @OneToMany(mappedBy = "saisonEquipe", fetch = FetchType.LAZY)
+	// private List<Match> matches;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EQUIPE_ID", unique = true, nullable = false)
@@ -54,21 +52,21 @@ public class SaisonEquipe implements Serializable {
 		this.saisonEquipeId = saisonEquipeId;
 	}
 
-	public Saison getSaisonId() {
+	public Season getSaisonId() {
 		return this.saison;
 	}
 
-	public void setSaisonId(final Saison saisonId) {
+	public void setSaisonId(final Season saisonId) {
 		this.saison = saisonId;
 	}
 
-	public List<Match> getMatches() {
-		return this.matches;
-	}
-
-	public void setMatches(final List<Match> matches) {
-		this.matches = matches;
-	}
+	// public List<Match> getMatches() {
+	// return this.matches;
+	// }
+	//
+	// public void setMatches(final List<Match> matches) {
+	// this.matches = matches;
+	// }
 
 	public Team getEquipe() {
 		return this.equipe;

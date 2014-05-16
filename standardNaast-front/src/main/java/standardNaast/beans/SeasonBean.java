@@ -9,7 +9,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import standardNaast.entities.Saison;
+import standardNaast.entities.Season;
 import standardNaast.service.SaisonService;
 
 @Named(value = "seasonsBean")
@@ -18,9 +18,9 @@ public class SeasonBean implements Serializable {
 
 	private static final long serialVersionUID = 7004625731973211539L;
 
-	private Saison selectedSeason;
+	private Season selectedSeason;
 
-	private List<Saison> seasons;
+	private List<Season> seasons;
 
 	@Inject
 	private SaisonService saisonService;
@@ -28,20 +28,20 @@ public class SeasonBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		System.out.println("Init SeasonBean");
-		List<Saison> saisons = this.saisonService.findAllSaison();
+		List<Season> saisons = this.saisonService.findAllSaison();
 		Collections.sort(saisons);
 		this.seasons = saisons;
 	}
 
-	public List<Saison> getSeasons() {
+	public List<Season> getSeasons() {
 		return this.seasons;
 	}
 
-	public Saison getSelectedSeason() {
+	public Season getSelectedSeason() {
 		return this.selectedSeason;
 	}
 
-	public void setSelectedSeason(final Saison selectedSeason) {
+	public void setSelectedSeason(final Season selectedSeason) {
 		this.selectedSeason = selectedSeason;
 	}
 

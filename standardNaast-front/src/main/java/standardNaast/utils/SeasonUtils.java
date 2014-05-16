@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import standardNaast.entities.Saison;
+import standardNaast.entities.Season;
 
 /**
  * @author stessy
@@ -16,13 +16,13 @@ import standardNaast.entities.Saison;
  */
 public class SeasonUtils {
 
-	public static List<Saison> getCotisationsEuropeanSeasons(final List<Saison> seasonList) {
+	public static List<Season> getCotisationsEuropeanSeasons(final List<Season> seasonList) {
 		Date today = new Date();
 		Collections.sort(seasonList);
 		Collections.reverse(seasonList);
-		List<Saison> subSeasonList = new ArrayList<Saison>();
+		List<Season> subSeasonList = new ArrayList<Season>();
 		boolean passedOnce = false;
-		for (Saison season : seasonList) {
+		for (Season season : seasonList) {
 			if (today.compareTo(season.getDateStart()) == 1) {
 				if (season.isEuropean()) {
 					if (passedOnce) {

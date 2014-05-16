@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 
 import types.CompetitionType;
 import types.MatchType;
+import types.Place;
 
 /**
  * The persistent class for the "MATCH" database table.
@@ -45,22 +46,19 @@ public class Match implements Serializable {
 	@Column(name = "DATE_MATCH")
 	private Date dateMatch;
 
-	@Column(name = "LIEU", nullable = false)
-	private String lieu;
+	@Column(name = "PLACE", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Place place;
 
 	@OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
 	private List<CommandePlace> commandePlaces;
 
 	@JoinColumn(name = "SAISON_ID", nullable = false)
-	private Saison saison;
-
-	@ManyToOne
-	@JoinColumn(name = "SAISON_EQUIPE_ID", nullable = false)
-	private SaisonEquipe saisonEquipe;
+	private Season season;
 
 	@ManyToOne
 	@JoinColumn(name = "TYPE_MATCH", nullable = false)
-	private TypeMatch typeMatchBean;
+	private TypeMatch typeMatch;
 
 	@Column(name = "COMPETITION_TYPE", nullable = false, length = CompetitionType.COMPETITION_TYPE_MAX_LENGTH)
 	@Enumerated(EnumType.STRING)
@@ -100,20 +98,12 @@ public class Match implements Serializable {
 		this.commandePlaces = commandePlaces;
 	}
 
-	public SaisonEquipe getSaisonEquipe() {
-		return this.saisonEquipe;
+	public TypeMatch getTypeMatch() {
+		return this.typeMatch;
 	}
 
-	public void setSaisonEquipe(final SaisonEquipe saisonEquipe) {
-		this.saisonEquipe = saisonEquipe;
-	}
-
-	public TypeMatch getTypeMatchBean() {
-		return this.typeMatchBean;
-	}
-
-	public void setTypeMatchBean(final TypeMatch typeMatchBean) {
-		this.typeMatchBean = typeMatchBean;
+	public void setTypeMatch(final TypeMatch typeMatch) {
+		this.typeMatch = typeMatch;
 	}
 
 	public List<PersonnesMatch> getPersonnesMatches() {
@@ -132,12 +122,12 @@ public class Match implements Serializable {
 		this.opponent = opponent;
 	}
 
-	public String getLieu() {
-		return this.lieu;
+	public Place getPlace() {
+		return this.place;
 	}
 
-	public void setLieu(String lieu) {
-		this.lieu = lieu;
+	public void setPlace(Place place) {
+		this.place = place;
 	}
 
 	public long getId() {

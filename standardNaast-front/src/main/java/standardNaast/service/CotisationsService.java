@@ -4,6 +4,7 @@
 package standardNaast.service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -15,6 +16,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Logger;
 
 import standardNaast.entities.Cotisation;
+import standardNaast.entities.PersonneCotisation;
+import standardNaast.entities.Season;
 
 /**
  * @author stessy
@@ -38,6 +41,10 @@ public class CotisationsService implements Serializable {
 				.getCriteriaBuilder().createQuery(Cotisation.class);
 		queryAll.from(Cotisation.class);
 		return this.entityManager.createQuery(queryAll).getResultList();
+	}
+
+	public List<PersonneCotisation> getPaiedCotisationsPerYear(Season season) {
+		return new ArrayList<PersonneCotisation>();
 	}
 
 }

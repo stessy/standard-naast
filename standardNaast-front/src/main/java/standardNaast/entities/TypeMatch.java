@@ -39,12 +39,8 @@ public class TypeMatch implements Serializable {
 	@Column(name = "DENOMINATION_MATCH", nullable = false, length = 100)
 	private String denominationMatch;
 
-	// bi-directional many-to-one association to Match
-
-	@OneToMany(mappedBy = "typeMatchBean")
+	@OneToMany(mappedBy = "typeMatch")
 	private List<Match> matches;
-
-	// bi-directional many-to-one association to PrixPlace
 
 	@OneToMany(mappedBy = "typeMatch")
 	private List<PrixPlace> prixPlaces;
