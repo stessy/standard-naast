@@ -1,0 +1,81 @@
+JFDML JFormDesigner: "5.1.1.0.120" Java: "1.7.0_04" encoding: "UTF-8"
+
+new FormModel {
+	"i18n.autoExternalize": true
+	"i18n.bundleName": "Bundle"
+	"i18n.keyPrefix": "SaisonsTable"
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+			"$columnSpecs": "default:grow"
+			"$rowSpecs": "default, linegap, default"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "seasonsTable"
+				} )
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 1
+				"gridY": 1
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+				"alignment": 2
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "addSeasonbutton"
+					"text": new FormMessage( null, "AJOUTER" )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addSeasonButtonActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "modifySeasonButton"
+					"text": new FormMessage( null, "MODIFY" )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "modifySeasonButtonActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "deleteSeasonButton"
+					"text": new FormMessage( null, "DELETE" )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "deleteSeasonButtonActionPerformed", true ) )
+				} )
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 1
+				"gridY": 3
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+		add( new FormNonVisual( "standardNaast.model.SaisonsModel" ) {
+			name: "saisonsModel"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 245, 380 )
+		} )
+		addBindingGroup( new FormBindingGroup( class org.jdesktop.beansbinding.BindingGroup ) {
+			"name": "bindingGroup"
+			addBinding( new FormBinding( "saisonsModel", "saisonsList", "seasonsTable", "elements" ) {
+				"editable": false
+				"subBindings": new com.jformdesigner.model.FormBinding[ new FormBinding( null, "id", null, null ) {
+					"columnName": new FormMessage( null, "SaisonsTable.seasonsTable.columnName.1" )
+					"columnClass": "java.lang.String"
+				}, new FormBinding( null, "dateStart", null, null ) {
+					"columnName": new FormMessage( null, "SaisonsTable.seasonsTable.columnName_4" )
+					"columnClass": "java.util.Date"
+				}, new FormBinding( null, "dateEnd", null, null ) {
+					"columnName": new FormMessage( null, "SaisonsTable.seasonsTable.columnName_2" )
+					"columnClass": "java.util.Date"
+				}, new FormBinding( null, "dateFirstMatchChampionship", null, null ) {
+					"columnName": new FormMessage( null, "SaisonsTable.seasonsTable.columnName_3" )
+					"columnClass": "java.util.Date"
+				}, new FormBinding( null, "european", null, null ) {
+					"columnName": new FormMessage( null, "SaisonsTable.seasonsTable.columnName_5" )
+					"columnClass": "java.lang.Boolean"
+				} ]
+			} )
+			addBinding( new FormBinding( "saisonsModel", "selectedSaison", "seasonsTable", "selectedElement" ) )
+			addBinding( new FormBinding( "seasonsTable", "${element != null}", "modifySeasonButton", "selected" ) )
+			addBinding( new FormBinding( "seasonsTable", "${element != null}", "deleteSeasonButton", "selected" ) )
+		} )
+	}
+}

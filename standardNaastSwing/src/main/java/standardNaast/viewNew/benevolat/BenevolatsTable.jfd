@@ -1,0 +1,82 @@
+JFDML JFormDesigner: "5.1.1.0.120" Java: "1.7.0_25" encoding: "UTF-8"
+
+new FormModel {
+	"i18n.autoExternalize": true
+	"i18n.bundleName": "Bundle"
+	"i18n.keyPrefix": "BenevolatsTable"
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+			"$columnSpecs": "default, labelcompgap, default"
+			"$rowSpecs": "default, linegap, default, linegap, default"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+				"$columnSpecs": "default:grow"
+				"$rowSpecs": "default, linegap, default:grow"
+			} ) {
+				name: "benevolatsPanel"
+				"border": new javax.swing.border.TitledBorder( "Bénévolats" )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "benevolatScrollPane"
+					add( new FormComponent( "javax.swing.JTable" ) {
+						name: "benevolatsTable"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "benevolatsTableMouseClicked", true ) )
+					} )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+					"alignment": 2
+				} ) {
+					name: "benevolatButtonPanel"
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "addBenevolatButton"
+						"text": new FormMessage( null, "BenevolatsTable.addBenevolatButton.text" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addBenevolatActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "modifyBenevolatButton"
+						"text": new FormMessage( null, "BenevolatsTable.modifyBenevolatButton.text" )
+						"enabled": false
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "modifyBenevolatActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "deleteBenevolatButton"
+						"text": new FormMessage( null, "BenevolatsTable.deleteBenevolatButton.text" )
+						"enabled": false
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "deleteBenevolatActionPerformed", true ) )
+					} )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridY": 3
+				} )
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+		add( new FormNonVisual( "standardNaast.entities.Benevolat" ) {
+			name: "selectedBenevolat"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 210, 320 )
+		} )
+		add( new FormNonVisual( "standardNaast.model.BenevolatModel" ) {
+			name: "benevolatModel"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 310 )
+		} )
+		addBindingGroup( new FormBindingGroup( class org.jdesktop.beansbinding.BindingGroup ) {
+			"name": "bindingGroup"
+			addBinding( new FormBinding( "benevolatModel", "benevolatList", "benevolatsTable", "elements" ) {
+				"subBindings": new com.jformdesigner.model.FormBinding[ new FormBinding( null, "dateBenevolat", null, null ) {
+					"columnName": new FormMessage( null, "BenevolatsTable.benevolatsTable.columnName.1" )
+					"columnClass": "java.util.Date"
+				}, new FormBinding( null, "amount", null, null ) {
+					"columnName": new FormMessage( null, "BenevolatsTable.benevolatsTable.columnName_2" )
+					"columnClass": "java.math.BigDecimal"
+				}, new FormBinding( null, "typeBenevolat", null, null ) {
+					"columnName": new FormMessage( null, "BenevolatsTable.benevolatsTable.columnName_3" )
+					"columnClass": "java.lang.String"
+				} ]
+			} )
+		} )
+	}
+}

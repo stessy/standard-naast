@@ -1,0 +1,564 @@
+JFDML JFormDesigner: "5.1.1.0.120" Java: "1.7.0_04" encoding: "UTF-8"
+
+new FormModel {
+	"i18n.bundleName": "Bundle"
+	"i18n.keyPrefix": "MembreForm"
+	"i18n.autoExternalize": true
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+			"$columnSpecs": "default:grow"
+			"$rowSpecs": "fill:default, linegap, fill:default:grow"
+		} ) {
+			name: "this"
+			"preferredSize": new java.awt.Dimension( 1024, 768 )
+			"minimumSize": new java.awt.Dimension( 1024, 768 )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+				"$columnSpecs": "default:grow(0.5), default:grow(0.5)"
+				"$rowSpecs": "fill:default"
+			} ) {
+				name: "memberDetailPanel"
+				"border": new javax.swing.border.TitledBorder( "Détails du membre" )
+				"focusTraversalPolicyProvider": true
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+					"$columnSpecs": "default, labelcompgap, default, labelcompgap, default, labelcompgap, default, labelcompgap, default, labelcompgap, default:grow(0.5), labelcompgap, default:grow(0.5), labelcompgap, default, labelcompgap, default, labelcompgap, default, labelcompgap, 61dlu:grow(0.5)"
+					"$rowSpecs": "fill:default, linegap, fill:default, linegap, fill:default, linegap, fill:default, linegap, fill:default, linegap, fill:default, linegap, fill:default, linegap, fill:default, linegap, fill:default"
+				} ) {
+					name: "leftColumnPanel"
+					"border": new javax.swing.border.TitledBorder( "i18nKey=MembreForm.leftColumnPanel.border" )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "nameTextField"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridWidth": 11
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "nameLabel"
+						"text": new FormMessage( null, "NOM" )
+						"labelFor": new FormReference( "nameTextField" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 1
+						"gridY": 1
+					} )
+					add( new FormComponent( "javax.swing.JTextArea" ) {
+						name: "addressTextArea"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 3
+						"gridWidth": 19
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "addressLabel"
+						"text": new FormMessage( null, "ADRESSE" )
+						"labelFor": new FormReference( "addressTextArea" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 1
+						"gridY": 3
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "phoneLabel"
+						"text": new FormMessage( null, "TELEPHONE" )
+						"labelFor": new FormReference( "phoneTextField" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 1
+						"gridY": 9
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "phoneTextField"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 9
+						"gridWidth": 9
+					} )
+					add( new FormComponent( "com.toedter.calendar.JDateChooser" ) {
+						name: "identityCardValidityDateChooser"
+						"dateFormatString": "dd MMMM yyyy"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 21
+						"gridY": 11
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "emailTextField"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 7
+						"gridWidth": 19
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "emailLabel"
+						"text": new FormMessage( null, "EMAIL" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 1
+						"gridY": 7
+					} )
+					add( new FormComponent( "com.toedter.calendar.JDateChooser" ) {
+						name: "birthDataDateChooser"
+						"dateFormatString": "dd MMMM yyyy"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 21
+						"gridY": 13
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "studentLabel"
+						"text": new FormMessage( null, "ETUDIANT" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 1
+						"gridY": 13
+					} )
+					add( new FormComponent( "javax.swing.JRadioButton" ) {
+						name: "studentYesRadioButton"
+						"text": new FormMessage( null, "OUI" )
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 13
+					} )
+					add( new FormComponent( "javax.swing.JRadioButton" ) {
+						name: "studentNoRadioButton"
+						"text": new FormMessage( null, "NON" )
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 5
+						"gridY": 13
+						"gridWidth": 7
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "firstNameLabel"
+						"text": new FormMessage( null, "PRENOM" )
+						"labelFor": new FormReference( "firstNameField" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 15
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "firstNameField"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 17
+						"gridWidth": 5
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "postalCodeLabel"
+						"text": new FormMessage( null, "CODE.POSTAL" )
+						"labelFor": new FormReference( "postalCodeTextField" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 1
+						"gridY": 5
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "postalCodeTextField"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 5
+						"gridWidth": 3
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "townLabel"
+						"text": new FormMessage( null, "VILLE" )
+						"labelFor": new FormReference( "townTextField" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 7
+						"gridY": 5
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "townTextField"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 9
+						"gridY": 5
+						"gridWidth": 13
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "identityCartLabel"
+						"text": new FormMessage( null, "CARTE.IDENTITE" )
+						"labelFor": new FormReference( "IdentityCardTextField" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridY": 9
+						"gridX": 13
+						"gridWidth": 7
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "IdentityCardTextField"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 21
+						"gridY": 9
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "mobileLabel"
+						"text": new FormMessage( null, "GSM" )
+						"labelFor": new FormReference( "mobileTextField" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridY": 11
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "mobileTextField"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 11
+						"gridWidth": 9
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "identityCardValidityLabel"
+						"text": new FormMessage( null, "IDENTITY.VALIDITY" )
+						"labelFor": new FormReference( "identityCardValidityDateChooser" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 13
+						"gridY": 11
+						"gridWidth": 7
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "birthDateLabel"
+						"text": new FormMessage( null, "DATE.NAISSANCE" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 11
+						"gridY": 13
+						"gridWidth": 9
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "memberNumberLabel"
+						"text": new FormMessage( null, "NUMERO.MEMBRE" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 1
+						"gridY": 15
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "memberNumberTextField"
+						"enabled": false
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 15
+						"gridWidth": 5
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+						"alignment": 2
+					} ) {
+						name: "panel4"
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "addMemberButton"
+							"text": new FormMessage( null, "MembreForm.addMemberButton.text" )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "modifyMemberButton"
+							"text": new FormMessage( null, "MembreForm.modifyMemberButton.text" )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "deleteMemberButton"
+							"text": new FormMessage( null, "MembreForm.deleteMemberButton.text" )
+						} )
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 15
+						"gridY": 17
+						"gridWidth": 7
+					} )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridY": 1
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+					"$columnSpecs": "default, labelcompgap, default"
+					"$rowSpecs": "default, linegap, default, linegap, default"
+				} ) {
+					name: "statisticsPanel"
+					"border": new javax.swing.border.TitledBorder( "i18nKey=MembreForm.statisticsPanel.border" )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridX": 2
+					"gridY": 1
+				} )
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 1
+				"gridY": 1
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+				"$columnSpecs": "203dlu, labelcompgap, default:grow"
+				"$rowSpecs": "fill:default:grow(0.5), linegap, fill:default:grow(0.5)"
+			} ) {
+				name: "bottomPanel"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+					"$columnSpecs": "right:default:grow(0.19999999999999998), default:grow(0.19999999999999998), default:grow(0.7), default"
+					"$rowSpecs": "fill:default, linegap, default, linegap, default, linegap, default"
+				} ) {
+					name: "deplacementsCarPanel"
+					"border": new javax.swing.border.TitledBorder( "Déplacements car" )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "saisonLabel"
+						"text": new FormMessage( null, "SAISON" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridY": 1
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "comboBox1"
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "domicileLabel"
+						"text": new FormMessage( null, "DOMICILE" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridY": 3
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "textField1"
+						"horizontalAlignment": 0
+						"editable": false
+						"font": &Font0 new java.awt.Font( "Dialog", 1, 12 )
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 3
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "exterieurLabel"
+						"text": new FormMessage( null, "DEPLACEMENT" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 1
+						"gridY": 5
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "textField2"
+						"horizontalAlignment": 0
+						"editable": false
+						"font": #Font0
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 5
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "totalLabel"
+						"text": new FormMessage( null, "TOTAL" )
+						"horizontalAlignment": 4
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 1
+						"gridY": 7
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "textField3"
+						"horizontalAlignment": 0
+						"editable": false
+						"font": #Font0
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridX": 3
+						"gridY": 7
+					} )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridX": 1
+					"gridY": 1
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+					"$columnSpecs": "default:grow, default"
+					"$rowSpecs": "default, linegap, default"
+				} ) {
+					name: "abonnementsPanel"
+					"border": new javax.swing.border.TitledBorder( "Abonnements" )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+						"$columnSpecs": "default:grow"
+						"$rowSpecs": "default, linegap, default"
+					} ) {
+						name: "panel1"
+						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+							name: "abonnementsScrollPane"
+							add( new FormComponent( "javax.swing.JTable" ) {
+								name: "abonnementsTable"
+								"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+									add( new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									} )
+									add( new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									} )
+									add( new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									} )
+									add( new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									} )
+								}, new java.util.Vector {
+									add( "Title 1" )
+									add( "Title 2" )
+									add( "Title 3" )
+									add( "Title 4" )
+								}, new java.util.Vector {
+									add( class java.lang.Object )
+									add( class java.lang.Object )
+									add( class java.lang.Object )
+									add( class java.lang.Object )
+								}, new java.util.Vector {
+									add( true )
+									add( true )
+									add( true )
+									add( true )
+								}, new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+							} )
+						}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+							"alignment": 2
+						} ) {
+							name: "abonnementButtonPanel"
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "addAbonnementButton"
+								"text": new FormMessage( null, "MembreForm.addAbonnementButton.text" )
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "modifyAbonnementButton"
+								"text": new FormMessage( null, "MembreForm.modifyAbonnementButton.text" )
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "deleteAbonnementButton"
+								"text": new FormMessage( null, "MembreForm.deleteAbonnementButton.text" )
+							} )
+						}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+							"gridY": 3
+						} )
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridX": 3
+					"gridY": 1
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
+					"$columnSpecs": "default:grow(0.5)"
+					"$rowSpecs": "default, linegap, default"
+				} ) {
+					name: "cotisationsPanel"
+					"border": new javax.swing.border.TitledBorder( "Cotisations" )
+					"preferredSize": new java.awt.Dimension( 33, 43 )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane1"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "cotisationTable"
+							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "cotisationTableMouseClicked", true ) )
+						} )
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+						"alignment": 2
+					} ) {
+						name: "panel3"
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "addCotisationButton"
+							"text": new FormMessage( null, "AJOUTER" )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "modifyCotisationButton"
+							"text": new FormMessage( null, "MODIFY" )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "deleteCotisationButton"
+							"text": new FormMessage( null, "DELETE" )
+						} )
+					}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+						"gridY": 3
+					} )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridX": 1
+					"gridY": 3
+				} )
+				add( new FormComponent( "standardNaast.viewNew.benevolat.BenevolatsTable" ) {
+					name: "benevolatsTable"
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridX": 3
+					"gridY": 3
+				} )
+			}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+				"gridX": 1
+				"gridY": 3
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 1100, 615 )
+			"location": new java.awt.Point( 0, 0 )
+		} )
+		add( new FormNonVisual( "standardNaast.entities.Personne" ) {
+			name: "personne"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 310 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 625 )
+		} )
+		addBindingGroup( new FormBindingGroup( class org.jdesktop.beansbinding.BindingGroup ) {
+			addBinding( new FormBinding( "personne", "abonnementList", "abonnementsTable", "elements" ) {
+				"subBindings": new com.jformdesigner.model.FormBinding[ new FormBinding( null, "saison.id", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.abonnementsTable.columnName.1" )
+					"columnClass": "java.lang.String"
+					"editable": false
+				}, new FormBinding( null, "blocId.blocValue", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.abonnementsTable.columnName_2" )
+					"columnClass": "java.lang.String"
+				}, new FormBinding( null, "rang", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.abonnementsTable.columnName_3" )
+					"columnClass": "java.lang.String"
+				}, new FormBinding( null, "place", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.abonnementsTable.columnName_4" )
+					"columnClass": "java.lang.String"
+				}, new FormBinding( null, "acompte", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.abonnementsTable.columnName_5" )
+					"columnClass": "java.math.BigInteger"
+				}, new FormBinding( null, "reduction", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.abonnementsTable.columnName_6" )
+					"columnClass": "java.lang.Long"
+				}, new FormBinding( null, "paye", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.abonnementsTable.columnName_7" )
+					"columnClass": "java.lang.Boolean"
+				}, new FormBinding( null, "placeCommandee", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.abonnementsTable.columnName_8" )
+					"columnClass": "java.lang.Boolean"
+				} ]
+				"editable": false
+			} )
+			addBinding( new FormBinding( "personne", "cotisations", "cotisationTable", "elements" ) {
+				"name": "cotisationsTableBinding"
+				"editable": false
+				"subBindings": new com.jformdesigner.model.FormBinding[ new FormBinding( null, "anneeCotisation2", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.cotisationTable.columnName.1" )
+					"columnClass": "java.lang.Short"
+				}, new FormBinding( null, "montantCotisation", null, null ) {
+					"columnName": new FormMessage( null, "MembreForm.cotisationTable.columnName_2" )
+					"columnClass": "java.math.BigDecimal"
+				} ]
+				"sourceNullValue": sfield java.util.Collections EMPTY_LIST
+				"sourceUnreadableValue": sfield java.util.Collections EMPTY_LIST
+				"targetNullValue": sfield java.util.Collections EMPTY_LIST
+			} )
+			addBinding( new FormBinding( "personne", "firstname", "firstNameField", "text" ) )
+			addBinding( new FormBinding( "personne", "name", "nameTextField", "text" ) )
+			addBinding( new FormBinding( "personne", "address", "addressTextArea", "text" ) )
+			addBinding( new FormBinding( "personne", "postalCode", "postalCodeTextField", "text" ) )
+			addBinding( new FormBinding( "personne", "city", "townTextField", "text" ) )
+			addBinding( new FormBinding( "personne", "phone", "phoneTextField", "text" ) )
+			addBinding( new FormBinding( "personne", "mobilePhone", "mobileTextField", "text" ) )
+			addBinding( new FormBinding( "personne", "passportValidity", "identityCardValidityDateChooser", "date" ) )
+			addBinding( new FormBinding( "personne", "birthdate", "birthDataDateChooser", "date" ) )
+			addBinding( new FormBinding( "personne", "email", "emailTextField", "text" ) )
+			addBinding( new FormBinding( "personne", "memberNumber", "memberNumberTextField", "text" ) )
+			addBinding( new FormBinding( "personne", "student", "studentYesRadioButton", "selected" ) )
+			addBinding( new FormBinding( "personne", "student", "studentNoRadioButton", "selected" ) )
+		} )
+	}
+}

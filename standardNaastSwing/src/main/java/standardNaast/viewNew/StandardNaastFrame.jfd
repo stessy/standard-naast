@@ -1,0 +1,56 @@
+JFDML JFormDesigner: "5.1.1.0.120" Java: "1.7.0_04" encoding: "UTF-8"
+
+new FormModel {
+	"i18n.bundleName": "Bundle"
+	"i18n.autoExternalize": false
+	"i18n.keyPrefix": "StandardNaastFrame"
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {space :0:733:x};par l {comp mainTabbedPane::t:::x}"
+			"$verticalGroup": "par l {space :0:472:x};par l {comp mainTabbedPane::t:::x}"
+		} ) {
+			name: "this"
+			"defaultCloseOperation": 3
+			"$sizePolicy": 0
+			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				name: "mainTabbedPane"
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "memberTabbedPane"
+					add( new FormComponent( "standardNaast.viewNew.MembersTable" ) {
+						name: "membersTable"
+					}, new FormLayoutConstraints( null ) {
+						"title": new FormMessage( null, "member.tabbedPane.listMember.title" )
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {seq l {space :::p, comp membersForm::::699:x, space :::p}}"
+						"$verticalGroup": "par l {seq l {space :::p, comp membersForm::::394:x, space :::p}}"
+					} ) {
+						name: "jPanel1"
+						add( new FormComponent( "standardNaast.viewNew.MembersForm" ) {
+							name: "membersForm"
+						} )
+					}, new FormLayoutConstraints( null ) {
+						"title": new FormMessage( null, "member.detailPanel.title" )
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": new FormMessage( null, "main.tabbedPane.member.title" )
+				} )
+			} )
+			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+				name: "jMenuBar1"
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "jMenu1"
+					"text": "File"
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "jMenu2"
+					"text": "Edit"
+				} )
+			}
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 745, 525 )
+			"location": new java.awt.Point( 0, 0 )
+		} )
+	}
+}

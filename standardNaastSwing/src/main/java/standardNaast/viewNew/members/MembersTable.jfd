@@ -1,0 +1,131 @@
+JFDML JFormDesigner: "5.1.0.0.51" Java: "1.7.0_04" encoding: "UTF-8"
+
+new FormModel {
+	"i18n.bundleName": "Bundle"
+	"i18n.autoExternalize": false
+	"i18n.keyPrefix": "MembresTable"
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :::p, par l {comp membersTableScrollPane::l::376:x, seq t {comp jPanel1:::p::p, space :0:0:x}}, space :::p}}"
+			"$verticalGroup": "par l {seq t {space :::p, comp jPanel1:::p::p, space :::p, comp membersTableScrollPane::::180:x, space :p::p}}"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "membersTableScrollPane"
+				auxiliary() {
+					"JavaCodeGenerator.customCreateCode": "new javax.swing.JScrollPane();"
+				}
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "membersTable"
+					"columnSelectionAllowed": true
+					"selectionMode": 0
+					auxiliary() {
+						"JavaCodeGenerator.customCreateCode": "new JTable();"
+						"JavaCodeGenerator.postInitCode": "firstNameRowSorter.setTable(membersTable);\nnameRowSorter.setTable(membersTable);"
+					}
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "membersTableMouseClicked", true ) )
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+				"$horizontalGroup": "par l {seq t {space :p:23:p, par l {comp jLabel1::t:p::p, comp jLabel2::t:p::p}, space :::p, par l {comp jTextField1:1:l:p:183:p, comp jTextField2:1:l:p:188:p}, space :p::p}}"
+				"$verticalGroup": "par l {seq l {par c {comp jLabel1::c:p::p, comp jTextField1:2:c:p::p}, space u:::p, par c {comp jTextField2:2:c:p::p, comp jLabel2::c:p::p}, space :::x}}"
+			} ) {
+				name: "jPanel1"
+				"border": new javax.swing.border.TitledBorder( "Filtrage" )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "jTextField1"
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "jTextField2"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "jLabel1"
+					"text": new FormMessage( null, "PRENOM" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "jLabel2"
+					"text": new FormMessage( null, "NOM" )
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 400, 300 )
+			"location": new java.awt.Point( 0, 0 )
+		} )
+		add( new FormNonVisual( "java.util.List" ) {
+			name: "personneList"
+			auxiliary() {
+				"JavaCodeGenerator.customCreateCode": "java.beans.Beans.isDesignTime() ? java.util.Collections.<standardNaast.entities.Personne>emptyList() : StartMain.getService(this.personneService, PersonneServiceImpl.class).findAllPerson();\nCollections.sort(personneList);"
+				"JavaCodeGenerator.typeParameters": "standardNaast.entities.Personne"
+			}
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 310 )
+		} )
+		add( new FormNonVisual( "standardNaast.viewNew.FirstNameRowSorter" ) {
+			name: "firstNameRowSorter"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 363 )
+		} )
+		add( new FormNonVisual( "standardNaast.viewNew.NameRowSorter" ) {
+			name: "nameRowSorter"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 416 )
+		} )
+		add( new FormNonVisual( "standardNaast.model.PersonnesModel" ) {
+			name: "personnesModel"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 225, 375 )
+		} )
+		addBindingGroup( new FormBindingGroup( class org.jdesktop.beansbinding.BindingGroup ) {
+			addBinding( new FormBinding( "personnesModel", "personnesList", "membersTable", "elements" ) {
+				"bindImmediately": true
+				"subBindings": new com.jformdesigner.model.FormBinding[ new FormBinding( null, "${memberNumber}", null, null ) {
+					"columnClass": "java.lang.Long"
+					"editable": false
+					"columnName": "Member Number"
+				}, new FormBinding( null, "${firstname}", null, null ) {
+					"columnClass": "java.lang.String"
+					"editable": false
+					"columnName": "Firstname"
+				}, new FormBinding( null, "${name}", null, null ) {
+					"columnClass": "java.lang.String"
+					"editable": false
+					"columnName": "Name"
+				}, new FormBinding( null, "${address}", null, null ) {
+					"columnClass": "java.lang.String"
+					"editable": false
+					"columnName": "Address"
+				}, new FormBinding( null, "${postalCode}", null, null ) {
+					"columnClass": "java.lang.String"
+					"editable": false
+					"columnName": "Postal Code"
+				}, new FormBinding( null, "${city}", null, null ) {
+					"columnClass": "java.lang.String"
+					"editable": false
+					"columnName": "City"
+				}, new FormBinding( null, "${phone}", null, null ) {
+					"columnClass": "java.lang.String"
+					"editable": false
+					"columnName": "Phone"
+				}, new FormBinding( null, "${email}", null, null ) {
+					"columnName": "Email"
+					"columnClass": "java.lang.String"
+					"editable": false
+				}, new FormBinding( null, "${birthdate}", null, null ) {
+					"columnClass": "java.util.Date"
+					"editable": false
+					"columnName": "Birthdate"
+				} ]
+			} )
+			addBinding( new FormBinding( "membersTable", "${rowSorter}", "jTextField1", "text" ) {
+				"name": "firstNameFilerBinding"
+				"converter": new FormReference( "firstNameRowSorter" )
+			} )
+			addBinding( new FormBinding( "membersTable", "${rowSorter}", "jTextField2", "text" ) {
+				"name": "nameFilterBinding"
+				"converter": new FormReference( "nameRowSorter" )
+			} )
+			addBinding( new FormBinding( "membersTable", "selectedElement_IGNORE_ADJUSTING", "personnesModel", "selectedPersonne" ) )
+		} )
+	}
+}

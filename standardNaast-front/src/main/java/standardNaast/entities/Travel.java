@@ -2,6 +2,7 @@ package standardNaast.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -14,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import types.Place;
@@ -28,13 +31,9 @@ import types.Place;
 public class Travel implements Serializable {
 
 	@Basic(optional = false)
-	// @NotNull
-	@Size(min = 1, max = 4)
 	@Column(name = "ANNEE")
-	private String annee;
-
-	// @Max(value=?) @Min(value=?)//if you know range of your decimal fields
-	// consider using these annotations to enforce field validation
+	@Temporal(TemporalType.DATE)
+	private Date annee;
 
 	@Basic(optional = false)
 	// @NotNull
@@ -76,11 +75,11 @@ public class Travel implements Serializable {
 	public Travel() {
 	}
 
-	public String getAnnee() {
+	public Date getAnnee() {
 		return this.annee;
 	}
 
-	public void setAnnee(final String annee) {
+	public void setAnnee(final Date annee) {
 		this.annee = annee;
 	}
 

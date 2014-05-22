@@ -1,0 +1,223 @@
+package standardNaast.model;
+
+import java.sql.Connection;
+
+import java.sql.PreparedStatement;
+
+import java.sql.ResultSet;
+
+import java.util.Vector;
+
+public class MatchDB
+{
+    public MatchDB()
+    {
+    }
+    
+    public Vector getMatches(String saison) throws Exception
+    {
+        Connection connection = JDBCConnection.getInstance().getJDBCConnection();
+        PreparedStatement selectStatement = null;
+        ResultSet rs = null;
+        Vector match = new Vector();
+        Vector allMatches = new Vector();
+        Vector data = new Vector();
+        Vector columnNames = new Vector();
+        
+        try
+        {
+            selectStatement = connection.prepareStatement("select	 " +
+            "    \"MATCH\".\"MATCH_ID\" as \"MATCH ID\",\n" + 
+            "    \"SAISON_EQUIPE\".\"SAISON_ID\" as \"SAISON\",\n" +
+            "   \"EQUIPE\".\"NOM_EQUIPE\" as \"Adversaire\",\n" +                                     
+            "	 \"MATCH\".\"LIEU\" as \"LIEU\",\n" + 
+            "	 to_char(DATE_MATCH,'DD-MM-YYYY HH24:MI:SS') as \"DATE de MATCH\",\n" + 
+            "	 \"TYPE_COMPETITION\".\"TYPE_COMPETITION_VALUE\" as \"TYPE de compétition\", \n" + 
+            " from	 \"TYPE_MATCH\" \"TYPE_MATCH\",\n" + 
+            "	 \"TYPE_COMPETITION\" \"TYPE_COMPETITION\",\n" + 
+            "	 \"MATCH\" \"MATCH\",\n" + 
+            "	 \"SAISON_EQUIPE\" \"SAISON_EQUIPE\",\n" + 
+            "	 \"EQUIPE\" \"EQUIPE\"\n" + 
+            " WHERE TYPE_COMPETITION.TYPE_COMPETITION_ID = TYPE_MATCH.TYPE_COMPETITION_ID\n" + 
+            " AND   MATCH.SAISON_EQUIPE_ID = SAISON_EQUIPE.SAISON_EQUIPE_ID\n" + 
+            " AND MATCH.TYPE_MATCH = TYPE_MATCH.TYPE_MATCH_ID\n" + 
+            " AND EQUIPE.EQUIPE_ID = SAISON_EQUIPE.EQUIPE_ID\n" + 
+            " AND SAISON_EQUIPE.SAISON_ID = ?\n" + 
+            " ORDER BY SAISON_EQUIPE.SAISON_ID DESC, MATCH.DATE_MATCH DESC");
+            selectStatement.setString(1,saison);
+            rs = selectStatement.executeQuery();
+            GlobalQueries gq = new GlobalQueries();
+            columnNames = gq.getColumnNames(rs);
+            while(rs.next())
+            {
+                match = new Vector();
+                match.add(rs.getInt(1));
+                match.add(rs.getString(2));
+                match.add(rs.getString(3));
+                match.add(rs.getString(4));
+                match.add(rs.getString(5));
+                match.add(rs.getString(6));
+                allMatches.add(match);
+            }
+            rs.close();
+            selectStatement.close();
+            
+            data.add(allMatches);
+            data.add(columnNames);
+            return data;            
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                rs.close();
+                selectStatement.close();
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+    }
+    
+    public Vector getMatchsForDeplacementCar() throws Exception
+    {
+        Connection connection = JDBCConnection.getInstance().getJDBCConnection();
+        PreparedStatement selectStatement = null;
+        ResultSet rs = null;
+        Vector match = new Vector();
+        Vector allMatches = new Vector();
+        Vector data = new Vector();
+        Vector columnNames = new Vector();
+        
+        try
+        {
+            selectStatement = connection.prepareStatement("select \n" + 
+            "match_id, \n" + 
+            "nom_equipe || ' ' || lieu || ' '|| type_competition_value, \n" + 
+            "to_char(date_match,'DD-MM-YYYY') \n" + 
+            "from match m, saison_equipe se, equipe e,type_competition tc, type_match tm\n" + 
+            "where m.SAISON_EQUIPE_ID = se.SAISON_EQUIPE_ID\n" + 
+            "and e.equipe_id = se.equipe_id\n" + 
+            "and m.type_match = tm.type_match_id\n" + 
+            "and tm.type_competition_id = tc.type_competition_id\n" + 
+            "and date_match >= sysdate\n" + 
+            "order by date_match");
+            
+            rs = selectStatement.executeQuery();
+            GlobalQueries gq = new GlobalQueries();
+            columnNames = gq.getColumnNames(rs);
+            while(rs.next())
+            {
+                match = new Vector();
+                match.add(rs.getInt(1));
+                match.add(rs.getString(2));
+                match.add(rs.getString(3));                
+                allMatches.add(match);
+            }
+            rs.close();
+            selectStatement.close();
+            
+            data.add(allMatches);
+            data.add(columnNames);
+            return data;            
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                rs.close();
+                selectStatement.close();
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+        
+    }
+    
+    public Vector getDeplacementsCarParMatch(int matchID,boolean isMembre) throws Exception
+    {
+        
+        Connection connection = JDBCConnection.getInstance().getJDBCConnection();
+        PreparedStatement selectStatement = null;
+        ResultSet rs = null;
+        Vector deplacementsCar = new Vector();
+        Vector allDeplacementsCar = new Vector();
+        Vector prixLocomotionID = new Vector();
+        Vector data = new Vector();
+        Vector columnNames = new Vector();
+        DeplacementsCarDB deplacementCarDB = new DeplacementsCarDB();
+        try
+        {
+            selectStatement = connection.prepareStatement(" " +
+                "select p.personne_id, \n" + 
+                "nom || ' ' || prenom \"Nom et Prénom\", \n" + 
+                "'true' payé \n" + 
+                "from personnes p inner join personnes_match pm\n" + 
+                "on p.personne_id = pm.personne_id\n" + 
+                "where match_id = ?\n" + 
+                "and numero_membre " + (isMembre ? "<":">=") + " 10000 " + 
+                "union \n" + 
+                "select p.personne_id, \n" + 
+                "nom || ' ' || prenom \"Nom et Prénom\", \n" + 
+                "'false' payé \n" + 
+                "from personnes p\n" + 
+                "where numero_membre "+ (isMembre ? "<":">=") + " 10000 " + 
+                "order by 2");
+            selectStatement.setInt(1,matchID);
+            rs = selectStatement.executeQuery();
+            GlobalQueries gq = new GlobalQueries();
+            columnNames = gq.getColumnNames(rs);
+            while(rs.next())
+            {
+                deplacementsCar = new Vector();
+                deplacementsCar.add(rs.getInt(1));
+                deplacementsCar.add(rs.getString(2));
+                int[] montantDeplacement = deplacementCarDB.getPrixDeplacementParDateNaissance(rs.getInt(1),matchID);
+                deplacementsCar.add(montantDeplacement[0]);
+                deplacementsCar.add(new Boolean(rs.getString(3)));
+                
+                allDeplacementsCar.add(deplacementsCar); 
+                prixLocomotionID.add(montantDeplacement[1]);
+            }
+            rs.close();
+            selectStatement.close();
+            
+            data.add(allDeplacementsCar);
+            data.add(columnNames);
+            data.add(prixLocomotionID);
+            return data;
+            
+        }
+        catch(Exception e )
+        {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                selectStatement.close();                
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+                
+        
+    }
+}

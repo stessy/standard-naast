@@ -83,13 +83,32 @@ SET competition_type =
 		<sql><![CDATA[UPDATE MATCH SET LIEU = 'AWAY' WHERE LIEU = 'DEPLACEMENT';]]></sql>
 	</changeSet>
 	<changeSet id="14" author="stessy">
-		<renameColumn tableName="MATCH" oldColumnName="LIEU" newColumnName="PLACE"/>
+		<renameColumn tableName="MATCH" oldColumnName="LIEU"
+			newColumnName="PLACE" />
 	</changeSet>
 	<changeSet id="15" author="stessy">
-		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="LIEU" newColumnName="PLACE"/>
+		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="LIEU"
+			newColumnName="PLACE" />
 	</changeSet>
-<!-- 	<changeSet id="16" author="stessy"> -->
-<!-- 		<dropForeignKeyConstraint baseTableName="MATCH" constraintName=""/> -->
-<!-- 		<dropColumn tableName="MATCH"  columnName="SAISON_EQUIPE_ID"/> -->
-<!-- 	</changeSet> -->
+	<!-- <changeSet id="16" author="stessy"> -->
+	<!-- <dropForeignKeyConstraint baseTableName="MATCH" constraintName=""/> -->
+	<!-- <dropColumn tableName="MATCH" columnName="SAISON_EQUIPE_ID"/> -->
+	<!-- </changeSet> -->
+	<changeSet id="16" author="stessy">
+		<addColumn tableName="PRIX_LOCOMOTION">
+			<column name="ANNEE2" type="DATE"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="17" author="stessy">
+		<update tableName="PRIX_LOCOMOTION">
+			<column name="ANNEE2" valueComputed="TO_DATE(ANNEE,'YYYY')"></column>
+		</update>
+	</changeSet>
+	<changeSet id="18" author="stessy">
+		<dropColumn tableName="PRIX_LOCOMOTION" columnName="ANNEE" />
+	</changeSet>
+	<changeSet id="19" author="stessy">
+		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="ANNEE2"
+			newColumnName="ANNEE" />
+	</changeSet>
 </databaseChangeLog>

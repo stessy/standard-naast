@@ -1,0 +1,673 @@
+package standardNaast.view;
+
+import com.vlsolutions.swing.table.VLJTable;
+import com.vlsolutions.swing.table.filters.RegExpFilter;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Event;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
+
+import oracle.jdeveloper.layout.PaneConstraints;
+import oracle.jdeveloper.layout.PaneLayout;
+
+import standardNaast.model.GlobalQueries;
+import standardNaast.model.JDBCConnection;
+
+import standardNaast.utils.TableauCotisations;
+
+
+public class StandardNaastMain extends JFrame {
+    private GridLayout gridLayout = new GridLayout();
+    private BorderLayout borderLayout = new BorderLayout();
+    private JPanel topPanel = new JPanel();
+    private JPanel dataPanel = new JPanel();
+    private JMenuBar menubarFrame = new JMenuBar();    
+    private JMenu menuFile = new JMenu();
+    private JMenuItem itemFileExit = new JMenuItem();
+    private JMenu menuHelp = new JMenu();
+    private JMenu menuImpression = new JMenu();
+    private JMenuItem impressionCarteMembres = new JMenuItem();
+    private JMenuItem impressionEtiquettes = new JMenuItem();
+    private JMenuItem impressionCotisations = new JMenuItem();
+    private JMenuItem impressionCommandePlaces = new JMenuItem();
+    private JMenuItem impressionCommandeAbonnements = new JMenuItem();
+    private JMenuItem itemHelpAbout = new JMenuItem();
+    private String aboutMessage = "about message";
+    private String aboutTitle = "about title ";
+    private PaneLayout paneLayout1 = new PaneLayout();
+    private JTabbedPane mainTabbedPane = new JTabbedPane();
+    private JPanel membresPanel = new JPanel();
+    private JPanel abonnementPanel = new JPanel();
+    private JPanel matchPanel = new JPanel();
+    private JPanel configurationPanel = new JPanel();
+    private JTabbedPane membresTabbedPane = new JTabbedPane();
+    private JPanel listeMembresPanel = new JPanel();
+    private JScrollPane jScrollPane1 = new JScrollPane();
+    private VLJTable jTable1 = new VLJTable();
+    private EditionMembrePanel editionMembrePanel = new EditionMembrePanel();
+    private CotisationsPanel cotisationsPanel = new CotisationsPanel();
+    private JButton jButtonEditerMembre = new JButton();
+    private Vector membreInfo = new Vector();
+    private JMenu jMenu1 = new JMenu();
+    private JMenuItem jMenuItem1 = new JMenuItem();
+
+
+    /**The default constructor for form
+     */
+    public StandardNaastMain() {
+        addWindowListener(new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        System.exit(0);
+                       
+                    }
+                });
+    }
+
+
+    /**the JbInit method
+     */
+    public void jbInit() throws Exception {
+
+        Vector data = createModel();
+        DefaultTableModel model = 
+            new DefaultTableModel((Object[][]) data.get(0),(String[]) data.get(1))
+            {
+                public boolean isCellEditable(int row, int col)
+                {
+                    return false;
+                }
+            };
+            
+            
+        jTable1.setModel(model);
+        jTable1.setFilteringEnabled(true);
+        jTable1.setPopUpSelectorEnabled(true);
+        jTable1.getPopUpSelector().setCaseSensitive(false);
+        
+
+        for (int i = 0; i < ((String[]) data.get(1)).length; i++)
+        {
+
+            jTable1.installFilter(i, new RegExpFilter(true));
+        }
+        
+        for(int i = 0; i < ((String[]) data.get(1)).length; i++)
+        {
+            if(i!=1 && i!=2)
+            {
+                jTable1.getFilterColumnModel().setFilterCellEditor(i, null);                
+            }
+        }       
+
+        JButton filter = 
+            new JButton(new ImageIcon(getClass().getResource("/com/vlsolutions/swing/table/filter16.png")));
+        filter.setMargin(new Insets(2, 2, 2, 2));
+        filter.setRolloverEnabled(true);
+
+        filter.setBounds(new Rectangle(5, 45, 35, 35));
+        filter.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        jTable1.setFilterHeaderVisible(!jTable1.isFilterHeaderVisible());
+                    }
+                });
+
+        jMenu1.setText("test");
+        jMenuItem1.setText("Deplacement car");
+        jMenuItem1.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        jMenuItem1_actionPerformed(e);
+                    }
+                });
+        jTable1.addMouseListener(new MouseAdapter()
+                {
+                    public void mouseClicked(MouseEvent e)
+                    {
+                        jTable1_mouseClicked(e);
+                    }
+                });
+
+
+        listeMembresPanel.add(filter, null);
+        jScrollPane1.getViewport().add(jTable1, null);
+        listeMembresPanel.add(jScrollPane1, null);
+        listeMembresPanel.add(jButtonEditerMembre,null);
+        
+
+        jTable1.setFilterHeaderVisible(true);
+
+        dataPanel.setLayout(paneLayout1);
+        this.getContentPane().setLayout(gridLayout);
+        topPanel.setLayout(borderLayout);
+        this.getContentPane().add(topPanel);
+        this.setSize(new Dimension(1024, 768));
+        
+
+
+        membresTabbedPane.addTab("Liste des membres", listeMembresPanel);
+        membresTabbedPane.addTab("Ajout/Modification d'un membre", 
+                                 editionMembrePanel);
+        membresTabbedPane.addTab("Cotisations",cotisationsPanel);
+        membresPanel.add(membresTabbedPane, 
+                         new PaneConstraints("membresTabbedPane", 
+                                             "membresTabbedPane", 
+                                             PaneConstraints.ROOT, 1.0f));
+        mainTabbedPane.addTab("Membres", membresPanel);
+        mainTabbedPane.addTab("Abonnements", abonnementPanel);
+        mainTabbedPane.addTab("Matchs", matchPanel);
+        mainTabbedPane.addTab("Configuration Générale", 
+                              configurationPanel);
+        dataPanel.add(mainTabbedPane, 
+                      new PaneConstraints("jTabbedPane1", "jTabbedPane1", 
+                                          PaneConstraints.ROOT, 1.0f));
+        topPanel.add(dataPanel, BorderLayout.CENTER);
+        
+
+        configurationPanel.add(new CotisationsSaisonDeplacementsPanel());
+        setJMenuBar(menubarFrame);
+        itemFileExit.setText("Exit");
+        itemFileExit.setMnemonic('X');
+        itemFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 
+                                                           Event.ALT_MASK, 
+                                                           false));
+        itemFileExit.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        file_exit_action(e);
+                    }
+                });
+        menuFile.add(itemFileExit);
+        menuFile.setText("File");
+        menuFile.setMnemonic('F');
+        menubarFrame.add(menuFile);
+
+        menuImpression.setText("Impression");
+        impressionCarteMembres.setText("Impression Cartes de membres");
+        impressionCarteMembres.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        impressionCarteMembres_actionPerformed(e);
+                    }
+                });
+        impressionEtiquettes.setText("Impression des étiquettes");
+        impressionEtiquettes.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        impressionEtiquettes_actionPerformed(e);
+                    }
+                });
+        impressionCotisations.setText("Impression Tableau Cotisations");
+        impressionCotisations.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        impressionCotisations_actionPerformed(e);
+                    }
+                });
+        impressionCommandeAbonnements.setText("Impression de la commande d'abonnements");
+        impressionCommandeAbonnements.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        impressionCommandeAbonnements_actionPerformed(e);
+                    }
+                });
+        impressionCommandePlaces.setText("Impression de la commande de places");
+
+        impressionCommandePlaces.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        impressionCommandePlaces_actionPerformed(e);
+                    }
+                });
+        menuImpression.add(impressionCarteMembres);
+        menuImpression.add(impressionEtiquettes);
+        menuImpression.addSeparator();
+        menuImpression.add(impressionCotisations);
+        menuImpression.addSeparator();
+        menuImpression.add(impressionCommandeAbonnements);
+        menuImpression.add(impressionCommandePlaces);
+        menubarFrame.add(menuImpression);
+
+        menuHelp.setText("Help");
+        menuHelp.setMnemonic('H');
+        itemHelpAbout.setText("About");
+        itemHelpAbout.setMnemonic('A');
+
+        itemHelpAbout.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        help_about_action(e);
+                    }
+                });
+        membresPanel.setLayout(null);
+        abonnementPanel.setLayout(null);
+        configurationPanel.setLayout(null);
+        membresTabbedPane.setBounds(new Rectangle(0, 0, 1015, 685));
+        membresTabbedPane.addMouseListener(new MouseAdapter()
+                {
+                    public void mouseClicked(MouseEvent e)
+                    {
+                        membresTabbedPane_mouseClicked(e);
+                    }
+                });
+        listeMembresPanel.setLayout(null);
+        jScrollPane1.setBounds(new Rectangle(5, 80, 990, 575));
+        jTable1.addMouseListener(new MouseAdapter()
+                {
+                    public void mouseClicked(MouseEvent e)
+                    {
+                        jTable1_mouseClicked(e);
+                    }
+                });
+        menuHelp.add(itemHelpAbout);
+        menubarFrame.add(menuHelp);
+
+        jMenu1.add(jMenuItem1);
+        menubarFrame.add(jMenu1);
+        jButtonEditerMembre.setText("Editer le membre");
+        jButtonEditerMembre.setEnabled(false);
+        jButtonEditerMembre.setBounds(new Rectangle(443, 40, 125, 30));
+        jButtonEditerMembre.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        jButtonEditerMembre_actionPerformed(e);
+                    }
+                });
+
+
+    }
+
+
+    
+
+    private void file_exit_action(ActionEvent e) {
+        System.exit(0);
+        
+    }
+
+    private void help_about_action(ActionEvent e) {
+        JOptionPane.showMessageDialog(this, aboutMessage, aboutTitle, 
+                                      JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void menuItemsUpdate() {
+        /*itemDatabaseFirst.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_FIRST));
+        itemDatabasePrevious.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_PREV));
+        itemDatabaseLast.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_LAST));
+        itemDatabaseNext.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_NEXT));
+        itemDatabaseInsert.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_INSERT));
+        itemDatabaseDelete.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_DELETE));
+        itemDatabaseCommit.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_COMMIT));
+        itemDatabaseRollback.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_ROLLBACK));
+        itemFindMode.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_FIND));
+        itemExecute.setEnabled(hiddenNavBar.isButtonActive(JUNavigationBar.BUTTON_EXECUTE));*/
+    }   
+
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception exemp) {
+            exemp.printStackTrace();
+        }       
+
+        try {
+            final StandardNaastMain frame = new StandardNaastMain();
+            frame.jbInit();
+            frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            Dimension frameSize = frame.getSize();
+            if (frameSize.height > screenSize.height) {
+                frameSize.height = screenSize.height;
+            }
+            if (frameSize.width > screenSize.width) {
+                frameSize.width = screenSize.width;
+            }
+            frame.setLocation((screenSize.width - frameSize.width) / 2, 
+                              (screenSize.height - frameSize.height) / 2);
+            frame.setVisible(true);
+        } catch (Exception ex) {
+            //JUMetaObjectManager.reportException(null, ex, true);
+            ex.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private void jTextField1_keyPressed(KeyEvent e) {
+    }
+    
+    public final void initializeLookAndFeels() {
+            // if in classpath thry to load JGoodies Plastic Look & Feel
+            try {
+                LookAndFeelInfo[] lnfs = UIManager.getInstalledLookAndFeels();
+                boolean found = false;
+                for (int i = 0; i < lnfs.length; i++) {
+                    if (lnfs[i].getName().equals("JGoodies Plastic 3D")) {
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    UIManager.installLookAndFeel("JGoodies Plastic 3D",
+                            "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+                }
+                UIManager.setLookAndFeel("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+            } catch (Throwable t) {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    private void jTable1_mouseClicked(MouseEvent e)
+    {
+        jButtonEditerMembre.setEnabled(true);
+        membreInfo = new Vector();
+        //System.out.println("row selected");
+        int row = jTable1.rowAtPoint(e.getPoint());
+        int columnCount = jTable1.getColumnCount();
+        for(int i = 0; i < columnCount; i++)
+        {
+            //System.out.println(jTable1.getColumnClass(i) + " " + jTable1.getValueAt(row,i) );            
+            membreInfo.add(jTable1.getValueAt(row,i));
+        }   
+    }
+
+    private void jButtonEditerMembre_actionPerformed(ActionEvent e)
+    {
+        membresTabbedPane.remove(1);
+        editionMembrePanel = new EditionMembrePanel(membreInfo);
+        if(membresTabbedPane.getTabCount() > 2)
+        {
+            membresTabbedPane.setComponentAt(1,editionMembrePanel);
+            membresTabbedPane.setTitleAt(1,"Ajout/Modification d'un membre");
+        }
+        else
+        {
+            membresTabbedPane.add("Ajout/Modification d'un membre",editionMembrePanel);
+        }
+        //editionMembrePanel = new EditionMembrePanel(membreInfo);
+        membresTabbedPane.setSelectedIndex(1);
+        //editionMembrePanel.initializePanelsOnUpdate(membreInfo);
+    }
+
+    private void membresTabbedPane_mouseClicked(MouseEvent e)
+    {
+        int index = membresTabbedPane.indexAtLocation(e.getX(),e.getY());        
+        System.out.println(""+index);
+        
+        
+        if(index == 1)
+        {
+            membresTabbedPane.remove(1);
+            if (membresTabbedPane.getTabCount() >= 2)
+            {
+                membresTabbedPane.setComponentAt(1, editionMembrePanel);
+                membresTabbedPane.setTitleAt(1, 
+                                             "Ajout/Modification d'un membre");
+            }
+            else
+            {
+                membresTabbedPane.add("Ajout/Modification d'un membre", 
+                                      editionMembrePanel);
+            }
+            editionMembrePanel.initializePanelsOnInsert();
+            membresTabbedPane.setSelectedIndex(1);
+                       
+        }
+        
+        if (index == 0)
+        {
+            //hiddenNavBar.doAction(JUNavigationBar.BUTTON_EXECUTE);
+            createTable();
+        }
+        
+        
+        
+       
+        
+    }
+
+    private void impressionCarteMembres_actionPerformed(ActionEvent e)
+    {
+    }
+
+    private void impressionEtiquettes_actionPerformed(ActionEvent e)
+    {
+    }
+
+    private void impressionCotisations_actionPerformed(ActionEvent e)
+    {
+        TableauCotisations tableauCotisations = new TableauCotisations();
+        String path = tableauCotisations.creationTableau();
+        //System.out.println(path);
+        /*try
+        {
+            Runtime.getRuntime().exec("start C:\\AcroRd32.exe.lnk \""+path+"\"");
+        }
+        catch(IOException ioe)
+        {
+            ioe.printStackTrace();
+        }*/
+        
+        //Exec.execPrint("start C:\\AcroRd32.exe.lnk \""+path+"\"");
+    }
+
+    private void impressionCommandeAbonnements_actionPerformed(ActionEvent e)
+    {
+    }
+
+    private void impressionCommandePlaces_actionPerformed(ActionEvent e)
+    {
+    }
+
+    private Vector createModel()
+    {
+        Vector v = new Vector();
+        Vector data = new Vector();
+
+        String query = 
+            "SELECT NUMERO_MEMBRE \"Numéro de membre\", NOM, PRENOM Prénom, ADRESSE, CODE_POSTAL \"Code postal\", VILLE, TELEPHONE, GSM, EMAIL, to_char(DATE_NAISSANCE,'DD-MM-YYYY') \"date de naissance\", PERSONNE_ID , CARTE_IDENTITE \"carte d'identité\", Etudiant FROM PERSONNES order by numero_membre,nom";
+        Connection connection = 
+            JDBCConnection.getInstance().getJDBCConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try
+        {
+            pstmt = connection.prepareStatement(query);
+            rs = pstmt.executeQuery();
+            GlobalQueries gq = new GlobalQueries();
+            Vector colNames = gq.getColumnNames(rs);
+            while (rs.next())
+            {
+                Vector row = new Vector();
+                row.add(rs.getInt(1));
+                row.add(rs.getString(2));
+                row.add(rs.getString(3));
+                row.add(rs.getString(4));
+                row.add(rs.getString(5));
+                row.add(rs.getString(6));
+                row.add(rs.getString(7));
+                row.add(rs.getString(8));
+                row.add(rs.getString(9));
+                row.add(rs.getString(10));
+                row.add(rs.getInt(11));
+                row.add(rs.getString(12));
+                row.add(rs.getInt(13));
+                v.add(row);
+            }
+            rs.close();
+            pstmt.close();
+
+            Object rows [][] = new Object[v.size()][colNames.size()];
+                
+            for (int i = 0; i < v.size(); i++)
+            {
+                Vector v2 = (Vector)v.get(i);
+                rows[i][0] = v2.get(0);
+                rows[i][1] = v2.get(1);
+                rows[i][2] = v2.get(2);
+                rows[i][3] = v2.get(3);
+                rows[i][4] = v2.get(4);
+                rows[i][5] = v2.get(5);
+                rows[i][6] = v2.get(6);
+                rows[i][7] = v2.get(7);
+                rows[i][8] = v2.get(8);
+                rows[i][9] = v2.get(9);
+                rows[i][10] = v2.get(10);
+                rows[i][11] = v2.get(11);
+                rows[i][12] = v2.get(12);
+            }
+            String columns [] = new String[colNames.size()];
+            for(int i = 0; i < colNames.size(); i++)
+            {
+                columns[i] = (String)colNames.get(i);
+            }
+            data.add(rows);
+            data.add(columns);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return data;
+
+    }
+    
+    private void createTable()
+    {
+        jScrollPane1.remove(jTable1);
+        listeMembresPanel.remove(jScrollPane1);
+        jScrollPane1 = new JScrollPane();
+        jScrollPane1.setBounds(new Rectangle(5, 80, 990, 525));
+        jTable1=  new VLJTable();
+        Vector data = createModel();
+        DefaultTableModel model = 
+            new DefaultTableModel((Object[][]) data.get(0), 
+                                  (String[]) data.get(1))
+            {
+                public boolean isCellEditable(int row, int col)
+                {
+                    return false;
+                }
+            };
+
+
+        jTable1.setModel(model);
+        jTable1.setFilteringEnabled(true);
+        jTable1.setPopUpSelectorEnabled(true);
+        jTable1.getPopUpSelector().setCaseSensitive(false);
+
+
+        for (int i = 0; i < ((String[]) data.get(1)).length; i++)
+        {
+            jTable1.installFilter(i, new RegExpFilter(true));
+        }
+
+        for (int i = 0; i < ((String[]) data.get(1)).length; i++)
+        {
+            if (i != 1 && i != 2)
+            {
+                jTable1.getFilterColumnModel().setFilterCellEditor(i, 
+                                                                   null);
+            }
+        }
+
+        JButton filter = 
+            new JButton(new ImageIcon(getClass().getResource("/com/vlsolutions/swing/table/filter16.png")));
+        filter.setMargin(new Insets(2, 2, 2, 2));
+        filter.setRolloverEnabled(true);
+
+        filter.setBounds(new Rectangle(5, 45, 35, 35));
+        filter.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        jTable1.setFilterHeaderVisible(!jTable1.isFilterHeaderVisible());
+                    }
+                });
+
+        jTable1.addMouseListener(new MouseAdapter()
+                {
+                    public void mouseClicked(MouseEvent e)
+                    {
+                        jTable1_mouseClicked(e);
+                    }
+                });
+
+
+        listeMembresPanel.add(filter, null);
+        jScrollPane1.getViewport().add(jTable1, null);
+        listeMembresPanel.add(jScrollPane1, null);
+        listeMembresPanel.add(jButtonEditerMembre, null);
+        jTable1.setFilterHeaderVisible(true); 
+        listeMembresPanel.repaint();
+    }
+
+    private void jMenuItem1_actionPerformed(ActionEvent e)
+    {
+        PresenceCarDialog presenceCarDialog = new PresenceCarDialog();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = presenceCarDialog.getSize();
+        if (frameSize.height > screenSize.height)
+        {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width)
+        {
+            frameSize.width = screenSize.width;
+        }
+        presenceCarDialog.setLocation((screenSize.width - frameSize.width) / 
+                                    2, 
+                                    (screenSize.height - frameSize.height) / 
+                                    2);
+        presenceCarDialog.setVisible(true);
+    }
+}

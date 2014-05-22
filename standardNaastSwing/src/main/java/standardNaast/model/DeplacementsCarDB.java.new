@@ -1,0 +1,447 @@
+package standardNaast.model;
+
+import java.sql.Connection;
+
+import java.sql.PreparedStatement;
+
+import java.sql.ResultSet;
+
+import java.util.Vector;
+
+import javax.swing.JOptionPane;
+
+public class DeplacementsCarDB
+{
+    public DeplacementsCarDB()
+    {
+    }
+    
+    public Vector getDeplacementsCar() 
+    {
+        Connection connection = JDBCConnection.getInstance().getJDBCConnection();
+        PreparedStatement selectStatement = null;
+        ResultSet rs = null;
+        Vector deplacementCar = new Vector();
+        Vector allDeplacementsCar = new Vector();
+        Vector columnNames = new Vector();
+        Vector data = new Vector();
+        
+        try
+        {
+            selectStatement = connection.prepareStatement("select PRIX_LOCOMOTION_ID as ID,\n" + 
+            "	 ANNEE,\n" + 
+            "	 MONTANT,\n" + 
+            "         AGE_MINIMUM as \"AGE MINIMUM\",\n" + 
+            "         AGE_MAXIMUM as \"AGE MAXIMUM\",\n" + 
+            "         LIEU,\n" + 
+            "         MEMBRE  \n" + 
+            " from	 PRIX_LOCOMOTION" +
+                " order by annee desc, age_minimum asc");
+            rs = selectStatement.executeQuery();
+            GlobalQueries gq = new GlobalQueries();
+            columnNames = gq.getColumnNames(rs);
+            while(rs.next())
+            {
+                deplacementCar = new Vector();
+                deplacementCar.add(rs.getInt(1));
+                deplacementCar.add(rs.getString(2));
+                deplacementCar.add(rs.getInt(3));
+                deplacementCar.add(rs.getInt(4));
+                deplacementCar.add(rs.getInt(5));
+                deplacementCar.add(rs.getString(6));
+                deplacementCar.add((rs.getInt(7)) == 0 ? new Boolean(false) : new Boolean(true));
+                allDeplacementsCar.add(deplacementCar);
+            }
+            rs.close();
+            selectStatement.close();
+            data.add(allDeplacementsCar);
+            data.add(columnNames);
+            
+            
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            //throw new Exception(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                rs.close();
+                selectStatement.close();
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+        return data;
+            
+            
+    }
+    
+    public boolean addDeplacementCar(Vector data) throws Exception
+    {
+        Connection connection = null;
+        PreparedStatement insertStatement = null;
+        
+        try
+        {
+            if(deplacementExistsOnAdd(data))
+            {
+                JOptionPane.showMessageDialog(null,"Information déjà existante dans la base de données.","Deplacement car",JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            else
+            {
+                connection = JDBCConnection.getInstance().getJDBCConnection();
+                insertStatement = connection.prepareStatement("insert into prix_locomotion (PRIX_LOCOMOTION_ID,ANNEE,MONTANT,LIEU,MEMBRE,AGE_MINIMUM,AGE_MAXIMUM)\n" + 
+                "values(prix_locomotion_seq.nextval,?,?,?,?,?,?)");
+                insertStatement.setString(1,((String)data.get(0)));
+                insertStatement.setInt(2,Integer.parseInt((String)data.get(1)));
+                insertStatement.setString(3,((String)data.get(2)));
+                insertStatement.setInt(4,Integer.parseInt((String)data.get(3)));
+                insertStatement.setInt(5,Integer.parseInt((String)data.get(4)));
+                insertStatement.setInt(6,Integer.parseInt((String)data.get(5)));
+                insertStatement.execute();            
+                insertStatement.close();
+                connection.commit();
+                return true;
+            }
+                        
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                insertStatement.close();
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+    }
+
+    public boolean updateDeplacementCar(Vector data)
+        throws Exception
+    {
+        Connection connection = null;
+        
+        PreparedStatement updateStatement = null;
+
+        try
+        {
+            if (deplacementExistsOnUpdate(data))
+            {
+                JOptionPane.showMessageDialog(null, 
+                                              "Information déjà existante dans la base de données.", 
+                                              "Deplacement car", 
+                                              JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            else
+            {
+                connection = 
+                        JDBCConnection.getInstance().getJDBCConnection();
+                updateStatement = connection.prepareStatement("update prix_locomotion " +
+                    "set annee = ?," +
+                    "montant = ?," +
+                    "lieu = ?," +
+                    "membre = ?," +
+                    "age_minimum = ?," +
+                    "age_maximum = ?" +
+                    " where prix_locomotion_id = ?");
+                
+                updateStatement.setInt(1, 
+                                       Integer.parseInt((String) data.get(0)));
+                
+                updateStatement.setInt(2, 
+                                       Integer.parseInt((String) data.get(1)));
+                updateStatement.setString(3, ((String) data.get(2)));
+                updateStatement.setInt(4, 
+                                       Integer.parseInt((String) data.get(3)));
+                updateStatement.setInt(5, 
+                                       Integer.parseInt((String) data.get(4)));
+                updateStatement.setInt(6, 
+                                       Integer.parseInt((String) data.get(5)));
+                updateStatement.setInt(7, 
+                                       Integer.parseInt((String) data.get(6)));
+                updateStatement.executeUpdate();
+                updateStatement.close();
+                connection.commit();
+                return true;
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                updateStatement.close();
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+    }
+    
+    public boolean deplacementExistsOnAdd(Vector data)
+    {
+        Connection connection = JDBCConnection.getInstance().getJDBCConnection();
+        PreparedStatement selectStatement = null;
+        ResultSet rs = null;
+        boolean exists = false;
+        
+        try
+        {
+            selectStatement = connection.prepareStatement("select * from prix_locomotion where ANNEE = ?\n" + 
+            "and MONTANT = ?\n" + 
+            "and LIEU = ?\n" + 
+            "and MEMBRE = ?\n" + 
+            "and AGE_MINIMUM = ?\n" + 
+            "and AGE_MAXIMUM = ?");
+            selectStatement.setString(1,((String)data.get(0)));
+            selectStatement.setInt(2,Integer.parseInt((String)data.get(1)));
+            selectStatement.setString(3,((String)data.get(2)));
+            selectStatement.setInt(4,Integer.parseInt((String)data.get(3)));
+            selectStatement.setInt(5,Integer.parseInt((String)data.get(4)));
+            selectStatement.setInt(6,Integer.parseInt((String)data.get(5)));
+            rs = selectStatement.executeQuery();
+            
+            if(rs.next())
+            {
+                exists = true;                
+            }
+            rs.close();
+            selectStatement.close();           
+            
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            
+        }
+        finally
+        {
+            try
+            {
+                rs.close();
+                selectStatement.close();
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+        return exists;
+        
+    }
+
+    public boolean deplacementExistsOnUpdate(Vector data)
+    {
+        Connection connection = 
+            JDBCConnection.getInstance().getJDBCConnection();
+        PreparedStatement selectStatement = null;
+        ResultSet rs = null;
+        boolean exists = false;
+
+        try
+        {
+            selectStatement = 
+                    connection.prepareStatement("select * from prix_locomotion where ANNEE = ?\n" +
+                        "and MONTANT = ?\n" +
+                        "and LIEU = ?\n" +
+                        "and MEMBRE = ?\n" +
+                        "and AGE_MINIMUM = ?\n" +
+                        "and AGE_MAXIMUM = ?" +
+                        " and prix_locomotion_id <> ?");
+            selectStatement.setString(1, ((String) data.get(0)));
+            selectStatement.setInt(2, 
+                                   Integer.parseInt((String) data.get(1)));
+            selectStatement.setString(3, ((String) data.get(2)));
+            selectStatement.setInt(4, 
+                                   Integer.parseInt((String) data.get(3)));
+            selectStatement.setInt(5, 
+                                   Integer.parseInt((String) data.get(4)));
+            selectStatement.setInt(6, 
+                                   Integer.parseInt((String) data.get(5)));
+            selectStatement.setInt(7, 
+                                   Integer.parseInt((String) data.get(6)));
+            rs = selectStatement.executeQuery();
+
+            if (rs.next())
+            {
+                exists = true;
+            }
+            rs.close();
+            selectStatement.close();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+
+        }
+        finally
+        {
+            try
+            {
+                rs.close();
+                selectStatement.close();
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+        return exists;
+
+    }
+    
+    public int[] getPrixDeplacementParDateNaissance(int personneID, int matchID) throws Exception
+    {
+        Connection connection = JDBCConnection.getInstance().getJDBCConnection();
+        PreparedStatement selectStatement = null;
+        ResultSet rs = null;
+        String dateNaissance =null;
+        int anneesDifference = 0;
+        String lieu = null;
+        String dateMatch = null;
+        String annee  = null;
+        int membre = 0;
+        int[] info = new int[2];
+        System.out.println("Personne ID: "+personneID);
+        System.out.println("Match ID: "+matchID);
+        
+        try
+        {
+            selectStatement = connection.prepareStatement("select to_char(sysdate,'YYYY') from dual");
+            rs = selectStatement.executeQuery();
+            rs.next();
+            annee = rs.getString(1);
+            rs.close();
+            selectStatement.close();
+            
+            System.out.println("Année: "+annee);
+            
+            selectStatement = connection.prepareStatement("select count(*) from personnes_cotisations\n" + 
+            "              where personne_id = ? \n" + 
+            "              and annee_cotisation = to_number(to_char(sysdate,'YYYY'))");
+            selectStatement.setInt(1,personneID);
+            rs = selectStatement.executeQuery();
+            if(rs.next())
+                membre = 1;            
+            rs.close();
+            selectStatement.close();
+            
+            if(membre == 0)
+            {
+                selectStatement = connection.prepareStatement("select sysdate from dual where to_date(?,'DD-MM-YYYY') > sysdate");
+                selectStatement.setString(1,"31-03-"+annee);
+                rs= selectStatement.executeQuery();
+                if (rs.next())
+                    membre = 1;
+                rs.close();
+                selectStatement.close();
+            }
+            
+            System.out.println("Membre: "+membre);
+            
+            selectStatement = connection.prepareStatement("" +
+                "select to_char(date_naissance,'DD-MM-YYYY') " +
+                " from personnes where personne_id = ?");
+            selectStatement.setInt(1,personneID);
+            rs = selectStatement.executeQuery();
+            rs.next();
+            dateNaissance =rs.getString(1);
+            rs.close();
+            selectStatement.close();
+            
+            System.out.println("Date de naissance: "+dateNaissance);
+            
+            selectStatement = connection.prepareStatement("select to_char(date_match,'DD-MM-YYYY') from match where match_id = ?");
+            selectStatement.setInt(1,matchID);
+            rs = selectStatement.executeQuery();
+            rs.next();
+            dateMatch = rs.getString(1);
+            rs.close();
+            selectStatement.close();
+            
+            System.out.println("Date de match: "+dateMatch);
+            
+            selectStatement = connection.prepareStatement("" +
+                "select trunc(((((86400*(to_date('"+dateMatch+"','DD-MM-YYYY') - to_date('"+dateNaissance+"','DD-MM-YYYY')))/60)/60)/24)/365) from dual");
+            rs = selectStatement.executeQuery();
+            rs.next();
+            anneesDifference = rs.getInt(1);
+            rs.close();
+            selectStatement.close();
+            
+            System.out.println("Années différence: "+anneesDifference);
+            
+            selectStatement = connection.prepareStatement("select lieu from match where match_id = ?");
+            selectStatement.setInt(1,matchID);
+            rs = selectStatement.executeQuery();
+            rs.next();
+            lieu = rs.getString(1);
+            rs.close();
+            selectStatement.close();
+            
+            System.out.println("Lieu: "+lieu);
+            
+            selectStatement = connection.prepareStatement("select montant, prix_locomotion_id\n" + 
+            "              from prix_locomotion\n" + 
+            "              where annee = to_number(to_char(sysdate,'YYYY'))\n" + 
+            "              and lieu = ?" + 
+            "              and membre = ?" + 
+            "              and age_minimum <= ?" + 
+            "              and age_maximum > ?");
+            selectStatement.setString(1,lieu);
+            selectStatement.setInt(2,membre);
+            selectStatement.setInt(3,anneesDifference);
+            selectStatement.setInt(4,anneesDifference);
+            rs = selectStatement.executeQuery();
+            rs.next();
+            info[0] = rs.getInt(1);
+            info[1] = rs.getInt(2);
+            rs.close();
+            selectStatement.close();
+            
+            System.out.println("Montant: "+info[0]);
+            System.out.println("Prix locomotion ID: "+info[1]);
+            
+            return info;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                selectStatement.close();
+            }
+            catch(Exception e)
+            {
+                
+            }
+        }
+        
+        
+    }
+}
