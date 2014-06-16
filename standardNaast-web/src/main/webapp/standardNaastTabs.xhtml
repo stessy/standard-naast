@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+<!--     <ui:define name="standardNaastTabs"> -->
+        <p:tabView>
+            <p:tab title="Membres">
+                <p:tabView>
+                    <p:tab title="Liste des membres">
+<!--                         <ui:include src="membersTable.xhtml" /> -->
+						<ui:insert name="memberTable"/>
+                    </p:tab>
+                    <p:tab title="Ajout/Modification d'un membre">
+                        <ui:include src="memberForm.xhtml" />
+                    </p:tab>
+                    <p:tab title="Cotisations"></p:tab>
+                    <p:tab title="Lettre d'information"></p:tab>
+                </p:tabView>
+            </p:tab>
+            <p:tab title="Abonnements"></p:tab>
+            <p:tab title="Matchs"></p:tab>
+        </p:tabView>
+<!--     </ui:define> -->
+</ui:composition>
+
+

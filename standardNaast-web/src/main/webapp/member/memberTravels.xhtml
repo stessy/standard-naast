@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<p:panelGrid style="width:100%" id="memberTravels">
+		<p:row>
+			<p:column style="text-align:right;">
+				<p:outputLabel for="seasonMenu" value="#{messages['SAISON']}" />
+			</p:column>
+			<p:column style="float:left;text-align:left;">
+				<p:selectOneMenu id="seasonMenu" value="#{memberTravelsBean.selectedSeason}">
+					<f:selectItems itemValue="#{season.id}" itemLabel="#{season.id}" value="#{seasonsBean.seasons}" var="season" />
+					<p:ajax listener="#{memberTravelsBean.setSeasonTravels}"  update="travelHome travelAway travelTotal" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="text-align:right;">
+				<p:outputLabel for="travelHome" value="#{messages['DOMICILE']}" />
+			</p:column>
+			<p:column style="float:left;">
+				<p:inputText disabled="true" id="travelHome" value="#{memberTravelsBean.home}"></p:inputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="text-align:right;">
+				<p:outputLabel for="travelAway" value="#{messages['DEPLACEMENT']}" />
+			</p:column>
+			<p:column style="float:left;">
+				<p:inputText disabled="true" id="travelAway" value="#{memberTravelsBean.away}"></p:inputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="text-align:right;">
+				<p:outputLabel for="travelTotal" value="#{messages['TOTAL']}" />
+			</p:column>
+			<p:column style="float:left;">
+				<p:inputText disabled="true" id="travelTotal" value="#{memberTravelsBean.total}"></p:inputText>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>
+

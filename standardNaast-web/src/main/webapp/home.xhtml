@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Application du Standard de Naast</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<h:outputStylesheet name="css/screen.css" />
+</h:head>
+<h:body>
+	<h:panelGroup id="page" layout="block">
+		<h:panelGroup id="header" layout="block">
+			<img src="images/banniere_club.png" alt="Banniere" height="140" width="900" />
+		</h:panelGroup>
+		<h:panelGroup id="content" layout="block">
+			<h:form id="mainForm">
+				<p:tabView style="width:100%" id="masterTabView">
+					<p:tab style="width:100%" title="Membres" id="membersTab">
+						<ui:include src="members.xhtml" />
+					</p:tab>
+					<p:tab style="width:100%" title="Cotisations"></p:tab>
+					<p:tab style="width:100%" title="Lettre d'information"></p:tab>
+					<p:tab style="width:100%" title="Abonnements"></p:tab>
+					<p:tab style="width:100%" title="Matchs"></p:tab>
+					<p:tab style="width:100%" title="Configuration générale">
+						<ui:include src="generalConfiguration.xhtml" />
+					</p:tab>
+				</p:tabView>
+			</h:form>
+		</h:panelGroup>
+		<h:panelGroup id="footer" layout="block"></h:panelGroup>
+	</h:panelGroup>
+
+</h:body>
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet id="1" author="stessy">
+		<addColumn tableName="MATCH">
+			<column name="OPPONENT" type="NUMERIC"></column>
+		</addColumn>
+		<addColumn tableName="MATCH">
+			<column name="SAISON_ID" type="VARCHAR(10)"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="2" author="stessy">
+		<addColumn tableName="MATCH">
+			<column name="COMPETITION_TYPE" type="VARCHAR(16)"></column>
+		</addColumn>
+		<addColumn tableName="MATCH">
+			<column name="MATCH_TYPE" type="VARCHAR(19)"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="3" author="stessy">
+		<sql><![CDATA[update match set opponent = (select equipe_id from saison_equipe where match.saison_equipe_id = saison_equipe.saison_equipe_id)]]></sql>
+	</changeSet>
+	<changeSet id="4" author="stessy">
+		<sql><![CDATA[update match set saison_id = (select saison_id from saison_equipe where match.saison_equipe_id = saison_equipe.saison_equipe_id)]]></sql>
+	</changeSet>
+	<changeSet id="5" author="stessy">
+		<sql><![CDATA[UPDATE MATCH
+SET competition_type =
+  (SELECT
+    CASE type_competition_id
+      WHEN 1
+      THEN 'CHAMPIONSHIP'
+      WHEN 2
+      THEN 'CUP'
+      WHEN 4
+      THEN 'EUROPA_LEAGUE'
+      ELSE competition_type
+    END
+  FROM type_match
+  WHERE match.type_match = type_match.type_match_id
+  );]]></sql>
+	</changeSet>
+	<changeSet id="6" author="stessy">
+		<sql><![CDATA[UPDATE MATCH
+SET competition_type =
+  (SELECT
+    CASE type_match
+      WHEN 9
+      THEN 'PLAYOFFS'
+      ELSE competition_type
+    END
+  FROM type_match
+  WHERE match.type_match = type_match.type_match_id
+  );]]></sql>
+	</changeSet>
+	<changeSet id="7" author="stessy">
+		<dropColumn tableName="PERSONNES_MATCH" columnName="PAYE" />
+	</changeSet>
+	<changeSet id="8" author="stessy">
+		<addColumn tableName="PERSONNES_MATCH">
+			<column name="CAR_TRAVEL_AMOUNT" type="INTEGER"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="9" author="stessy">
+		<sql><![CDATA[  UPDATE personnes_match
+			SET car_travel_amount =
+  			(SELECT montant
+  			FROM prix_locomotion
+  			WHERE personnes_match.PRIX_LOCOMOTION_ID = prix_locomotion.PRIX_LOCOMOTION_ID
+  			);]]></sql>
+	</changeSet>
+	<changeSet id="10" author="stessy">
+		<sql><![CDATA[UPDATE PRIX_LOCOMOTION SET LIEU = 'HOME' WHERE LIEU = 'DOMICILE';]]></sql>
+	</changeSet>
+	<changeSet id="11" author="stessy">
+		<sql><![CDATA[UPDATE PRIX_LOCOMOTION SET LIEU = 'AWAY' WHERE LIEU = 'DEPLACEMENT';]]></sql>
+	</changeSet>
+	<changeSet id="12" author="stessy">
+		<sql><![CDATA[UPDATE MATCH SET LIEU = 'HOME' WHERE LIEU = 'DOMICILE';]]></sql>
+	</changeSet>
+	<changeSet id="13" author="stessy">
+		<sql><![CDATA[UPDATE MATCH SET LIEU = 'AWAY' WHERE LIEU = 'DEPLACEMENT';]]></sql>
+	</changeSet>
+	<changeSet id="14" author="stessy">
+		<renameColumn tableName="MATCH" oldColumnName="LIEU"
+			newColumnName="PLACE" />
+	</changeSet>
+	<changeSet id="15" author="stessy">
+		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="LIEU"
+			newColumnName="PLACE" />
+	</changeSet>
+	<!-- <changeSet id="16" author="stessy"> -->
+	<!-- <dropForeignKeyConstraint baseTableName="MATCH" constraintName=""/> -->
+	<!-- <dropColumn tableName="MATCH" columnName="SAISON_EQUIPE_ID"/> -->
+	<!-- </changeSet> -->
+	<changeSet id="16" author="stessy">
+		<addColumn tableName="PRIX_LOCOMOTION">
+			<column name="ANNEE2" type="DATE"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="17" author="stessy">
+		<update tableName="PRIX_LOCOMOTION">
+			<column name="ANNEE2" valueComputed="TO_DATE(ANNEE,'YYYY')"></column>
+		</update>
+	</changeSet>
+	<changeSet id="18" author="stessy">
+		<dropColumn tableName="PRIX_LOCOMOTION" columnName="ANNEE" />
+	</changeSet>
+	<changeSet id="19" author="stessy">
+		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="ANNEE2"
+			newColumnName="ANNEE" />
+	</changeSet>
+</databaseChangeLog>

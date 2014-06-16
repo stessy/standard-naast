@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<p:dataTable id="travelConfigurationTable" var="travel" value="#{travelsTableBean.allTravels}" paginator="true" rows="5" tableStyle="width:98%" selectionMode="single" selection="#{travelsTableBean.selectedTravel}" rowKey="#{travel}"
+		emptyMessage="#{messages['NO.TRAVEL']}" paginatorPosition="bottom">
+		<p:column headerText="#{messages['year']}">
+			<h:outputText value="#{travel.annee}" ><f:convertDateTime type="date" pattern="yyyy"/></h:outputText>
+		</p:column>
+		<p:column headerText="#{messages['amount']}">
+			<h:outputText value="#{travel.montant}" ><f:convertNumber maxFractionDigits="1" minFractionDigits="0" groupingUsed="true" /></h:outputText>
+		</p:column>
+		<p:column headerText="#{messages['age.minimum']}">
+			<h:outputText value="#{travel.ageMinimum}" />
+		</p:column>
+		<p:column headerText="#{messages['age.maximum']}">
+			<h:outputText value="#{travel.ageMaximum}" />
+		</p:column>
+		<p:column headerText="#{messages['lieu']}">
+			<h:outputText value="#{messages[travel.place]}" />
+		</p:column>
+		<p:column headerText="#{messages['member']}">
+			<p:selectBooleanCheckbox value="#{travel.membre}" />
+		</p:column>
+		<f:facet name="footer">
+			<h:outputText value=" " />
+		</f:facet>
+	</p:dataTable>
+</ui:composition>
