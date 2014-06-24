@@ -54,6 +54,7 @@ public class Match implements Serializable {
 	private List<CommandePlace> commandePlaces;
 
 	@JoinColumn(name = "SAISON_ID", nullable = false)
+	@ManyToOne
 	private Season season;
 
 	@ManyToOne

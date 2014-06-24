@@ -28,6 +28,16 @@
 			<artifactId>itextpdf</artifactId>
 		</dependency>
 		<dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk15on</artifactId>
+        <version>1.47</version>
+    </dependency>
+    <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcmail-jdk15on</artifactId>
+        <version>1.47</version>
+    </dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
@@ -103,7 +113,7 @@
 		<dependency>
 			<groupId>org.jboss.weld</groupId>
 			<artifactId>weld-core</artifactId>
-			<scope>provided</scope>
+<!-- 			<scope>provided</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.main.extras</groupId>
@@ -121,9 +131,9 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
-					<compilerArguments>
-						<endorseddirs>${endorsed.dir}</endorseddirs>
-					</compilerArguments>
+<!-- 					<compilerArguments> -->
+<!-- 						<endorseddirs>${endorsed.dir}</endorseddirs> -->
+<!-- 					</compilerArguments> -->
 				</configuration>
 			</plugin>
 			<plugin>

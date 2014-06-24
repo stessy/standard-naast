@@ -12,6 +12,5 @@
 			<base-name>Bundle</base-name>
 			<var>messages</var>
 		</resource-bundle>
-<!-- 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver> -->
 	</application>
 </faces-config>

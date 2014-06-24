@@ -2,7 +2,7 @@
     <wb-module deploy-name="standardNaast-ear-1.0-SNAPSHOT">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/application" tag="defaultRootSource"/>
-        <dependent-module archiveName="standardNaast-front-1.0-SNAPSHOT.war" deploy-path="/" handle="module:/resource/standardNaast-front/standardNaast-front">
+        <dependent-module archiveName="standardNaast-web-0.0.1-SNAPSHOT.war" deploy-path="/" handle="module:/resource/standardNaast-web/standardNaast-web">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>

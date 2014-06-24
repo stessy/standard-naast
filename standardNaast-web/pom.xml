@@ -292,21 +292,7 @@
 			<artifactId>weld-core</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.wildfly</groupId>
-			<artifactId>wildfly-embedded</artifactId>
-			<version>8.0.0.Final</version>
-		</dependency>
-		<dependency>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-core-uberjar</artifactId>
-				<version>1.4.8</version>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-core-container-wildfly</artifactId>
-				<version>1.4.8</version>
-			</dependency>
+		
 
 	</dependencies>
 

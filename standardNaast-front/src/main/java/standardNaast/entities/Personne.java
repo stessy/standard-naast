@@ -91,8 +91,8 @@ public class Personne implements Serializable, Comparable<Personne> {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "personne")
 	private List<Abonnement> abonnementList;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "personne", cascade = {
-			CascadeType.MERGE, CascadeType.PERSIST }, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE,
+			CascadeType.PERSIST }, orphanRemoval = true, mappedBy = "personne")
 	private List<Benevolat> benevolatList;
 
 	@OneToMany(mappedBy = "personne", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
