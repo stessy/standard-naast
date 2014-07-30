@@ -24,7 +24,7 @@ import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
 import standardNaast.entities.Season;
 import standardNaast.service.PersonneService;
-import standardNaast.service.SaisonService;
+import standardNaast.service.SeasonService;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -41,7 +41,7 @@ public class TableauCotisations {
 
 	private PersonneService personneService;
 
-	private SaisonService saisonService;
+	private SeasonService saisonService;
 
 	private static final int YEAR = GregorianCalendar.getInstance().get(
 			Calendar.YEAR);
@@ -288,7 +288,8 @@ public class TableauCotisations {
 	}
 
 	private List<Personne> getMembers() {
-		List<Personne> personneList = this.getPersonneService().findAllPerson();
+		List<Personne> personneList = this.getPersonneService().findAllPerson(
+				false);
 		List<Personne> memberList = new ArrayList<Personne>();
 		for (Personne personne : personneList) {
 			if (personne.getMemberNumber() < 10000) {
@@ -306,9 +307,9 @@ public class TableauCotisations {
 		return this.personneService;
 	}
 
-	private SaisonService getSaisonService() {
+	private SeasonService getSaisonService() {
 		if (this.saisonService == null) {
-			this.saisonService = new SaisonService();
+			this.saisonService = new SeasonService();
 		}
 		return this.saisonService;
 	}

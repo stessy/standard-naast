@@ -11,8 +11,6 @@ import javax.inject.Named;
 import standardNaast.entities.Personne;
 import standardNaast.service.PersonneService;
 
-//@Controller("memberForm")
-//@Scope("session")
 @Named(value = "memberForm")
 @SessionScoped
 public class MemberFormBean implements Serializable {

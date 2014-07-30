@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<p:panelGrid>
+		<p:row>
+			<p:column>
+				<p:outputLabel for="yearsMenu" value="#{messages['COTISATION.ANNEE']} : " />
+				<p:selectOneMenu id="yearsMenu" value="#{cotisationsTable.selectedCotisation}" style="width: 60px; vertical-align:middle;">
+					<p:ajax listener="#{cotisationsTable.updateCotisations}" update="paidCotisationsTable unpaidCotisationsTable totalPaid totalUnpaid totalAmountPaid" />
+					<f:selectItems itemValue="#{cotisation.anneeCotisation}" itemLabel="#{cotisation.anneeCotisation}" value="#{cotisationsTable.cotisations}" var="cotisation" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:outputLabel for="totalPaid" value="#{messages['COTISATIONS.TOTAL.PAYE']} : " />
+				<p:inputText id="totalPaid" disabled="true" value="#{cotisationsTable.totalPaid}" size="3"></p:inputText>
+			</p:column>
+			<p:column>
+				<p:outputLabel for="totalUnpaid" value="#{messages['COTISATIONS.TOTAL.NON.PAYE']} : " />
+				<p:inputText id="totalUnpaid" disabled="true" value="#{cotisationsTable.totalUnpaid}" size="3"></p:inputText>
+			</p:column>
+			<p:column>
+				<p:outputLabel for="totalAmountPaid" value="#{messages['COTISATIONS.MONTANT.TOTAL.PAYE']} : " />
+				<p:inputText id="totalAmountPaid" disabled="true" value="#{cotisationsTable.totalAmountPaid} €" size="5"></p:inputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column colspan="2" style="vertical-align:top;">
+				<p:panel id="paidCotisationsPanel" header="Cotisations payées" style="text-align:center;">
+					<p:dataTable id="paidCotisationsTable" var="paidCotisations" value="#{cotisationsTable.paidCotisationsModel}" widgetVar="paidCotisationsTableVar" paginator="true" rows="25"
+						selection="#{cotisationsTable.paidSelectedCotisationsModel}" rowKey="#{paidCotisations.memberNumber}">
+						<p:ajax event="rowSelect" update="printSelectedButton" listener="#{cotisationsTable.onPaidRowSelect}"/>
+						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
+							<h:outputText value="#{paidCotisations.memberNumber}" />
+						</p:column>
+						<p:column headerText="#{messages['PRENOM']}">
+							<h:outputText value="#{paidCotisations.firstName}" />
+						</p:column>
+						<p:column headerText="#{messages['NOM']}">
+							<h:outputText value="#{paidCotisations.name}" />
+						</p:column>
+						<p:column headerText="#{messages['PAYMENT.DATE.COTISATION']}">
+							<h:outputText value="#{paidCotisations.paymentDate}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{messages['MEMBER.CARD.SENT']}">
+							<p:selectBooleanCheckbox value="#{paidCotisations.memberCardSent}" disabled="true" />
+						</p:column>
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="8">
+									<p:commandButton id="printSelectedButton" type="submit" value="#{messages['AJOUTER.MEMBRE']}" icon="ui-icon-print" disabled="#{cotisationsTable.paidCotisationButtonDisabled}" style="margin:5px;" actionListener="#{cotisationsTable.printSelected}" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:dataTable>
+				</p:panel>
+			</p:column>
+			<p:column colspan="2" style="vertical-align:top;">
+				<p:panel id="unpaidCotisationsPanel" header="Cotisations non payées" style="text-align:center">
+					<p:dataTable id="unpaidCotisationsTable" var="unpaidCotisations" filteredValue="#{cotisationsTable.filteredUnpaidCotisation}"  value="#{cotisationsTable.unpaidCotisationsModel}" widgetVar="unpaidCotisationsTableVar" paginator="true" rows="25"
+						selection="#{cotisationsTable.unpaidSelectedCotisationsModel}" rowKey="#{unpaidCotisations.memberNumber}">
+						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
+							<h:outputText value="#{unpaidCotisations.memberNumber}" />
+						</p:column>
+						<p:column headerText="#{messages['PRENOM']}" filterBy="#{unpaidCotisations.firstName}" filterMatchMode="startsWith">
+							<h:outputText value="#{unpaidCotisations.firstName}"/>
+						</p:column>
+						<p:column headerText="#{messages['NOM']}" filterBy="#{unpaidCotisations.name}" filterMatchMode="startsWith">
+							<h:outputText value="#{unpaidCotisations.name}"/>
+						</p:column>
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="8">
+									<p:commandButton type="submit" value="#{messages['AJOUTER.MEMBRE']}" update="@([id$=paidCotisationsTable], [id$=unpaidCotisationsTable], [id$=totalPaid], [id$=totalUnpaid], [id$=totalAmountPaid], [id$=growl])" icon="ui-icon-check" style="margin:5px;" actionListener="#{cotisationsTable.setPaidForSelected}" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:dataTable>
+				</p:panel>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

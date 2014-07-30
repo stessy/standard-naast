@@ -68,14 +68,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.primefaces.themes</groupId>
-			<artifactId>blitzer</artifactId>
-		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.primefaces.themes</groupId> -->
-<!-- 			<artifactId>standardNaast-theme</artifactId> -->
-<!-- 		</dependency> -->
-		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 		</dependency>
@@ -115,12 +107,6 @@
 			<artifactId>weld-core</artifactId>
 <!-- 			<scope>provided</scope> -->
 		</dependency>
-		<dependency>
-			<groupId>org.glassfish.main.extras</groupId>
-			<artifactId>glassfish-embedded-all</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
 	</dependencies>
 	<build>
 		<plugins>

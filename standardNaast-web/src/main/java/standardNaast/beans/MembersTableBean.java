@@ -51,7 +51,8 @@ public class MembersTableBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		System.out.println("Initializing MembersTableBean");
-		List<Personne> findAllPerson = this.personneService.findAllPerson();
+		List<Personne> findAllPerson = this.personneService
+				.findAllPerson(false);
 		Collections.sort(findAllPerson);
 		this.members = findAllPerson;
 		this.filteredMembers = findAllPerson;

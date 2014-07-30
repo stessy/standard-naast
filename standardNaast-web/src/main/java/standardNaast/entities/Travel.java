@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 
 import standardNaast.types.Place;
 
@@ -41,8 +40,6 @@ public class Travel implements Serializable {
 	private BigDecimal montant;
 
 	@Basic(optional = false)
-	// @NotNull
-	@Size(min = 1, max = 20)
 	@Column(name = "PLACE")
 	@Enumerated(EnumType.STRING)
 	private Place place;

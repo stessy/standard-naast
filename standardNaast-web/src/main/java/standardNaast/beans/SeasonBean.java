@@ -10,7 +10,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import standardNaast.entities.Season;
-import standardNaast.service.SaisonService;
+import standardNaast.service.SeasonService;
 
 @Named(value = "seasonsBean")
 @SessionScoped
@@ -23,7 +23,7 @@ public class SeasonBean implements Serializable {
 	private List<Season> seasons;
 
 	@EJB
-	private SaisonService saisonService;
+	private SeasonService saisonService;
 
 	@PostConstruct
 	public void init() {

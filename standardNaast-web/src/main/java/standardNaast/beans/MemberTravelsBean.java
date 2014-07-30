@@ -7,7 +7,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import standardNaast.entities.Personne;
-import standardNaast.service.SaisonService;
+import standardNaast.model.MemberSeasonTravels;
+import standardNaast.service.SeasonService;
 
 //@Controller("memberTravelsBean")
 //@Scope("session")
@@ -28,7 +29,7 @@ public class MemberTravelsBean implements Serializable {
 	private int total;
 
 	@Inject
-	private SaisonService saisonService;
+	private SeasonService saisonService;
 
 	public MemberTravelsBean() {
 		System.out.println("Initializing MemberTravelsBean");

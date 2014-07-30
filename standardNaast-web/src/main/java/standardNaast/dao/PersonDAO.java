@@ -12,6 +12,8 @@ public interface PersonDAO {
 
 	Personne getPerson(long id);
 
-	List<Personne> getAllPersons();
+	List<Personne> getAllPersons(boolean allPersons);
+
+	Personne getPersonneByMemberNumber(long memberNumber);
 
 }

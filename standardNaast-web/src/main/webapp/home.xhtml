@@ -4,31 +4,40 @@
 <h:head>
 	<title>Application du Standard de Naast</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<h:outputStylesheet name="css/screen.css" />
+	<h:outputStylesheet name="/css/screen.css" />
 </h:head>
 <h:body>
 	<h:panelGroup id="page" layout="block">
 		<h:panelGroup id="header" layout="block">
-			<img src="images/banniere_club.png" alt="Banniere" height="140" width="900" />
+			<img src="resources/images/banniere_club.png" alt="Banniere" height="140" width="900" />
 		</h:panelGroup>
 		<h:panelGroup id="content" layout="block">
-			<h:form id="mainForm">
-				<p:tabView style="width:100%" id="masterTabView">
-					<p:tab style="width:100%" title="Membres" id="membersTab">
+			<p:tabView style="width:100%" id="masterTabView" dynamic="true">
+				<p:ajax event="tabChange" listener="#{tabView.onTabChange}" />
+				<p:tab style="width:100%" title="Membres" id="membersTab">
+					<h:form>
+					<p:growl id="growl" showDetail="true" sticky="true" />
 						<ui:include src="members.xhtml" />
-					</p:tab>
-					<p:tab style="width:100%" title="Cotisations"></p:tab>
-					<p:tab style="width:100%" title="Lettre d'information"></p:tab>
-					<p:tab style="width:100%" title="Abonnements"></p:tab>
-					<p:tab style="width:100%" title="Matchs"></p:tab>
-					<p:tab style="width:100%" title="Configuration générale">
-						<ui:include src="generalConfiguration.xhtml" />
-					</p:tab>
-				</p:tabView>
-			</h:form>
+					</h:form>
+				</p:tab>
+				<p:tab style="width:100%" title="Cotisations" id="cotisationsTab">
+					<h:form>
+						<ui:include src="cotisation/cotisationsTable.xhtml" />
+					</h:form>
+				</p:tab>
+				<p:tab style="width:100%" title="Lettre d'information"></p:tab>
+				<p:tab style="width:100%" title="Abonnements"></p:tab>
+				<p:tab style="width:100%" title="Matchs"></p:tab>
+				<p:tab style="width:100%" title="Configuration générale">
+					<h:form id="generalConfigurationForm">
+						<ui:include src="configuration/generalConfiguration.xhtml" />
+					</h:form>
+				</p:tab>
+			</p:tabView>
 		</h:panelGroup>
 		<h:panelGroup id="footer" layout="block"></h:panelGroup>
 	</h:panelGroup>
-
+	 <ui:debug rendered="true" hotkey="x"/>
+<!-- 	 <ui:include src="member/createMemberForm.xhtml" /> -->
 </h:body>
 </html>

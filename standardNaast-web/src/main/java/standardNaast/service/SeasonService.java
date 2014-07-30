@@ -12,10 +12,10 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import standardNaast.beans.MemberSeasonTravels;
 import standardNaast.dao.SaisonDAO;
 import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
+import standardNaast.model.MemberSeasonTravels;
 
 /**
  * @author stessy
@@ -23,12 +23,12 @@ import standardNaast.entities.Season;
  */
 @Stateless
 @LocalBean
-public class SaisonService implements Serializable {
+public class SeasonService implements Serializable {
 
 	@Inject
 	SaisonDAO saisonDAO;
 
-	private static final Logger LOGGER = Logger.getLogger(SaisonService.class);
+	private static final Logger LOGGER = Logger.getLogger(SeasonService.class);
 
 	public List<Season> findAllSaison() {
 		return this.saisonDAO.getAllSeasons();

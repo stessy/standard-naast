@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<p:messages id="createMemberMessages" showDetail="true" autoUpdate="true" closable="true" />
+	<p:dialog id="createMemberDialog" widgetVar="createMemberDlg" modal="true" rendered="true">
+		<h:form>
+			<p:panelGrid style="width:100%" styleClass="memberForm" id="createMemberFormGrid">
+				<p:row>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="lastName" value="#{messages['NOM']}" />
+					</p:column>
+					<p:column style="align:left;">
+						<p:inputText id="lastName" required="true" value="#{createMemberForm.personne.name}" style="width:98%;" maxLength="50">
+							<f:validateLength maximum="50"></f:validateLength>
+						</p:inputText>
+						<p:message for="lastName" display="tooltip" />
+					</p:column>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="firstName" value="#{messages['PRENOM']}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="firstName" required="true" value="#{createMemberForm.personne.firstname}" style="width:98%;" maxLength="50">
+							<f:validateLength maximum="50"></f:validateLength>
+						</p:inputText>
+						<p:message for="firstName" display="tooltip" />
+					</p:column>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="birthDate" value="#{messages['DATE.NAISSANCE']}" />
+					</p:column>
+					<p:column style="margin-left: 0;">
+						<p:calendar id="birthDate" navigator="true" required="true" value="#{createMemberForm.personne.birthdate}" pattern="dd/MM/yyyy" />
+						<p:message for="birthDate" display="tooltip" />
+					</p:column>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="memberNumber" value="#{messages['NUMERO.MEMBRE']}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="memberNumber" readonly="true" value="#{createMemberForm.personne.memberNumber}" disabled="true" size="3" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="address" value="#{messages['ADRESSE']}" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputText id="address" value="#{createMemberForm.personne.address}" style="width:98%;" maxLength="120">
+							<f:validateLength maximum="120"></f:validateLength>
+						</p:inputText>
+					</p:column>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="postalCode" value="#{messages['CODE.POSTAL']}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="postalCode" value="#{createMemberForm.personne.postalCode}" size="4" maxLength="4">
+							<f:validateLength maximum="4"></f:validateLength>
+						</p:inputText>
+					</p:column>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="city" value="#{messages['VILLE']}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="city" value="#{createMemberForm.personne.city}" style="width:98%;" maxLength="50">
+							<f:validateLength maximum="50"></f:validateLength>
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="email" value="#{messages['EMAIL']}" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputText id="email" value="#{createMemberForm.personne.email}" style="width:98%;" maxLength="120">
+							<f:validateLength maximum="120"></f:validateLength>
+						</p:inputText>
+					</p:column>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="phoneNumber" value="#{messages['TELEPHONE']}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="phoneNumber" value="#{createMemberForm.personne.phone}">
+							<f:validateLength maximum="12"></f:validateLength>
+						</p:inputText>
+					</p:column>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="mobilePhone" value="#{messages['GSM']}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="mobilePhone" value="#{createMemberForm.personne.mobilePhone}">
+							<f:validateLength maximum="13"></f:validateLength>
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="identityCard" value="#{messages['CARTE.IDENTITE']}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="identityCard" value="#{createMemberForm.personne.identityCardNumber}" />
+					</p:column>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="identityCardValidity" value="#{messages['IDENTITY.VALIDITY']}" />
+					</p:column>
+					<p:column>
+						<p:calendar id="identityCardValidity" navigator="true" value="#{createMemberForm.personne.passportValidity}" pattern="dd/MM/yyyy" />
+					</p:column>
+					<p:column style="text-align:right;">
+						<p:outputLabel for="student" value="#{messages['ETUDIANT']}" />
+					</p:column>
+					<p:column>
+						<p:selectOneRadio id="student" value="#{createMemberForm.personne.student}">
+							<f:selectItem itemLabel="#{messages['OUI']}" itemValue="true" />
+							<f:selectItem itemLabel="#{messages['NON']}" itemValue="false" />
+						</p:selectOneRadio>
+					</p:column>
+				</p:row>
+				<f:facet name="footer">
+					<p:row>
+						<p:column colspan="8">
+							<p:commandButton type="submit" value="#{messages['AJOUTER.MEMBRE']}" icon="ui-icon-check" style="margin:5px;" actionListener="#{memberForm.addMember}" update="memberFormGrid" />
+							<p:commandButton type="submit" value="Annuler" icon="ui-icon-trash" style="margin:5px;" />
+						</p:column>
+					</p:row>
+
+				</f:facet>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+</ui:composition>

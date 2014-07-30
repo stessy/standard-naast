@@ -4,7 +4,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 
 import standardNaast.entities.Personne;
 
@@ -29,19 +34,33 @@ public class PersonDAOImpl implements PersonDAO {
 	}
 
 	@Override
-	public List<Personne> getAllPersons() {
-		CriteriaQuery<Personne> queryAll = this.getEntityManager()
-				.getCriteriaBuilder().createQuery(Personne.class);
-		queryAll.from(Personne.class);
-		List<Personne> allPersons = this.getEntityManager()
-				.createQuery(queryAll).getResultList();
-		return allPersons;
+	public Personne getPersonneByMemberNumber(long memberNumber) {
+		TypedQuery<Personne> query = this.getEntityManager().createNamedQuery("getByMemberNumber", Personne.class);
+		query.setParameter("memberNumber", memberNumber);
+		// query.setParameter(1, memberNumber);
+		return query.getSingleResult();
+	}
 
+	@Override
+	public List<Personne> getAllPersons(final boolean allPersons) {
+		CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<Personne> cq = cb.createQuery(Personne.class);
+		Root<Personne> personne = cq.from(Personne.class);
+		cq.select(personne);
+		if (!allPersons) {
+			ParameterExpression<Long> p = cb.parameter(Long.class, "memberNumber");
+			Path<Long> memberNumber = personne.get("memberNumber");
+			cq.where(cb.lt(memberNumber, p));
+		}
+		TypedQuery<Personne> query = this.getEntityManager().createQuery(cq);
+		if (!allPersons) {
+			query.setParameter("memberNumber", 10000);
+		}
+		return query.getResultList();
 	}
 
 	public EntityManager getEntityManager() {
 		return this.entityManager;
-		// return this.entityManager;
 	}
 
 	public void setEntityManager(final EntityManager entityManager) {

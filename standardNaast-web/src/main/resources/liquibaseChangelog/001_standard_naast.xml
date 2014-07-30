@@ -111,4 +111,9 @@ SET competition_type =
 		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="ANNEE2"
 			newColumnName="ANNEE" />
 	</changeSet>
+	<changeSet id="20" author="stessy">
+		<addColumn tableName="ABONNEMENT">
+			<column name="ABONNEMENT_STATUS" type="VARCHAR2(20 CHAR)"></column>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

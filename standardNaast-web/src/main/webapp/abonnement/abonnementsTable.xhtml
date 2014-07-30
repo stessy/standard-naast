@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+	<p:panelGrid>
+		<p:row>
+			<p:column style="text-align:right;">
+				<p:outputLabel for="seasonMenu" value="#{messages['SAISON']}" />
+			</p:column>
+			<p:column style="float:left;text-align:left;">
+				<p:selectOneMenu id="seasonMenu" value="#{abonnementsTable.selectedSeason}">
+					<f:selectItems itemValue="#{season.id}" itemLabel="#{season.id}" value="#{seasonsBean.seasons}" var="season" />
+					<p:ajax listener="#{abonnementsTable.setAbonnementsSeason}"  update="" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column colspan="2" style="vertical-align:top;">
+				<p:panel id="paidAbonnementsPanel" header="Abonnements payés" style="text-align:center;">
+					<p:dataTable id="paidAbonnementsTable" var="paidAbonnements" value="#{abonnementsTable.paidAbonnementsModel}" widgetVar="paidAbonnementsTableVar" paginator="true" rows="25"
+						selection="#{cotisationsTable.paidSelectedAbonnementsModel}" rowKey="#{paidAbonnements.memberNumber}">
+						<p:ajax event="rowSelect" update="printSelectedButton" listener="#{abonnementsTable.onPaidRowSelect}"/>
+						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
+							<h:outputText value="#{paidCotisations.memberNumber}" />
+						</p:column>
+						<p:column headerText="#{messages['PRENOM']}">
+							<h:outputText value="#{paidCotisations.firstName}" />
+						</p:column>
+						<p:column headerText="#{messages['NOM']}">
+							<h:outputText value="#{paidCotisations.name}" />
+						</p:column>
+						<p:column headerText="#{messages['PAYMENT.DATE.COTISATION']}">
+							<h:outputText value="#{paidCotisations.paymentDate}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{messages['MEMBER.CARD.SENT']}">
+							<p:selectBooleanCheckbox value="#{paidCotisations.memberCardSent}" disabled="true" />
+						</p:column>
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="8">
+									<p:commandButton id="printSelectedButton" type="submit" value="#{messages['AJOUTER.MEMBRE']}" icon="ui-icon-print" disabled="#{cotisationsTable.paidCotisationButtonDisabled}" style="margin:5px;" actionListener="#{cotisationsTable.printSelected}" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:dataTable>
+				</p:panel>
+			</p:column>
+			<p:column colspan="2" style="vertical-align:top;">
+				<p:panel id="unpaidCotisationsPanel" header="Cotisations non payées" style="text-align:center">
+					<p:dataTable id="unpaidCotisationsTable" var="unpaidCotisations" filteredValue="#{cotisationsTable.filteredUnpaidCotisation}"  value="#{cotisationsTable.unpaidCotisationsModel}" widgetVar="unpaidCotisationsTableVar" paginator="true" rows="25"
+						selection="#{cotisationsTable.unpaidSelectedCotisationsModel}" rowKey="#{unpaidCotisations.memberNumber}">
+						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
+							<h:outputText value="#{unpaidCotisations.memberNumber}" />
+						</p:column>
+						<p:column headerText="#{messages['PRENOM']}" filterBy="#{unpaidCotisations.firstName}" filterMatchMode="startsWith">
+							<h:outputText value="#{unpaidCotisations.firstName}"/>
+						</p:column>
+						<p:column headerText="#{messages['NOM']}" filterBy="#{unpaidCotisations.name}" filterMatchMode="startsWith">
+							<h:outputText value="#{unpaidCotisations.name}"/>
+						</p:column>
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="8">
+									<p:commandButton type="submit" value="#{messages['AJOUTER.MEMBRE']}" update="@([id$=paidCotisationsTable], [id$=unpaidCotisationsTable], [id$=totalPaid], [id$=totalUnpaid], [id$=totalAmountPaid], [id$=growl])" icon="ui-icon-check" style="margin:5px;" actionListener="#{cotisationsTable.setPaidForSelected}" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:dataTable>
+				</p:panel>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

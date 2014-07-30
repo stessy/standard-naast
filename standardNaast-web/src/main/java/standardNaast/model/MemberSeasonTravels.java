@@ -1,4 +1,4 @@
-package standardNaast.beans;
+package standardNaast.model;
 
 public class MemberSeasonTravels {
 

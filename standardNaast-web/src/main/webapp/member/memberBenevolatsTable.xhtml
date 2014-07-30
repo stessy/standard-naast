@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
 	<p:dataTable id="memberBenevolatsTable" var="benevolats" value="#{memberBenevolats.benevolats}" widgetVar="memberBenevolatsTableVar" paginator="true" row="5" selectionMode="single" selection="#{memberBenevolats.selectedBenevolat}"
 		rowKey="#{benevolats}" paginatorPosition="bottom">
-		<p:ajax event="rowSelect" listener="#{membersTable.onRowSelect}" update="@([id$=memberFormGrid], [id$=memberAbonnementsTable]) :mainForm:masterTabView:memberAbonnementsTable" />
+		<p:ajax event="rowSelect" listener="#{membersTable.onRowSelect}" update="@([id$=memberFormGrid], [id$=memberAbonnementsTable])" />
 
 		<p:column headerText="#{messages['BENEVOLAT.DATE']}">
 			<h:outputText value="#{benevolats.dateBenevolat}"><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></h:outputText>

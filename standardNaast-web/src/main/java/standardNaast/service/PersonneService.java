@@ -26,28 +26,29 @@ public class PersonneService implements Serializable {
 	@Inject
 	PersonDAO personneDAO;
 
-	private static final Logger LOGGER = Logger
-			.getLogger(PersonneService.class);
+	private static final Logger LOGGER = Logger.getLogger(PersonneService.class);
 
 	public PersonneService() {
 		PersonneService.LOGGER.debug("Instanciating PersonneService");
 	}
 
-	public List<Personne> findAllPerson() {
+	public List<Personne> findAllPerson(final boolean allPersons) {
 		PersonneService.LOGGER.debug("Getting list of personnes");
-		return this.personneDAO.getAllPersons();
+		return this.personneDAO.getAllPersons(allPersons);
 	}
 
 	public Personne getPerson(final long id) {
 		return this.personneDAO.getPerson(id);
 	}
 
-	// @Transactional(readOnly = false)
+	public Personne getPersonByMemberNumber(final long memberNumber) {
+		return this.personneDAO.getPersonneByMemberNumber(memberNumber);
+	}
+
 	public Personne savePerson(final Personne person) {
 		return this.personneDAO.updatePerson(person);
 	}
 
-	// @Transactional(readOnly = false)
 	public Personne addPerson(final Personne person) {
 		this.personneDAO.addPerson(person);
 		return person;
