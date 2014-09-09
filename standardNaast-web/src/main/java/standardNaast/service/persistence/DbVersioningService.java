@@ -5,6 +5,8 @@ import java.sql.SQLException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
@@ -15,12 +17,12 @@ import standardNaast.utils.DbUtils;
 /**
  * Description: database versioning service. Runs a schema/data upgrade at
  * application startup.
- * 
+ *
  * @author BuyWay-Services: DWW<BR>
  *         Created on 29 août 2012
  */
-// @Startup
-// @Singleton
+@Startup
+@Singleton
 public class DbVersioningService {
 
 	/** The LOG. */
@@ -37,7 +39,7 @@ public class DbVersioningService {
 	@PostConstruct
 	public void initDb() {
 		DbVersioningService.LOG.debug("********** Upgrading database...");
-		Connection connection = this.getConnection();
+		final Connection connection = this.getConnection();
 		DbUtils.runLiquibase(connection, "changelog.xml");
 		DbVersioningService.LOG.debug("********** Database upgrade done...");
 	}
@@ -48,7 +50,7 @@ public class DbVersioningService {
 	private Connection getConnection() {
 		try {
 			return this.dataSource.getConnection();
-		} catch (SQLException sqlException) {
+		} catch (final SQLException sqlException) {
 			throw new TechnicalException(sqlException);
 		}
 	}

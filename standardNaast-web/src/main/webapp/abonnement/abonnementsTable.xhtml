@@ -1,74 +1,161 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
-	<p:panelGrid>
-		<p:row>
-			<p:column style="text-align:right;">
-				<p:outputLabel for="seasonMenu" value="#{messages['SAISON']}" />
-			</p:column>
-			<p:column style="float:left;text-align:left;">
-				<p:selectOneMenu id="seasonMenu" value="#{abonnementsTable.selectedSeason}">
-					<f:selectItems itemValue="#{season.id}" itemLabel="#{season.id}" value="#{seasonsBean.seasons}" var="season" />
-					<p:ajax listener="#{abonnementsTable.setAbonnementsSeason}"  update="" />
-				</p:selectOneMenu>
-			</p:column>
-		</p:row>
-		<p:row>
-			<p:column colspan="2" style="vertical-align:top;">
-				<p:panel id="paidAbonnementsPanel" header="Abonnements payés" style="text-align:center;">
-					<p:dataTable id="paidAbonnementsTable" var="paidAbonnements" value="#{abonnementsTable.paidAbonnementsModel}" widgetVar="paidAbonnementsTableVar" paginator="true" rows="25"
-						selection="#{cotisationsTable.paidSelectedAbonnementsModel}" rowKey="#{paidAbonnements.memberNumber}">
-						<p:ajax event="rowSelect" update="printSelectedButton" listener="#{abonnementsTable.onPaidRowSelect}"/>
-						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
-							<h:outputText value="#{paidCotisations.memberNumber}" />
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/jsf/core
+http://java.sun.com/jsf/facelets ">
+    <p:panelGrid>
+        <p:row>
+            <p:column colspan="2" style="text-align:right;">
+                <p:outputLabel for="abonnementsSeasonMenu" value="#{messages['SAISON']}"/>
+            </p:column>
+            <p:column style="float:left;text-align:left;">
+                <p:selectOneMenu id="abonnementsSeasonMenu"
+                                 value="#{abonnementsTable.selectedSeason}">
+                    <f:selectItems itemValue="#{season.id}" itemLabel="#{season.id}"
+                                   value="#{abonnementsTable.seasons}" var="season"/>
+                    <p:ajax listener="#{abonnementsTable.setAbonnementsSeason}"
+                            update="@([id$=newAbonnementsTable], [id$=receivedAbonnementsTable], [id$=purchasedAbonnementsTable], [id$=distributedAbonnementsTable])"/>
+                </p:selectOneMenu>
+            </p:column>
+        </p:row>
+        <p:row>
+            <p:column colspan="3" style="vertical-align:top;">
+                <p:panel id="newAbonnementsPanel" header="Nouveaux abonnements"
+                         style="text-align:center;">
+                    <p:dataTable id="newAbonnementsTable" var="newAbonnements"
+                                 value="#{abonnementsTable.newAbonnements}"
+                                 widgetVar="newAbonnementsTableVar" paginator="true" rows="10"
+                                 selection="#{abonnementsTable.selectedNewAbonnements}"
+                                 rowKey="#{newAbonnements.id}" rowStyleClass="#{newAbonnements.paye ? null : 'notYetPaid'}">
+                                 <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+                        <p:column headerText="#{messages['NUMERO.MEMBRE']}">
+                            <h:outputText value="#{newAbonnements.personne.memberNumber}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['PRENOM']}">
+                            <h:outputText value="#{newAbonnements.personne.firstname}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['NOM']}">
+                            <h:outputText value="#{newAbonnements.personne.name}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['ABONNEMENT.STATUS']}">
+                            <h:outputText value="#{messages[newAbonnements.abonnementStatus]}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['ACOMPTE']}">
+                            <h:outputText value="#{newAbonnements.acompte}"/>
+                        </p:column>
+                       <f:facet name="footer">
+                            <p:row>
+                                <p:column colspan="8">
+                                    <p:commandButton id="newButton" type="submit"
+                                                     value="#{messages['PURCHASED']}"
+                                                     style="margin:5px;"
+                                                     actionListener="#{abonnementsTable.setAbonnementsAsPurchased()}"/>
+                                                     <p:tooltip id="toolTipnew" for="newButton" value="Cliquer sur ce bouton pour mettre les abonnements avec le statut 'Commandé'" />
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </p:column>
+        </p:row>
+        <p:row>
+        <p:column style="vertical-align:top;">
+                <p:panel id="distributedAbonnementsPanel" header="Abonnements distribués"
+                         style="text-align:center;">
+                    <p:dataTable id="distributedAbonnementsTable" var="distributedAbonnements"
+                                 value="#{abonnementsTable.distributedAbonnements}"
+                                 widgetVar="distributedAbonnementsTableVar" paginator="true" rows="10"
+                                 rowKey="#{distributedAbonnements.id}">
+                                 <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+						<p:column>
+							<h:outputText
+								value="#{distributedAbonnements.personne.memberNumber}" />
 						</p:column>
 						<p:column headerText="#{messages['PRENOM']}">
-							<h:outputText value="#{paidCotisations.firstName}" />
-						</p:column>
-						<p:column headerText="#{messages['NOM']}">
-							<h:outputText value="#{paidCotisations.name}" />
-						</p:column>
-						<p:column headerText="#{messages['PAYMENT.DATE.COTISATION']}">
-							<h:outputText value="#{paidCotisations.paymentDate}">
-								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
-							</h:outputText>
-						</p:column>
-						<p:column headerText="#{messages['MEMBER.CARD.SENT']}">
-							<p:selectBooleanCheckbox value="#{paidCotisations.memberCardSent}" disabled="true" />
-						</p:column>
-						<f:facet name="footer">
-							<p:row>
-								<p:column colspan="8">
-									<p:commandButton id="printSelectedButton" type="submit" value="#{messages['AJOUTER.MEMBRE']}" icon="ui-icon-print" disabled="#{cotisationsTable.paidCotisationButtonDisabled}" style="margin:5px;" actionListener="#{cotisationsTable.printSelected}" />
-								</p:column>
-							</p:row>
-						</f:facet>
-					</p:dataTable>
-				</p:panel>
-			</p:column>
-			<p:column colspan="2" style="vertical-align:top;">
-				<p:panel id="unpaidCotisationsPanel" header="Cotisations non payées" style="text-align:center">
-					<p:dataTable id="unpaidCotisationsTable" var="unpaidCotisations" filteredValue="#{cotisationsTable.filteredUnpaidCotisation}"  value="#{cotisationsTable.unpaidCotisationsModel}" widgetVar="unpaidCotisationsTableVar" paginator="true" rows="25"
-						selection="#{cotisationsTable.unpaidSelectedCotisationsModel}" rowKey="#{unpaidCotisations.memberNumber}">
-						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
-							<h:outputText value="#{unpaidCotisations.memberNumber}" />
-						</p:column>
-						<p:column headerText="#{messages['PRENOM']}" filterBy="#{unpaidCotisations.firstName}" filterMatchMode="startsWith">
-							<h:outputText value="#{unpaidCotisations.firstName}"/>
-						</p:column>
-						<p:column headerText="#{messages['NOM']}" filterBy="#{unpaidCotisations.name}" filterMatchMode="startsWith">
-							<h:outputText value="#{unpaidCotisations.name}"/>
-						</p:column>
-						<f:facet name="footer">
-							<p:row>
-								<p:column colspan="8">
-									<p:commandButton type="submit" value="#{messages['AJOUTER.MEMBRE']}" update="@([id$=paidCotisationsTable], [id$=unpaidCotisationsTable], [id$=totalPaid], [id$=totalUnpaid], [id$=totalAmountPaid], [id$=growl])" icon="ui-icon-check" style="margin:5px;" actionListener="#{cotisationsTable.setPaidForSelected}" />
-								</p:column>
-							</p:row>
-						</f:facet>
-					</p:dataTable>
-				</p:panel>
-			</p:column>
-		</p:row>
-	</p:panelGrid>
+                            <h:outputText value="#{distributedAbonnements.personne.firstname}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['NOM']}">
+                            <h:outputText value="#{distributedAbonnements.personne.name}"/>
+                        </p:column>
+<!--                        <f:facet name="footer"> -->
+<!--                             <p:row> -->
+<!--                                 <p:column colspan="8"> -->
+<!--                                     <p:commandButton id="printSelectedButton" type="submit" -->
+<!--                                                      value="#{messages['AJOUTER.MEMBRE']}" icon="ui-icon-print" -->
+<!--                                                      style="margin:5px;" -->
+<!--                                                      actionListener="#{cotisationsTable.printSelected}"/> -->
+<!--                                 </p:column> -->
+<!--                             </p:row> -->
+<!--                         </f:facet> -->
+                    </p:dataTable>
+                </p:panel>
+            </p:column>
+            <p:column style="vertical-align:top;">
+                <p:panel id="purchasedAbonnementsPanel" header="Abonnements commandés"
+                         style="text-align:center;">
+                    <p:dataTable id="purchasedAbonnementsTable" var="purchasedAbonnements"
+                                 value="#{abonnementsTable.purchasedAbonnements}"
+                                 widgetVar="purchasedAbonnementsTableVar" paginator="true" rows="10"
+                                 selection="#{abonnementsTable.selectedPurchasedAbonnements}"
+                                 rowKey="#{purchasedAbonnements.id}">
+                                 <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+                        <p:column headerText="#{messages['NUMERO.MEMBRE']}">
+                            <h:outputText value="#{purchasedAbonnements.personne.memberNumber}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['PRENOM']}">
+                            <h:outputText value="#{purchasedAbonnements.personne.firstname}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['NOM']}">
+                            <h:outputText value="#{purchasedAbonnements.personne.name}"/>
+                        </p:column>
+                       <f:facet name="footer">
+                            <p:row>
+                                <p:column colspan="8">
+                                    <p:commandButton id="purchasedButton" type="submit"
+                                                     value="#{messages['RECEIVED']}"
+                                                     style="margin:5px;" 
+                                                     actionListener="#{abonnementsTable.setAbonnementsAsReceived()}"/>
+                                    <p:tooltip id="toolTipPurchased" for="purchasedButton" value="Cliquer sur ce bouton pour mettre les abonnements avec le statut 'Reçu'" />
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </p:column>
+            <p:column style="vertical-align:top;">
+                <p:panel id="receivedAbonnementsPanel" header="Abonnements reçus"
+                         style="text-align:center;">
+                    <p:dataTable id="receivedAbonnementsTable" var="receivedAbonnements"
+                                 value="#{abonnementsTable.receivedAbonnements}"
+                                 widgetVar="receivedAbonnementsTableVar" paginator="true" rows="10"
+                                 selection="#{abonnementsTable.selectedReceivedAbonnements}"
+                                 rowKey="#{receivedAbonnements.id}">
+                                 <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+                        <p:column headerText="#{messages['NUMERO.MEMBRE']}">
+                            <h:outputText value="#{receivedAbonnements.personne.memberNumber}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['PRENOM']}">
+                            <h:outputText value="#{receivedAbonnements.personne.firstname}"/>
+                        </p:column>
+                        <p:column headerText="#{messages['NOM']}">
+                            <h:outputText value="#{receivedAbonnements.personne.name}"/>
+                        </p:column>
+                       <f:facet name="footer">
+                            <p:row>
+                                <p:column colspan="8">
+                                    <p:commandButton id="receivedButton" type="submit"
+                                                     value="#{messages['DISTRIBUTED']}"
+                                                     style="margin:5px;"
+                                                     actionListener="#{abonnementsTable.setAbonnementsAsDistributed()}"/>
+                                                     <p:tooltip id="toolTipReceived" for="receivedButton" value="Cliquer sur ce bouton pour mettre les abonnements avec le statut 'Distribué'" />
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </p:column>
+        </p:row>
+    </p:panelGrid>
 </ui:composition>

@@ -4,7 +4,8 @@
 			<p:column>
 				<p:outputLabel for="yearsMenu" value="#{messages['COTISATION.ANNEE']} : " />
 				<p:selectOneMenu id="yearsMenu" value="#{cotisationsTable.selectedCotisation}" style="width: 60px; vertical-align:middle;">
-					<p:ajax listener="#{cotisationsTable.updateCotisations}" update="paidCotisationsTable unpaidCotisationsTable totalPaid totalUnpaid totalAmountPaid" />
+					<p:ajax listener="#{cotisationsTable.updateCotisations}" update="paidCotisationsCardSentTable paidCotisationsCardNotSentTable unpaidCotisationsTable totalPaid totalUnpaid totalAmountPaid" />
+<!-- 					<f:selectItem itemLabel=""/> -->
 					<f:selectItems itemValue="#{cotisation.anneeCotisation}" itemLabel="#{cotisation.anneeCotisation}" value="#{cotisationsTable.cotisations}" var="cotisation" />
 				</p:selectOneMenu>
 			</p:column>
@@ -23,42 +24,31 @@
 		</p:row>
 		<p:row>
 			<p:column colspan="2" style="vertical-align:top;">
-				<p:panel id="paidCotisationsPanel" header="Cotisations payées" style="text-align:center;">
-					<p:dataTable id="paidCotisationsTable" var="paidCotisations" value="#{cotisationsTable.paidCotisationsModel}" widgetVar="paidCotisationsTableVar" paginator="true" rows="25"
-						selection="#{cotisationsTable.paidSelectedCotisationsModel}" rowKey="#{paidCotisations.memberNumber}">
-						<p:ajax event="rowSelect" update="printSelectedButton" listener="#{cotisationsTable.onPaidRowSelect}"/>
+				<p:panel id="paidCotisationsPanelCardSent" header="Cotisations payées (carte de membre donnée)" style="text-align:center;">
+					<p:dataTable id="paidCotisationsCardSentTable" var="paidCotisationsCardSent" value="#{cotisationsTable.paidCotisationsCardSent}" widgetVar="paidCotisationsCardSentTableVar" paginator="true" rows="10"
+						rowKey="#{paidCotisationsCardSent.memberNumber}">
 						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
 						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
-							<h:outputText value="#{paidCotisations.memberNumber}" />
+							<h:outputText value="#{paidCotisationsCardSent.memberNumber}" />
 						</p:column>
 						<p:column headerText="#{messages['PRENOM']}">
-							<h:outputText value="#{paidCotisations.firstName}" />
+							<h:outputText value="#{paidCotisationsCardSent.firstName}" />
 						</p:column>
 						<p:column headerText="#{messages['NOM']}">
-							<h:outputText value="#{paidCotisations.name}" />
+							<h:outputText value="#{paidCotisationsCardSent.name}" />
 						</p:column>
 						<p:column headerText="#{messages['PAYMENT.DATE.COTISATION']}">
-							<h:outputText value="#{paidCotisations.paymentDate}">
+							<h:outputText value="#{paidCotisationsCardSent.paymentDate}">
 								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
 							</h:outputText>
 						</p:column>
-						<p:column headerText="#{messages['MEMBER.CARD.SENT']}">
-							<p:selectBooleanCheckbox value="#{paidCotisations.memberCardSent}" disabled="true" />
-						</p:column>
-						<f:facet name="footer">
-							<p:row>
-								<p:column colspan="8">
-									<p:commandButton id="printSelectedButton" type="submit" value="#{messages['AJOUTER.MEMBRE']}" icon="ui-icon-print" disabled="#{cotisationsTable.paidCotisationButtonDisabled}" style="margin:5px;" actionListener="#{cotisationsTable.printSelected}" />
-								</p:column>
-							</p:row>
-						</f:facet>
 					</p:dataTable>
 				</p:panel>
 			</p:column>
-			<p:column colspan="2" style="vertical-align:top;">
+			<p:column colspan="2" rowspan="2" style="vertical-align:top;">
 				<p:panel id="unpaidCotisationsPanel" header="Cotisations non payées" style="text-align:center">
-					<p:dataTable id="unpaidCotisationsTable" var="unpaidCotisations" filteredValue="#{cotisationsTable.filteredUnpaidCotisation}"  value="#{cotisationsTable.unpaidCotisationsModel}" widgetVar="unpaidCotisationsTableVar" paginator="true" rows="25"
-						selection="#{cotisationsTable.unpaidSelectedCotisationsModel}" rowKey="#{unpaidCotisations.memberNumber}">
+					<p:dataTable id="unpaidCotisationsTable" var="unpaidCotisations" filteredValue="#{cotisationsTable.filteredUnpaidCotisation}"  value="#{cotisationsTable.unpaidCotisations}" widgetVar="unpaidCotisationsTableVar" paginator="true" rows="25"
+						selection="#{cotisationsTable.unpaidSelectedCotisations}" rowKey="#{unpaidCotisations.memberNumber}">
 						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
 						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
 							<h:outputText value="#{unpaidCotisations.memberNumber}" />
@@ -72,7 +62,7 @@
 						<f:facet name="footer">
 							<p:row>
 								<p:column colspan="8">
-									<p:commandButton type="submit" value="#{messages['AJOUTER.MEMBRE']}" update="@([id$=paidCotisationsTable], [id$=unpaidCotisationsTable], [id$=totalPaid], [id$=totalUnpaid], [id$=totalAmountPaid], [id$=growl])" icon="ui-icon-check" style="margin:5px;" actionListener="#{cotisationsTable.setPaidForSelected}" />
+									<p:commandButton type="submit" value="#{messages['COTISATION.PAID']}" update="@([id$=paidCotisationsCardSentTable], [id$=paidCotisationsCardNotSentTable], [id$=unpaidCotisationsTable], [id$=totalPaid], [id$=totalUnpaid], [id$=totalAmountPaid], [id$=growl])" icon="ui-icon-check" style="margin:5px;" actionListener="#{cotisationsTable.setPaidForSelected}" />
 								</p:column>
 							</p:row>
 						</f:facet>
@@ -80,5 +70,36 @@
 				</p:panel>
 			</p:column>
 		</p:row>
+		<p:row>
+			<p:column colspan="2" style="vertical-align:top;">
+				<p:panel id="paidCotisationsPanelCardNotSent" header="Cotisations payées (carte de membre non donnée)" style="text-align:center;">
+					<p:dataTable id="paidCotisationsCardNotSentTable" var="paidCotisationsCardNotSent" value="#{cotisationsTable.paidCotisationsCardNotSent}" widgetVar="paidCotisationsCardNotSentTableVar" paginator="true" rows="10"
+						selection="#{cotisationsTable.paidSelectedCotisationsCardNotSent}" rowKey="#{paidCotisationsCardNotSent.memberNumber}">
+						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
+							<h:outputText value="#{paidCotisationsCardNotSent.memberNumber}" />
+						</p:column>
+						<p:column headerText="#{messages['PRENOM']}">
+							<h:outputText value="#{paidCotisationsCardNotSent.firstName}" />
+						</p:column>
+						<p:column headerText="#{messages['NOM']}">
+							<h:outputText value="#{paidCotisationsCardNotSent.name}" />
+						</p:column>
+						<p:column headerText="#{messages['PAYMENT.DATE.COTISATION']}">
+							<h:outputText value="#{paidCotisationsCardNotSent.paymentDate}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</p:column>
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="8">
+									<p:commandButton id="memberCardSentSelectedButton" type="submit" value="#{messages['MEMBER.CARD.SENT']}"  update="@([id$=paidCotisationsCardSentTable], [id$=paidCotisationsCardNotSentTable], [id$=unpaidCotisationsTable], [id$=totalPaid], [id$=totalUnpaid], [id$=totalAmountPaid], [id$=growl])" icon="ui-icon-check" style="margin:5px;" actionListener="#{cotisationsTable.setSentForSelected}" />
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:dataTable>
+				</p:panel>
+			</p:column>
+			</p:row>
 	</p:panelGrid>
 </ui:composition>

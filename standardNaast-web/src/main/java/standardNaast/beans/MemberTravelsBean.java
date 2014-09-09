@@ -10,8 +10,6 @@ import standardNaast.entities.Personne;
 import standardNaast.model.MemberSeasonTravels;
 import standardNaast.service.SeasonService;
 
-//@Controller("memberTravelsBean")
-//@Scope("session")
 @Named(value = "memberTravelsBean")
 @SessionScoped
 public class MemberTravelsBean implements Serializable {
@@ -39,7 +37,7 @@ public class MemberTravelsBean implements Serializable {
 		return this.selectedSeason;
 	}
 
-	public void setSelectedSeason(String selectedSeason) {
+	public void setSelectedSeason(final String selectedSeason) {
 		this.selectedSeason = selectedSeason;
 	}
 
@@ -47,7 +45,7 @@ public class MemberTravelsBean implements Serializable {
 		return this.home;
 	}
 
-	public void setHome(int home) {
+	public void setHome(final int home) {
 		this.home = home;
 	}
 
@@ -55,7 +53,7 @@ public class MemberTravelsBean implements Serializable {
 		return this.away;
 	}
 
-	public void setAway(int away) {
+	public void setAway(final int away) {
 		this.away = away;
 	}
 
@@ -63,7 +61,7 @@ public class MemberTravelsBean implements Serializable {
 		return this.total;
 	}
 
-	public void setTotal(int total) {
+	public void setTotal(final int total) {
 		this.total = total;
 	}
 
@@ -71,16 +69,17 @@ public class MemberTravelsBean implements Serializable {
 		return this.selectedMember;
 	}
 
-	public void setSelectedMember(Personne selectedMember) {
+	public void setSelectedMember(final Personne selectedMember) {
 		this.selectedMember = selectedMember;
 	}
 
 	public void setSeasonTravels() {
-		MemberSeasonTravels travelsPerSeason = this.saisonService.getTravelsPerSeason(
-				this.getSelectedSeason(), this.getSelectedMember());
-		int awayResult = travelsPerSeason.getAway();
+		final MemberSeasonTravels travelsPerSeason = this.saisonService
+				.getTravelsPerSeason(this.getSelectedSeason(),
+						this.getSelectedMember());
+		final int awayResult = travelsPerSeason.getAway();
 		this.setAway(awayResult);
-		int homeResult = travelsPerSeason.getHome();
+		final int homeResult = travelsPerSeason.getHome();
 		this.setHome(homeResult);
 		this.setTotal(homeResult + awayResult);
 	}
