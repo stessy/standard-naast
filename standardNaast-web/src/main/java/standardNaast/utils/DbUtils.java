@@ -45,7 +45,7 @@ public class DbUtils {
 			// run the changelogs
 			Liquibase liquibase = new Liquibase(changelog, resourceAccessor,
 					database);
-			liquibase.update(null);
+			liquibase.update("");
 		} catch (LiquibaseException liquibaseException) {
 			throw new TechnicalException(liquibaseException);
 		}

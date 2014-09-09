@@ -2,7 +2,49 @@
     <wb-module deploy-name="standardNaast-ear-1.0-SNAPSHOT">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/application" tag="defaultRootSource"/>
-        <dependent-module archiveName="standardNaast-web-1.0-SNAPSHOT.war" deploy-path="/" handle="module:/resource/standardNaast-web/standardNaast-web">
+        <dependent-module archiveName="standardNaast-webservices-1.0-SNAPSHOT.war" deploy-path="/" handle="module:/resource/standardNaast-webservices/standardNaast-webservices">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="standardNaast-business-1.0-SNAPSHOT.jar" deploy-path="/" handle="module:/resource/standardNaast-business/standardNaast-business">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="log4j-1.2.17.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/log4j/log4j/1.2.17/log4j-1.2.17.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="standardNaast-persistence-1.0-SNAPSHOT.jar" deploy-path="/lib" handle="module:/resource/standardNaast-persistence/standardNaast-persistence">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="joda-time-2.1.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/joda-time/joda-time/2.1/joda-time-2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ojdbc6-1.0.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/com/oracle/ojdbc6/1.0/ojdbc6-1.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-lang3-3.1.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-collections-3.2.1.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="itextpdf-5.3.2.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/com/itextpdf/itextpdf/5.3.2/itextpdf-5.3.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mail-1.4.4.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/javax/mail/mail/1.4.4/mail-1.4.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="standardNaast-commons-1.0-SNAPSHOT.jar" deploy-path="/lib" handle="module:/resource/standardNaast-commons/standardNaast-commons">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="liquibase-core-3.1.1.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/org/liquibase/liquibase-core/3.1.1/liquibase-core-3.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="snakeyaml-1.13.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/org/yaml/snakeyaml/1.13/snakeyaml-1.13.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="validation-api-1.1.0.Final.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-api-1.5.10.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/org/slf4j/slf4j-api/1.5.10/slf4j-api-1.5.10.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>

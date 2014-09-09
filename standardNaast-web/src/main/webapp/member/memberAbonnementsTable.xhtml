@@ -17,14 +17,14 @@
 		<p:column headerText="#{messages['REDUCTION']}">
 			<h:outputText value="#{abonnement.reduction}" />
 		</p:column>
-		<p:column headerText="#{messages['PAYE']}">
-			<p:selectBooleanCheckbox value="#{abonnement.paye}" />
-		</p:column>
 		<p:column headerText="#{messages['ACOMPTE']}">
 			<h:outputText value="#{abonnement.acompte}" />
 		</p:column>
-		<p:column headerText="#{messages['PLACE.COMMANDEE']}">
-			<p:selectBooleanCheckbox value="#{abonnement.placeCommandee}" />
+		<p:column headerText="#{messages['PAYE']}">
+			<p:selectBooleanCheckbox value="#{abonnement.paye}" />
+		</p:column>
+		<p:column headerText="#{messages['STATUS']}">
+			<h:outputText value="#{messages[abonnement.abonnementStatus]}" />
 		</p:column>
 		<f:facet name="footer">
 			<p:row>

@@ -31,131 +31,14 @@ body {
 	margin-right: auto;
 }
 
-/*#sidebar {
-	float: right;
-	width: 200px;
-	border: 1px solid #d0d0d0;
-	min-height: 240px;
-	padding: 4px;
-}
-
-#sidebar h1 {
-	display: block;
-	font-size: 120%;
-	border-bottom: 1px solid #d0d0d0;
-}
-
-#container {
-	padding: 8px;
-	width: 1040px;
-}*/
-
 #content {
 	min-height: 320px;
 	font-size: 120%;
 	width: 98%;
 }
 
-/*#footer {
-	text-align: center;
-	padding: 8px;
-	margin: 8px;
-	border-top: 1px solid #c0c0c0;
-	clear: both;
-}
-
-.panel {
-	padding: 8px;
-	margin: 8px 4px 16px 4px;
-	background: #fafafa;
-}
-
-.panel h1 {
-	font-size: 120%;
-	display: block;
-	background: #f0f0f0;
-	padding: 6px;
-	margin: -8px;
-	border-bottom: 1px solid #d0d0d0;
-	margin-bottom: 8px;
-}
-
-.odd {
-	background: #f0f0f0;
-}
-
-.even {
-	background: #ffffff;
-}
-
-.dataTable {
-	border-collapse: collapse;;
-	width: 100%;
-}
-
-.dataTable th {
-	background: #204080;
-	color: #f0f0f0;
-	padding: 6px;
-	border: 1px solid #f0f0f0;
-}
-
-.dataTable td {
-	border: 1px solid #d0d0d0;
-	padding: 4px;
-}
-
-.caption {
-	float: left;
-	width: 100px;
-}
-
-.formCaption {
-	float: left;
-	width: 100px;
-	padding-top: 4px;
-}
-
-.value {
-	margin-right: 8px;
-}
-
-.errorMessage {
-	color: #ff0000;
-	font-weight: bold;
-}
-
-.property {
-	margin-bottom: 12px;
-}
-
-.ui-datatable tr.ui-datatable-even:hover,.ui-datatable tr.ui-datatable-odd:hover
+.checkboxstyle .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-list
 	{
-	background: #ff0000;
-	color: #ffffff;
-	font-weight: bold;
-}
-
-.ui-tabs-nav {
-	width: 100%;
-}
-
-.memberForm td label {
-	text-align: right;
-}
-
-.memberForm tr,.memberForm td {
-	border: 1px solid;
-	border-color: #ffffff;
-	text-align: left;
-}
-
-.ui-panel-titlebar {
-	background-color: #660000;
-	color: #aaaaaa;
-}*/
-
-.checkboxstyle .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-list{
 	font-size: 10px !important;
 }
 
@@ -174,6 +57,11 @@ body {
 }
 
 #gritter-notice-wrapper {
-    top:50%;
-    left:50%;
+	top: 50%;
+	left: 50%;
+}
+
+.notYetPaid {
+	background: #FF6347;
+	color: #ffffff;
 }

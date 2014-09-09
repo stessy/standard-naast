@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import standardNaast.entities.Personne;
-import standardNaast.service.PersonneService;
+import standardNaast.service.PersonneServiceImpl;
 
 @Named(value = "createMemberForm")
 @RequestScoped
@@ -16,7 +16,7 @@ public class CreateMemberFormBean implements Serializable {
 	private Personne personne;
 
 	@Inject
-	private PersonneService personneService;
+	private PersonneServiceImpl personneService;
 
 	public Personne getPersonne() {
 		if (this.personne == null) {

@@ -59,7 +59,7 @@
 <!-- 	</changeSet> -->
 <!-- 	<changeSet id="8" author="stessy"> -->
 <!-- 		<addColumn tableName="PERSONNES_MATCH"> -->
-<!-- 			<column name="CAR_TRAVEL_AMOUNT" type="INTEGER"></column> -->
+<!-- 			<column name="CAR_TRAVEL_AMOUNT" type="INTEGER"/> -->
 <!-- 		</addColumn> -->
 <!-- 	</changeSet> -->
 <!-- 	<changeSet id="9" author="stessy"> -->
@@ -90,21 +90,38 @@
 <!-- 		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="LIEU" -->
 <!-- 			newColumnName="PLACE" /> -->
 <!-- 	</changeSet> -->
-<!-- 	<changeSet id="16" author="stessy"> -->
-<!-- 		<addColumn tableName="PRIX_LOCOMOTION"> -->
-<!-- 			<column name="ANNEE2" type="DATE"></column> -->
-<!-- 		</addColumn> -->
-<!-- 	</changeSet> -->
-<!-- 	<changeSet id="17" author="stessy"> -->
-<!-- 		<update tableName="PRIX_LOCOMOTION"> -->
-<!-- 			<column name="ANNEE2" valueComputed="TO_DATE(ANNEE,'YYYY')"></column> -->
-<!-- 		</update> -->
-<!-- 	</changeSet> -->
-<!-- 	<changeSet id="18" author="stessy"> -->
-<!-- 		<dropColumn tableName="PRIX_LOCOMOTION" columnName="ANNEE" /> -->
-<!-- 	</changeSet> -->
-<!-- 	<changeSet id="19" author="stessy"> -->
-<!-- 		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="ANNEE2" -->
-<!-- 			newColumnName="ANNEE" /> -->
-<!-- 	</changeSet> -->
+	<!-- <changeSet id="16" author="stessy"> -->
+	<!-- <dropForeignKeyConstraint baseTableName="MATCH" constraintName=""/> -->
+	<!-- <dropColumn tableName="MATCH" columnName="SAISON_EQUIPE_ID"/> -->
+	<!-- </changeSet> -->
+	<changeSet id="16" author="stessy">
+		<addColumn tableName="PRIX_LOCOMOTION">
+			<column name="ANNEE2" type="DATE"/>
+		</addColumn>
+	</changeSet>
+	<changeSet id="17" author="stessy">
+		<update tableName="PRIX_LOCOMOTION">
+			<column name="ANNEE2" valueComputed="TO_DATE(ANNEE,'YYYY')"/>
+		</update>
+	</changeSet>
+	<changeSet id="18" author="stessy">
+		<dropColumn tableName="PRIX_LOCOMOTION" columnName="ANNEE" />
+	</changeSet>
+	<changeSet id="19" author="stessy">
+		<renameColumn tableName="PRIX_LOCOMOTION" oldColumnName="ANNEE2"
+			newColumnName="ANNEE" />
+	</changeSet>
+	<changeSet id="20" author="stessy">
+		<addColumn tableName="ABONNEMENT">
+			<column name="ABONNEMENT_STATUS" type="VARCHAR(20)" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="21" author="stessy">
+		<update tableName="ABONNEMENT">
+			<column name="ABONNEMENT_STATUS" value="DISTRIBUTED"/>
+		</update>
+	</changeSet>
+	<changeSet id="22" author="stessy">
+		<dropColumn tableName="ABONNEMENT" columnName="PLACE_COMMANDEE" />
+	</changeSet>
 </databaseChangeLog>

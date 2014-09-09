@@ -113,7 +113,15 @@ SET competition_type =
 	</changeSet>
 	<changeSet id="20" author="stessy">
 		<addColumn tableName="ABONNEMENT">
-			<column name="ABONNEMENT_STATUS" type="VARCHAR2(20 CHAR)"></column>
+			<column name="ABONNEMENT_STATUS" type="VARCHAR2(20 CHAR)" />
 		</addColumn>
+	</changeSet>
+	<changeSet id="21" author="stessy">
+		<update tableName="ABONNEMENT">
+			<column name="ABONNEMENT_STATUS" value="DISTRIBUTED_ABONNEMENT"></column>
+		</update>
+	</changeSet>
+	<changeSet id="22" author="stessy">
+		<dropColumn tableName="ABONNEMENT" columnName="PLACE_COMMANDEE" />
 	</changeSet>
 </databaseChangeLog>

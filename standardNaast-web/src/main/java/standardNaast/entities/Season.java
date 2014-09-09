@@ -22,7 +22,7 @@ import javax.persistence.TemporalType;
 
 /**
  * Entity implementation class for Entity: Saison
- * 
+ *
  */
 @Entity
 @Table(name = "SAISON")
@@ -34,7 +34,7 @@ public class Season implements Serializable, Comparable<Season> {
 	@Column(name = "EUROPEENS")
 	private boolean european;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "saison", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "season", fetch = FetchType.LAZY)
 	private List<Abonnement> abonnementList;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "saison", fetch = FetchType.LAZY)
@@ -102,7 +102,7 @@ public class Season implements Serializable, Comparable<Season> {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -129,14 +129,14 @@ public class Season implements Serializable, Comparable<Season> {
 		return this.equipes;
 	}
 
-	public void setEquipes(List<Team> equipes) {
+	public void setEquipes(final List<Team> equipes) {
 		this.equipes = equipes;
 	}
 
 	@Override
 	public int compareTo(final Season otherSaison) {
-		Date saison1 = this.getDateStart();
-		Date saison2 = otherSaison.getDateStart();
+		final Date saison1 = this.getDateStart();
+		final Date saison2 = otherSaison.getDateStart();
 		return (saison1.compareTo(saison2));
 	}
 
@@ -166,7 +166,7 @@ public class Season implements Serializable, Comparable<Season> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -176,7 +176,7 @@ public class Season implements Serializable, Comparable<Season> {
 		if (!(obj instanceof Season)) {
 			return false;
 		}
-		Season other = (Season) obj;
+		final Season other = (Season) obj;
 		if (this.abonnementList == null) {
 			if (other.abonnementList != null) {
 				return false;
@@ -231,6 +231,12 @@ public class Season implements Serializable, Comparable<Season> {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s[id=%s]", this.getClass().getSimpleName(),
+				this.getId());
 	}
 
 }

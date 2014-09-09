@@ -8,25 +8,31 @@ import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import standardNaast.types.AbonnementStatus;
+
 /**
  * Entity implementation class for Entity: Abonnement.
- * 
+ *
  */
 @Entity
 @Table(name = "ABONNEMENT")
 @Access(AccessType.FIELD)
-public class Abonnement implements Serializable {
+@NamedQuery(name = "getAbonnementsPerSeason", query = "select A from Abonnement A where A.season = :season")
+public class Abonnement implements Serializable, Comparable<Abonnement> {
 
 	@Size(max = 100)
 	@Column(name = "PLACE")
@@ -49,14 +55,9 @@ public class Abonnement implements Serializable {
 	@Column(name = "ACOMPTE")
 	private BigInteger acompte;
 
-	@Basic(optional = false)
-	@NotNull
-	@Column(name = "PLACE_COMMANDEE")
-	private boolean placeCommandee;
-
 	@JoinColumn(name = "SAISON", referencedColumnName = "SAISON_ID")
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Season saison;
+	private Season season;
 
 	private static final long serialVersionUID = 3083188497640356561L;
 
@@ -77,6 +78,10 @@ public class Abonnement implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PERSONNE_ID")
 	private Personne personne;
+
+	@Column(name = "ABONNEMENT_STATUS")
+	@Enumerated(EnumType.STRING)
+	private AbonnementStatus abonnementStatus;
 
 	public long getId() {
 		return this.id;
@@ -137,19 +142,25 @@ public class Abonnement implements Serializable {
 		this.acompte = acompte;
 	}
 
-	public boolean getPlaceCommandee() {
-		return this.placeCommandee;
-	}
-
-	public void setPlaceCommandee(final boolean placeCommandee) {
-		this.placeCommandee = placeCommandee;
-	}
-
 	public Season getSaison() {
-		return this.saison;
+		return this.season;
 	}
 
 	public void setSaison(final Season saison) {
-		this.saison = saison;
+		this.season = saison;
+	}
+
+	public AbonnementStatus getAbonnementStatus() {
+		return this.abonnementStatus;
+	}
+
+	public void setAbonnementStatus(final AbonnementStatus abonnementStatus) {
+		this.abonnementStatus = abonnementStatus;
+	}
+
+	@Override
+	public int compareTo(final Abonnement o) {
+		return this.getPersonne().getMemberNumber() < o.getPersonne()
+				.getMemberNumber() ? 0 : 1;
 	}
 }

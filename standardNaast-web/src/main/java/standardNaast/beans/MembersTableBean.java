@@ -16,7 +16,7 @@ import standardNaast.entities.Abonnement;
 import standardNaast.entities.Benevolat;
 import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
-import standardNaast.service.PersonneService;
+import standardNaast.service.PersonneServiceImpl;
 
 @Named(value = "membersTable")
 @SessionScoped
@@ -43,7 +43,7 @@ public class MembersTableBean implements Serializable {
 	private MemberFormBean memberForm;
 
 	@Inject
-	private PersonneService personneService;
+	private PersonneServiceImpl personneService;
 
 	@Inject
 	private MemberTravelsBean memberTravelsBean;

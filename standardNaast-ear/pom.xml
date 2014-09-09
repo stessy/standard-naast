@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>standardNaast</artifactId>
-		<groupId>com.standardNaast</groupId>
+		<groupId>standardNaast</groupId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
@@ -36,22 +36,58 @@
 					<version>6</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<modules>
+<!-- 						<webModule> -->
+<!-- 							<groupId>standardNaast</groupId> -->
+<!-- 							<artifactId>standardNaast-web</artifactId> -->
+<!-- 							<contextRoot>/standardnaast</contextRoot> -->
+<!-- 							<unpack>true</unpack> -->
+<!-- 						</webModule> -->
+<!-- 						<webModule> -->
+<!-- 							<groupId>standardNaast</groupId> -->
+<!-- 							<artifactId>standardNaastAngular</artifactId> -->
+<!-- 							<contextRoot>/standardnaastAngular</contextRoot> -->
+<!-- 							<unpack>true</unpack> -->
+<!-- 						</webModule> -->
 						<webModule>
-							<groupId>com.standardNaast</groupId>
-							<artifactId>standardNaast-web</artifactId>
-							<contextRoot>/standardnaast</contextRoot>
+							<groupId>standardNaast</groupId>
+							<artifactId>standardNaast-webservices</artifactId>
+							<contextRoot>/standardnaastwebservices</contextRoot>
+							<unpack>true</unpack>
 						</webModule>
+						<ejbModule>
+							<groupId>standardNaast</groupId>
+							<artifactId>standardNaast-business</artifactId>
+							<unpack>true</unpack>
+						</ejbModule>
 					</modules>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
+<!-- 		<dependency> -->
+<!-- 			<groupId>standardNaast</groupId> -->
+<!-- 			<artifactId>standardNaast-web</artifactId> -->
+<!-- 			<version>${project.version}</version> -->
+<!-- 			<type>war</type> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>standardNaast</groupId> -->
+<!-- 			<artifactId>standardNaastAngular</artifactId> -->
+<!-- 			<version>${project.version}</version> -->
+<!-- 			<type>war</type> -->
+<!-- 		</dependency> -->
 		<dependency>
-			<groupId>com.standardNaast</groupId>
-			<artifactId>standardNaast-web</artifactId>
+			<groupId>standardNaast</groupId>
+			<artifactId>standardNaast-webservices</artifactId>
 			<version>${project.version}</version>
 			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>standardNaast</groupId>
+			<artifactId>standardNaast-business</artifactId>
+			<version>${project.version}</version>
+			<type>ejb</type>
 		</dependency>
 	</dependencies>
 </project>

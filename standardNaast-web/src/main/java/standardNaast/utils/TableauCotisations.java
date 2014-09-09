@@ -23,7 +23,7 @@ import org.joda.time.DateTime;
 import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
 import standardNaast.entities.Season;
-import standardNaast.service.PersonneService;
+import standardNaast.service.PersonneServiceImpl;
 import standardNaast.service.SeasonService;
 
 import com.itextpdf.text.BaseColor;
@@ -39,7 +39,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class TableauCotisations {
 
-	private PersonneService personneService;
+	private PersonneServiceImpl personneService;
 
 	private SeasonService saisonService;
 
@@ -300,9 +300,9 @@ public class TableauCotisations {
 		return memberList;
 	}
 
-	private PersonneService getPersonneService() {
+	private PersonneServiceImpl getPersonneService() {
 		if (this.personneService == null) {
-			this.personneService = new PersonneService();
+			this.personneService = new PersonneServiceImpl();
 		}
 		return this.personneService;
 	}
