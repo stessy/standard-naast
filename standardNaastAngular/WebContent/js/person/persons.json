@@ -1,0 +1,3260 @@
+[
+{
+"personId": 23,
+"memberNumber": 211,
+"name": "LEHERTE",
+"firstName": "Gwenael",
+"address": "Avenue du chemin de Fer, 7\t\t\t",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 61,
+"memberNumber": 168,
+"name": "HACHEZ",
+"firstName": "Nicolas",
+"address": "ChaussÃ©e de Bruxelles, 71",
+"town": "7061 Casteau",
+"phoneNumber": null
+},
+{
+"personId": 82,
+"memberNumber": 181,
+"name": "RETH",
+"firstName": "Nathalie",
+"address": "Rue Arthur Charles, 1",
+"town": "5300 Andennes",
+"phoneNumber": null
+},
+{
+"personId": 89,
+"memberNumber": 261,
+"name": "LEGREVE",
+"firstName": "Maxence",
+"address": "0",
+"town": "null Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 125,
+"memberNumber": 343,
+"name": "COTTON",
+"firstName": "Marc",
+"address": "rue de la Procession,97",
+"town": "7830 Bassilly",
+"phoneNumber": null
+},
+{
+"personId": 141,
+"memberNumber": 26,
+"name": "BECQ",
+"firstName": "Madeline",
+"address": "Place de Naast,",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 161,
+"memberNumber": 169,
+"name": "BURION ",
+"firstName": "Didier",
+"address": "rue du GazomÃ¨tre,4",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": "067/56.11.56"
+},
+{
+"personId": 169,
+"memberNumber": 255,
+"name": "TAINTENIER",
+"firstName": "Olivier",
+"address": "0",
+"town": "null null",
+"phoneNumber": null
+},
+{
+"personId": 182,
+"memberNumber": 187,
+"name": "COUWEZ",
+"firstName": "Fabrice",
+"address": "Avenue du chemin de Fer, 7",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 183,
+"memberNumber": 194,
+"name": "COUWEZ",
+"firstName": "AurÃ©lien",
+"address": "0",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 206,
+"memberNumber": 237,
+"name": "MONFORT",
+"firstName": "Eric",
+"address": "chemin des sept Douleurs,14 ",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 252,
+"memberNumber": 1,
+"name": "DANIEL",
+"firstName": "Martine",
+"address": "rue Max Fassiaux,7",
+"town": "7062 Naast",
+"phoneNumber": "067/33.23.12"
+},
+{
+"personId": 253,
+"memberNumber": 2,
+"name": "BOTTEMANNE",
+"firstName": "Richard",
+"address": "citÃ© Vital ParÃ©e,26",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 254,
+"memberNumber": 3,
+"name": "SLUYS",
+"firstName": "LÃ©on",
+"address": "rue Haute Folie,47",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 255,
+"memberNumber": 4,
+"name": "POLART",
+"firstName": "Octave",
+"address": "rue d'Ecaussinnes,4",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 256,
+"memberNumber": 5,
+"name": "PERREMAN",
+"firstName": "Michel",
+"address": "chemin de Casteau,190",
+"town": "7061 Casteau",
+"phoneNumber": null
+},
+{
+"personId": 257,
+"memberNumber": 6,
+"name": "EHRLER",
+"firstName": "Chantal",
+"address": "0",
+"town": "null Casteau",
+"phoneNumber": null
+},
+{
+"personId": 259,
+"memberNumber": 7,
+"name": "MAQUESTIAU",
+"firstName": "Jean-Pierre",
+"address": "rue Caulier,36",
+"town": "7063 Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 260,
+"memberNumber": 8,
+"name": "SABIAU",
+"firstName": "IrÃ¨ne",
+"address": "0",
+"town": "null Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 261,
+"memberNumber": 9,
+"name": "BLONDIAU",
+"firstName": "Christian",
+"address": "chemin Tinette,18",
+"town": "7063 Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 262,
+"memberNumber": 10,
+"name": "LEGREVE",
+"firstName": "AndrÃ©",
+"address": "rue Max Fassiaux, 7",
+"town": "7062 Naast",
+"phoneNumber": "067/33.23.12"
+},
+{
+"personId": 263,
+"memberNumber": 11,
+"name": "LEGREVE",
+"firstName": "Julien",
+"address": "0",
+"town": "7062 Naast",
+"phoneNumber": "067/332312"
+},
+{
+"personId": 264,
+"memberNumber": 12,
+"name": "DE PREE",
+"firstName": "Pascal",
+"address": "rue Grande, 45",
+"town": "7110 Boussoit",
+"phoneNumber": null
+},
+{
+"personId": 265,
+"memberNumber": 13,
+"name": "DEPRET",
+"firstName": "Florence",
+"address": "rue Haute Folie,143",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 266,
+"memberNumber": 14,
+"name": "DEHOUX",
+"firstName": "Emile",
+"address": "val de la Marquette,3",
+"town": "7870 Lens",
+"phoneNumber": null
+},
+{
+"personId": 267,
+"memberNumber": 15,
+"name": "PIAT",
+"firstName": "Jean-Jacques",
+"address": "clos de l'Escabaille,3",
+"town": "7063 Neufvilles",
+"phoneNumber": "067/335953"
+},
+{
+"personId": 268,
+"memberNumber": 16,
+"name": "DE LANGE",
+"firstName": "Robert",
+"address": "rue de Godimont,134",
+"town": "7063 ChaussÃ©e",
+"phoneNumber": null
+},
+{
+"personId": 269,
+"memberNumber": 17,
+"name": "GILLEROT",
+"firstName": "Michel",
+"address": "rue de Godimont,135",
+"town": "7063 ChaussÃ©e",
+"phoneNumber": "067/45.83.08"
+},
+{
+"personId": 270,
+"memberNumber": 18,
+"name": "COLLIGNON",
+"firstName": "Yves",
+"address": "rue du CurÃ©,11",
+"town": "7850 Enghien",
+"phoneNumber": "02/3960846 (PrivÃ©)"
+},
+{
+"personId": 271,
+"memberNumber": 19,
+"name": "MAQUESTIAU",
+"firstName": "Lucile",
+"address": "0",
+"town": "null Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 272,
+"memberNumber": 20,
+"name": "LEGREVE",
+"firstName": "Lucien",
+"address": "rue Saint Roch,2D04",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 273,
+"memberNumber": 21,
+"name": "LEGREVE",
+"firstName": "Michael",
+"address": "chaussÃ©e de Braine,97",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 276,
+"memberNumber": 22,
+"name": "PERSYN",
+"firstName": "Norbert",
+"address": "rue de la Tannerie,9",
+"town": "7811 Arbre",
+"phoneNumber": "068/657848"
+},
+{
+"personId": 277,
+"memberNumber": 23,
+"name": "GILMAND",
+"firstName": "Steve",
+"address": " rue du Donjon,4",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 279,
+"memberNumber": 24,
+"name": "ROCH",
+"firstName": "Yves",
+"address": "rue des Houilleurs, 7",
+"town": "7134 PÃ©ronnes-lez-Binche",
+"phoneNumber": null
+},
+{
+"personId": 281,
+"memberNumber": 25,
+"name": "RENARD",
+"firstName": "Serge",
+"address": "rue Godimont,27",
+"town": "7063 Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 286,
+"memberNumber": 27,
+"name": "LETOUCHE",
+"firstName": "Dany",
+"address": "rue MarÃ©chal,2",
+"town": "7943 Gages",
+"phoneNumber": null
+},
+{
+"personId": 287,
+"memberNumber": 28,
+"name": "DELABIE",
+"firstName": "Marie-Louise",
+"address": "0",
+"town": "null null",
+"phoneNumber": null
+},
+{
+"personId": 288,
+"memberNumber": 29,
+"name": "GOFFIN",
+"firstName": "Francis",
+"address": "rue Centrale,43",
+"town": "7063 Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 289,
+"memberNumber": 30,
+"name": "RENARD",
+"firstName": "Sylvianne",
+"address": "0",
+"town": "null Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 290,
+"memberNumber": 31,
+"name": "DEHANTSCHUTTER",
+"firstName": "Pascal",
+"address": "chemin de Casteau,37",
+"town": "7063 Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 291,
+"memberNumber": 32,
+"name": "COUSIN",
+"firstName": "Frans",
+"address": "rue Saint-Vincent,58",
+"town": "7062 Naast",
+"phoneNumber": "(067)335931"
+},
+{
+"personId": 294,
+"memberNumber": 33,
+"name": "DRUARD",
+"firstName": "FranÃ§ois",
+"address": "rue GrÃ©goire Wincqz,46",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 296,
+"memberNumber": 34,
+"name": "FRANCOIS",
+"firstName": "Eddy",
+"address": "rue du Masy,10",
+"town": "7063 Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 298,
+"memberNumber": 35,
+"name": "DECAMPS",
+"firstName": "Thierry",
+"address": "rue Max Fassiaux,10",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 300,
+"memberNumber": 36,
+"name": "SABIAU",
+"firstName": "RÃ©nald",
+"address": "rue de la LibertÃ©,28",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 301,
+"memberNumber": 37,
+"name": "VANEBERG",
+"firstName": "Yves",
+"address": "rue de Flandre,42",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 302,
+"memberNumber": 38,
+"name": "CARTON",
+"firstName": "Alain",
+"address": "rue Jean Watrin,63",
+"town": "7804 Rebaix",
+"phoneNumber": "068/84.07.47"
+},
+{
+"personId": 305,
+"memberNumber": 39,
+"name": "DELHALLE",
+"firstName": "Marc",
+"address": "chemin du Perlonjour,35",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 306,
+"memberNumber": 40,
+"name": "DELHALLE",
+"firstName": "KÃ©vin",
+"address": "chemin du Perlonjour, 35",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 310,
+"memberNumber": 41,
+"name": "LIBIOULLE",
+"firstName": "Laurent",
+"address": "rue des Lanciers,7",
+"town": "6230 Pont-A-Celles",
+"phoneNumber": null
+},
+{
+"personId": 312,
+"memberNumber": 42,
+"name": "DECAMPS",
+"firstName": "Jean-Pierre",
+"address": "rue Saint-Vincent,129",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 313,
+"memberNumber": 43,
+"name": "HAMAIDE",
+"firstName": "Yves",
+"address": "chaussÃ©e de Mons, 3 bt31",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 315,
+"memberNumber": 45,
+"name": "LAMBERT",
+"firstName": "GrÃ©gory",
+"address": "rue St Vincent, 156",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 319,
+"memberNumber": 46,
+"name": "LALINNE",
+"firstName": "David",
+"address": "Clos du Vivier, 15",
+"town": "7061 Casteau",
+"phoneNumber": null
+},
+{
+"personId": 320,
+"memberNumber": 47,
+"name": "WEYMERS",
+"firstName": "Pascale",
+"address": "rue des Chasseurs,27",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 322,
+"memberNumber": 48,
+"name": "GEVAR",
+"firstName": "Jean-Marc",
+"address": "rue Haute Folie,136",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 323,
+"memberNumber": 49,
+"name": "STERCKVAL",
+"firstName": "Willy",
+"address": "Chemin Mitoyen, 21",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 324,
+"memberNumber": 50,
+"name": "DERUE",
+"firstName": "Pascal",
+"address": "rue des Fontaines,31/27",
+"town": "7061 Casteau",
+"phoneNumber": null
+},
+{
+"personId": 325,
+"memberNumber": 51,
+"name": "BERNATH",
+"firstName": "Jean-Paul",
+"address": "rue du cimetiÃ¨re, 1",
+"town": "7110 Houdeng-Goegnies",
+"phoneNumber": null
+},
+{
+"personId": 326,
+"memberNumber": 52,
+"name": "CHAINIAUX",
+"firstName": "Geoffroy",
+"address": "chaussÃ©e Paul Houtart,256",
+"town": "7110 Houdeng-Goegnies",
+"phoneNumber": "064/228593"
+},
+{
+"personId": 327,
+"memberNumber": 53,
+"name": "SMEKENS",
+"firstName": "Fabrice",
+"address": "avenue Emile Herman,281",
+"town": "7170 Manage",
+"phoneNumber": null
+},
+{
+"personId": 328,
+"memberNumber": 54,
+"name": "NICAISE",
+"firstName": "Jean-Marc",
+"address": "rue de l'Avedelle, 54",
+"town": "7190 Ecaussinnes",
+"phoneNumber": "067/844511"
+},
+{
+"personId": 336,
+"memberNumber": 55,
+"name": "VAN BRUSSELEN",
+"firstName": "Curtis",
+"address": "rue BenoÃ®t Delsarte, 28",
+"town": "7100 TriviÃ¨res",
+"phoneNumber": null
+},
+{
+"personId": 337,
+"memberNumber": 56,
+"name": "MAJOIS",
+"firstName": "Catherine",
+"address": "rue BenoÃ®t Delsarte, 28",
+"town": "7100 TriviÃ¨res",
+"phoneNumber": "064/368798"
+},
+{
+"personId": 340,
+"memberNumber": 57,
+"name": "DURANT",
+"firstName": "SÃ©bastien",
+"address": "rue Franklin Roosevelt,10",
+"town": "7100 TriviÃ¨res",
+"phoneNumber": null
+},
+{
+"personId": 341,
+"memberNumber": 58,
+"name": "CLERBOIS",
+"firstName": "Jean-Marc",
+"address": "rue Harmegnies,47/2",
+"town": "7110 Strepy-Bracquegnies",
+"phoneNumber": null
+},
+{
+"personId": 342,
+"memberNumber": 59,
+"name": "LEFRANT",
+"firstName": "Isabelle",
+"address": "rue Martial Hautier,8",
+"town": "7070 Mignault",
+"phoneNumber": null
+},
+{
+"personId": 344,
+"memberNumber": 60,
+"name": "LERMINIAUX",
+"firstName": "Jean-Michel",
+"address": "rue du MÃ©doc,29",
+"town": "7170 Bois D'Haines",
+"phoneNumber": null
+},
+{
+"personId": 345,
+"memberNumber": 61,
+"name": "LERMINIAUX",
+"firstName": "Wesley",
+"address": "chaussÃ©e de Charleroi, 258",
+"town": "5140 Ligny",
+"phoneNumber": null
+},
+{
+"personId": 346,
+"memberNumber": 62,
+"name": "BECQ",
+"firstName": "Guillaume",
+"address": "0",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 348,
+"memberNumber": 63,
+"name": "DENDOOVEN",
+"firstName": "Ronald",
+"address": "Den Ham, 3",
+"town": "1731 Zellik",
+"phoneNumber": null
+},
+{
+"personId": 349,
+"memberNumber": 64,
+"name": "LENNE",
+"firstName": "Jean-Luc",
+"address": "rue de Nivelles, 94",
+"town": "7190 Ecaussinnes",
+"phoneNumber": "(067)443373"
+},
+{
+"personId": 351,
+"memberNumber": 65,
+"name": "VASSART",
+"firstName": "Fabian",
+"address": "rue Duffosez, 98",
+"town": "7140 Morlanwelz",
+"phoneNumber": null
+},
+{
+"personId": 352,
+"memberNumber": 66,
+"name": "CROUSSE",
+"firstName": "RÃ©gis",
+"address": "citÃ© Bougard,53/4",
+"town": "7141 Morlanwelz",
+"phoneNumber": "064/44.99.08"
+},
+{
+"personId": 353,
+"memberNumber": 67,
+"name": "CHARON ",
+"firstName": "Jean-Pierre",
+"address": "rue de Cognebeau,46",
+"town": "7060 Soignies",
+"phoneNumber": "(067)339002"
+},
+{
+"personId": 354,
+"memberNumber": 68,
+"name": "HAWRYS",
+"firstName": "GÃ©nia",
+"address": "0",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 355,
+"memberNumber": 69,
+"name": "BAUTHIÃˆRE",
+"firstName": "AndrÃ©",
+"address": "chemin du Fayt,1",
+"town": "7060 Soignies",
+"phoneNumber": "(067)331662"
+},
+{
+"personId": 358,
+"memberNumber": 70,
+"name": "GEVAR",
+"firstName": "JÃ©rÃ©my",
+"address": "0",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 359,
+"memberNumber": 274,
+"name": "THIRION",
+"firstName": "Vincent",
+"address": "0",
+"town": "null Braine-Le-Comte",
+"phoneNumber": "(067)555652"
+},
+{
+"personId": 360,
+"memberNumber": 71,
+"name": "LACROIX",
+"firstName": "Marc",
+"address": "place du Bois Renaud,9",
+"town": "6239 Pont-A-Celles",
+"phoneNumber": "(071)843108"
+},
+{
+"personId": 361,
+"memberNumber": 72,
+"name": "COUVREUR",
+"firstName": "Martine",
+"address": "chemin des Fontaines,31 Bte27",
+"town": "7061 Casteau",
+"phoneNumber": null
+},
+{
+"personId": 362,
+"memberNumber": 73,
+"name": "CARION",
+"firstName": "Myriam",
+"address": "rue de la Motte, 3",
+"town": "7860 Lessines",
+"phoneNumber": null
+},
+{
+"personId": 363,
+"memberNumber": 74,
+"name": "BOTTEMANNE",
+"firstName": "Lionel",
+"address": "Rue Haute Folie,16",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 365,
+"memberNumber": 75,
+"name": "ZUTTERMAN",
+"firstName": "Hendrik",
+"address": "rue GrÃ©goire Wincqz,37",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 366,
+"memberNumber": 76,
+"name": "BAUTHIERE",
+"firstName": "Samuel",
+"address": "chemin du Fayt,1",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 367,
+"memberNumber": 77,
+"name": "CANIVET",
+"firstName": "Johan",
+"address": "Ch de Nivelles,171",
+"town": "6041 Gosselies",
+"phoneNumber": null
+},
+{
+"personId": 368,
+"memberNumber": 78,
+"name": "LICKI",
+"firstName": "Marc",
+"address": "rue Neuve,76",
+"town": "7090 Braine-Le-Comte",
+"phoneNumber": "(067)444107"
+},
+{
+"personId": 369,
+"memberNumber": 267,
+"name": "VANDIEST",
+"firstName": "BenoÃ®t",
+"address": "0",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 370,
+"memberNumber": 79,
+"name": "NICODEME",
+"firstName": "SÃ©bastien",
+"address": "Cour Roucloux,1",
+"town": "7941 Attre",
+"phoneNumber": null
+},
+{
+"personId": 373,
+"memberNumber": 80,
+"name": "PLANQUE",
+"firstName": "Loic",
+"address": "rue des Jardins,32",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 374,
+"memberNumber": 81,
+"name": "PERSOENS",
+"firstName": "AndrÃ©",
+"address": "rue des DÃ©mineurs,2/3",
+"town": "6041 Gosselies",
+"phoneNumber": null
+},
+{
+"personId": 377,
+"memberNumber": 82,
+"name": "THIRION",
+"firstName": "Yannick",
+"address": "sentier des Messinnes,86",
+"town": "7090 Braine-Le-Comte",
+"phoneNumber": "(067)555652"
+},
+{
+"personId": 382,
+"memberNumber": 83,
+"name": "VLIEGHE",
+"firstName": "Axel",
+"address": "0",
+"town": "7850 Enghien",
+"phoneNumber": null
+},
+{
+"personId": 383,
+"memberNumber": 84,
+"name": "HEREMANS",
+"firstName": "Chantal",
+"address": "rue Vanlaethem,26",
+"town": "7850 Enghien",
+"phoneNumber": null
+},
+{
+"personId": 384,
+"memberNumber": 85,
+"name": "DE PREE",
+"firstName": "KÃ©vin",
+"address": "rue Grande, 45",
+"town": "7110 Boussoit",
+"phoneNumber": null
+},
+{
+"personId": 385,
+"memberNumber": 86,
+"name": "HUART",
+"firstName": "Daniel",
+"address": "rue du Cul de Sac,17",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 386,
+"memberNumber": 87,
+"name": "VREUX",
+"firstName": "Michel",
+"address": "rue Arbroy,14",
+"town": "7870 Bauffe",
+"phoneNumber": "068/65.77.19"
+},
+{
+"personId": 387,
+"memberNumber": 88,
+"name": "VREUX",
+"firstName": "Denis",
+"address": "0",
+"town": "null null",
+"phoneNumber": null
+},
+{
+"personId": 388,
+"memberNumber": 89,
+"name": "VREUX",
+"firstName": "Michael",
+"address": "0",
+"town": "7870 Lens (Hainaut)",
+"phoneNumber": null
+},
+{
+"personId": 389,
+"memberNumber": 90,
+"name": "DANGRIAUX",
+"firstName": "Annette",
+"address": "0",
+"town": "7870 Lens(Hainaut)",
+"phoneNumber": null
+},
+{
+"personId": 391,
+"memberNumber": 91,
+"name": "DELFOSSE",
+"firstName": "Roger",
+"address": "rue Mayeurmont,17",
+"town": "7190 Ecaussinnes",
+"phoneNumber": "(067)485135"
+},
+{
+"personId": 394,
+"memberNumber": 92,
+"name": "BARREZ",
+"firstName": "Thierry",
+"address": "chemin de ChiÃ¨vres, 33",
+"town": "7860 Lessines",
+"phoneNumber": "068/55.38.17"
+},
+{
+"personId": 395,
+"memberNumber": 93,
+"name": "BARREZ",
+"firstName": "KÃ©vin",
+"address": "Chemin de ChiÃ¨vres, 33",
+"town": "7860 Lessines",
+"phoneNumber": null
+},
+{
+"personId": 399,
+"memberNumber": 94,
+"name": "MARTIN",
+"firstName": "Michael",
+"address": "rue Mademoiselle Hanicq, 2",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 400,
+"memberNumber": 95,
+"name": "DE LANGE",
+"firstName": "Luc",
+"address": "rue GrÃ©goire Wincqz,240",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 401,
+"memberNumber": 96,
+"name": "VANDEKERCKHOVE",
+"firstName": "Eddy",
+"address": "rue Billaumont, 22",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 402,
+"memberNumber": 97,
+"name": "DE BOCK",
+"firstName": "Boris",
+"address": "citÃ© LÃ©vie, 19",
+"town": "7141 Morlanwelz",
+"phoneNumber": "(064)446274"
+},
+{
+"personId": 403,
+"memberNumber": 98,
+"name": "DE BOCK",
+"firstName": "Yvan",
+"address": "CitÃ© LÃ©vie (MSA), 19",
+"town": "7141 Morlanwelz",
+"phoneNumber": null
+},
+{
+"personId": 404,
+"memberNumber": 99,
+"name": "CHAPELLE",
+"firstName": "Philippe",
+"address": "rue Arsenal,23",
+"town": "6230 Pont-A-Celles",
+"phoneNumber": null
+},
+{
+"personId": 410,
+"memberNumber": 100,
+"name": "DELWART",
+"firstName": "Michel",
+"address": "rue Neuve,15/31",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 411,
+"memberNumber": 101,
+"name": "BROHEE",
+"firstName": "Marie-France",
+"address": "ChÃ©e d'Enghien,117",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 412,
+"memberNumber": 102,
+"name": "SCHREYERS",
+"firstName": "Serge",
+"address": "rue du petit Bruxelles,42",
+"town": "1430 Rebecq",
+"phoneNumber": null
+},
+{
+"personId": 413,
+"memberNumber": 103,
+"name": "SCLAVONS",
+"firstName": "Cindy",
+"address": "rue Montliaux,53",
+"town": "7041 Givry",
+"phoneNumber": "065/58.62.97"
+},
+{
+"personId": 416,
+"memberNumber": 104,
+"name": "CHARLIER",
+"firstName": "FrÃ©dÃ©ric",
+"address": "rue de Luttre,77",
+"town": "6181 Courcelles",
+"phoneNumber": null
+},
+{
+"personId": 418,
+"memberNumber": 105,
+"name": "ROCH",
+"firstName": "Philippe",
+"address": "rue Ste Catherine, 133",
+"town": "7170 Manage",
+"phoneNumber": null
+},
+{
+"personId": 419,
+"memberNumber": 106,
+"name": "LARDINOIS",
+"firstName": "Hans",
+"address": "rue Croisettes,32",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 420,
+"memberNumber": 107,
+"name": "BERDOUX",
+"firstName": "Eric",
+"address": "rue des trois planches 47 boite EB2",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 421,
+"memberNumber": 108,
+"name": "DESCAMPS",
+"firstName": "SÃ©bastien",
+"address": "ChaussÃ©e de Lessines,69",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 425,
+"memberNumber": 109,
+"name": "DUSEWOIR",
+"firstName": "Pol",
+"address": "rue Arthur Trigaux,43 ",
+"town": "7170 Fayt-lez-Manage",
+"phoneNumber": "(064)558086"
+},
+{
+"personId": 426,
+"memberNumber": 110,
+"name": "DUBREUX",
+"firstName": "Francis",
+"address": "rue Hector Ameye,104",
+"town": "7110 Houdeng-Goegnies",
+"phoneNumber": null
+},
+{
+"personId": 429,
+"memberNumber": 111,
+"name": "FONTIGNIES",
+"firstName": "SÃ©bastien",
+"address": "rue Catherine,19",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 430,
+"memberNumber": 112,
+"name": "ZAMPIERI",
+"firstName": "Philippe",
+"address": "rue du Rapois,152",
+"town": "7110 Boussoit",
+"phoneNumber": null
+},
+{
+"personId": 431,
+"memberNumber": 113,
+"name": "ZAMPIERI",
+"firstName": "Cyril",
+"address": "0",
+"town": "7110 Boussoit",
+"phoneNumber": null
+},
+{
+"personId": 432,
+"memberNumber": 258,
+"name": "BROGNIEZ",
+"firstName": "Freddy",
+"address": "rue sous le bois, 176",
+"town": "7110 Strepy-Bracquegnies",
+"phoneNumber": null
+},
+{
+"personId": 434,
+"memberNumber": 114,
+"name": "LAMBERT",
+"firstName": "FrÃ©dÃ©ric",
+"address": "rue St Vincent, 140",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 435,
+"memberNumber": 115,
+"name": "AVICE",
+"firstName": "Daniel",
+"address": "rue Jules Destree,23bis",
+"town": "7160 Godarville",
+"phoneNumber": null
+},
+{
+"personId": 436,
+"memberNumber": 116,
+"name": "AVICE",
+"firstName": "Joshua",
+"address": "0",
+"town": "7160 Godarville",
+"phoneNumber": null
+},
+{
+"personId": 438,
+"memberNumber": 117,
+"name": "TINSY",
+"firstName": "StÃ©phane",
+"address": "Avenue Reine Astrid,300/1",
+"town": "7180 Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 442,
+"memberNumber": 118,
+"name": "CABO",
+"firstName": "Nicolas",
+"address": "rue des Marguerites,5",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 444,
+"memberNumber": 341,
+"name": "BAETEN",
+"firstName": "FrÃ©dÃ©ric",
+"address": "rue GrÃ©goire Wincqz, 245",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 445,
+"memberNumber": 119,
+"name": "AVICE",
+"firstName": "Bernard",
+"address": "rue de la QuiÃ©tude,6",
+"town": "7160 Chapelle-lez-Herlaimont",
+"phoneNumber": null
+},
+{
+"personId": 447,
+"memberNumber": 244,
+"name": "LENOM",
+"firstName": "KÃ©vin",
+"address": "ChaussÃ©e de Mons, 321 Bis",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 451,
+"memberNumber": 120,
+"name": "NEGRO",
+"firstName": "Fernando",
+"address": "Avenue Reine Astrid, 350",
+"town": "7180 Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 452,
+"memberNumber": 121,
+"name": "VERMEULEN",
+"firstName": "Willy",
+"address": "Rond Point de la Bosse,32",
+"town": "7090 Braine-Le-Comte",
+"phoneNumber": "067/55.46.03"
+},
+{
+"personId": 459,
+"memberNumber": 122,
+"name": "DECAT",
+"firstName": "Olivier",
+"address": "rue Arthur Charles, 1",
+"town": "5300 Andenne",
+"phoneNumber": null
+},
+{
+"personId": 464,
+"memberNumber": 123,
+"name": "GOSSELIN",
+"firstName": "Patricia",
+"address": "rue Maurice Grevisse, 32/11",
+"town": "7110 Houdeng-G6egn5es",
+"phoneNumber": null
+},
+{
+"personId": 467,
+"memberNumber": 124,
+"name": "PATERNOSTRE",
+"firstName": "Julien",
+"address": "rue de l'Ã©glise, 69",
+"town": "1410 Waterloo",
+"phoneNumber": null
+},
+{
+"personId": 469,
+"memberNumber": 125,
+"name": "DEFOSSE",
+"firstName": "Fabian",
+"address": "rue Canterlot,98",
+"town": "7170 La Hestre",
+"phoneNumber": null
+},
+{
+"personId": 471,
+"memberNumber": 126,
+"name": "DERIDDER",
+"firstName": "Alain",
+"address": "sentier de Rognon,13",
+"town": "1430 Rebecq",
+"phoneNumber": null
+},
+{
+"personId": 472,
+"memberNumber": 127,
+"name": "DRAMAIX",
+"firstName": "BenoÃ®t",
+"address": "LisiÃ¨re du Bois, 10",
+"town": "7063 Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 474,
+"memberNumber": 128,
+"name": "DETHIER",
+"firstName": "Claire",
+"address": "Place du Fichaux,7",
+"town": "6230 Pont-A-Celles",
+"phoneNumber": null
+},
+{
+"personId": 479,
+"memberNumber": 129,
+"name": "FRAGAPANE",
+"firstName": "Vincenza",
+"address": "0",
+"town": "7100 TriviÃ¨res",
+"phoneNumber": null
+},
+{
+"personId": 480,
+"memberNumber": 130,
+"name": "BASTIEN",
+"firstName": "Jean-Luc",
+"address": "rue Mayeurmont,3",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 482,
+"memberNumber": 131,
+"name": "SAMYN",
+"firstName": "FrÃ©dÃ©ric",
+"address": "rue Albert Billy, 48",
+"town": "5370 Porcheresse",
+"phoneNumber": null
+},
+{
+"personId": 483,
+"memberNumber": 132,
+"name": "HULIN",
+"firstName": "Emilie",
+"address": "rue LÃ©on Roger, 12",
+"town": "7070 Mignault",
+"phoneNumber": null
+},
+{
+"personId": 485,
+"memberNumber": 133,
+"name": "HULIN",
+"firstName": "Florence",
+"address": "ruelle Dardinne,10",
+"town": "6142 Leernes",
+"phoneNumber": null
+},
+{
+"personId": 486,
+"memberNumber": 348,
+"name": "ERNAELSTEEN",
+"firstName": "Emmanuelle",
+"address": "rue des Marguerites,5",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 487,
+"memberNumber": 134,
+"name": "HAGEMAN",
+"firstName": "AndrÃ©",
+"address": "rue de l'Industrie,5",
+"town": "7860 Lessines",
+"phoneNumber": null
+},
+{
+"personId": 489,
+"memberNumber": 135,
+"name": "DEFOSSE",
+"firstName": "Alisson",
+"address": "rue Canterlot, 98",
+"town": "7170 La Hestre",
+"phoneNumber": null
+},
+{
+"personId": 490,
+"memberNumber": 136,
+"name": "BZDAK",
+"firstName": "Sarah",
+"address": "Rue de Canterlot, 98",
+"town": "7170 La Hestre",
+"phoneNumber": null
+},
+{
+"personId": 491,
+"memberNumber": 137,
+"name": "GUISSET",
+"firstName": "Sophie",
+"address": "Avenue de la Motte Baraffe, 20/3,27",
+"town": "7180 Seneffe",
+"phoneNumber": "064/44.82.75"
+},
+{
+"personId": 494,
+"memberNumber": 138,
+"name": "AUDIART",
+"firstName": "Annick",
+"address": "chemin du Perlonjour, 35",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 496,
+"memberNumber": 139,
+"name": "DRUART",
+"firstName": "Nancy",
+"address": "Sentier de Rognon, 13",
+"town": "1430 Rebecq",
+"phoneNumber": null
+},
+{
+"personId": 497,
+"memberNumber": 140,
+"name": "BAETENS",
+"firstName": "Joelle",
+"address": "avenue de la HoussiÃ¨re, 32",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 498,
+"memberNumber": 141,
+"name": "CAUSSIN",
+"firstName": "Didier",
+"address": "avenue de la HoussiÃ¨re,32",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 499,
+"memberNumber": 142,
+"name": "CAUSSIN",
+"firstName": "Killian",
+"address": "avenue de la HoussiÃ¨re, 32",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 500,
+"memberNumber": 143,
+"name": "CAUSSIN",
+"firstName": "William",
+"address": "0",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 502,
+"memberNumber": 144,
+"name": "MONFORT",
+"firstName": "Philippe",
+"address": "rue du Bosquet,5",
+"town": "7090 Braine-Le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 503,
+"memberNumber": 145,
+"name": "DELABIE",
+"firstName": "Cinthia",
+"address": "0",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 504,
+"memberNumber": 146,
+"name": "MONFORT",
+"firstName": "Amory",
+"address": "rue du Bosquet, 5",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 505,
+"memberNumber": 147,
+"name": "MONFORT",
+"firstName": "Luc",
+"address": "rue Neuve,24",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 506,
+"memberNumber": 148,
+"name": "DE SCHRIJVER",
+"firstName": "Nadine",
+"address": "rue FÃ©lix van de Sande, 16",
+"town": "1081 Koekelberg",
+"phoneNumber": null
+},
+{
+"personId": 507,
+"memberNumber": 257,
+"name": "JACQUES",
+"firstName": "Fabian",
+"address": "rue de Neufvilles,115",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 510,
+"memberNumber": 149,
+"name": "DESCHUYTENEER",
+"firstName": "Renaud",
+"address": "Rue de Flandre, 16",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 511,
+"memberNumber": 150,
+"name": "LEJEUNE",
+"firstName": "FrÃ©dÃ©ric",
+"address": "rue de la PÃ©piniÃ¨re,49",
+"town": "7130 Binche",
+"phoneNumber": "064332348"
+},
+{
+"personId": 515,
+"memberNumber": 151,
+"name": "LEROY",
+"firstName": "Philippe",
+"address": "rue de la HoussiÃ¨re, 3",
+"town": "7180 Seneffe",
+"phoneNumber": "064/65.02.64"
+},
+{
+"personId": 518,
+"memberNumber": 152,
+"name": "LEVEKE",
+"firstName": "Didier",
+"address": "rue d'Horrues,156",
+"town": "7090 Braine-Le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 523,
+"memberNumber": 153,
+"name": "FUMIER",
+"firstName": "Logan",
+"address": "ruelle des Cinq Bonniers, 1\nterrain de football",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 525,
+"memberNumber": 154,
+"name": "WANIN",
+"firstName": "Loic",
+"address": "rue Catherine,6",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 526,
+"memberNumber": 155,
+"name": "PORSON",
+"firstName": "Corinne",
+"address": "rue Tombou,153",
+"town": "7110 StrÃ©py-Bracquegnies",
+"phoneNumber": null
+},
+{
+"personId": 527,
+"memberNumber": 156,
+"name": "JOREZ",
+"firstName": "Dorian",
+"address": "rue Tombou, 153",
+"town": "7110 StÃ©py-Bracquegnies",
+"phoneNumber": null
+},
+{
+"personId": 529,
+"memberNumber": 157,
+"name": "DARAHIM",
+"firstName": "Erwan",
+"address": "Rue des AlliÃ©s, 3 boÃ®te 12",
+"town": "7160 Chapelle-lez-herlaimont",
+"phoneNumber": null
+},
+{
+"personId": 532,
+"memberNumber": 158,
+"name": "PEETERS",
+"firstName": "Mikel",
+"address": "rue de la Paix,20",
+"town": "7070 Thieu",
+"phoneNumber": null
+},
+{
+"personId": 533,
+"memberNumber": 159,
+"name": "VERMEULEN",
+"firstName": "Jacques",
+"address": "avenue des Fauvettes,17",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 537,
+"memberNumber": 160,
+"name": "MINNE",
+"firstName": "Daniel",
+"address": "Rue de l'EvÃªchÃ©,2/Bt 1",
+"town": "1400 Nivelles",
+"phoneNumber": null
+},
+{
+"personId": 539,
+"memberNumber": 161,
+"name": "MERTENS",
+"firstName": "Catherine",
+"address": "avenue des Fauvettes,17",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 545,
+"memberNumber": 162,
+"name": "DENDOOVEN",
+"firstName": "Matthias",
+"address": "0",
+"town": "1731 Zellik",
+"phoneNumber": null
+},
+{
+"personId": 567,
+"memberNumber": 186,
+"name": "GOREZ",
+"firstName": "Gregory",
+"address": "Clos des Sorbiers,16",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 571,
+"memberNumber": 358,
+"name": "MASSOT",
+"firstName": "Jonathan",
+"address": null,
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 583,
+"memberNumber": 170,
+"name": "CUVELIER",
+"firstName": "Giles",
+"address": "rue Rouge Ã  Triaux,8",
+"town": "7050 Erbisoeul",
+"phoneNumber": "(065)227739"
+},
+{
+"personId": 584,
+"memberNumber": 203,
+"name": "CUVELIER",
+"firstName": "Florent",
+"address": "0",
+"town": "7050 Erbisoeul",
+"phoneNumber": null
+},
+{
+"personId": 703,
+"memberNumber": 44,
+"name": "DELCROIX",
+"firstName": "Stessy",
+"address": "chaussÃ©e de soignies, 34H",
+"town": "7070 Gottignies",
+"phoneNumber": "064224472"
+},
+{
+"personId": 705,
+"memberNumber": 163,
+"name": "BOTTEMANNE ",
+"firstName": "Charly",
+"address": "rue de la Haute Folie,95-97",
+"town": "7062 Naast",
+"phoneNumber": "067/33.21.55"
+},
+{
+"personId": 706,
+"memberNumber": 164,
+"name": "BOTTEMANNE",
+"firstName": "Allan",
+"address": "rue de la Haute Folie, 95-97",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 709,
+"memberNumber": 165,
+"name": "EUCHAMPS",
+"firstName": "Fabian",
+"address": "rue Albert 1er, 58",
+"town": "6230 Viesville",
+"phoneNumber": null
+},
+{
+"personId": 766,
+"memberNumber": 183,
+"name": "COPIENNE",
+"firstName": "Brigitte",
+"address": "CitÃ© LÃ©vie (MSA), 19",
+"town": "7141 Morlanwelz",
+"phoneNumber": null
+},
+{
+"personId": 804,
+"memberNumber": 166,
+"name": "WATERLOT",
+"firstName": "Michel",
+"address": "rue du Daim,4",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 824,
+"memberNumber": 167,
+"name": "MARCIL ",
+"firstName": "Eric",
+"address": "chemin Terre PelÃ©e,15",
+"town": "7180 Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 2423,
+"memberNumber": 171,
+"name": "KENDA",
+"firstName": "Damien",
+"address": "rue Caulier,274",
+"town": "7063 Neufvilles",
+"phoneNumber": null
+},
+{
+"personId": 2424,
+"memberNumber": 172,
+"name": "LEPENNE",
+"firstName": "Gian-Francesco",
+"address": "rue de la Grande LouviÃ¨re,17",
+"town": "7100 La LouviÃ¨re",
+"phoneNumber": null
+},
+{
+"personId": 2429,
+"memberNumber": 173,
+"name": "BROGNIEZ",
+"firstName": "Mathieu",
+"address": "rue Edouard Huys,3",
+"town": "6567 Fontaine Valmont",
+"phoneNumber": null
+},
+{
+"personId": 2443,
+"memberNumber": 174,
+"name": "DE LUCA",
+"firstName": "Giovanni",
+"address": "rue Anselme Mary,73",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 2445,
+"memberNumber": 175,
+"name": "SCHWIND",
+"firstName": "Damien",
+"address": "rue du Herdal, 1/2",
+"town": "5070 Fosses-Ville",
+"phoneNumber": null
+},
+{
+"personId": 2447,
+"memberNumber": 176,
+"name": "FARFALLA",
+"firstName": "Serge",
+"address": "rue Hubert Debauche, 13",
+"town": "6060 Charleroi",
+"phoneNumber": null
+},
+{
+"personId": 2450,
+"memberNumber": 177,
+"name": "FAYT",
+"firstName": "Jimmy",
+"address": "rue de l'Ã©cole normale, 33",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 2463,
+"memberNumber": 178,
+"name": "CAMELLOTTO",
+"firstName": "Gino",
+"address": "rue Tout Vent, 36 ",
+"town": "6041 Gosselies",
+"phoneNumber": null
+},
+{
+"personId": 2467,
+"memberNumber": 323,
+"name": "BUEKENS",
+"firstName": "Julien",
+"address": "rue Max Fassiaux, 71",
+"town": "7062 Naast",
+"phoneNumber": "067/33.92.17"
+},
+{
+"personId": 2503,
+"memberNumber": 179,
+"name": "COTILS",
+"firstName": "Jean-Paul",
+"address": "rue des Bassins, 1/1001",
+"town": "6238 Luttre",
+"phoneNumber": "071/344363"
+},
+{
+"personId": 2643,
+"memberNumber": 180,
+"name": "DUTRIEUX",
+"firstName": "Thierry",
+"address": "rue Platoit, 7",
+"town": "7190 Ecaussinnes",
+"phoneNumber": "067/44.40.55"
+},
+{
+"personId": 2665,
+"memberNumber": 182,
+"name": "SGORRANO",
+"firstName": "JÃ©rÃ´me",
+"address": "Champ du Calvaire, 63",
+"town": "7110 Houdeng-Aimeries",
+"phoneNumber": null
+},
+{
+"personId": 2683,
+"memberNumber": 184,
+"name": "HENNAUT",
+"firstName": "Jessy",
+"address": "Rue ProdÃ©o, 24\n\t\t",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 2684,
+"memberNumber": 185,
+"name": "HENNAUT",
+"firstName": "Dylan",
+"address": "rue ProdÃ©o, 24",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 2914,
+"memberNumber": 204,
+"name": "PATERNOTTE",
+"firstName": "Christian",
+"address": "rue de Sirieu, 38",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 2923,
+"memberNumber": 188,
+"name": "VANSNICK",
+"firstName": "Marc",
+"address": "rue Crollies, 97",
+"town": "1430 Quenast",
+"phoneNumber": null
+},
+{
+"personId": 2988,
+"memberNumber": 189,
+"name": "LIMBOURG",
+"firstName": "Eddy",
+"address": "rue d'Ecaussinnes, 88",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 3030,
+"memberNumber": 333,
+"name": "SCHUMMER",
+"firstName": "Dylan",
+"address": "rue Catherine, 6",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 3043,
+"memberNumber": 190,
+"name": "SURDIACOURT",
+"firstName": "Martine",
+"address": "rue Albert- Elisabeth, 8",
+"town": "7134 Binche",
+"phoneNumber": null
+},
+{
+"personId": 3063,
+"memberNumber": 198,
+"name": "HORLAIT",
+"firstName": "Didier",
+"address": "chemin des AulnÃ©es, 64",
+"town": "7060 Soignies",
+"phoneNumber": "067/33.18.54"
+},
+{
+"personId": 3064,
+"memberNumber": 327,
+"name": "POLLERA",
+"firstName": "Daniela",
+"address": "chemin des AulnÃ©es, 64",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 3111,
+"memberNumber": 254,
+"name": "BARBAIX",
+"firstName": "Arnaud",
+"address": "rue Armand Basecour, 5",
+"town": "7861 Papignies",
+"phoneNumber": null
+},
+{
+"personId": 3146,
+"memberNumber": 199,
+"name": "AMICO",
+"firstName": "Giorgio",
+"address": "rue du Bon Voisin,82",
+"town": "1480 Tubize",
+"phoneNumber": null
+},
+{
+"personId": 3209,
+"memberNumber": 215,
+"name": "GODIN ",
+"firstName": "Franz",
+"address": "Rue Victor Cuvelier, 4/B",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 3216,
+"memberNumber": 270,
+"name": "GHISLAIN",
+"firstName": "FrÃ©dÃ©ric",
+"address": "ChÃ©e d'Ecaussinnes, 119",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 3231,
+"memberNumber": 205,
+"name": "RENARD",
+"firstName": "MÃ©lanie",
+"address": "rue de Lens, 4",
+"town": "7061 Casteau",
+"phoneNumber": null
+},
+{
+"personId": 3233,
+"memberNumber": 191,
+"name": "DERUME",
+"firstName": "Didier",
+"address": "rue de Nivelles, 8",
+"town": "7110 StrÃ©py-Bracquegnies",
+"phoneNumber": "064/650440"
+},
+{
+"personId": 3237,
+"memberNumber": 200,
+"name": "DUBOIS ",
+"firstName": "Alain",
+"address": "citÃ© mal d'accord, 22",
+"town": "7110 StrÃ©py-Bracquegnies",
+"phoneNumber": null
+},
+{
+"personId": 3263,
+"memberNumber": 192,
+"name": "VOJTECH",
+"firstName": "Ingrid",
+"address": "Avenue du chemin de Fer, 7",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 3264,
+"memberNumber": 193,
+"name": "DE RYCKERE ",
+"firstName": "Sandrine",
+"address": "rue de Restaumont, 47",
+"town": "7190 Ecaussinnes",
+"phoneNumber": "067/491478"
+},
+{
+"personId": 3306,
+"memberNumber": 195,
+"name": "FRANC",
+"firstName": "Michael",
+"address": "rue des Combattants, 11",
+"town": "7070 Mignault",
+"phoneNumber": "067/458566"
+},
+{
+"personId": 3308,
+"memberNumber": 196,
+"name": "VANDERBEURGHT",
+"firstName": "Thierry",
+"address": "rue des Digues, 9B/06",
+"town": "7190 Ecaussinnes",
+"phoneNumber": "067/220388"
+},
+{
+"personId": 3309,
+"memberNumber": 197,
+"name": "BEISSEL",
+"firstName": "BÃ©atrice",
+"address": "0",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 3467,
+"memberNumber": 245,
+"name": "VERSET",
+"firstName": "Philippe",
+"address": "rue Robert Delange, 64",
+"town": "7812 Villers St Amand",
+"phoneNumber": null
+},
+{
+"personId": 3583,
+"memberNumber": 225,
+"name": "DEMANET",
+"firstName": "Mathieu",
+"address": "Rue Fanuelz, 115",
+"town": "7100 La LouviÃ¨re",
+"phoneNumber": null
+},
+{
+"personId": 3644,
+"memberNumber": 210,
+"name": "DEVERSENNE",
+"firstName": "Wesley",
+"address": "rue de ChiÃ¨vres, 409",
+"town": "7332 Neufmaison",
+"phoneNumber": null
+},
+{
+"personId": 3665,
+"memberNumber": 322,
+"name": "DEHASPE",
+"firstName": "Jean-Pierre",
+"address": "rue Camille Duray, 12 Bte B010",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 3706,
+"memberNumber": 207,
+"name": "DURIEU",
+"firstName": "David",
+"address": "rue de Flandre, 30\t\t\t\t\t",
+"town": "7062 NAAST",
+"phoneNumber": null
+},
+{
+"personId": 3723,
+"memberNumber": 201,
+"name": "EUCHAMPS",
+"firstName": "Pauline",
+"address": "0",
+"town": "6230 Viesville",
+"phoneNumber": null
+},
+{
+"personId": 3724,
+"memberNumber": 202,
+"name": "RENSON",
+"firstName": "Sabrina",
+"address": "Rue de Luttre, 77",
+"town": "6181 Gouy les PiÃ©tons",
+"phoneNumber": null
+},
+{
+"personId": 3783,
+"memberNumber": 253,
+"name": "RIGA",
+"firstName": "Romane",
+"address": "0",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 3883,
+"memberNumber": 206,
+"name": "DE CLERCQ",
+"firstName": "Bernadette",
+"address": "Place de TriviÃ¨res, 20",
+"town": "7100 TriviÃ¨res",
+"phoneNumber": null
+},
+{
+"personId": 3927,
+"memberNumber": 208,
+"name": "FELIX",
+"firstName": "Laurence",
+"address": "Place CurÃ© Borremans, 14",
+"town": "7861 PAPIGNIES",
+"phoneNumber": null
+},
+{
+"personId": 3928,
+"memberNumber": 209,
+"name": "MOULIGNEAU",
+"firstName": "Alain",
+"address": "Place curÃ© Borremans,14 ",
+"town": "7861 PAPIGNIES",
+"phoneNumber": null
+},
+{
+"personId": 4163,
+"memberNumber": 329,
+"name": "BALAND",
+"firstName": "AnaÃ¯s",
+"address": "rÃ©sidence Christina Lodges, 24",
+"town": "7030 St-Symphorien",
+"phoneNumber": null
+},
+{
+"personId": 4311,
+"memberNumber": 315,
+"name": "DURIEU",
+"firstName": "CÃ©dric",
+"address": "rue Haute Folie,5",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 4316,
+"memberNumber": 212,
+"name": "ROMAN ",
+"firstName": "Paul",
+"address": "groteweg, 147",
+"town": "9500 Geraardsbergen",
+"phoneNumber": null
+},
+{
+"personId": 4363,
+"memberNumber": 213,
+"name": "GODISSART",
+"firstName": "RomÃ©o",
+"address": "0",
+"town": "7110 null",
+"phoneNumber": null
+},
+{
+"personId": 4443,
+"memberNumber": 214,
+"name": "CABO",
+"firstName": "Jean-Pierre",
+"address": "Rue de Patriotes, 15",
+"town": "7860 Lessines",
+"phoneNumber": null
+},
+{
+"personId": 4587,
+"memberNumber": 334,
+"name": "DELHALLE ",
+"firstName": "StÃ©phane",
+"address": "rue de Bruxelles, 77",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 4623,
+"memberNumber": 220,
+"name": "FONTIGNIES",
+"firstName": "Christophe",
+"address": "0",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 4664,
+"memberNumber": 232,
+"name": "LEGAY",
+"firstName": "Lindsay",
+"address": "ruelle des cinq bonniers, 1\nterrain de football",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 4665,
+"memberNumber": 345,
+"name": "GODEAU",
+"firstName": "Christophe",
+"address": "rue des Braicheux, 2/B201",
+"town": "7110 Maurage",
+"phoneNumber": null
+},
+{
+"personId": 4669,
+"memberNumber": 247,
+"name": "HERMANT",
+"firstName": "Jean-Pierre",
+"address": "Rue de Bray, 29",
+"town": "7120 Estinnes au val",
+"phoneNumber": null
+},
+{
+"personId": 4670,
+"memberNumber": 248,
+"name": "HERMANT",
+"firstName": "Hugo",
+"address": "rue de Bray, 29",
+"town": "7120 Estinnes au Val",
+"phoneNumber": null
+},
+{
+"personId": 4672,
+"memberNumber": 331,
+"name": "DUBUISSON",
+"firstName": "John",
+"address": "rue des Postes, 126",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 4752,
+"memberNumber": 216,
+"name": "VAN NUETEN ",
+"firstName": "CÃ©dric",
+"address": "rue des Bons Conseils, 54",
+"town": "7181 Arquennes",
+"phoneNumber": null
+},
+{
+"personId": 4783,
+"memberNumber": 226,
+"name": "DIZIER",
+"firstName": "Fabrice",
+"address": "Rue Nouvelle Route, 22",
+"town": "4550 Nandrin",
+"phoneNumber": null
+},
+{
+"personId": 4809,
+"memberNumber": 228,
+"name": "VANDEN EYNDEN",
+"firstName": "Catherine",
+"address": null,
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 4864,
+"memberNumber": 217,
+"name": "COLLIGNON",
+"firstName": "Nathalie",
+"address": "0",
+"town": "7070 Mignault",
+"phoneNumber": null
+},
+{
+"personId": 4923,
+"memberNumber": 218,
+"name": "COUTURIAUX",
+"firstName": "Joel",
+"address": "hameau tour qui brouille, 2",
+"town": "7181  Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 4924,
+"memberNumber": 219,
+"name": "HECQ",
+"firstName": "StÃ©phanie",
+"address": "0",
+"town": "7181 Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 4944,
+"memberNumber": 221,
+"name": "VRAY",
+"firstName": "Nathalie",
+"address": "Place de Naast, 5",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 4948,
+"memberNumber": 222,
+"name": "VANDERSTRAETEN",
+"firstName": "Micheline",
+"address": "rue Hubert Debauche, 13",
+"town": "6060 Gilly",
+"phoneNumber": null
+},
+{
+"personId": 5023,
+"memberNumber": 223,
+"name": "CAPPUYNS",
+"firstName": "Didier",
+"address": "Boulevard de l'Europe, 19/7",
+"town": "1420 Braine-L'Alleud",
+"phoneNumber": null
+},
+{
+"personId": 5024,
+"memberNumber": 224,
+"name": "CAPPUYNS",
+"firstName": "Quentin",
+"address": "0",
+"town": "null null",
+"phoneNumber": null
+},
+{
+"personId": 5064,
+"memberNumber": 233,
+"name": "LEGAY",
+"firstName": "Loic",
+"address": "rue Eloy DÃ©sirÃ©e Marbais, 23",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 5083,
+"memberNumber": 227,
+"name": "CONRARDY",
+"firstName": "Philippe",
+"address": "Borsu, 2",
+"town": "4560 Bois-et-Borsu",
+"phoneNumber": null
+},
+{
+"personId": 5103,
+"memberNumber": 229,
+"name": "SOMERS",
+"firstName": "Christophe",
+"address": "Rue du Glatimont, 46",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 5143,
+"memberNumber": 230,
+"name": "CANON",
+"firstName": "Jean-Yves",
+"address": "rue du Goutteux, 5",
+"town": "7090 HennuyÃ¨res",
+"phoneNumber": null
+},
+{
+"personId": 5144,
+"memberNumber": 231,
+"name": "DEMOL",
+"firstName": "Isabelle",
+"address": "0",
+"town": "7090 HennuyÃ¨res",
+"phoneNumber": null
+},
+{
+"personId": 5163,
+"memberNumber": 234,
+"name": "LAMOUREUX",
+"firstName": "AgnÃ¨s",
+"address": "0",
+"town": "1430 Quenast",
+"phoneNumber": null
+},
+{
+"personId": 5164,
+"memberNumber": 235,
+"name": "DECOOMAN",
+"firstName": "FrÃ©dÃ©ric",
+"address": "rue du Chenois, 23",
+"town": "7090 HennuyÃ¨res",
+"phoneNumber": null
+},
+{
+"personId": 5165,
+"memberNumber": 236,
+"name": "DECOOMAN",
+"firstName": "Julien",
+"address": "rue du Chenois, 23",
+"town": "7090 HennuyÃ¨res",
+"phoneNumber": null
+},
+{
+"personId": 5203,
+"memberNumber": 238,
+"name": "ROUBAIX",
+"firstName": "Dominique",
+"address": "Quai des Usines, 23",
+"town": "7800 Ath",
+"phoneNumber": null
+},
+{
+"personId": 5204,
+"memberNumber": 239,
+"name": "AVICE",
+"firstName": "Renaud",
+"address": "rue de la QuiÃ©tude, 6",
+"town": "7160 Chapelle-lez-herlaimont",
+"phoneNumber": null
+},
+{
+"personId": 5205,
+"memberNumber": 240,
+"name": "GEERAERTS",
+"firstName": "Olivier",
+"address": "rue Ste Anne, 4",
+"town": "6238 Ittre",
+"phoneNumber": null
+},
+{
+"personId": 5206,
+"memberNumber": 241,
+"name": "DAHY",
+"firstName": "Pascal",
+"address": "rue du Calvaire, 18",
+"town": "6181  Gouy-lez-PiÃ©ton",
+"phoneNumber": null
+},
+{
+"personId": 5207,
+"memberNumber": 242,
+"name": "RINCHON",
+"firstName": "CÃ©dric",
+"address": "rue Rigault, 2/A",
+"town": "7800 Ath",
+"phoneNumber": null
+},
+{
+"personId": 5223,
+"memberNumber": 243,
+"name": "SERONT",
+"firstName": "Tony",
+"address": "Rue ValÃ¨re Mercier, 18",
+"town": "7080 Eugies",
+"phoneNumber": null
+},
+{
+"personId": 5245,
+"memberNumber": 246,
+"name": "VERSET",
+"firstName": "Florent",
+"address": "0",
+"town": "7812 Viller St Amand",
+"phoneNumber": null
+},
+{
+"personId": 5263,
+"memberNumber": 249,
+"name": "ARRIGO",
+"firstName": "Gian-Claudio",
+"address": "rue de la Poterie, 49",
+"town": "7100 La LouviÃ¨re",
+"phoneNumber": null
+},
+{
+"personId": 5283,
+"memberNumber": 250,
+"name": "COTON",
+"firstName": "Eddy",
+"address": "chaussÃ©e Pont du Sart, 30",
+"town": "7110 Houdeng-Aimeries",
+"phoneNumber": null
+},
+{
+"personId": 5303,
+"memberNumber": 251,
+"name": "WALEM",
+"firstName": "Yvon",
+"address": "rue des Braicheux, 161",
+"town": "7110 Maurage",
+"phoneNumber": null
+},
+{
+"personId": 5304,
+"memberNumber": 252,
+"name": "WALEM",
+"firstName": "Florian",
+"address": "rue des Braicheux,161\t",
+"town": "7110 Maurage",
+"phoneNumber": null
+},
+{
+"personId": 5406,
+"memberNumber": 292,
+"name": "DELTENRE",
+"firstName": "Thibaut",
+"address": "0",
+"town": "7110 StÃ©py-Bracquegnies",
+"phoneNumber": null
+},
+{
+"personId": 5569,
+"memberNumber": 340,
+"name": "SERONT",
+"firstName": "JÃ©rÃ©my",
+"address": null,
+"town": "null null",
+"phoneNumber": null
+},
+{
+"personId": 5663,
+"memberNumber": 256,
+"name": "DUMONT",
+"firstName": "Williame",
+"address": "rue de Ghlin, 32",
+"town": "7050 Jurbise",
+"phoneNumber": null
+},
+{
+"personId": 5743,
+"memberNumber": 291,
+"name": "DELTENRE",
+"firstName": "Emeric",
+"address": "rue sous le bois, 177",
+"town": "7110 StrÃ©py-Bracquegnies",
+"phoneNumber": null
+},
+{
+"personId": 5784,
+"memberNumber": 296,
+"name": "BOURGUEILLE",
+"firstName": "Adeline",
+"address": "ChaussÃ©e Brunehault, 18",
+"town": "7812 Mainbault",
+"phoneNumber": null
+},
+{
+"personId": 5786,
+"memberNumber": 295,
+"name": "DELAVALEE",
+"firstName": "Lysiane",
+"address": "0",
+"town": "null null",
+"phoneNumber": null
+},
+{
+"personId": 5803,
+"memberNumber": 259,
+"name": "DELABIE",
+"firstName": "Vanessa",
+"address": "chaussÃ©e de Mons, 124",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 5804,
+"memberNumber": 260,
+"name": "FAYT",
+"firstName": "KÃ©vin",
+"address": "chaussÃ©e de Mons, 124",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 5823,
+"memberNumber": 262,
+"name": "KNOCKAERT",
+"firstName": "Luc",
+"address": "rue Joseph Wauters, 18",
+"town": "7100 Bracquegnies",
+"phoneNumber": null
+},
+{
+"personId": 5824,
+"memberNumber": 263,
+"name": "KNOCKAERT",
+"firstName": "Yohan",
+"address": "chaussÃ©e de Mons, 294",
+"town": "7100 Haine st Pierre",
+"phoneNumber": null
+},
+{
+"personId": 5826,
+"memberNumber": 264,
+"name": "NATALINO",
+"firstName": "Antonio",
+"address": "citÃ© du Moustier,42",
+"town": "7130 Bray",
+"phoneNumber": null
+},
+{
+"personId": 5827,
+"memberNumber": 265,
+"name": "LIENAUX",
+"firstName": "Astrid",
+"address": "rue notre dame de Cambron, 4",
+"town": "7120 Estinnes",
+"phoneNumber": null
+},
+{
+"personId": 5828,
+"memberNumber": 266,
+"name": "DUREZ",
+"firstName": "JÃ©rÃ´me",
+"address": "rue Neuve, 4",
+"town": "7130 Bray",
+"phoneNumber": null
+},
+{
+"personId": 5843,
+"memberNumber": 268,
+"name": "DEMANDE ",
+"firstName": "Patrick",
+"address": "rue haute Folie, 143",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 5863,
+"memberNumber": 269,
+"name": "ROUSSEAU",
+"firstName": "Didier",
+"address": "Avenue Gaston Baudoux, 36",
+"town": "7181 Feluy",
+"phoneNumber": null
+},
+{
+"personId": 5883,
+"memberNumber": 271,
+"name": "PITRONS",
+"firstName": "Dany",
+"address": "avenue de la Motte Baraffe, 20/3",
+"town": "7180 Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 5903,
+"memberNumber": 272,
+"name": "BEQUET",
+"firstName": "Steven",
+"address": "rue du vieux Sourdiau,33",
+"town": "7130 Binche",
+"phoneNumber": null
+},
+{
+"personId": 5943,
+"memberNumber": 273,
+"name": "HUYGHE",
+"firstName": "Luc",
+"address": "rue Henri Neuman, 71",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": "0477/982011"
+},
+{
+"personId": 5945,
+"memberNumber": 275,
+"name": "VAN LIERDE",
+"firstName": "Wesley",
+"address": "rue de ChÃ¨vremont, 44",
+"town": "7181 Arquennes",
+"phoneNumber": null
+},
+{
+"personId": 5946,
+"memberNumber": 276,
+"name": "VISANI",
+"firstName": "Nicolas",
+"address": "rue des Fontenelles, 7",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 5963,
+"memberNumber": 277,
+"name": "BUZON",
+"firstName": "Pierre",
+"address": "Place de l'ancienne Bergerie, 6/3002",
+"town": "6230 Pont-Ã -Celles",
+"phoneNumber": null
+},
+{
+"personId": 5964,
+"memberNumber": 278,
+"name": "VAN LIERDE",
+"firstName": "Didier",
+"address": "Hameau Beaufort, 1",
+"town": "7180 Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 5965,
+"memberNumber": 279,
+"name": "DE CLERCQ",
+"firstName": "Bruno",
+"address": "rue de Maffle,2",
+"town": "7180 Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 5966,
+"memberNumber": 280,
+"name": "DE CLERCQ",
+"firstName": "RÃ©my",
+"address": "rue de Maffle, 2",
+"town": "7180 Maffle",
+"phoneNumber": null
+},
+{
+"personId": 5967,
+"memberNumber": 281,
+"name": "ANCIAUX",
+"firstName": "BÃ©atrice",
+"address": "0",
+"town": "6230 Pont-Ã -Celles",
+"phoneNumber": null
+},
+{
+"personId": 5968,
+"memberNumber": 282,
+"name": "BOTTEMANNE",
+"firstName": "Bernard",
+"address": "rue du Planty, 8",
+"town": "7180 Seneffe",
+"phoneNumber": "064/540817"
+},
+{
+"personId": 5969,
+"memberNumber": 283,
+"name": "NEGRO",
+"firstName": "Biaggio",
+"address": "rue des Combattants, 12",
+"town": "7180 Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 6003,
+"memberNumber": 284,
+"name": "SCHWIND",
+"firstName": "Jean-Luc",
+"address": "avenue Paul Pastur, 67/1",
+"town": "6032 Mont sur marchienne",
+"phoneNumber": null
+},
+{
+"personId": 6004,
+"memberNumber": 285,
+"name": "ENGELS",
+"firstName": "SÃ©bastien",
+"address": "rue Hubert Debauche, 11",
+"town": "6060 Gilly",
+"phoneNumber": null
+},
+{
+"personId": 6005,
+"memberNumber": 286,
+"name": "OTTE",
+"firstName": "Bernard",
+"address": "Try des Marais 7Ã¨me avenue,738",
+"town": "5651 Tarcienne",
+"phoneNumber": null
+},
+{
+"personId": 6006,
+"memberNumber": 287,
+"name": "MALBURNY",
+"firstName": "Dominique",
+"address": "0",
+"town": "5651 Tarcienne",
+"phoneNumber": null
+},
+{
+"personId": 6008,
+"memberNumber": 288,
+"name": "DUREZ",
+"firstName": "Jimmy",
+"address": "rue Carlo Mahy, 45",
+"town": "7130 Binche",
+"phoneNumber": null
+},
+{
+"personId": 6009,
+"memberNumber": 289,
+"name": "LIEGEOIS",
+"firstName": "FrÃ©dÃ©ric",
+"address": "Place de la RÃ©sistance, 16",
+"town": "7940 Brugelette",
+"phoneNumber": null
+},
+{
+"personId": 6010,
+"memberNumber": 290,
+"name": "ARRIGO",
+"firstName": "David",
+"address": "place de Waressaix, 18",
+"town": "7120 Haulchin",
+"phoneNumber": null
+},
+{
+"personId": 6023,
+"memberNumber": 293,
+"name": "SOETENS",
+"firstName": "Pascal",
+"address": "rue de la Procession, 85",
+"town": "7830 Bassily",
+"phoneNumber": null
+},
+{
+"personId": 6024,
+"memberNumber": 294,
+"name": "FOSSEPREZ",
+"firstName": "Catherine",
+"address": "rue de la Procession, 85",
+"town": "7830 Bassily",
+"phoneNumber": null
+},
+{
+"personId": 6025,
+"memberNumber": 297,
+"name": "LELEUX",
+"firstName": "Romain",
+"address": "rue de la Science, 3",
+"town": "7120 Peissant",
+"phoneNumber": null
+},
+{
+"personId": 6043,
+"memberNumber": 298,
+"name": "COTON",
+"firstName": "KÃ©vin",
+"address": "rue E. Aneele, 109/7",
+"town": "7100 La LouviÃ¨re",
+"phoneNumber": null
+},
+{
+"personId": 6044,
+"memberNumber": 299,
+"name": "CROQUET",
+"firstName": "CÃ©dric",
+"address": "rue Catherine, 3",
+"town": "7062 Naast",
+"phoneNumber": "067/879980"
+},
+{
+"personId": 6063,
+"memberNumber": 300,
+"name": "LIENAUX",
+"firstName": "CÃ©dric",
+"address": "rue de l'Espinette, 256",
+"town": "7390 Quaregnon",
+"phoneNumber": null
+},
+{
+"personId": 6064,
+"memberNumber": 301,
+"name": "GODART",
+"firstName": "FrÃ©dÃ©ric",
+"address": "rue notre dame de Cambron, 20",
+"town": "7120 Estinnes-au-Mont",
+"phoneNumber": null
+},
+{
+"personId": 6065,
+"memberNumber": 302,
+"name": "BONGIOVANNI",
+"firstName": "Jordan",
+"address": "rue st Eloi, 167",
+"town": "7140 Morlanwelz",
+"phoneNumber": null
+},
+{
+"personId": 6083,
+"memberNumber": 303,
+"name": "ZEBIER",
+"firstName": "Jean-Marc",
+"address": "rue Modeste Cornil, 55",
+"town": "6041 Gosselies",
+"phoneNumber": null
+},
+{
+"personId": 6084,
+"memberNumber": 304,
+"name": "PERSOENS",
+"firstName": "Carine",
+"address": "rue des DÃ©mineurs, 2/3",
+"town": "6041 Gosselies",
+"phoneNumber": null
+},
+{
+"personId": 6085,
+"memberNumber": 305,
+"name": "CASAERT",
+"firstName": "Michael",
+"address": "rue des DÃ©mineurs, 2/3",
+"town": "6041 Gosselies",
+"phoneNumber": null
+},
+{
+"personId": 6086,
+"memberNumber": 306,
+"name": "ZEBIER",
+"firstName": "RÃ©gis",
+"address": "rue de la Brise, 9",
+"town": "1400 Nivelles",
+"phoneNumber": null
+},
+{
+"personId": 6087,
+"memberNumber": 307,
+"name": "STRUYS",
+"firstName": "Johanna",
+"address": "rue des DÃ©portÃ©s, 19",
+"town": "6041 Gosselies",
+"phoneNumber": null
+},
+{
+"personId": 6088,
+"memberNumber": 308,
+"name": "LECHIEN",
+"firstName": "Daniel",
+"address": "rue Jean Poty, 44",
+"town": "6238 Luttre",
+"phoneNumber": null
+},
+{
+"personId": 6103,
+"memberNumber": 309,
+"name": "CLINCKART",
+"firstName": "Bernard",
+"address": "rue Warissaet,34 ",
+"town": "7830 Silly",
+"phoneNumber": null
+},
+{
+"personId": 6104,
+"memberNumber": 310,
+"name": "CLINCKART",
+"firstName": "StÃ©phane",
+"address": "rue du sept juillet, 52",
+"town": "7804 Rebaix",
+"phoneNumber": null
+},
+{
+"personId": 6105,
+"memberNumber": 311,
+"name": "CLINCKART",
+"firstName": "Jule",
+"address": "0",
+"town": "7804 Rebaix",
+"phoneNumber": null
+},
+{
+"personId": 6123,
+"memberNumber": 312,
+"name": "LEONARD",
+"firstName": "Maurice",
+"address": "rue de la Chapelette, 26",
+"town": "7130 Bray",
+"phoneNumber": null
+},
+{
+"personId": 6124,
+"memberNumber": 313,
+"name": "CHAVATTE",
+"firstName": "Josette",
+"address": "rue de la Chapelette, 24\t\t",
+"town": "7130 Bray",
+"phoneNumber": null
+},
+{
+"personId": 6125,
+"memberNumber": 314,
+"name": "CANNELLA",
+"firstName": "LÃ©o",
+"address": "rue de la Chapelette, 28",
+"town": "7130 Bray",
+"phoneNumber": null
+},
+{
+"personId": 6224,
+"memberNumber": 335,
+"name": "IANNI",
+"firstName": "Concetta",
+"address": null,
+"town": "7140 Morlanwelz",
+"phoneNumber": null
+},
+{
+"personId": 6283,
+"memberNumber": 316,
+"name": "BRANDS",
+"firstName": "FrÃ©dÃ©ric",
+"address": "rue LÃ©on Blum, 40",
+"town": "7110 Houdeng-Goegnies",
+"phoneNumber": null
+},
+{
+"personId": 6427,
+"memberNumber": 317,
+"name": "STASSIN",
+"firstName": "Philippe",
+"address": "rue du Glatimont, 50",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 6446,
+"memberNumber": 321,
+"name": "DEMONCEAU",
+"firstName": "Caroline",
+"address": "rue de l'Avedelle, 54",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 6463,
+"memberNumber": 318,
+"name": "THIEULLET",
+"firstName": "KÃ©vin",
+"address": "avenue des Tulipes, 79",
+"town": "7180 Seneffe",
+"phoneNumber": null
+},
+{
+"personId": 6464,
+"memberNumber": 319,
+"name": "MAHY",
+"firstName": "Christian",
+"address": null,
+"town": "7181 Arquennes",
+"phoneNumber": null
+},
+{
+"personId": 6465,
+"memberNumber": 320,
+"name": "RAUX",
+"firstName": "Freddy",
+"address": "chemin Casteau, 64",
+"town": "7063 Neufvilles",
+"phoneNumber": "065/723506"
+},
+{
+"personId": 6506,
+"memberNumber": 324,
+"name": "VANUSCORPS",
+"firstName": "SÃ©bastien",
+"address": "rue Emile Vandervelde, 108",
+"town": "7100 La LouviÃ¨re",
+"phoneNumber": null
+},
+{
+"personId": 6507,
+"memberNumber": 325,
+"name": "KNIAZEVA",
+"firstName": "Julia",
+"address": "rue Emile Vandervelde, 108",
+"town": "7100  La LouviÃ¨re",
+"phoneNumber": null
+},
+{
+"personId": 6623,
+"memberNumber": 326,
+"name": "BAUWENS",
+"firstName": "Dimitri",
+"address": "rue Infante Isabelle, 55\t\t\t\t",
+"town": "7110 Houdeng-Aimeries",
+"phoneNumber": "064/608090"
+},
+{
+"personId": 6643,
+"memberNumber": 328,
+"name": "SIMPLICIO",
+"firstName": "David",
+"address": "rÃ©sidence Christina Lodges, 24",
+"town": "7030 St-Symphorien",
+"phoneNumber": null
+},
+{
+"personId": 6644,
+"memberNumber": 330,
+"name": "BALAND",
+"firstName": "Julie",
+"address": "rue de bon conseil, 67",
+"town": "7181 Arquennes",
+"phoneNumber": null
+},
+{
+"personId": 6645,
+"memberNumber": 332,
+"name": "DUBUISSON",
+"firstName": "Jimmy",
+"address": "rue d'Ecaussinnes, 118B1",
+"town": "7090 Braine-le-Comte",
+"phoneNumber": null
+},
+{
+"personId": 6663,
+"memberNumber": 336,
+"name": "DANNAUX",
+"firstName": "CÃ©line",
+"address": "rue de sglatignies, 24",
+"town": "7332 Neufmaison",
+"phoneNumber": null
+},
+{
+"personId": 6664,
+"memberNumber": 337,
+"name": "BURELLE",
+"firstName": "Alain",
+"address": "rue de sglatignies, 24\t\t\t\t\t\t",
+"town": "7332 Neufmaison",
+"phoneNumber": null
+},
+{
+"personId": 6665,
+"memberNumber": 338,
+"name": "DE SMECHT",
+"firstName": "Joeffrey",
+"address": "rue Saint-Paul, 44",
+"town": "7130 Binche",
+"phoneNumber": null
+},
+{
+"personId": 6666,
+"memberNumber": 339,
+"name": "COLLIGNON",
+"firstName": "BeverlÃ©e",
+"address": "rue Saint-Paul, 44",
+"town": "7130 Binche",
+"phoneNumber": "064/602077"
+},
+{
+"personId": 6683,
+"memberNumber": 342,
+"name": "DUPUIS",
+"firstName": "Nicolas",
+"address": "sente de la CressonniÃ¨re, 4",
+"town": "6500 BarbenÃ§on",
+"phoneNumber": null
+},
+{
+"personId": 6684,
+"memberNumber": 344,
+"name": "GUERRIAT",
+"firstName": "Mathilde",
+"address": "rue des Braicheux, 2/B201",
+"town": "7110 Maurage",
+"phoneNumber": null
+},
+{
+"personId": 6703,
+"memberNumber": 346,
+"name": "VANDEVILLE",
+"firstName": "Eddy",
+"address": "rue du Beguinage, 28",
+"town": "7134 Leval-Trahegnies",
+"phoneNumber": null
+},
+{
+"personId": 6704,
+"memberNumber": 347,
+"name": "MIRASOLA",
+"firstName": "ValÃ©ria",
+"address": "rue du Beguinage, 28",
+"town": "7134 Leval-Trahegnies",
+"phoneNumber": null
+},
+{
+"personId": 6723,
+"memberNumber": 349,
+"name": "NICAISE",
+"firstName": "FrÃ©dÃ©ric",
+"address": "rue du Glatimont, 13",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 6724,
+"memberNumber": 350,
+"name": "DRUART",
+"firstName": "Dominique",
+"address": "rue du Glatimont, 13",
+"town": "7062 Naast",
+"phoneNumber": null
+},
+{
+"personId": 6725,
+"memberNumber": 351,
+"name": "DE LUCA",
+"firstName": "Rachel",
+"address": "rue du Veneur, 30",
+"town": "7830 Gratty",
+"phoneNumber": null
+},
+{
+"personId": 6726,
+"memberNumber": 352,
+"name": "DE LUCA",
+"firstName": "Emmanuelle",
+"address": "rue du Veneur, 30",
+"town": "7830 Gratty",
+"phoneNumber": null
+},
+{
+"personId": 6743,
+"memberNumber": 353,
+"name": "HAUTENAUVE",
+"firstName": "Philippe",
+"address": "chemin du Tour, 63",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 6744,
+"memberNumber": 354,
+"name": "HAUTENAUVE",
+"firstName": "Corentin",
+"address": "chemin du Tour, 63",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 6745,
+"memberNumber": 355,
+"name": "NICAISE",
+"firstName": "Marc",
+"address": "rue de l'HÃ´tel,6",
+"town": "7090 Steenkerque",
+"phoneNumber": null
+},
+{
+"personId": 6746,
+"memberNumber": 356,
+"name": "CUVELIER",
+"firstName": "CÃ©cile",
+"address": "rue de l'HÃ´et, 6",
+"town": "7090 Steenkerque",
+"phoneNumber": null
+},
+{
+"personId": 6804,
+"memberNumber": 357,
+"name": "WUYTDENHOVEN",
+"firstName": "Guy",
+"address": "chaussÃ©e de Lessines, 101",
+"town": "7060 Soignies",
+"phoneNumber": null
+},
+{
+"personId": 6824,
+"memberNumber": 359,
+"name": "VANDERPUTTEN",
+"firstName": "Elea",
+"address": null,
+"town": "null null",
+"phoneNumber": null
+},
+{
+"personId": 6827,
+"memberNumber": 360,
+"name": "DERYCKE",
+"firstName": "Laurence",
+"address": "boulevard de la Senette, 2/A",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 6828,
+"memberNumber": 361,
+"name": "STAF",
+"firstName": "Racel",
+"address": "boulevard de la Senette, 2/A",
+"town": "7190 Ecaussinnes",
+"phoneNumber": null
+},
+{
+"personId": 1004755,
+"memberNumber": 0,
+"name": "TEST NAME",
+"firstName": "TEST FIRST NAME",
+"address": null,
+"town": "null null",
+"phoneNumber": null
+}
+]

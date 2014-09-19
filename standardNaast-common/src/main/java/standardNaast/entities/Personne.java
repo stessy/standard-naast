@@ -134,6 +134,11 @@ public class Personne implements Serializable, Comparable<Personne> {
 		return this.address;
 	}
 
+	public String getFullAddress() {
+		return String.format("{0} {1} {2}", this.getAddress(),
+				this.getPostalCode(), this.getCity());
+	}
+
 	public void setAddress(final String address) {
 		this.address = address;
 	}
@@ -245,8 +250,8 @@ public class Personne implements Serializable, Comparable<Personne> {
 
 	@Override
 	public int compareTo(final Personne otherPerson) {
-		long memberNumber1 = this.getMemberNumber();
-		long memberNumber2 = otherPerson.getMemberNumber();
+		final long memberNumber1 = this.getMemberNumber();
+		final long memberNumber2 = otherPerson.getMemberNumber();
 		return (memberNumber1 < memberNumber2 ? -1
 				: (memberNumber1 == memberNumber2 ? 0 : 1));
 	}

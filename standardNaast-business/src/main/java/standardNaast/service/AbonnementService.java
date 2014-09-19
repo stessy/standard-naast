@@ -4,6 +4,9 @@
 package standardNaast.service;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -12,11 +15,14 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import standardNaast.constants.DateFormat;
 import standardNaast.dao.AbonnementDAO;
 import standardNaast.dao.SeasonDAO;
 import standardNaast.entities.Abonnement;
+import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
 import standardNaast.model.AbonnementsModel;
+import standardNaast.model.PurchasableAbonnements;
 import standardNaast.types.AbonnementStatus;
 
 /**
@@ -115,5 +121,15 @@ public class AbonnementService implements Serializable {
 
 		return abonnementsModel;
 
+	}
+
+	public void printAbonnements(final List<Abonnement> abonnementsToPurchase) {
+		final List<PurchasableAbonnements> purchasableAbonnements = new ArrayList<>();
+		for (final Abonnement abonnement : abonnementsToPurchase) {
+			final Personne person = abonnement.getPersonne();
+			final Date birthdate = person.getBirthdate();
+			final String formattedBirthdate = new SimpleDateFormat(DateFormat.DDSMMSYYYY).format(birthdate);
+			final PurchasableAbonnements purchasableAbonnement = new PurchasableAbonnements(person.getName(), person.getFirstname(), birthdate, person.getFullAddress(), person.getIdentityCardNumber(), abonnement.getBlocId().getBlocValue(), abonnement.getRang(), abonnement.getPlace(), amount)
+		}
 	}
 }

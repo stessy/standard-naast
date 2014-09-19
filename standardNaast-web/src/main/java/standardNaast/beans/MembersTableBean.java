@@ -51,7 +51,7 @@ public class MembersTableBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		System.out.println("Initializing MembersTableBean");
-		List<Personne> findAllPerson = this.personneService
+		final List<Personne> findAllPerson = this.personneService
 				.findAllPerson(false);
 		Collections.sort(findAllPerson);
 		this.members = findAllPerson;
@@ -66,7 +66,7 @@ public class MembersTableBean implements Serializable {
 		return this.filteredMembers;
 	}
 
-	public void setFilteredMembers(List<Personne> filteredMembers) {
+	public void setFilteredMembers(final List<Personne> filteredMembers) {
 		this.filteredMembers = filteredMembers;
 	}
 
@@ -74,22 +74,24 @@ public class MembersTableBean implements Serializable {
 		return this.selectedMember;
 	}
 
-	public void setSelectedMember(Personne selectedMember) {
+	public void setSelectedMember(final Personne selectedMember) {
 		this.selectedMember = selectedMember;
 	}
 
-	public void onRowSelect(SelectEvent event) {
+	public void onRowSelect(final SelectEvent event) {
 		this.memberForm.setPersonne(this.getSelectedMember());
-		Personne person = this.personneService.getPerson(this
+		final Personne person = this.personneService.getPerson(this
 				.getSelectedMember().getPersonneId());
-		List<Abonnement> abonnementList = person.getAbonnementList();
-		List<Benevolat> benevolatList = person.getBenevolatList();
-		List<PersonneCotisation> personnesCotisations = person
+		final List<Abonnement> abonnementList = person.getAbonnementList();
+		final List<Benevolat> benevolatList = person.getBenevolatList();
+		final List<PersonneCotisation> personnesCotisations = person
 				.getPersonnesCotisations();
 		this.memberAbonnementBean.setAbonnements(abonnementList);
 		this.memberCotisationsBean.setCotisations(personnesCotisations);
 		this.memberBenevolatBean.setBenevolats(benevolatList);
 		this.memberTravelsBean.setSelectedMember(this.getSelectedMember());
+		this.memberTravelsBean.setSelectedSeason("");
+		this.memberTravelsBean.setSeasonTravels();
 	}
 
 }

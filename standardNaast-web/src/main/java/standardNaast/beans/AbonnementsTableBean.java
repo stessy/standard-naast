@@ -95,6 +95,10 @@ public class AbonnementsTableBean implements Serializable {
 		this.setAbonnementsSeason();
 	}
 
+	public void printAbonnements() {
+		this.abonnementService.printAbonnements(this.selectedNewAbonnements);
+	}
+
 	// Getters and setters
 
 	public List<Season> getSeasons() {

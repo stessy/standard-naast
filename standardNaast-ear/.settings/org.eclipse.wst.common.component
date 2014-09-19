@@ -32,6 +32,9 @@
         <dependent-module archiveName="mail-1.4.4.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/javax/mail/mail/1.4.4/mail-1.4.4.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="activation-1.1.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/javax/activation/activation/1.1/activation-1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="standardNaast-commons-1.0-SNAPSHOT.jar" deploy-path="/lib" handle="module:/resource/standardNaast-commons/standardNaast-commons">
             <dependency-type>uses</dependency-type>
         </dependent-module>

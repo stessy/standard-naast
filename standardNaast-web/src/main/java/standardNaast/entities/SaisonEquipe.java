@@ -52,11 +52,11 @@ public class SaisonEquipe implements Serializable {
 		this.saisonEquipeId = saisonEquipeId;
 	}
 
-	public Season getSaisonId() {
+	public Season getSeason() {
 		return this.saison;
 	}
 
-	public void setSaisonId(final Season saisonId) {
+	public void setSeason(final Season saisonId) {
 		this.saison = saisonId;
 	}
 
@@ -68,7 +68,7 @@ public class SaisonEquipe implements Serializable {
 	// this.matches = matches;
 	// }
 
-	public Team getEquipe() {
+	public Team getTeam() {
 		return this.equipe;
 	}
 

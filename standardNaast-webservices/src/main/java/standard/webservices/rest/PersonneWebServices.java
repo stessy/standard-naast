@@ -3,8 +3,8 @@ package standard.webservices.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,7 +19,7 @@ import standardNaast.service.PersonneService;
 @RequestScoped
 public class PersonneWebServices {
 
-	@Inject
+	@EJB
 	PersonneService personneService;
 
 	@GET

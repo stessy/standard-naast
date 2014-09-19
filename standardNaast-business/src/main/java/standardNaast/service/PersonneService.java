@@ -5,17 +5,12 @@ package standardNaast.service;
 
 import java.util.List;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-
 import standardNaast.entities.Personne;
 
 /**
  * @author stessy
  *
  */
-@Stateless
-@LocalBean
 public interface PersonneService {
 
 	public List<Personne> findAllPerson(final boolean allPersons);
