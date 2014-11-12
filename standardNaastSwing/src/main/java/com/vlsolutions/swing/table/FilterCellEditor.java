@@ -1,4 +1,4 @@
-/* 
+/*
  VLSolutions VLJTable : an enhanced JTable for Swing Applications
  Copyright (C) 2005 VLSolutions http://www.vlsolutions.com
 
@@ -18,7 +18,6 @@
 package com.vlsolutions.swing.table;
 
 import java.beans.PropertyChangeListener;
-import javax.swing.event.ChangeListener;
 
 /**
  * Interface implemented by JComponents that are used as editors for table
@@ -28,43 +27,47 @@ import javax.swing.event.ChangeListener;
  */
 public interface FilterCellEditor {
 
-    /**
-     * Updates the value displayed in the editor
-     */
-    public void setValue(Object value);
+	/**
+	 * Updates the value displayed in the editor
+	 */
+	public void setValue(Object value);
 
-    /**
-     * Returns the value currently edited
-     */
-    public Object getValue();
+	/**
+	 * Returns the value currently edited
+	 */
+	public Object getValue();
 
-    /**
-     * Returns the name of the property bound to a change in the filter content.
-     * <p> The VLJTable needs this information to add a PropertyChangeListener
-     * and listen to the changes (dynamically, not just on focus lost) to
-     * reflect them in the filtered data.
-     *
-     * @see #addPropertyChangeListener
-     * @see #removePropertyChangeListener
-     */
-    public String getFilterChangePropertyName();
+	/**
+	 * Returns the name of the property bound to a change in the filter content.
+	 * <p>
+	 * The VLJTable needs this information to add a PropertyChangeListener and
+	 * listen to the changes (dynamically, not just on focus lost) to reflect
+	 * them in the filtered data.
+	 *
+	 * @see #addPropertyChangeListener
+	 * @see #removePropertyChangeListener
+	 */
+	public String getFilterChangePropertyName();
 
-    /**
-     * Registers a listener to track changes of the content of the filter, must
-     * use the getFilterChangePropertyName() as the name of the property. <p>
-     * This method is already part of the JComponent signature, and there is no
-     * need to override it.
-     *
-     * @see #removePropertyChangeListener
-     * @see #getFilterChangePropertyName
-     */
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener);
+	/**
+	 * Registers a listener to track changes of the content of the filter, must
+	 * use the getFilterChangePropertyName() as the name of the property.
+	 * <p>
+	 * This method is already part of the JComponent signature, and there is no
+	 * need to override it.
+	 *
+	 * @see #removePropertyChangeListener
+	 * @see #getFilterChangePropertyName
+	 */
+	public void addPropertyChangeListener(String propertyName,
+			PropertyChangeListener listener);
 
-    /**
-     * Removes a property change listener.
-     *
-     * @see #addPropertyChangeListener
-     * @see #getFilterChangePropertyName
-     */
-    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener);
+	/**
+	 * Removes a property change listener.
+	 *
+	 * @see #addPropertyChangeListener
+	 * @see #getFilterChangePropertyName
+	 */
+	public void removePropertyChangeListener(String propertyName,
+			PropertyChangeListener listener);
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  VLSolutions VLJTable : an enhanced JTable for Swing Applications
  Copyright (C) 2005 VLSolutions http://www.vlsolutions.com
 
@@ -17,9 +17,6 @@
  */
 package com.vlsolutions.swing.table;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTextField;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 
 /**
@@ -30,29 +27,32 @@ import javax.swing.table.TableModel;
  */
 public class FilterColumnModel {
 
-    protected int columns;
-    protected FilterCellEditor[] editors;
-    protected TableModel model;
+	protected int columns;
 
-    public FilterColumnModel(TableModel model) {
-        this.model = model;
-        this.columns = model.getColumnCount();
-        installDefaultFilters();
-    }
+	protected FilterCellEditor[] editors;
 
-    private void installDefaultFilters() {
-        int cols = model.getColumnCount();
-        editors = new FilterCellEditor[cols];
-        for (int i = 0; i < cols; i++) {
-            editors[i] = new DefaultFilterCellEditor();
-        }
-    }
+	protected TableModel model;
 
-    public void setFilterCellEditor(int column, FilterCellEditor editor) {
-        editors[column] = editor;
-    }
+	public FilterColumnModel(final TableModel model) {
+		this.model = model;
+		this.columns = model.getColumnCount();
+		this.installDefaultFilters();
+	}
 
-    public FilterCellEditor getFilterCellEditor(int column) {
-        return editors[column];
-    }
+	private void installDefaultFilters() {
+		final int cols = this.model.getColumnCount();
+		this.editors = new FilterCellEditor[cols];
+		for (int i = 0; i < cols; i++) {
+			this.editors[i] = new DefaultFilterCellEditor();
+		}
+	}
+
+	public void setFilterCellEditor(final int column,
+			final FilterCellEditor editor) {
+		this.editors[column] = editor;
+	}
+
+	public FilterCellEditor getFilterCellEditor(final int column) {
+		return this.editors[column];
+	}
 }

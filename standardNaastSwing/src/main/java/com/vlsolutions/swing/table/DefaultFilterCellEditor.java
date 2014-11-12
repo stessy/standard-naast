@@ -1,4 +1,4 @@
-/* 
+/*
  VLSolutions VLJTable : an enhanced JTable for Swing Applications
  Copyright (C) 2005 VLSolutions http://www.vlsolutions.com
 
@@ -17,13 +17,9 @@
  */
 package com.vlsolutions.swing.table;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
 
 /**
  * Default implementation of a Filter cell editor : works only with String
@@ -32,41 +28,50 @@ import javax.swing.text.BadLocationException;
  *
  * @author Lilian Chamontin, VLSolutions
  */
-public class DefaultFilterCellEditor extends JTextField implements FilterCellEditor, DocumentListener {
+@SuppressWarnings("serial")
+public class DefaultFilterCellEditor extends JTextField implements
+		FilterCellEditor, DocumentListener {
 
-    public DefaultFilterCellEditor() {
-        getDocument().addDocumentListener(this);
-    }
+	public DefaultFilterCellEditor() {
+		this.getDocument().addDocumentListener(this);
+	}
 
-    public void insertUpdate(DocumentEvent e) {
-        changed(e);
-    }
+	@Override
+	public void insertUpdate(final DocumentEvent e) {
+		this.changed(e);
+	}
 
-    public void changedUpdate(DocumentEvent e) {
-        changed(e);
-    }
+	@Override
+	public void changedUpdate(final DocumentEvent e) {
+		this.changed(e);
+	}
 
-    public void removeUpdate(DocumentEvent e) {
-        changed(e);
-    }
+	@Override
+	public void removeUpdate(final DocumentEvent e) {
+		this.changed(e);
+	}
 
-    private void changed(DocumentEvent e) {
-        firePropertyChange(getFilterChangePropertyName(), null, getText());
-    }
+	private void changed(final DocumentEvent e) {
+		this.firePropertyChange(this.getFilterChangePropertyName(), null,
+				this.getText());
+	}
 
-    public Object getValue() {
-        return getText();
-    }
+	@Override
+	public Object getValue() {
+		return this.getText();
+	}
 
-    public void setValue(Object value) {
-        if (value == null) {
-            setText("");
-        } else {
-            setText(value.toString());
-        }
-    }
+	@Override
+	public void setValue(final Object value) {
+		if (value == null) {
+			this.setText("");
+		} else {
+			this.setText(value.toString());
+		}
+	}
 
-    public String getFilterChangePropertyName() {
-        return "FilterContent";
-    }
+	@Override
+	public String getFilterChangePropertyName() {
+		return "FilterContent";
+	}
 }

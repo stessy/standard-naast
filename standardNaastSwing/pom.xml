@@ -1,9 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>standardNaast</groupId>
+		<artifactId>standardNaast</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>standardNaast</groupId>
 	<artifactId>standardNaastSwing</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<repositories>
 		<repository>
 			<id>sakai-maven</id>
@@ -93,7 +96,6 @@
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
-			<version>2.4.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commonj.sdo</groupId>
@@ -109,27 +111,22 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>3.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
-			<version>1.4.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jdesktop</groupId>
@@ -144,7 +141,6 @@
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
-			<version>5.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jgoodies</groupId>
@@ -159,12 +155,10 @@
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>jdev-rt</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -176,6 +170,18 @@
 			<artifactId>swing-layout</artifactId>
 			<version>1.0.3</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>standardNaast</groupId>
+			<artifactId>standardNaast-business</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.weblaf</groupId>
+			<artifactId>weblaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se-core</artifactId>
+		</dependency>
 	</dependencies>
 </project>

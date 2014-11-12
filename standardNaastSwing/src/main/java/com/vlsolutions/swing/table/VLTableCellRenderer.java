@@ -1,4 +1,4 @@
-/* 
+/*
  VLSolutions VLJTable : an enhanced JTable for Swing Applications
  Copyright (C) 2005 VLSolutions http://www.vlsolutions.com
 
@@ -19,6 +19,7 @@ package com.vlsolutions.swing.table;
 
 import java.awt.Component;
 import java.awt.Graphics;
+
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.UIManager;
@@ -30,48 +31,55 @@ import javax.swing.table.JTableHeader;
  *
  * @author Lilian Chamontin, VLSolutions
  */
+@SuppressWarnings("serial")
 public class VLTableCellRenderer extends DefaultTableCellRenderer {
 
-    protected VLJTable table;
-    protected int col;
+	protected VLJTable table;
 
-    public VLTableCellRenderer() {
-    }
+	protected int col;
 
-    VLTableCellRenderer(VLJTable table, int col) {
-        this.col = col;
-        this.table = table;
-    }
+	public VLTableCellRenderer() {
+	}
 
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
-        if (table != null) {
-            JTableHeader header = table.getTableHeader();
-            if (header != null) {
-                setForeground(header.getForeground());
-                setBackground(header.getBackground());
-                setFont(header.getFont());
-                setHorizontalAlignment(JLabel.CENTER);
-            }
-        }
+	VLTableCellRenderer(final VLJTable table, final int col) {
+		this.col = col;
+		this.table = table;
+	}
 
-        setText((value == null) ? "" : value.toString());
-        setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-        return this;
-    }
+	@Override
+	public Component getTableCellRendererComponent(final JTable table,
+			final Object value, final boolean isSelected,
+			final boolean hasFocus, final int row, final int column) {
+		if (table != null) {
+			final JTableHeader header = table.getTableHeader();
+			if (header != null) {
+				this.setForeground(header.getForeground());
+				this.setBackground(header.getBackground());
+				this.setFont(header.getFont());
+				this.setHorizontalAlignment(JLabel.CENTER);
+			}
+		}
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+		this.setText((value == null) ? "" : value.toString());
+		this.setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+		return this;
+	}
 
-        int sort = table.getSortMode(col);
-        if (sort == FilterModel.SORT_NONE) {
-        } else {
-            g.setColor(getBackground().darker());
-            if (sort == FilterModel.SORT_ASCENDING) {
-                g.drawImage(table.getAscendingSortImage(), getWidth() - 16, getHeight() / 2 - 8, null);
-            } else {
-                g.drawImage(table.getDescendingSortImage(), getWidth() - 16, getHeight() / 2 - 8, null);
-            }
-        }
-    }
+	@Override
+	public void paintComponent(final Graphics g) {
+		super.paintComponent(g);
+
+		final int sort = this.table.getSortMode(this.col);
+		if (sort == FilterModel.SORT_NONE) {
+		} else {
+			g.setColor(this.getBackground().darker());
+			if (sort == FilterModel.SORT_ASCENDING) {
+				g.drawImage(this.table.getAscendingSortImage(),
+						this.getWidth() - 16, this.getHeight() / 2 - 8, null);
+			} else {
+				g.drawImage(this.table.getDescendingSortImage(),
+						this.getWidth() - 16, this.getHeight() / 2 - 8, null);
+			}
+		}
+	}
 }
