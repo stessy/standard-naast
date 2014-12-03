@@ -5,9 +5,9 @@
         http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="StandardNaastPeristenceUnit"
-		transaction-type="JTA">
+		transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<jta-data-source>java:jboss/datasources/StandardNaastDS</jta-data-source>
+<!-- 		<jta-data-source>java:jboss/datasources/StandardNaastDS</jta-data-source> -->
 <!-- 		<jta-data-source>jdbc/standardNaast</jta-data-source> -->
 		<class>standardNaast.entities.Abonnement</class>
 		<class>standardNaast.entities.Personne</class>
