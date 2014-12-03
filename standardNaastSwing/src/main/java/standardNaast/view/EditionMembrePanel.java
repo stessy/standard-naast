@@ -1,6 +1,6 @@
 // Decompiled by DJ v3.10.10.93 Copyright 2007 Atanas Neshkov  Date: 14/09/2008 20:45:24
 // Home Page: http://members.fortunecity.com/neshkov/dj.html  http://www.neshkov.com/dj.html - Check often for new version!
-// Decompiler options: packimports(3) 
+// Decompiler options: packimports(3)
 // Source File Name:   EditionMembrePanel.java
 package standardNaast.view;
 
@@ -17,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -197,7 +196,7 @@ public class EditionMembrePanel extends JPanel {
 
 		try {
 			this.jbInit();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -206,7 +205,7 @@ public class EditionMembrePanel extends JPanel {
 
 		try {
 			this.jbInit2(membreInfo);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -368,15 +367,15 @@ public class EditionMembrePanel extends JPanel {
 	}
 
 	private void populateComboBox(final JComboBox comboBox) {
-		GlobalQueries query = new GlobalQueries();
+		final GlobalQueries query = new GlobalQueries();
 		comboBox.addItem(StringUtils.EMPTY);
 		try {
-			List<String> saisons = query.getListeSaison();
+			final List<String> saisons = query.getListeSaison();
 			for (int i = 0; i < saisons.size(); i++) {
 				comboBox.addItem(saisons.get(i));
 			}
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -395,7 +394,7 @@ public class EditionMembrePanel extends JPanel {
 			personneValid = false;
 		}
 		if (personneValid) {
-			String dateNaissance = this.textField.getText();
+			final String dateNaissance = this.textField.getText();
 			if (!dateNaissance.equals("----------")
 					&& (DateUtils.getYearsBetween(this.dateChooser.getDate()) < 18)) {
 				this.jComboBoxEtudiant.setSelectedIndex(1);
@@ -411,14 +410,15 @@ public class EditionMembrePanel extends JPanel {
 	}
 
 	private void jButtonAjoutBenevolat_actionPerformed(final ActionEvent e) {
-		Vector data = new Vector();
+		final Vector data = new Vector();
 		data.add((new StringBuilder()).append(this.nomField.getText())
 				.append(" ").append(this.prenomField.getText()).toString());
 		data.add(new Long(this.personneID));
-		BenevolatDialog benevolatDialog = new BenevolatDialog(data,
+		final BenevolatDialog benevolatDialog = new BenevolatDialog(data,
 				this.getBundleText("ADD"), this);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frameSize = benevolatDialog.getSize();
+		final Dimension screenSize = Toolkit.getDefaultToolkit()
+				.getScreenSize();
+		final Dimension frameSize = benevolatDialog.getSize();
 		if (frameSize.height > screenSize.height) {
 			frameSize.height = screenSize.height;
 		}
@@ -437,27 +437,27 @@ public class EditionMembrePanel extends JPanel {
 					this.getBundleText("ABONNEMENT.PERSONNE.NONMEMBRE.ERREUR"),
 					"Erreur", 0);
 		} else {
-			PersonneCotisationDB cotisationDB = new PersonneCotisationDB();
+			final PersonneCotisationDB cotisationDB = new PersonneCotisationDB();
 			try {
 				cotisation = cotisationDB.getCotisation(this.personneID);
-			} catch (Exception xe) {
+			} catch (final Exception xe) {
 				xe.printStackTrace();
 			}
 			if (cotisation.isEmpty()) {
 				JOptionPane
-						.showMessageDialog(
-								this,
-								this.getBundleText("ABONNEMENT.PERSONNE.MEMBRE.COTISATION.NONPAYEE.ERREUR"),
-								this.getBundleText("ERREUR"), 0);
+				.showMessageDialog(
+						this,
+						this.getBundleText("ABONNEMENT.PERSONNE.MEMBRE.COTISATION.NONPAYEE.ERREUR"),
+						this.getBundleText("ERREUR"), 0);
 			} else {
-				AbonnementDialog abonnementDialog = new AbonnementDialog(
+				final AbonnementDialog abonnementDialog = new AbonnementDialog(
 						this.personneID, (new StringBuilder())
-								.append(this.nomField.getText()).append(" ")
-								.append(this.prenomField.getText()).toString(),
+						.append(this.nomField.getText()).append(" ")
+						.append(this.prenomField.getText()).toString(),
 						this);
-				Dimension screenSize = Toolkit.getDefaultToolkit()
+				final Dimension screenSize = Toolkit.getDefaultToolkit()
 						.getScreenSize();
-				Dimension frameSize = abonnementDialog.getSize();
+				final Dimension frameSize = abonnementDialog.getSize();
 				if (frameSize.height > screenSize.height) {
 					frameSize.height = screenSize.height;
 				}
@@ -473,12 +473,14 @@ public class EditionMembrePanel extends JPanel {
 	}
 
 	private void jButtonAjoutCotisation_actionPerformed(final ActionEvent e) {
-		String membre = (new StringBuilder()).append(this.nomField.getText())
-				.append(" ").append(this.prenomField.getText()).toString();
-		PersonneCotisationDialog cotisationDialog = new PersonneCotisationDialog(
+		final String membre = (new StringBuilder())
+				.append(this.nomField.getText()).append(" ")
+				.append(this.prenomField.getText()).toString();
+		final PersonneCotisationDialog cotisationDialog = new PersonneCotisationDialog(
 				membre, this.personneID, this);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frameSize = cotisationDialog.getSize();
+		final Dimension screenSize = Toolkit.getDefaultToolkit()
+				.getScreenSize();
+		final Dimension frameSize = cotisationDialog.getSize();
 		if (frameSize.height > screenSize.height) {
 			frameSize.height = screenSize.height;
 		}
@@ -492,10 +494,11 @@ public class EditionMembrePanel extends JPanel {
 
 	private void jButtonModificationBenevolat_actionPerformed(
 			final ActionEvent e) {
-		BenevolatDialog benevolatDialog = new BenevolatDialog(
+		final BenevolatDialog benevolatDialog = new BenevolatDialog(
 				this.benevolatInfo, this.getBundleText("UPDATE"), this);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frameSize = benevolatDialog.getSize();
+		final Dimension screenSize = Toolkit.getDefaultToolkit()
+				.getScreenSize();
+		final Dimension frameSize = benevolatDialog.getSize();
 		if (frameSize.height > screenSize.height) {
 			frameSize.height = screenSize.height;
 		}
@@ -511,10 +514,11 @@ public class EditionMembrePanel extends JPanel {
 			final ActionEvent e) {
 		// System.out.println((new
 		// StringBuilder()).append(StringUtils.EMPTY).append(((Integer)abonnementInfo.get(0)).intValue()).toString());
-		AbonnementDialog abonnementDialog = new AbonnementDialog(
+		final AbonnementDialog abonnementDialog = new AbonnementDialog(
 				((Integer) this.abonnementInfo.get(0)).intValue(), null, this);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frameSize = abonnementDialog.getSize();
+		final Dimension screenSize = Toolkit.getDefaultToolkit()
+				.getScreenSize();
+		final Dimension frameSize = abonnementDialog.getSize();
 		if (frameSize.height > screenSize.height) {
 			frameSize.height = screenSize.height;
 		}
@@ -528,13 +532,13 @@ public class EditionMembrePanel extends JPanel {
 
 	private void jButtonModificationCotisation_actionPerformed(
 			final ActionEvent e) {
-		int ok = JOptionPane.showConfirmDialog(this,
+		final int ok = JOptionPane.showConfirmDialog(this,
 				this.getBundleText("COTISATION.SUPPRIMER.CONFIRMATION?"),
 				this.getBundleText("SUPPRESSION.COTISATION"), 0);
 		if (ok == 0) {
-			PersonneCotisationDB cotisationDB = new PersonneCotisationDB();
+			final PersonneCotisationDB cotisationDB = new PersonneCotisationDB();
 			try {
-				boolean success = cotisationDB.deleteCotisation(
+				final boolean success = cotisationDB.deleteCotisation(
 						this.personneID, (String) this.cotisationInfo.get(0));
 				if (success) {
 					JOptionPane.showMessageDialog(this,
@@ -543,7 +547,7 @@ public class EditionMembrePanel extends JPanel {
 					this.remove(this.jPanelCotisations);
 					this.displayCotisationPanel(this.personneID, 0);
 				}
-			} catch (Exception xe) {
+			} catch (final Exception xe) {
 				xe.printStackTrace();
 			}
 		}
@@ -574,7 +578,8 @@ public class EditionMembrePanel extends JPanel {
 		this.remove(this.jPanelBenevolat);
 		this.remove(this.jPanelCotisations);
 		this.remove(this.jPaneldeplacement);
-		java.awt.Component component[] = this.jPanelMembre.getComponents();
+		final java.awt.Component component[] = this.jPanelMembre
+				.getComponents();
 		for (int i = 0; i < component.length; i++) {
 			if (component[i] instanceof JTextField) {
 				((JTextField) component[i]).setText(StringUtils.EMPTY);
@@ -695,11 +700,11 @@ public class EditionMembrePanel extends JPanel {
 	public void populateABonnementTable(final long personneID) {
 		EditionMembrePanel.logger.log(Level.INFO,
 				this.getBundleText("STARTING POPULATEABONNEMENTTABLE"));
-		AbonnementDB abonnementDB = new AbonnementDB();
+		final AbonnementDB abonnementDB = new AbonnementDB();
 		try {
-			Vector data = abonnementDB.getAbonnements(personneID);
-			Vector allAbonnements = (Vector) data.get(0);
-			Vector columnNames = (Vector) data.get(1);
+			final Vector data = abonnementDB.getAbonnements(personneID);
+			final Vector allAbonnements = (Vector) data.get(0);
+			final Vector columnNames = (Vector) data.get(1);
 			EditionMembrePanel.logger.log(Level.INFO, (new StringBuilder())
 					.append(this.getBundleText("ALL.ABONNEMENTS.EMPTY"))
 					.append(allAbonnements.isEmpty()).toString());
@@ -714,7 +719,7 @@ public class EditionMembrePanel extends JPanel {
 			});
 			this.jScrollPaneAbonnements = new JScrollPane();
 			this.jScrollPaneAbonnements
-					.setBounds(new Rectangle(10, 55, 645, 80));
+			.setBounds(new Rectangle(10, 55, 645, 80));
 			this.jButtonEditionAbonnement = new JButton();
 			this.jButtonEditionAbonnement.setText(this
 					.getBundleText("EDITER.ABONNEMENT"));
@@ -722,15 +727,15 @@ public class EditionMembrePanel extends JPanel {
 					25));
 			this.jButtonEditionAbonnement.setEnabled(false);
 			this.jButtonEditionAbonnement
-					.addActionListener(new ActionListener() {
+			.addActionListener(new ActionListener() {
 
-						@Override
-						public void actionPerformed(final ActionEvent e) {
-							EditionMembrePanel
-									.mav$jButtonModificationAbonnement_actionPerformed(
-											EditionMembrePanel.this, e);
-						}
-					});
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					EditionMembrePanel
+					.mav$jButtonModificationAbonnement_actionPerformed(
+							EditionMembrePanel.this, e);
+				}
+			});
 			this.jScrollPaneAbonnements.getViewport().add(
 					this.jTableAbonnements, null);
 			this.jPanelAbonnements.add(this.jButtonEditionAbonnement, null);
@@ -738,17 +743,17 @@ public class EditionMembrePanel extends JPanel {
 			this.add(this.jPanelAbonnements, null);
 			EditionMembrePanel.logger.log(Level.INFO,
 					this.getBundleText("ENDING POPULATEABONNEMENTTABLE"));
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void populateCotisationTable(final long personneID) {
-		PersonneCotisationDB cotisationtDB = new PersonneCotisationDB();
+		final PersonneCotisationDB cotisationtDB = new PersonneCotisationDB();
 		try {
-			Vector data = cotisationtDB.getCotisations(personneID);
-			Vector allCotisations = (Vector) data.get(0);
-			Vector columnNames = (Vector) data.get(1);
+			final Vector data = cotisationtDB.getCotisations(personneID);
+			final Vector allCotisations = (Vector) data.get(0);
+			final Vector columnNames = (Vector) data.get(1);
 			this.jButtonEditionCotisation = new JButton();
 			this.jButtonEditionCotisation.setText(this
 					.getBundleText("SUPPRIMER.COTISATION"));
@@ -756,15 +761,15 @@ public class EditionMembrePanel extends JPanel {
 					25));
 			this.jButtonEditionCotisation.setEnabled(false);
 			this.jButtonEditionCotisation
-					.addActionListener(new ActionListener() {
+			.addActionListener(new ActionListener() {
 
-						@Override
-						public void actionPerformed(final ActionEvent e) {
-							EditionMembrePanel
-									.mav$jButtonModificationCotisation_actionPerformed(
-											EditionMembrePanel.this, e);
-						}
-					});
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					EditionMembrePanel
+					.mav$jButtonModificationCotisation_actionPerformed(
+							EditionMembrePanel.this, e);
+				}
+			});
 			this.jTableCotisations = new JTable(allCotisations, columnNames);
 			this.jTableCotisations.addMouseListener(new MouseAdapter() {
 
@@ -784,7 +789,7 @@ public class EditionMembrePanel extends JPanel {
 			this.jPanelCotisations.setVisible(true);
 			this.add(this.jPanelCotisations, null);
 			this.repaint();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -882,8 +887,8 @@ public class EditionMembrePanel extends JPanel {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				EditionMembrePanel
-						.mav$jComboBoxSaisonDeplacement_actionPerformed(
-								EditionMembrePanel.this, e);
+				.mav$jComboBoxSaisonDeplacement_actionPerformed(
+						EditionMembrePanel.this, e);
 			}
 		});
 		this.saisonDeplacement.setText(this.getBundleText("SAISON"));
@@ -949,21 +954,21 @@ public class EditionMembrePanel extends JPanel {
 			personneValid = false;
 		}
 		if (personneValid) {
-			EditionMembreDB editionMembreDB = new EditionMembreDB();
-			String dateNaissance = this.textField.getText();
+			final EditionMembreDB editionMembreDB = new EditionMembreDB();
+			final String dateNaissance = this.textField.getText();
 			if (!dateNaissance.equals(this.getBundleText("----------"))) {
 				try {
-					int anneesDifferences = editionMembreDB
+					final int anneesDifferences = editionMembreDB
 							.getAnneesDifferences(dateNaissance);
 					if (anneesDifferences < 18) {
 						this.jComboBoxEtudiant.setSelectedIndex(1);
 					}
-				} catch (Exception xe) {
+				} catch (final Exception xe) {
 					xe.printStackTrace();
 				}
 			}
 			try {
-				Personne membreInfo = this.getMembreInfo();
+				final Personne membreInfo = this.getMembreInfo();
 				membreInfo.setPersonneId(this.personneID);
 				// StartMain.getService(this.personneService,
 				// PersonneServiceImpl.class).updatePerson(membreInfo);
@@ -972,7 +977,7 @@ public class EditionMembrePanel extends JPanel {
 						this.getBundleText("UPDATE.MEMBER.DONE"),
 						this.getBundleText("INFORMATION"), 1);
 
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				ex.printStackTrace();
 			}
 		}
@@ -984,7 +989,7 @@ public class EditionMembrePanel extends JPanel {
 			personne = new Personne();
 		} else {
 			personne = null;// StartMain.getService(this.personneService,
-							// PersonneServiceImpl.class).getPerson(this.personneID);
+			// PersonneServiceImpl.class).getPerson(this.personneID);
 		}
 		personne.setName(this.nomField.getText());
 		personne.setFirstname(this.prenomField.getText());
@@ -1018,12 +1023,12 @@ public class EditionMembrePanel extends JPanel {
 
 	private void jButtonEffacer_actionPerformed(final ActionEvent e) {
 
-		String format = MessageFormat.format(
+		final String format = MessageFormat.format(
 				this.getBundleText("DELETE.MEMBER.CONFIRM"),
 				this.nomField.getText());
-		int i = JOptionPane.showConfirmDialog(this, format);
+		final int i = JOptionPane.showConfirmDialog(this, format);
 		if (i == 0) {
-			EditionMembreDB editionMembreDB = new EditionMembreDB();
+			final EditionMembreDB editionMembreDB = new EditionMembreDB();
 			try {
 				if (editionMembreDB.deleteMembre(this.personneID)) {
 					JOptionPane.showMessageDialog(this,
@@ -1032,7 +1037,7 @@ public class EditionMembrePanel extends JPanel {
 				}
 				this.initializePanelsOnInsert();
 				this.repaint();
-			} catch (Exception xe) {
+			} catch (final Exception xe) {
 				xe.printStackTrace();
 			}
 		}
@@ -1044,8 +1049,8 @@ public class EditionMembrePanel extends JPanel {
 		this.benevolatInfo.add((new StringBuilder())
 				.append(this.nomField.getText()).append(" ")
 				.append(this.prenomField.getText()).toString());
-		int row = this.jTableBenevolat.rowAtPoint(e.getPoint());
-		int columnCount = this.jTableBenevolat.getColumnCount();
+		final int row = this.jTableBenevolat.rowAtPoint(e.getPoint());
+		final int columnCount = this.jTableBenevolat.getColumnCount();
 		for (int i = 0; i < columnCount; i++) {
 			this.benevolatInfo.add(this.jTableBenevolat.getValueAt(row, i));
 		}
@@ -1056,8 +1061,8 @@ public class EditionMembrePanel extends JPanel {
 	private void jTableAbonnements_mouseClicked(final MouseEvent e) {
 		this.jButtonEditionAbonnement.setEnabled(true);
 		this.abonnementInfo = new Vector();
-		int row = this.jTableAbonnements.rowAtPoint(e.getPoint());
-		int columnCount = this.jTableAbonnements.getColumnCount();
+		final int row = this.jTableAbonnements.rowAtPoint(e.getPoint());
+		final int columnCount = this.jTableAbonnements.getColumnCount();
 		for (int i = 0; i < columnCount; i++) {
 			this.abonnementInfo.add(this.jTableAbonnements.getValueAt(row, i));
 		}
@@ -1067,8 +1072,8 @@ public class EditionMembrePanel extends JPanel {
 	private void jTableCotisation_mouseClicked(final MouseEvent e) {
 		this.jButtonEditionCotisation.setEnabled(true);
 		this.cotisationInfo = new Vector();
-		int row = this.jTableCotisations.rowAtPoint(e.getPoint());
-		int columnCount = this.jTableCotisations.getColumnCount();
+		final int row = this.jTableCotisations.rowAtPoint(e.getPoint());
+		final int columnCount = this.jTableCotisations.getColumnCount();
 		for (int i = 0; i < columnCount; i++) {
 			this.cotisationInfo.add(this.jTableCotisations.getValueAt(row, i));
 		}
@@ -1081,14 +1086,14 @@ public class EditionMembrePanel extends JPanel {
 					this.getBundleText("VEUILLEZ.CHOISIR.SAISON"),
 					this.getBundleText("DEPLACEMENT"), 0);
 		} else {
-			String saison = (String) this.jComboBoxSaisonDeplacement
+			final String saison = (String) this.jComboBoxSaisonDeplacement
 					.getSelectedItem();
-			AbonnementDB abonnementDB = new AbonnementDB();
+			final AbonnementDB abonnementDB = new AbonnementDB();
 			try {
-				int domicile = abonnementDB.getNombreDeplacementsDomicile(
-						this.personneID, saison);
-				int deplacement = abonnementDB.getNombreDeplacementsExterieur(
-						this.personneID, saison);
+				final int domicile = abonnementDB
+						.getNombreDeplacementsDomicile(this.personneID, saison);
+				final int deplacement = abonnementDB
+						.getNombreDeplacementsExterieur(this.personneID, saison);
 				this.domicileField.setText((new StringBuilder())
 						.append(StringUtils.EMPTY).append(domicile).toString());
 				this.exterieurField.setText((new StringBuilder())
@@ -1097,7 +1102,7 @@ public class EditionMembrePanel extends JPanel {
 				this.totalField.setText((new StringBuilder())
 						.append(StringUtils.EMPTY)
 						.append(domicile + deplacement).toString());
-			} catch (Exception xe) {
+			} catch (final Exception xe) {
 				xe.printStackTrace();
 			}
 		}
@@ -1124,12 +1129,13 @@ public class EditionMembrePanel extends JPanel {
 	}
 
 	private void jButtonCommandePlace_actionPerformed(final ActionEvent e) {
-		CommandePlaceDialog commandePlaceDialog = new CommandePlaceDialog(
+		final CommandePlaceDialog commandePlaceDialog = new CommandePlaceDialog(
 				this.personneID, (new StringBuilder())
-						.append(this.nomField.getText()).append(" ")
-						.append(this.prenomField.getText()).toString());
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frameSize = commandePlaceDialog.getSize();
+				.append(this.nomField.getText()).append(" ")
+				.append(this.prenomField.getText()).toString());
+		final Dimension screenSize = Toolkit.getDefaultToolkit()
+				.getScreenSize();
+		final Dimension frameSize = commandePlaceDialog.getSize();
 		if (frameSize.height > screenSize.height) {
 			frameSize.height = screenSize.height;
 		}
@@ -1150,7 +1156,7 @@ public class EditionMembrePanel extends JPanel {
 			final EditionMembrePanel editionmembrepanel,
 			final ActionEvent actionevent) {
 		editionmembrepanel
-				.jComboBoxSaisonDeplacement_actionPerformed(actionevent);
+		.jComboBoxSaisonDeplacement_actionPerformed(actionevent);
 	}
 
 	static void mav$jButtonAjoutBenevolat_actionPerformed(
@@ -1175,7 +1181,7 @@ public class EditionMembrePanel extends JPanel {
 			final EditionMembrePanel editionmembrepanel,
 			final ActionEvent actionevent) {
 		editionmembrepanel
-				.jButtonModificationCotisation_actionPerformed(actionevent);
+		.jButtonModificationCotisation_actionPerformed(actionevent);
 	}
 
 	static void mav$jTableCotisation_mouseClicked(
@@ -1194,14 +1200,14 @@ public class EditionMembrePanel extends JPanel {
 			final EditionMembrePanel editionmembrepanel,
 			final ActionEvent actionevent) {
 		editionmembrepanel
-				.jButtonModificationAbonnement_actionPerformed(actionevent);
+		.jButtonModificationAbonnement_actionPerformed(actionevent);
 	}
 
 	static void mav$jButtonModificationBenevolat_actionPerformed(
 			final EditionMembrePanel editionmembrepanel,
 			final ActionEvent actionevent) {
 		editionmembrepanel
-				.jButtonModificationBenevolat_actionPerformed(actionevent);
+		.jButtonModificationBenevolat_actionPerformed(actionevent);
 	}
 
 	static void mav$jTableBenevolat_mouseClicked(
@@ -1240,7 +1246,8 @@ public class EditionMembrePanel extends JPanel {
 	}
 
 	private String getBundleText(final String key) {
-		return ResourceBundle.getBundle(
-				EditionMembrePanel.STANDARD_NAASTVIEW_BUNDLE).getString(key);
+		return "";
+		// return ResourceBundle.getBundle(
+		// EditionMembrePanel.STANDARD_NAASTVIEW_BUNDLE).getString(key);
 	}
 }

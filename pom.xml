@@ -198,7 +198,6 @@
 				<groupId>org.hsqldb</groupId>
 				<artifactId>hsqldb</artifactId>
 				<version>2.3.1</version>
-				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.codehaus.cargo</groupId>

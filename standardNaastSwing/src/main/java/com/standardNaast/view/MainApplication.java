@@ -41,8 +41,9 @@ public class MainApplication {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * @wbp.parser.entryPoint
 	 */
+
 	public void initialize() {
 		this.frmApplicationDuClub = new JFrame();
 		this.frmApplicationDuClub.setTitle("Application du club de Naast");
@@ -51,7 +52,6 @@ public class MainApplication {
 		.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frmApplicationDuClub.getContentPane().setLayout(
 				new BorderLayout(0, 0));
-
 		final JPanel panel = new JPanel();
 		this.frmApplicationDuClub.getContentPane().add(panel,
 				BorderLayout.NORTH);
@@ -84,7 +84,6 @@ public class MainApplication {
 		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		this.frmApplicationDuClub.getContentPane().add(tabbedPane,
 				BorderLayout.CENTER);
-
 		final MembersPanel membersPanel = new MembersPanel();
 		tabbedPane.addTab("New tab", null, membersPanel, null);
 
