@@ -46,4 +46,11 @@
 		<nature>tern.eclipse.ide.core.ternnature</nature>
 		<nature>org.eclipse.angularjs.core.angularnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/main/webapp</name>
+			<type>2</type>
+			<location>C:/Development/git/standard-naast/standardNaastAngular/WebContent</location>
+		</link>
+	</linkedResources>
 </projectDescription>

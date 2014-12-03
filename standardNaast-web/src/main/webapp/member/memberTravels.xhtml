@@ -7,6 +7,7 @@
 			</p:column>
 			<p:column style="float:left;text-align:left;">
 				<p:selectOneMenu id="seasonMenu" value="#{memberTravelsBean.selectedSeason}">
+					<f:selectItem itemValue="" itemLabel="Sélectionner une année"/>
 					<f:selectItems itemValue="#{season.id}" itemLabel="#{season.id}" value="#{seasonsBean.seasons}" var="season" />
 					<p:ajax listener="#{memberTravelsBean.setSeasonTravels}"  update="travelHome travelAway travelTotal" />
 				</p:selectOneMenu>

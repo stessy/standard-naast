@@ -65,7 +65,7 @@ import standardNaast.model.TypeCompetitionDB;
 import standardNaast.model.TypeMatchDB;
 import standardNaast.service.PersonneService;
 import standardNaast.utils.PrintCartesMembres;
-import standardNaast.utils.PrintCommandesPlaces;
+import standardNaast.utils.PrintCommandeAbonnements;
 import standardNaast.utils.TableauCotisations;
 
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
@@ -1291,7 +1291,7 @@ public class StandardNaastMain extends JFrame {
 			String dat = dateFormat.format(actuelle);
 			String saison = (String) this.jComboBoxSaisonAllAbonnements
 					.getSelectedItem();
-			PrintCommandesPlaces printCommandesPlaces = new PrintCommandesPlaces();
+			PrintCommandeAbonnements printCommandesPlaces = new PrintCommandeAbonnements();
 			String filePath = printCommandesPlaces
 					.printCommandeAbonnements(saison);
 			/*

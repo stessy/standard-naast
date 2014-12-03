@@ -1,4 +1,4 @@
-/* 
+/*
  VLSolutions VLJTable : an enhanced JTable for Swing Applications
  Copyright (C) 2005 VLSolutions http://www.vlsolutions.com
 
@@ -19,6 +19,7 @@ package com.vlsolutions.swing.table;
 
 import java.util.ArrayList;
 import java.util.Date;
+
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -31,420 +32,447 @@ import javax.swing.table.TableModel;
  *
  * @author Lilian Chamontin, VLSolutions
  */
-public class FilterModel<T> extends AbstractTableModel implements TableModelListener {
+@SuppressWarnings("serial")
+public class FilterModel extends AbstractTableModel implements
+TableModelListener {
 
-    // our sorting constants (3 modes : unsorted, sorted asc, sorted desc)
-    /**
-     * sort mode : unsorted
-     */
-    public static final int SORT_NONE = 0;
-    /**
-     * ascending sort
-     */
-    public static final int SORT_ASCENDING = 1;
-    /**
-     * descenging sort
-     */
-    public static final int SORT_DESCENDING = 2;
-    protected int[] filterIndex = new int[0];
-    protected VLJTableFilter[] filters;
-    protected int[] sortModes;
-    protected int[] indexes;
-    protected TableModel model;
-    protected VLJTable table;
+	// our sorting constants (3 modes : unsorted, sorted asc, sorted desc)
+	/**
+	 * sort mode : unsorted
+	 */
+	public static final int SORT_NONE = 0;
 
-    /**
-     * Creates a filter model for a table, and with a given base model
-     */
-    public FilterModel(VLJTable table, TableModel model) {
-        this.table = table;
-        this.model = model;
-        filters = new VLJTableFilter[model.getColumnCount()];
-        sortModes = new int[model.getColumnCount()];
-        rebuildIndex();
-        model.addTableModelListener(this);
-    }
+	/**
+	 * ascending sort
+	 */
+	public static final int SORT_ASCENDING = 1;
 
-    /**
-     * returns the base (source) model used by this table model
-     */
-    public TableModel getModel() {
-        return model;
-    }
+	/**
+	 * descenging sort
+	 */
+	public static final int SORT_DESCENDING = 2;
 
-    /**
-     * Removes all filters from the model (all data contained in the base model
-     * will be shown)
-     */
-    public void clearFilters() {
-        int cols = model.getColumnCount();
-        for (int i = 0; i < cols; i++) {
-            filters[i].setFilter(null);
-        }
-        rebuildIndex();
-    }
+	protected int[] filterIndex = new int[0];
 
-    /**
-     * Returns the corresponding row in the base model
-     */
-    public int getSourceRow(int row) {
-        return filterIndex[indexes[row]];
-    }
+	protected VLJTableFilter[] filters;
 
-    /**
-     * Sets a filter value for a given column
-     */
-    public void setFilter(int col, Object value) {
-        filters[col].setFilter(value);
-        rebuildIndex();
-    }
+	protected int[] sortModes;
 
-    /**
-     * install a new filtering implementation on a column
-     */
-    public void installFilter(int col, VLJTableFilter filter) {
-        filters[col] = filter;
-        rebuildIndex();
-    }
+	protected int[] indexes;
 
-    /**
-     * Returns the filtering implementation for a given column
-     */
-    public VLJTableFilter getFilter(int col) {
-        return filters[col];
-    }
+	protected TableModel model;
 
-    /**
-     * {@inheritDoc}
-     */
-    public int getColumnCount() {
-        return model.getColumnCount();
-    }
+	protected VLJTable table;
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getColumnName(int col) {
-        return model.getColumnName(col);
-    }
+	/**
+	 * Creates a filter model for a table, and with a given base model
+	 */
+	public FilterModel(final VLJTable table, final TableModel model) {
+		this.table = table;
+		this.model = model;
+		this.filters = new VLJTableFilter[model.getColumnCount()];
+		this.sortModes = new int[model.getColumnCount()];
+		this.rebuildIndex();
+		model.addTableModelListener(this);
+	}
 
-    public Class getColumnClass(int col) {
-        /**
-         * {@inheritDoc}
-         */
-        return model.getColumnClass(col);
-    }
+	/**
+	 * returns the base (source) model used by this table model
+	 */
+	public TableModel getModel() {
+		return this.model;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public int getRowCount() {
-        return filterIndex.length;
-    }
+	/**
+	 * Removes all filters from the model (all data contained in the base model
+	 * will be shown)
+	 */
+	public void clearFilters() {
+		final int cols = this.model.getColumnCount();
+		for (int i = 0; i < cols; i++) {
+			this.filters[i].setFilter(null);
+		}
+		this.rebuildIndex();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public Object getValueAt(int row, int col) {
-        return model.getValueAt(filterIndex[indexes[row]], col);
-    }
+	/**
+	 * Returns the corresponding row in the base model
+	 */
+	public int getSourceRow(final int row) {
+		return this.filterIndex[this.indexes[row]];
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isCellEditable(int row, int col) {
-        return model.isCellEditable(filterIndex[indexes[row]], col);
-    }
+	/**
+	 * Sets a filter value for a given column
+	 */
+	public void setFilter(final int col, final Object value) {
+		this.filters[col].setFilter(value);
+		this.rebuildIndex();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setValueAt(Object o, int row, int col) {
-        model.setValueAt(o, filterIndex[indexes[row]], col);
-    }
+	/**
+	 * install a new filtering implementation on a column
+	 */
+	public void installFilter(final int col, final VLJTableFilter filter) {
+		this.filters[col] = filter;
+		this.rebuildIndex();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public void tableChanged(TableModelEvent e) {
-        boolean sortOrFilter = isSortedOrFiltered();
-        synchronized (this) {
-            if (e.getFirstRow() == TableModelEvent.HEADER_ROW) {
-                // this is how we recognize a structure change
-                filters = new VLJTableFilter[model.getColumnCount()];
-                sortModes = new int[model.getColumnCount()];
-                rebuildIndex();
-                if (table.isFilterHeaderVisible()) {
-                    table.installFilterHeader();
-                } else {
-                    table.installHeader();
-                }
-            } else if (sortOrFilter) {
-                rebuildIndex();
-            } else if (e.getLastRow() > indexes.length) {
-                indexes = new int[model.getRowCount()];
-                filterIndex = new int[model.getRowCount()];
-                for (int i = 0; i < indexes.length; i++) {
-                    indexes[i] = filterIndex[i] = i;
-                }
-                fireTableChanged(new TableModelEvent(this, e.getFirstRow(),
-                        e.getLastRow(), e.getColumn(), e.getType()));
-            }
-        }
-    }
+	/**
+	 * Returns the filtering implementation for a given column
+	 */
+	public VLJTableFilter getFilter(final int col) {
+		return this.filters[col];
+	}
 
-    //--------- contents below are borrowed from the java tutorial, and reworked when possible
-    /**
-     * Modify visible indexes based on filtering
-     */
-    public void rebuildIndex() {
-        boolean existFilter = false;
-        for (int i = 0; i < model.getColumnCount(); i++) {
-            if (filters[i] != null) {
-                existFilter = true;
-            }
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getColumnCount() {
+		return this.model.getColumnCount();
+	}
 
-        if (existFilter) { // some filtering
-            int rowCount = model.getRowCount();
-            int colCount = model.getColumnCount();
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getColumnName(final int col) {
+		return this.model.getColumnName(col);
+	}
 
-            for (int j = 0; j < colCount; j++) {
-                if (filters[j] != null) {
-                    filters[j].compile();
-                }
-            }
+	@Override
+	public Class<?> getColumnClass(final int col) {
+		/**
+		 * {@inheritDoc}
+		 */
+		return this.model.getColumnClass(col);
+	}
 
-            ArrayList dataIndex = new ArrayList(model.getRowCount() / 2);
-            for (int i = 0; i < rowCount; i++) {
-                boolean reject = false;
-                for (int j = 0; j < colCount && !reject; j++) {
-                    VLJTableFilter filter = filters[j];
-                    if (filter != null) {
-                        Object o = model.getValueAt(i, j);
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getRowCount() {
+		return this.filterIndex.length;
+	}
 
-                        if (!filter.accept(model.getValueAt(i, j))) {
-                            reject = true;
-                        }
-                    }
-                }
-                if (!reject) {
-                    // keep the row as all filters have passed the test
-                    dataIndex.add(new Integer(i));
-                }
-            }
-            // dataIndex contains filtered lines
-            this.filterIndex = new int[dataIndex.size()];
-            for (int i = 0; i < dataIndex.size(); i++) {
-                filterIndex[i] = ((Integer) dataIndex.get(i)).intValue();
-            }
-        } else { // no filters
-            this.filterIndex = new int[model.getRowCount()];
-            for (int i = 0; i < filterIndex.length; i++) {
-                filterIndex[i] = i;
-            }
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object getValueAt(final int row, final int col) {
+		return this.model.getValueAt(this.filterIndex[this.indexes[row]], col);
+	}
 
-        reallocateIndexes();
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isCellEditable(final int row, final int col) {
+		return this.model.isCellEditable(this.filterIndex[this.indexes[row]],
+				col);
+	}
 
-        // now we can sort
-        sort();
-        fireTableDataChanged();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setValueAt(final Object o, final int row, final int col) {
+		this.model.setValueAt(o, this.filterIndex[this.indexes[row]], col);
+	}
 
-    protected boolean isSortedOrFiltered() {
-        if (!table.isSortEnabled() && !table.isFilteringEnabled()) {
-            return false;
-        }
-        boolean rep = false;
-        for (int i = 0; i < sortModes.length && !rep; i++) {
-            rep = sortModes[i] != SORT_NONE;
-        }
-        for (int i = 0; i < filters.length && !rep; i++) {
-            rep = filters[i] != null;
-        }
-        return rep;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void tableChanged(final TableModelEvent e) {
+		final boolean sortOrFilter = this.isSortedOrFiltered();
+		synchronized (this) {
+			if (e.getFirstRow() == TableModelEvent.HEADER_ROW) {
+				// this is how we recognize a structure change
+				this.filters = new VLJTableFilter[this.model.getColumnCount()];
+				this.sortModes = new int[this.model.getColumnCount()];
+				this.rebuildIndex();
+				if (this.table.isFilterHeaderVisible()) {
+					this.table.installFilterHeader();
+				} else {
+					this.table.installHeader();
+				}
+			} else if (sortOrFilter) {
+				this.rebuildIndex();
+			} else if (e.getLastRow() > this.indexes.length) {
+				this.indexes = new int[this.model.getRowCount()];
+				this.filterIndex = new int[this.model.getRowCount()];
+				for (int i = 0; i < this.indexes.length; i++) {
+					this.indexes[i] = this.filterIndex[i] = i;
+				}
+				this.fireTableChanged(new TableModelEvent(this,
+						e.getFirstRow(), e.getLastRow(), e.getColumn(), e
+						.getType()));
+			}
+		}
+	}
 
-    /**
-     * Return the sort mode for a given column. (between SORT_NONE,
-     * SORT_ASCENDING, SORT_DESCENDING)
-     */
-    protected int getSortMode(int col) {
-        return sortModes[col];
-    }
+	// --------- contents below are borrowed from the java tutorial, and
+	// reworked when possible
+	/**
+	 * Modify visible indexes based on filtering
+	 */
+	public void rebuildIndex() {
+		boolean existFilter = false;
+		for (int i = 0; i < this.model.getColumnCount(); i++) {
+			if (this.filters[i] != null) {
+				existFilter = true;
+			}
+		}
 
-    /**
-     * Sets the sort mode for a given column. (between SORT_NONE,
-     * SORT_ASCENDING, SORT_DESCENDING)
-     */
-    protected void setSortMode(int col, int mode) {
-        sortModes[col] = mode;
-        rebuildIndex();
-    }
+		if (existFilter) { // some filtering
+			final int rowCount = this.model.getRowCount();
+			final int colCount = this.model.getColumnCount();
 
-    private int compareRowsByColumn(int row1, int row2, int column) {
-        TableModel data = model;
-        Class type = getColumnClass(column);
+			for (int j = 0; j < colCount; j++) {
+				if (this.filters[j] != null) {
+					this.filters[j].compile();
+				}
+			}
 
-        // Check for nulls.
-        Object o1 = data.getValueAt(row1, column);
-        Object o2 = data.getValueAt(row2, column);
+			final ArrayList<Integer> dataIndex = new ArrayList<>(
+					this.model.getRowCount() / 2);
+			for (int i = 0; i < rowCount; i++) {
+				boolean reject = false;
+				for (int j = 0; j < colCount && !reject; j++) {
+					final VLJTableFilter filter = this.filters[j];
+					if (filter != null) {
+						if (!filter.accept(this.model.getValueAt(i, j))) {
+							reject = true;
+						}
+					}
+				}
+				if (!reject) {
+					// keep the row as all filters have passed the test
+					dataIndex.add(new Integer(i));
+				}
+			}
+			// dataIndex contains filtered lines
+			this.filterIndex = new int[dataIndex.size()];
+			for (int i = 0; i < dataIndex.size(); i++) {
+				this.filterIndex[i] = dataIndex.get(i).intValue();
+			}
+		} else { // no filters
+			this.filterIndex = new int[this.model.getRowCount()];
+			for (int i = 0; i < this.filterIndex.length; i++) {
+				this.filterIndex[i] = i;
+			}
+		}
 
-        // If both values are null, return 0.
-        if (o1 == null && o2 == null) {
-            return 0;
-        } else if (o1 == null) {
-            // Define null less than everything.
-            return -1;
-        } else if (o2 == null) {
-            return 1;
-        }
+		this.reallocateIndexes();
 
-        if (type.getSuperclass() == java.lang.Number.class) {
-            Number n1 = (Number) o1;
-            double d1 = n1.doubleValue();
-            Number n2 = (Number) o2;
-            double d2 = n2.doubleValue();
+		// now we can sort
+		this.sort();
+		this.fireTableDataChanged();
+	}
 
-            if (d1 < d2) {
-                return -1;
-            } else if (d1 > d2) {
-                return 1;
-            } else {
-                return 0;
-            }
-        } else if (type == java.util.Date.class) {
-            Date d1 = (Date) o1;
-            long n1 = d1.getTime();
-            Date d2 = (Date) o2;
-            long n2 = d2.getTime();
+	protected boolean isSortedOrFiltered() {
+		if (!this.table.isSortEnabled() && !this.table.isFilteringEnabled()) {
+			return false;
+		}
+		boolean rep = false;
+		for (int i = 0; i < this.sortModes.length && !rep; i++) {
+			rep = this.sortModes[i] != FilterModel.SORT_NONE;
+		}
+		for (int i = 0; i < this.filters.length && !rep; i++) {
+			rep = this.filters[i] != null;
+		}
+		return rep;
+	}
 
-            if (n1 < n2) {
-                return -1;
-            } else if (n1 > n2) {
-                return 1;
-            } else {
-                return 0;
-            }
-        } else if (type == String.class) {
-            String s1 = (String) o1;
-            String s2 = (String) o2;
-            int result = s1.compareTo(s2);
+	/**
+	 * Return the sort mode for a given column. (between SORT_NONE,
+	 * SORT_ASCENDING, SORT_DESCENDING)
+	 */
+	protected int getSortMode(final int col) {
+		return this.sortModes[col];
+	}
 
-            if (result < 0) {
-                return -1;
-            } else if (result > 0) {
-                return 1;
-            } else {
-                return 0;
-            }
-        } else if (type == Boolean.class) {
-            Boolean bool1 = (Boolean) o1;
-            boolean b1 = bool1.booleanValue();
-            Boolean bool2 = (Boolean) o2;
-            boolean b2 = bool2.booleanValue();
-            if (b1 == b2) {
-                return 0;
-            } else if (b1) {
-                // Define false < true.
-                return 1;
-            } else {
-                return -1;
-            }
-        } else {
-            String s1 = o1.toString();
-            String s2 = o2.toString();
-            int result = s1.compareTo(s2);
-            if (result < 0) {
-                return -1;
-            } else if (result > 0) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    }
+	/**
+	 * Sets the sort mode for a given column. (between SORT_NONE,
+	 * SORT_ASCENDING, SORT_DESCENDING)
+	 */
+	protected void setSortMode(final int col, final int mode) {
+		this.sortModes[col] = mode;
+		this.rebuildIndex();
+	}
 
-    private int compare(int row1, int row2) {
-        for (int i = 0; i < sortModes.length; i++) {
-            int sortMode = sortModes[i];
-            if (sortMode != 0) {
-                int result = compareRowsByColumn(filterIndex[row1], filterIndex[row2], i);
-                if (result != 0) {
-                    return sortMode == SORT_ASCENDING ? result : -result;
-                }
-            }
-        }
-        return 0;
-    }
+	private int compareRowsByColumn(final int row1, final int row2,
+			final int column) {
+		final TableModel data = this.model;
+		final Class<?> type = this.getColumnClass(column);
 
-    /**
-     * Setup a new array of indexes with the right number of elements for the
-     * new data model.
-     */
-    private void reallocateIndexes() {
-        int rowCount = filterIndex.length;
-        indexes = new int[rowCount];
+		// Check for nulls.
+		final Object o1 = data.getValueAt(row1, column);
+		final Object o2 = data.getValueAt(row2, column);
 
-        // Initialise with the identity mapping.
-        for (int row = 0; row < rowCount; row++) {
-            indexes[row] = row;
-        }
-    }
+		// If both values are null, return 0.
+		if (o1 == null && o2 == null) {
+			return 0;
+		} else if (o1 == null) {
+			// Define null less than everything.
+			return -1;
+		} else if (o2 == null) {
+			return 1;
+		}
 
-    private void checkModel() {
-        if (indexes.length != filterIndex.length) {
-            throw new RuntimeException("Model changed");
-        }
-    }
+		if (type.getSuperclass() == java.lang.Number.class) {
+			final Number n1 = (Number) o1;
+			final double d1 = n1.doubleValue();
+			final Number n2 = (Number) o2;
+			final double d2 = n2.doubleValue();
 
-    private void sort() {
-        checkModel();
-        shuttleSort((int[]) indexes.clone(), indexes, 0, indexes.length);
-    }
+			if (d1 < d2) {
+				return -1;
+			} else if (d1 > d2) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} else if (type == java.util.Date.class) {
+			final Date d1 = (Date) o1;
+			final long n1 = d1.getTime();
+			final Date d2 = (Date) o2;
+			final long n2 = d2.getTime();
 
-    private void n2sort() {
-        for (int i = 0; i < getRowCount(); i++) {
-            for (int j = i + 1; j < getRowCount(); j++) {
-                if (compare(indexes[i], indexes[j]) == -1) {
-                    swap(i, j);
-                }
-            }
-        }
-    }
+			if (n1 < n2) {
+				return -1;
+			} else if (n1 > n2) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} else if (type == String.class) {
+			final String s1 = (String) o1;
+			final String s2 = (String) o2;
+			final int result = s1.compareTo(s2);
 
-    private void shuttleSort(int from[], int to[], int low, int high) {
-        if (high - low < 2) {
-            return;
-        }
-        int middle = (low + high) / 2;
-        shuttleSort(to, from, low, middle);
-        shuttleSort(to, from, middle, high);
+			if (result < 0) {
+				return -1;
+			} else if (result > 0) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} else if (type == Boolean.class) {
+			final Boolean bool1 = (Boolean) o1;
+			final boolean b1 = bool1.booleanValue();
+			final Boolean bool2 = (Boolean) o2;
+			final boolean b2 = bool2.booleanValue();
+			if (b1 == b2) {
+				return 0;
+			} else if (b1) {
+				// Define false < true.
+				return 1;
+			} else {
+				return -1;
+			}
+		} else {
+			final String s1 = o1.toString();
+			final String s2 = o2.toString();
+			final int result = s1.compareTo(s2);
+			if (result < 0) {
+				return -1;
+			} else if (result > 0) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	}
 
-        int p = low;
-        int q = middle;
+	private int compare(final int row1, final int row2) {
+		for (int i = 0; i < this.sortModes.length; i++) {
+			final int sortMode = this.sortModes[i];
+			if (sortMode != 0) {
+				final int result = this.compareRowsByColumn(
+						this.filterIndex[row1], this.filterIndex[row2], i);
+				if (result != 0) {
+					return sortMode == FilterModel.SORT_ASCENDING ? result
+							: -result;
+				}
+			}
+		}
+		return 0;
+	}
 
-        if (high - low >= 4 && compare(from[middle - 1], from[middle]) <= 0) {
-            for (int i = low; i < high; i++) {
-                to[i] = from[i];
-            }
-            return;
-        }
+	/**
+	 * Setup a new array of indexes with the right number of elements for the
+	 * new data model.
+	 */
+	private void reallocateIndexes() {
+		final int rowCount = this.filterIndex.length;
+		this.indexes = new int[rowCount];
 
-        // A normal merge.
-        for (int i = low; i < high; i++) {
-            if (q >= high || (p < middle && compare(from[p], from[q]) <= 0)) {
-                to[i] = from[p++];
-            } else {
-                to[i] = from[q++];
-            }
-        }
-    }
+		// Initialise with the identity mapping.
+		for (int row = 0; row < rowCount; row++) {
+			this.indexes[row] = row;
+		}
+	}
 
-    private void swap(int i, int j) {
-        int tmp = indexes[i];
-        indexes[i] = indexes[j];
-        indexes[j] = tmp;
-    }
+	private void checkModel() {
+		if (this.indexes.length != this.filterIndex.length) {
+			throw new RuntimeException("Model changed");
+		}
+	}
+
+	private void sort() {
+		this.checkModel();
+		this.shuttleSort(this.indexes.clone(), this.indexes, 0,
+				this.indexes.length);
+	}
+
+	// private void n2sort() {
+	// for (int i = 0; i < this.getRowCount(); i++) {
+	// for (int j = i + 1; j < this.getRowCount(); j++) {
+	// if (this.compare(this.indexes[i], this.indexes[j]) == -1) {
+	// this.swap(i, j);
+	// }
+	// }
+	// }
+	// }
+
+	private void shuttleSort(final int from[], final int to[], final int low,
+			final int high) {
+		if (high - low < 2) {
+			return;
+		}
+		final int middle = (low + high) / 2;
+		this.shuttleSort(to, from, low, middle);
+		this.shuttleSort(to, from, middle, high);
+
+		int p = low;
+		int q = middle;
+
+		if (high - low >= 4
+				&& this.compare(from[middle - 1], from[middle]) <= 0) {
+			for (int i = low; i < high; i++) {
+				to[i] = from[i];
+			}
+			return;
+		}
+
+		// A normal merge.
+		for (int i = low; i < high; i++) {
+			if (q >= high
+					|| (p < middle && this.compare(from[p], from[q]) <= 0)) {
+				to[i] = from[p++];
+			} else {
+				to[i] = from[q++];
+			}
+		}
+	}
+
+	// private void swap(final int i, final int j) {
+	// final int tmp = this.indexes[i];
+	// this.indexes[i] = this.indexes[j];
+	// this.indexes[j] = tmp;
+	// }
 }

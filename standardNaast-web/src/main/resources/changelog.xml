@@ -101,7 +101,8 @@
 	</changeSet>
 	<changeSet id="17" author="stessy">
 		<update tableName="PRIX_LOCOMOTION">
-			<column name="ANNEE2" valueComputed="TO_DATE(ANNEE,'YYYY')"/>
+<!-- 			<column name="ANNEE2" valueComputed="TO_DATE(ANNEE,'YYYY')"/> -->
+			<column name="ANNEE2" valueComputed="ANNEE"/>
 		</update>
 	</changeSet>
 	<changeSet id="18" author="stessy">

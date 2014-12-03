@@ -52,7 +52,13 @@ http://java.sun.com/jsf/facelets ">
                                                      value="#{messages['PURCHASED']}"
                                                      style="margin:5px;"
                                                      actionListener="#{abonnementsTable.setAbonnementsAsPurchased()}"/>
-                                                     <p:tooltip id="toolTipnew" for="newButton" value="Cliquer sur ce bouton pour mettre les abonnements avec le statut 'Commandé'" />
+                                                     <p:tooltip id="toolTipnew" for="newButton" value="Cliquer sur ce bouton pour mettre à jour les abonnements avec le statut 'Commandé'" />
+                                    <p:commandButton id="printAbonnementsButton" type="submit"
+                                                     value="#{messages['ABONNEMENTS.PRINT']}"
+                                                     style="margin:5px;"
+                                                     actionListener="#{abonnementsTable.printAbonnements()}"/>
+                                                     <p:tooltip id="toolTipPrintAbonnements" for="printAbonnementsButton" value="Cliquer sur ce bouton pour imprimer les abonnements" />
+                            
                                 </p:column>
                             </p:row>
                         </f:facet>

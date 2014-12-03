@@ -5,7 +5,6 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
         <dependent-module archiveName="standardNaast-business-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/standardNaast-business/standardNaast-business">
             <dependency-type>uses</dependency-type>
         </dependent-module>
