@@ -6,14 +6,14 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import standardNaast.entities.Season;
 import standardNaast.service.SeasonService;
 
 @Named(value = "seasonsBean")
-@SessionScoped
+@ViewScoped
 public class SeasonBean implements Serializable {
 
 	private static final long serialVersionUID = 7004625731973211539L;
@@ -27,9 +27,7 @@ public class SeasonBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		System.out.println("Init SeasonBean");
-
-		List<Season> saisons = this.saisonService.findAllSaison();
+		final List<Season> saisons = this.saisonService.findAllSaison();
 		Collections.sort(saisons);
 		this.seasons = saisons;
 	}

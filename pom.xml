@@ -9,7 +9,7 @@
 	<name>standardNaast</name>
 	<modules>
 		<module>standardNaast-ear</module>
-		<!-- <module>standardNaast-web</module> -->
+		<module>standardNaast-web</module>
 		<module>standardNaast-business</module>
 		<module>standardNaast-persistence</module>
 		<module>standardNaast-common</module>

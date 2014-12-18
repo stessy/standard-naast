@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,7 +19,7 @@ import standardNaast.entities.PersonneCotisation;
 import standardNaast.service.PersonneServiceImpl;
 
 @Named(value = "membersTable")
-@SessionScoped
+@ViewScoped
 public class MembersTableBean implements Serializable {
 
 	private static final long serialVersionUID = 7614568701955199215L;
@@ -79,7 +79,8 @@ public class MembersTableBean implements Serializable {
 	}
 
 	public void onRowSelect(final SelectEvent event) {
-		this.memberForm.setPersonne(this.getSelectedMember());
+		this.memberForm.setUpdate(true);
+		this.memberForm.setSelectedPerson(this.getSelectedMember());
 		final Personne person = this.personneService.getPerson(this
 				.getSelectedMember().getPersonneId());
 		final List<Abonnement> abonnementList = person.getAbonnementList();

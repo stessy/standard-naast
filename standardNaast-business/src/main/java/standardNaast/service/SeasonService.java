@@ -8,11 +8,11 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
 import standardNaast.dao.SeasonDAO;
+import standardNaast.dao.SeasonDAOImpl;
 import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
 import standardNaast.model.MemberSeasonTravels;
@@ -27,8 +27,7 @@ public class SeasonService implements Serializable {
 
 	private static final long serialVersionUID = 8960211172323308502L;
 
-	@Inject
-	SeasonDAO saisonDAO;
+	SeasonDAO saisonDAO = new SeasonDAOImpl();
 
 	private static final Logger LOGGER = Logger.getLogger(SeasonService.class);
 

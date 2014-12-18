@@ -19,7 +19,9 @@ import standardNaast.entities.PersonnesMatch;
 import standardNaast.entities.Season;
 import standardNaast.types.Place;
 
-public class SaisonDAOImpl implements SeasonDAO {
+import com.standardnaast.persistence.EntityManagerFactoryHelper;
+
+public class SeasonDAOImpl implements SeasonDAO {
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -43,7 +45,7 @@ public class SaisonDAOImpl implements SeasonDAO {
 	}
 
 	public EntityManager getEntityManager() {
-		return this.entityManager;
+		return EntityManagerFactoryHelper.getFactory().createEntityManager();
 	}
 
 	public void setEntityManager(final EntityManager entityManager) {
@@ -65,7 +67,7 @@ public class SaisonDAOImpl implements SeasonDAO {
 	private int getTravelsPerSeason(final Season season, final Personne member,
 			final boolean away) {
 		final Place place = away ? Place.AWAY : Place.HOME;
-		final CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+		final CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
 
 		final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 		final Root<PersonnesMatch> root = cq.from(PersonnesMatch.class);
@@ -76,12 +78,13 @@ public class SaisonDAOImpl implements SeasonDAO {
 		criteria.add(cb.equal(root.get("personne"), member));
 		criteria.add(cb.equal(match.get("season"), season));
 		cq.where(cb.and(criteria.toArray(new Predicate[0])));
-		final TypedQuery<Long> createQuery = this.entityManager.createQuery(cq);
+		final TypedQuery<Long> createQuery = this.getEntityManager()
+				.createQuery(cq);
 		return createQuery.getSingleResult().intValue();
 	}
 
 	public static void main(final String args[]) {
-		new SaisonDAOImpl();
+		new SeasonDAOImpl();
 	}
 
 	// public SaisonDAOImpl() {

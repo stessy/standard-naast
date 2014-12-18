@@ -235,8 +235,8 @@ public class Season implements Serializable, Comparable<Season> {
 
 	@Override
 	public String toString() {
-		return String.format("%s[id=%s]", this.getClass().getSimpleName(),
-				this.getId());
+		// return String.format("%s[id=%s]", this.getClass().getSimpleName(),
+		// this.getId());
+		return this.getId();
 	}
-
 }

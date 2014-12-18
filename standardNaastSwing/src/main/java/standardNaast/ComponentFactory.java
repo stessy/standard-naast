@@ -6,8 +6,8 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.standardNaast.view.MembersPanel;
-import com.standardNaast.view.MembersTable;
+import com.standardNaast.view.member.MembersPanel;
+import com.standardNaast.view.member.MembersTable;
 import com.standardNaast.view.types.MembersPanelQualifier;
 
 @ApplicationScoped

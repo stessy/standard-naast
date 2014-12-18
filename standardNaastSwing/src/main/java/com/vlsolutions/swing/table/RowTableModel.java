@@ -25,7 +25,7 @@ import javax.swing.table.AbstractTableModel;
  *
  */
 @SuppressWarnings("serial")
-public abstract class RowTableModel<T> extends AbstractTableModel {
+abstract class RowTableModel<T> extends AbstractTableModel {
 
 	protected List<T> modelData;
 

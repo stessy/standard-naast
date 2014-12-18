@@ -36,12 +36,12 @@
 					<version>6</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<modules>
-<!-- 						<webModule> -->
-<!-- 							<groupId>standardNaast</groupId> -->
-<!-- 							<artifactId>standardNaast-web</artifactId> -->
-<!-- 							<contextRoot>/standardnaast</contextRoot> -->
-<!-- 							<unpack>true</unpack> -->
-<!-- 						</webModule> -->
+						<webModule>
+							<groupId>standardNaast</groupId>
+							<artifactId>standardNaast-web</artifactId>
+							<contextRoot>/standardnaast</contextRoot>
+							<unpack>true</unpack>
+						</webModule>
 <!-- 						<webModule> -->
 <!-- 							<groupId>standardNaast</groupId> -->
 <!-- 							<artifactId>standardNaastAngular</artifactId> -->
@@ -65,12 +65,12 @@
 		</plugins>
 	</build>
 	<dependencies>
-<!-- 		<dependency> -->
-<!-- 			<groupId>standardNaast</groupId> -->
-<!-- 			<artifactId>standardNaast-web</artifactId> -->
-<!-- 			<version>${project.version}</version> -->
-<!-- 			<type>war</type> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>standardNaast</groupId>
+			<artifactId>standardNaast-web</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>standardNaast</groupId> -->
 <!-- 			<artifactId>standardNaastAngular</artifactId> -->

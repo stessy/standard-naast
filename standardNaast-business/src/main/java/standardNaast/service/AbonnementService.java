@@ -128,8 +128,14 @@ public class AbonnementService implements Serializable {
 		for (final Abonnement abonnement : abonnementsToPurchase) {
 			final Personne person = abonnement.getPersonne();
 			final Date birthdate = person.getBirthdate();
-			final String formattedBirthdate = new SimpleDateFormat(DateFormat.DDSMMSYYYY).format(birthdate);
-			final PurchasableAbonnements purchasableAbonnement = new PurchasableAbonnements(person.getName(), person.getFirstname(), birthdate, person.getFullAddress(), person.getIdentityCardNumber(), abonnement.getBlocId().getBlocValue(), abonnement.getRang(), abonnement.getPlace(), amount)
+			final String formattedBirthdate = new SimpleDateFormat(
+					DateFormat.DDSMMSYYYY).format(birthdate);
+			// final PurchasableAbonnements purchasableAbonnement = new
+			// PurchasableAbonnements(person.getName(), person.getFirstname(),
+			// birthdate, person.getFullAddress(),
+			// person.getIdentityCardNumber(),
+			// abonnement.getBlocId().getBlocValue(), abonnement.getRang(),
+			// abonnement.getPlace(), amount)
 		}
 	}
 }

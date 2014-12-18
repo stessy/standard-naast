@@ -21,6 +21,7 @@ import org.jboss.weld.environment.se.bindings.Parameters;
 import org.jboss.weld.environment.se.events.ContainerInitialized;
 
 import com.alee.laf.WebLookAndFeel;
+import com.standardNaast.view.member.MembersPanel;
 
 @ApplicationScoped
 public class MainApplication {

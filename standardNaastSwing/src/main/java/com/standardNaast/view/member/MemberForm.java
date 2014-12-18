@@ -1,15 +1,27 @@
-package com.standardNaast.view;
+package com.standardNaast.view.member;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
 
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Bindings;
+
+import standardNaast.entities.Personne;
 
 import com.alee.extended.date.WebDateField;
 import com.jgoodies.forms.factories.FormFactory;
@@ -18,19 +30,18 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.standardNaast.bundle.Messages;
 
-public class MemberForm extends JPanel {
+@SuppressWarnings("serial")
+public class MemberForm extends JPanel implements Observer {
 
 	private JPanel formPanel;
 
 	private JPanel buttonPanel;
 
-	private JButton btnNewButton;
+	private JButton modifyButton;
 
-	private JButton btnNewButton_1;
+	private JButton deleteButton;
 
-	private JButton btnNewButton_2;
-
-	private JButton btnNewButton_3;
+	private JButton addButton;
 
 	private JLabel nameLabel;
 
@@ -46,7 +57,7 @@ public class MemberForm extends JPanel {
 
 	private JLabel lblNewLabel;
 
-	private JTextField textField;
+	private JTextField streetField;
 
 	private JLabel memberNumberLabel;
 
@@ -82,7 +93,15 @@ public class MemberForm extends JPanel {
 
 	private JLabel studentLabel;
 
-	private JComboBox studentComboBox;
+	private Personne personne;
+
+	private JRadioButton yesStudentRadioButton;
+
+	private ButtonGroup studentButtonGroup;
+
+	private JRadioButton noStudentRadioButton;
+
+	private JPanel studentRadioButtonsPanel;
 
 	public MemberForm() {
 		this.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,
@@ -100,7 +119,7 @@ public class MemberForm extends JPanel {
 					FormFactory.RELATED_GAP_COLSPEC,
 					FormFactory.DEFAULT_COLSPEC,
 					FormFactory.RELATED_GAP_COLSPEC,
-					ColumnSpec.decode("max(147dlu;pref):grow"),
+					ColumnSpec.decode("pref:grow"),
 					FormFactory.RELATED_GAP_COLSPEC,
 					FormFactory.DEFAULT_COLSPEC,
 					FormFactory.RELATED_GAP_COLSPEC,
@@ -108,7 +127,7 @@ public class MemberForm extends JPanel {
 					FormFactory.RELATED_GAP_COLSPEC,
 					ColumnSpec.decode("left:pref"),
 					FormFactory.RELATED_GAP_COLSPEC,
-					ColumnSpec.decode("max(75dlu;default)"),
+					FormFactory.DEFAULT_COLSPEC,
 					FormFactory.RELATED_GAP_COLSPEC,
 					FormFactory.DEFAULT_COLSPEC,
 					FormFactory.RELATED_GAP_COLSPEC,
@@ -135,7 +154,7 @@ public class MemberForm extends JPanel {
 			this.formPanel.add(this.getMemberNumberField(),
 					"16, 2, fill, default");
 			this.formPanel.add(this.getLblNewLabel(), "2, 4, right, default");
-			this.formPanel.add(this.getTextField(), "4, 4, fill, default");
+			this.formPanel.add(this.getStreetField(), "4, 4, fill, default");
 			this.formPanel.add(this.getTownLabel(), "6, 4, right, default");
 			this.formPanel.add(this.getTownField(), "8, 4, fill, default");
 			this.formPanel.add(this.getPostalCodeLabel(),
@@ -159,49 +178,81 @@ public class MemberForm extends JPanel {
 			this.formPanel.add(this.getIdentityCardValidityDateField(),
 					"16, 6, fill, default");
 			this.formPanel.add(this.getStudentLabel(), "2, 8, right, default");
-			this.formPanel
-			.add(this.getStudentComboBox(), "4, 8, fill, default");
+			this.formPanel.add(this.getStudentRadioButtonsPanel(),
+					"4, 8, fill, fill");
+			this.getStudentRadioButtonsPanel().add(
+					this.getYesStudentRadioButton());
+			this.getStudentRadioButtonsPanel().add(
+					this.getNoStudentRadioButton());
+			this.buildStudentButtonGroup();
 		}
 		return this.formPanel;
+	}
+
+	private ButtonGroup buildStudentButtonGroup() {
+		if (this.studentButtonGroup == null) {
+			this.studentButtonGroup = new ButtonGroup();
+			this.studentButtonGroup.add(this.getYesStudentRadioButton());
+			this.studentButtonGroup.add(this.getNoStudentRadioButton());
+		}
+		return this.studentButtonGroup;
+	}
+
+	private JRadioButton getYesStudentRadioButton() {
+		if (this.yesStudentRadioButton == null) {
+			this.yesStudentRadioButton = new JRadioButton(
+					Messages.getString("OUI"));
+		}
+		return this.yesStudentRadioButton;
+	}
+
+	private JRadioButton getNoStudentRadioButton() {
+		if (this.noStudentRadioButton == null) {
+			this.noStudentRadioButton = new JRadioButton(
+					Messages.getString("NON"));
+		}
+		return this.noStudentRadioButton;
+
 	}
 
 	private JPanel getButtonPanel() {
 		if (this.buttonPanel == null) {
 			this.buttonPanel = new JPanel();
-			this.buttonPanel.add(this.getBtnNewButton_3());
-			this.buttonPanel.add(this.getBtnNewButton_2());
-			this.buttonPanel.add(this.getBtnNewButton_1());
-			this.buttonPanel.add(this.getBtnNewButton());
+			this.buttonPanel.add(this.getAddButton());
+			this.buttonPanel.add(this.getDeleteButton());
+			this.buttonPanel.add(this.getModifyButton());
 		}
+		this.initDataBindings();
 		return this.buttonPanel;
 	}
 
-	private JButton getBtnNewButton() {
-		if (this.btnNewButton == null) {
-			this.btnNewButton = new JButton("New button");
+	private JButton getModifyButton() {
+		if (this.modifyButton == null) {
+			this.modifyButton = new JButton(
+					Messages.getString("ENREGISTRER.MODIFICATIONS")); //$NON-NLS-1$
 		}
-		return this.btnNewButton;
+		return this.modifyButton;
 	}
 
-	private JButton getBtnNewButton_1() {
-		if (this.btnNewButton_1 == null) {
-			this.btnNewButton_1 = new JButton("New button");
+	private JButton getDeleteButton() {
+		if (this.deleteButton == null) {
+			this.deleteButton = new JButton(
+					Messages.getString("EFFACER.MEMBRE")); //$NON-NLS-1$
 		}
-		return this.btnNewButton_1;
+		return this.deleteButton;
 	}
 
-	private JButton getBtnNewButton_2() {
-		if (this.btnNewButton_2 == null) {
-			this.btnNewButton_2 = new JButton("New button");
-		}
-		return this.btnNewButton_2;
-	}
+	private JButton getAddButton() {
+		if (this.addButton == null) {
+			this.addButton = new JButton(Messages.getString("AJOUTER.MEMBRE")); //$NON-NLS-1$
+			this.addButton.addActionListener(new ActionListener() {
 
-	private JButton getBtnNewButton_3() {
-		if (this.btnNewButton_3 == null) {
-			this.btnNewButton_3 = new JButton("New button");
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+				}
+			});
 		}
-		return this.btnNewButton_3;
+		return this.addButton;
 	}
 
 	private JLabel getNameLabel() {
@@ -260,13 +311,13 @@ public class MemberForm extends JPanel {
 		return this.lblNewLabel;
 	}
 
-	private JTextField getTextField() {
-		if (this.textField == null) {
-			this.textField = new JTextField();
-			this.textField.setText("\r\n");
-			this.textField.setColumns(10);
+	private JTextField getStreetField() {
+		if (this.streetField == null) {
+			this.streetField = new JTextField();
+			this.streetField.setText("\r\n");
+			this.streetField.setColumns(10);
 		}
-		return this.textField;
+		return this.streetField;
 	}
 
 	private JLabel getMemberNumberLabel() {
@@ -412,16 +463,162 @@ public class MemberForm extends JPanel {
 
 	private JLabel getStudentLabel() {
 		if (this.studentLabel == null) {
-			this.studentLabel = new JLabel(Messages.getString("student")); //$NON-NLS-1$
-			this.studentLabel.setLabelFor(this.getStudentComboBox());
+			this.studentLabel = new JLabel(Messages.getString("student"));
 		}
 		return this.studentLabel;
 	}
 
-	private JComboBox getStudentComboBox() {
-		if (this.studentComboBox == null) {
-			this.studentComboBox = new JComboBox();
+	@Override
+	public void update(final Personne personne) {
+		this.personne = personne;
+		this.initDataBindings();
+	}
+
+	private JRadioButton getRdbtnNewRadioButton() {
+		if (this.yesStudentRadioButton == null) {
+			this.yesStudentRadioButton = new JRadioButton(
+					Messages.getString("MemberForm.rdbtnNewRadioButton.text")); //$NON-NLS-1$
 		}
-		return this.studentComboBox;
+		return this.yesStudentRadioButton;
+	}
+
+	private JPanel getStudentRadioButtonsPanel() {
+		if (this.studentRadioButtonsPanel == null) {
+			this.studentRadioButtonsPanel = new JPanel();
+			this.studentRadioButtonsPanel.setLayout(new BoxLayout(
+					this.studentRadioButtonsPanel, BoxLayout.X_AXIS));
+		}
+		return this.studentRadioButtonsPanel;
+	}
+
+	protected void initDataBindings() {
+		final BeanProperty<Personne, String> personneBeanProperty = BeanProperty
+				.create("name");
+		final BeanProperty<Object, Object> objectBeanProperty = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, String, Object, Object> autoBinding = Bindings
+				.createAutoBinding(UpdateStrategy.READ_WRITE, this.personne,
+						personneBeanProperty, this.getNameField(),
+						objectBeanProperty, "nameBinding");
+		autoBinding.bind();
+		//
+		final BeanProperty<Personne, String> personneBeanProperty_1 = BeanProperty
+				.create("firstname");
+		final BeanProperty<JTextField, String> jTextFieldBeanProperty = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, String, JTextField, String> autoBinding_1 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_1, this.getFirstNameField(),
+						jTextFieldBeanProperty, "firstNameBinding");
+		autoBinding_1.bind();
+		//
+		final BeanProperty<Personne, Date> personneBeanProperty_2 = BeanProperty
+				.create("birthdate");
+		final BeanProperty<WebDateField, Date> webDateFieldBeanProperty = BeanProperty
+				.create("date");
+		final AutoBinding<Personne, Date, WebDateField, Date> autoBinding_2 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_2, this.getBirthDateField(),
+						webDateFieldBeanProperty);
+		autoBinding_2.bind();
+		//
+		final BeanProperty<Personne, String> personneBeanProperty_3 = BeanProperty
+				.create("address");
+		final BeanProperty<JTextField, String> jTextFieldBeanProperty_1 = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, String, JTextField, String> autoBinding_3 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_3, this.getStreetField(),
+						jTextFieldBeanProperty_1);
+		autoBinding_3.bind();
+		//
+		final BeanProperty<Personne, String> personneBeanProperty_4 = BeanProperty
+				.create("city");
+		final BeanProperty<JTextField, String> jTextFieldBeanProperty_2 = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, String, JTextField, String> autoBinding_4 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_4, this.getTownField(),
+						jTextFieldBeanProperty_2);
+		autoBinding_4.bind();
+		//
+		final BeanProperty<Personne, String> personneBeanProperty_5 = BeanProperty
+				.create("postalCode");
+		final BeanProperty<JTextField, String> jTextFieldBeanProperty_3 = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, String, JTextField, String> autoBinding_5 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_5, this.getPostalCodeField(),
+						jTextFieldBeanProperty_3);
+		autoBinding_5.bind();
+		//
+		final BeanProperty<Personne, String> personneBeanProperty_6 = BeanProperty
+				.create("email");
+		final BeanProperty<JTextField, String> jTextFieldBeanProperty_4 = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, String, JTextField, String> autoBinding_6 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_6, this.getEmailField(),
+						jTextFieldBeanProperty_4);
+		autoBinding_6.bind();
+		//
+		final BeanProperty<Personne, String> personneBeanProperty_7 = BeanProperty
+				.create("phone");
+		final BeanProperty<JTextField, String> jTextFieldBeanProperty_5 = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, String, JTextField, String> autoBinding_7 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_7, this.getPhoneField(),
+						jTextFieldBeanProperty_5);
+		autoBinding_7.bind();
+		//
+		final BeanProperty<Personne, String> personneBeanProperty_8 = BeanProperty
+				.create("mobilePhone");
+		final BeanProperty<JTextField, String> jTextFieldBeanProperty_6 = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, String, JTextField, String> autoBinding_8 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_8, this.getMobilePhoneField(),
+						jTextFieldBeanProperty_6);
+		autoBinding_8.bind();
+		//
+		final BeanProperty<Personne, String> personneBeanProperty_9 = BeanProperty
+				.create("identityCardNumber");
+		final BeanProperty<JTextField, String> jTextFieldBeanProperty_7 = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, String, JTextField, String> autoBinding_9 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_9, this.getIdentityCardField(),
+						jTextFieldBeanProperty_7);
+		autoBinding_9.bind();
+		//
+		final BeanProperty<Personne, Date> personneBeanProperty_10 = BeanProperty
+				.create("passportValidity");
+		final AutoBinding<Personne, Date, WebDateField, Date> autoBinding_10 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_10,
+						this.getIdentityCardValidityDateField(),
+						webDateFieldBeanProperty);
+		autoBinding_10.bind();
+		//
+		final BeanProperty<Personne, Boolean> personneBeanProperty_11 = BeanProperty
+				.create("student");
+		final BeanProperty<JRadioButton, String> jRadioButtonBeanProperty = BeanProperty
+				.create("text");
+		final AutoBinding<Personne, Boolean, JRadioButton, String> autoBinding_11 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_11,
+						this.getYesStudentRadioButton(),
+						jRadioButtonBeanProperty);
+		autoBinding_11.bind();
+		//
+		final BeanProperty<JRadioButton, Boolean> jRadioButtonBeanProperty_1 = BeanProperty
+				.create("selected");
+		final AutoBinding<Personne, Boolean, JRadioButton, Boolean> autoBinding_12 = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.personne,
+						personneBeanProperty_11,
+						this.getNoStudentRadioButton(),
+						jRadioButtonBeanProperty_1);
+		autoBinding_12.bind();
 	}
 }
