@@ -23,8 +23,6 @@ import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 
-import standardNaast.model.SaisonsModel;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -35,7 +33,8 @@ public class SaisonsTable extends JPanel {
 
 	ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
 
-	// JFormDesigner - Variables declaration - DO NOT MODIFY //GEN-BEGIN:variables
+	// JFormDesigner - Variables declaration - DO NOT MODIFY
+	// //GEN-BEGIN:variables
 	private JScrollPane scrollPane1;
 
 	private JTable seasonsTable;
@@ -48,10 +47,9 @@ public class SaisonsTable extends JPanel {
 
 	private JButton deleteSeasonButton;
 
-	private SaisonsModel saisonsModel;
+	// private SaisonsModel saisonsModel;
 
 	private BindingGroup bindingGroup;
-
 
 	// JFormDesigner - End of variables declaration //GEN-END:variables
 
@@ -59,33 +57,30 @@ public class SaisonsTable extends JPanel {
 		this.initComponents();
 	}
 
-
 	private void addSeasonButtonActionPerformed(final ActionEvent e) {
 		// TODO add your code here
 	}
-
 
 	private void modifySeasonButtonActionPerformed(final ActionEvent e) {
 		// TODO add your code here
 	}
 
-
 	private void deleteSeasonButtonActionPerformed(final ActionEvent e) {
 		// TODO add your code here
 	}
 
-
 	private void initComponents() {
-		// JFormDesigner - Component initialization - DO NOT MODIFY //GEN-BEGIN:initComponents
-		ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+		// JFormDesigner - Component initialization - DO NOT MODIFY
+		// //GEN-BEGIN:initComponents
+		final ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
 		this.scrollPane1 = new JScrollPane();
 		this.seasonsTable = new JTable();
 		this.panel1 = new JPanel();
 		this.addSeasonbutton = new JButton();
 		this.modifySeasonButton = new JButton();
 		this.deleteSeasonButton = new JButton();
-		this.saisonsModel = new SaisonsModel();
-		CellConstraints cc = new CellConstraints();
+		// this.saisonsModel = new SaisonsModel();
+		final CellConstraints cc = new CellConstraints();
 
 		// ======== this ========
 		this.setLayout(new FormLayout("default:grow", "default, $lgap, default"));
@@ -136,43 +131,63 @@ public class SaisonsTable extends JPanel {
 		this.add(this.panel1, cc.xy(1, 3));
 
 		this.initComponentBindings();
-		// JFormDesigner - End of component initialization //GEN-END:initComponents
+		// JFormDesigner - End of component initialization
+		// //GEN-END:initComponents
 	}
 
-
 	private void initComponentBindings() {
-		// JFormDesigner - Component bindings initialization - DO NOT MODIFY //GEN-BEGIN:initBindings
+		// JFormDesigner - Component bindings initialization - DO NOT MODIFY
+		// //GEN-BEGIN:initBindings
 		this.bindingGroup = new BindingGroup();
 		{
-			JTableBinding binding =
-					SwingBindings.createJTableBinding(UpdateStrategy.READ_WRITE, this.saisonsModel,
-							(BeanProperty) BeanProperty.create("saisonsList"), this.seasonsTable);
+			final JTableBinding binding = SwingBindings.createJTableBinding(
+					UpdateStrategy.READ_WRITE, null,
+					(BeanProperty) BeanProperty.create("saisonsList"),
+					this.seasonsTable);
 			binding.setEditable(false);
 			binding.addColumnBinding(BeanProperty.create("id"))
-					.setColumnName(this.bundle.getString("SaisonsTable.seasonsTable.columnName.1"))
+					.setColumnName(
+					this.bundle
+					.getString("SaisonsTable.seasonsTable.columnName.1"))
 					.setColumnClass(String.class);
 			binding.addColumnBinding(BeanProperty.create("dateStart"))
-					.setColumnName(this.bundle.getString("SaisonsTable.seasonsTable.columnName_4"))
+					.setColumnName(
+					this.bundle
+					.getString("SaisonsTable.seasonsTable.columnName_4"))
 					.setColumnClass(Date.class);
 			binding.addColumnBinding(BeanProperty.create("dateEnd"))
-					.setColumnName(this.bundle.getString("SaisonsTable.seasonsTable.columnName_2"))
+					.setColumnName(
+					this.bundle
+					.getString("SaisonsTable.seasonsTable.columnName_2"))
 					.setColumnClass(Date.class);
-			binding.addColumnBinding(BeanProperty.create("dateFirstMatchChampionship"))
-					.setColumnName(this.bundle.getString("SaisonsTable.seasonsTable.columnName_3"))
+			binding.addColumnBinding(
+					BeanProperty.create("dateFirstMatchChampionship"))
+					.setColumnName(
+							this.bundle
+							.getString("SaisonsTable.seasonsTable.columnName_3"))
 					.setColumnClass(Date.class);
 			binding.addColumnBinding(BeanProperty.create("european"))
-					.setColumnName(this.bundle.getString("SaisonsTable.seasonsTable.columnName_5"))
+					.setColumnName(
+					this.bundle
+					.getString("SaisonsTable.seasonsTable.columnName_5"))
 					.setColumnClass(Boolean.class);
 			this.bindingGroup.addBinding(binding);
 		}
-		this.bindingGroup.addBinding(Bindings.createAutoBinding(UpdateStrategy.READ_WRITE, this.saisonsModel,
-				BeanProperty.create("selectedSaison"), this.seasonsTable, BeanProperty.create("selectedElement")));
-		this.bindingGroup.addBinding(Bindings.createAutoBinding(UpdateStrategy.READ_WRITE, this.seasonsTable,
-				ELProperty.create("${element != null}"), this.modifySeasonButton, BeanProperty.create("selected")));
-		this.bindingGroup.addBinding(Bindings.createAutoBinding(UpdateStrategy.READ_WRITE, this.seasonsTable,
-				ELProperty.create("${element != null}"), this.deleteSeasonButton, BeanProperty.create("selected")));
+		this.bindingGroup.addBinding(Bindings.createAutoBinding(
+				UpdateStrategy.READ_WRITE, null,
+				BeanProperty.create("selectedSaison"), this.seasonsTable,
+				BeanProperty.create("selectedElement")));
+		this.bindingGroup.addBinding(Bindings.createAutoBinding(
+				UpdateStrategy.READ_WRITE, this.seasonsTable,
+				ELProperty.create("${element != null}"),
+				this.modifySeasonButton, BeanProperty.create("selected")));
+		this.bindingGroup.addBinding(Bindings.createAutoBinding(
+				UpdateStrategy.READ_WRITE, this.seasonsTable,
+				ELProperty.create("${element != null}"),
+				this.deleteSeasonButton, BeanProperty.create("selected")));
 		this.bindingGroup.bind();
-		// JFormDesigner - End of component bindings initialization //GEN-END:initBindings
+		// JFormDesigner - End of component bindings initialization
+		// //GEN-END:initBindings
 	}
 
 }

@@ -2,10 +2,13 @@ package com.standardNaast.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -49,8 +52,14 @@ public class MainApplication {
 		this.frmApplicationDuClub = new JFrame();
 		this.frmApplicationDuClub.setTitle("Application du club de Naast");
 		this.frmApplicationDuClub.setBounds(100, 100, 1919, 928);
+		try {
+			this.frmApplicationDuClub.setIconImage(ImageIO.read(new File(
+					"Royal_Standard_de_Liege.png")));
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
 		this.frmApplicationDuClub
-		.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frmApplicationDuClub.getContentPane().setLayout(
 				new BorderLayout(0, 0));
 		final JPanel panel = new JPanel();

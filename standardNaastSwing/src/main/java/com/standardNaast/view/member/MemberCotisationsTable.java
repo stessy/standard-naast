@@ -8,20 +8,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import standardNaast.entities.Abonnement;
 import standardNaast.entities.Personne;
+import standardNaast.entities.PersonneCotisation;
 
 import com.vlsolutions.swing.table.BeanTableModel;
 
 @SuppressWarnings("serial")
-public class MemberAbonnementsTable extends JPanel implements Observer {
+public class MemberCotisationsTable extends JPanel implements Observer {
 
 	private final JTable table;
 
-	public MemberAbonnementsTable() {
+	public MemberCotisationsTable() {
 		this.setLayout(new BorderLayout(0, 0));
-		final BeanTableModel<Abonnement> model = new BeanTableModel<>(
-				Abonnement.class);
+		final BeanTableModel<PersonneCotisation> model = new BeanTableModel<>(
+				PersonneCotisation.class);
 		this.table = new JTable();
 		this.table.setModel(model);
 		final JScrollPane scrollPane = new JScrollPane();
@@ -31,14 +31,15 @@ public class MemberAbonnementsTable extends JPanel implements Observer {
 
 	}
 
-	private void updateTableData(final List<Abonnement> abonnements) {
+	private void updateTableData(
+			final List<PersonneCotisation> personneCotisations) {
 		@SuppressWarnings("unchecked")
-		final BeanTableModel<Abonnement> model = (BeanTableModel<Abonnement>) this.table
-		.getModel();
+		final BeanTableModel<PersonneCotisation> model = (BeanTableModel<PersonneCotisation>) this.table
+				.getModel();
 		if (model.getRowCount() > 0) {
 			model.removeRowRange(0, model.getRowCount() - 1);
 		}
-		for (final Abonnement abonnement : abonnements) {
+		for (final PersonneCotisation abonnement : personneCotisations) {
 			model.addRow(abonnement);
 		}
 		model.fireTableDataChanged();
@@ -46,7 +47,7 @@ public class MemberAbonnementsTable extends JPanel implements Observer {
 
 	@Override
 	public void update(final Personne personne) {
-		this.updateTableData(personne.getAbonnementList());
+		this.updateTableData(personne.getPersonnesCotisations());
 	}
 
 }

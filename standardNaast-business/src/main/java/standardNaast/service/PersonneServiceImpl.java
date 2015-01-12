@@ -8,11 +8,11 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
 import standardNaast.dao.PersonDAO;
+import standardNaast.dao.PersonDAOImpl;
 import standardNaast.entities.Personne;
 
 /**
@@ -24,8 +24,7 @@ import standardNaast.entities.Personne;
 @Local(PersonneService.class)
 public class PersonneServiceImpl implements PersonneService {
 
-	@Inject
-	PersonDAO personneDAO;
+	PersonDAO personneDAO = new PersonDAOImpl();
 
 	private static final Logger LOGGER = Logger
 			.getLogger(PersonneServiceImpl.class);

@@ -120,7 +120,7 @@ public class VLJTable extends JTable {
 	public void setFilterColumnModel(final FilterColumnModel fcmodel) {
 		this.filterColumnModel = fcmodel;
 		if (this.isFilterHeaderDisplayed) { // hide it, as it's not the right
-											// one anymore
+			// one anymore
 			this.setFilterHeaderVisible(false);
 		}
 	}
@@ -329,7 +329,7 @@ public class VLJTable extends JTable {
 								FilterModel.SORT_DESCENDING);
 					} else {
 						VLJTable.this
-								.setSortMode(column, FilterModel.SORT_NONE);
+						.setSortMode(column, FilterModel.SORT_NONE);
 					}
 				}
 			}
@@ -354,7 +354,7 @@ public class VLJTable extends JTable {
 		super.setModel(fModel);
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			this.getColumnModel().getColumn(i)
-					.setHeaderRenderer(new VLTableCellRenderer(this, i));
+			.setHeaderRenderer(new VLTableCellRenderer(this, i));
 		}
 
 		// install a default FilterColumnModel
@@ -508,7 +508,7 @@ public class VLJTable extends JTable {
 
 			// install the filter for every column (except when it has a null
 			// filter)
-			for (int i = 0; i < this.getModel().getColumnCount(); i++) {
+			for (int i = 0; i < this.getColumnCount(); i++) {
 				final FilterCellEditor fcEditor = this.filterColumnModel
 						.getFilterCellEditor(i);
 				if (fcEditor != null) {
@@ -523,41 +523,41 @@ public class VLJTable extends JTable {
 				}
 				final int col = i;
 				final int w = this.getColumnModel().getColumn(col).getWidth(); // 1ere
-																				// valeur
-																				// de
-																				// largeur
+				// valeur
+				// de
+				// largeur
 				final Dimension d = new Dimension(w,
 						tfComp.getPreferredSize().height);
 				tfComp.setPreferredSize(d);
 
 				// listen to width change to adapt the subHeader
 				this.getColumnModel()
-						.getColumn(i)
-						.addPropertyChangeListener(
-								new PropertyChangeListener() {
+				.getColumn(i)
+				.addPropertyChangeListener(
+						new PropertyChangeListener() {
 
-									@Override
-									public void propertyChange(
-											final PropertyChangeEvent e) {
-										if (e.getPropertyName().equals("width")) {
-											// that property is updated with the
-											// table column width
-											final int w = VLJTable.this
-													.getColumnModel()
-													.getColumn(col).getWidth();
-											final Dimension d = new Dimension(
-													w,
-													tfComp.getPreferredSize().height);
-											tfComp.setPreferredSize(d);
-											// as we're on a flow layout, the
-											// subHeader will remain in sync
-											// with the table header
-											// as long as we maintain the same
-											// preferred sizes
-											tfComp.revalidate();
-										}
-									}
-								});
+							@Override
+							public void propertyChange(
+									final PropertyChangeEvent e) {
+								if (e.getPropertyName().equals("width")) {
+									// that property is updated with the
+									// table column width
+									final int w = VLJTable.this
+											.getColumnModel()
+											.getColumn(col).getWidth();
+									final Dimension d = new Dimension(
+											w,
+											tfComp.getPreferredSize().height);
+									tfComp.setPreferredSize(d);
+									// as we're on a flow layout, the
+									// subHeader will remain in sync
+									// with the table header
+									// as long as we maintain the same
+									// preferred sizes
+									tfComp.revalidate();
+								}
+							}
+						});
 				subHeader.add(tfComp);
 				if (fcEditor != null) {
 					fcEditor.addPropertyChangeListener(
@@ -568,7 +568,7 @@ public class VLJTable extends JTable {
 								public void propertyChange(
 										final PropertyChangeEvent e) {
 									((FilterModel) VLJTable.this.getModel())
-											.setFilter(col, e.getNewValue());
+									.setFilter(col, e.getNewValue());
 									final Rectangle r = VLJTable.this
 											.getCellRect(0, 0, false);
 									VLJTable.this.scrollRectToVisible(r);
@@ -631,7 +631,7 @@ public class VLJTable extends JTable {
 				enclosingScrollPane.setColumnHeaderView(this.getTableHeader());
 			} else { // tableHeaderReplacement != null
 				enclosingScrollPane
-						.setColumnHeaderView(this.tableHeaderReplacement);
+				.setColumnHeaderView(this.tableHeaderReplacement);
 			}
 		} // else parent isn't a viewport, and we cannot install a header
 	}

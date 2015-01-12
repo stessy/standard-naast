@@ -4,6 +4,7 @@
  */
 package com.vlsolutions.swing.table;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -11,6 +12,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeMap;
+
+import standardNaast.annotations.PersonneColumnOrdering;
 
 /**
  * The BeanTableModel will use reflection to determine the columns of data to be
@@ -34,6 +40,9 @@ import java.util.Map;
  */
 @SuppressWarnings("serial")
 public class BeanTableModel<T> extends RowTableModel<T> {
+
+	private static final ResourceBundle BUNDLE = ResourceBundle
+			.getBundle("com.standardNaast.bundle.Bundle"); //$NON-NLS-1$
 
 	// Map "type" to "class". Class is needed for the getColumnClass() method.
 
@@ -64,7 +73,7 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 	 *            is also used to determine the columns that will be displayed
 	 *            in the model
 	 */
-	public BeanTableModel(final Class<?> beanClass) {
+	public BeanTableModel(final Class<T> beanClass) {
 		this(beanClass, beanClass, new ArrayList<T>());
 	}
 
@@ -77,7 +86,7 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 	 *            the methods of this class and its descendents down to the bean
 	 *            class can be included in the model.
 	 */
-	public BeanTableModel(final Class<?> beanClass, final Class<?> ancestorClass) {
+	public BeanTableModel(final Class<T> beanClass, final Class<?> ancestorClass) {
 		this(beanClass, ancestorClass, new ArrayList<T>());
 	}
 
@@ -89,7 +98,7 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 	 * @param modelData
 	 *            the data of the table
 	 */
-	public BeanTableModel(final Class<?> beanClass, final List<T> modelData) {
+	public BeanTableModel(final Class<T> beanClass, final List<T> modelData) {
 		this(beanClass, beanClass, modelData);
 	}
 
@@ -104,7 +113,7 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 	 * @param modelData
 	 *            the data of the table
 	 */
-	public BeanTableModel(final Class<?> beanClass,
+	public BeanTableModel(final Class<T> beanClass,
 			final Class<?> ancestorClass, final List<T> modelData) {
 		super(beanClass);
 		this.beanClass = beanClass;
@@ -113,7 +122,9 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 		// Use reflection on the beanClass and ancestorClass to find properties
 		// to add to the TableModel
 
-		this.createColumnInformation();
+		// this.createColumnInformation();
+
+		this.createColumnsInformation();
 
 		// Initialize the column name List to the proper size. The actual
 		// column names will be reset in the resetModelDefaults() method.
@@ -158,6 +169,109 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 				}
 			}
 		}
+	}
+
+	private List<Field> getDeclaredFieldsFromMethods() {
+		final List<Field> declaredFields = new ArrayList<>();
+		final Method[] theMethods = this.beanClass.getMethods();
+
+		// Check each method to make sure it should be used in the model
+		try {
+
+			for (int i = 0; i < theMethods.length; i++) {
+				final Method theMethod = theMethods[i];
+
+				if (theMethod.getParameterTypes().length == 0
+						&& this.ancestorClass.isAssignableFrom(theMethod
+								.getDeclaringClass())) {
+					final String methodName = theMethod.getName();
+
+					if (theMethod.getName().startsWith("get")) {
+						final Field declaredField = this.beanClass
+								.getDeclaredField(this
+										.uncapitalizeFirstLetter(methodName
+												.substring(3)));
+						declaredFields.add(declaredField);
+
+					}
+
+					if (theMethod.getName().startsWith("is")) {
+						final Field declaredField = this.beanClass
+								.getDeclaredField(this
+										.uncapitalizeFirstLetter(methodName
+												.substring(2)));
+						declaredFields.add(declaredField);
+					}
+				}
+			}
+		} catch (NoSuchFieldException | SecurityException e) {
+
+		}
+		return declaredFields;
+	}
+
+	private void createColumnsInformation() {
+		final List<Field> fields = this.getDeclaredFieldsFromMethods();
+
+		final Map<Integer, Field> annotatedFieldsOrdering = new TreeMap<>();
+		final List<Field> unAnnotatedFieldsOrdering = new ArrayList<>();
+
+		for (int i = 0; i < fields.size(); i++) {
+			final Field field = fields.get(i);
+			field.setAccessible(true);
+			if (field.isAnnotationPresent(PersonneColumnOrdering.class)) {
+				final PersonneColumnOrdering annotation = field
+						.getAnnotation(PersonneColumnOrdering.class);
+				final int order = annotation.order();
+				annotatedFieldsOrdering.put(order, field);
+			} else {
+				unAnnotatedFieldsOrdering.add(field);
+			}
+		}
+
+		final Set<Integer> keySet = annotatedFieldsOrdering.keySet();
+		for (final Integer key : keySet) {
+			this.createColumnInformation(annotatedFieldsOrdering.get(key));
+		}
+
+		for (final Field field : unAnnotatedFieldsOrdering) {
+			this.createColumnInformation(field);
+		}
+	}
+
+	private void createColumnInformation(final Field field) {
+
+		final String capitalizedField = this.capitalizeFirstLetter(field
+				.getName());
+		Method method = null;
+		try {
+			method = this.beanClass.getMethod("get" + capitalizedField);
+		} catch (NoSuchMethodException | SecurityException e) {
+			try {
+				method = this.beanClass.getMethod("is" + capitalizedField);
+			} catch (NoSuchMethodException | SecurityException e1) {
+
+			}
+		}
+
+		if (method != null) {
+			this.buildColumnInformation(method, capitalizedField);
+		}
+
+	}
+
+	public String uncapitalizeFirstLetter(final String original) {
+		if (original.length() == 0) {
+			return original;
+		}
+		return original.substring(0, 1).toLowerCase() + original.substring(1);
+	}
+
+	public String capitalizeFirstLetter(final String original) {
+		if (original.length() == 0) {
+			return original;
+		}
+		return original.substring(0, 1).toUpperCase() + original.substring(1);
 	}
 
 	/*
@@ -249,7 +363,13 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 		Object value = null;
 
 		try {
-			value = ci.getGetter().invoke(this.getRow(row));
+			final Method getter = ci.getGetter();
+			value = getter.invoke(this.getRow(row));
+			final Class<?> returnType = getter.getReturnType();
+			if (returnType.isEnum()) {
+				value = BeanTableModel.BUNDLE.getString(((Enum<?>) value)
+						.name());
+			}
 		} catch (final IllegalAccessException e) {
 		} catch (final InvocationTargetException e) {
 		}
@@ -274,12 +394,17 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 	@Override
 	public void setValueAt(final Object value, final int row, final int column) {
 		final ColumnInformation ci = this.columns.get(column);
-
+		Object newValue = value;
 		try {
 			final Method setMethod = ci.getSetter();
 
 			if (setMethod != null) {
-				setMethod.invoke(this.getRow(row), value);
+				if (newValue.getClass().isEnum()) {
+					newValue = new String(
+							BeanTableModel.BUNDLE
+									.getString(((Enum<?>) newValue).name()));
+				}
+				setMethod.invoke(this.getRow(row), newValue);
 				this.fireTableCellUpdated(row, column);
 			}
 		} catch (final IllegalAccessException e) {

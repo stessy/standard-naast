@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.BindingGroup;
 import org.jdesktop.beansbinding.Bindings;
 
 import standardNaast.entities.Personne;
@@ -103,6 +104,8 @@ public class MemberForm extends JPanel implements Observer {
 
 	private JPanel studentRadioButtonsPanel;
 
+	private BindingGroup bindingGroup;
+
 	public MemberForm() {
 		this.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,
 				null, null), "Membre", TitledBorder.LEADING, TitledBorder.TOP,
@@ -143,12 +146,12 @@ public class MemberForm extends JPanel implements Observer {
 			this.formPanel.add(this.getNameLabel(), "2, 2, right, default");
 			this.formPanel.add(this.getNameField(), "4, 2, fill, default");
 			this.formPanel
-			.add(this.getFirstNameLabel(), "6, 2, right, default");
+					.add(this.getFirstNameLabel(), "6, 2, right, default");
 			this.formPanel.add(this.getFirstNameField(), "8, 2, fill, default");
 			this.formPanel.add(this.getBirthDateLabel(),
 					"10, 2, right, default");
 			this.formPanel
-			.add(this.getBirthDateField(), "12, 2, fill, default");
+					.add(this.getBirthDateField(), "12, 2, fill, default");
 			this.formPanel.add(this.getMemberNumberLabel(),
 					"14, 2, right, default");
 			this.formPanel.add(this.getMemberNumberField(),
@@ -160,7 +163,7 @@ public class MemberForm extends JPanel implements Observer {
 			this.formPanel.add(this.getPostalCodeLabel(),
 					"10, 4, right, default");
 			this.formPanel
-					.add(this.getPostalCodeField(), "12, 4, default, top");
+			.add(this.getPostalCodeField(), "12, 4, default, top");
 			this.formPanel.add(this.getEmailLabel(), "14, 4, right, default");
 			this.formPanel.add(this.getEmailField(), "16, 4, fill, default");
 			this.formPanel.add(this.getPhoneLabel(), "2, 6, right, default");
@@ -470,6 +473,7 @@ public class MemberForm extends JPanel implements Observer {
 
 	@Override
 	public void update(final Personne personne) {
+		this.bindingGroup.unbind();
 		this.personne = personne;
 		this.initDataBindings();
 	}
@@ -492,133 +496,139 @@ public class MemberForm extends JPanel implements Observer {
 	}
 
 	protected void initDataBindings() {
-		final BeanProperty<Personne, String> personneBeanProperty = BeanProperty
-				.create("name");
-		final BeanProperty<Object, Object> objectBeanProperty = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, String, Object, Object> autoBinding = Bindings
-				.createAutoBinding(UpdateStrategy.READ_WRITE, this.personne,
-						personneBeanProperty, this.getNameField(),
-						objectBeanProperty, "nameBinding");
-		autoBinding.bind();
-		//
-		final BeanProperty<Personne, String> personneBeanProperty_1 = BeanProperty
-				.create("firstname");
-		final BeanProperty<JTextField, String> jTextFieldBeanProperty = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, String, JTextField, String> autoBinding_1 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_1, this.getFirstNameField(),
-						jTextFieldBeanProperty, "firstNameBinding");
-		autoBinding_1.bind();
-		//
-		final BeanProperty<Personne, Date> personneBeanProperty_2 = BeanProperty
-				.create("birthdate");
-		final BeanProperty<WebDateField, Date> webDateFieldBeanProperty = BeanProperty
-				.create("date");
-		final AutoBinding<Personne, Date, WebDateField, Date> autoBinding_2 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_2, this.getBirthDateField(),
-						webDateFieldBeanProperty);
-		autoBinding_2.bind();
-		//
-		final BeanProperty<Personne, String> personneBeanProperty_3 = BeanProperty
-				.create("address");
-		final BeanProperty<JTextField, String> jTextFieldBeanProperty_1 = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, String, JTextField, String> autoBinding_3 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_3, this.getStreetField(),
-						jTextFieldBeanProperty_1);
-		autoBinding_3.bind();
-		//
-		final BeanProperty<Personne, String> personneBeanProperty_4 = BeanProperty
-				.create("city");
-		final BeanProperty<JTextField, String> jTextFieldBeanProperty_2 = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, String, JTextField, String> autoBinding_4 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_4, this.getTownField(),
-						jTextFieldBeanProperty_2);
-		autoBinding_4.bind();
-		//
-		final BeanProperty<Personne, String> personneBeanProperty_5 = BeanProperty
-				.create("postalCode");
-		final BeanProperty<JTextField, String> jTextFieldBeanProperty_3 = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, String, JTextField, String> autoBinding_5 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_5, this.getPostalCodeField(),
-						jTextFieldBeanProperty_3);
-		autoBinding_5.bind();
-		//
-		final BeanProperty<Personne, String> personneBeanProperty_6 = BeanProperty
-				.create("email");
-		final BeanProperty<JTextField, String> jTextFieldBeanProperty_4 = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, String, JTextField, String> autoBinding_6 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_6, this.getEmailField(),
-						jTextFieldBeanProperty_4);
-		autoBinding_6.bind();
-		//
-		final BeanProperty<Personne, String> personneBeanProperty_7 = BeanProperty
-				.create("phone");
-		final BeanProperty<JTextField, String> jTextFieldBeanProperty_5 = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, String, JTextField, String> autoBinding_7 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_7, this.getPhoneField(),
-						jTextFieldBeanProperty_5);
-		autoBinding_7.bind();
-		//
-		final BeanProperty<Personne, String> personneBeanProperty_8 = BeanProperty
-				.create("mobilePhone");
-		final BeanProperty<JTextField, String> jTextFieldBeanProperty_6 = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, String, JTextField, String> autoBinding_8 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_8, this.getMobilePhoneField(),
-						jTextFieldBeanProperty_6);
-		autoBinding_8.bind();
-		//
-		final BeanProperty<Personne, String> personneBeanProperty_9 = BeanProperty
-				.create("identityCardNumber");
-		final BeanProperty<JTextField, String> jTextFieldBeanProperty_7 = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, String, JTextField, String> autoBinding_9 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_9, this.getIdentityCardField(),
-						jTextFieldBeanProperty_7);
-		autoBinding_9.bind();
-		//
-		final BeanProperty<Personne, Date> personneBeanProperty_10 = BeanProperty
-				.create("passportValidity");
-		final AutoBinding<Personne, Date, WebDateField, Date> autoBinding_10 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_10,
-						this.getIdentityCardValidityDateField(),
-						webDateFieldBeanProperty);
-		autoBinding_10.bind();
-		//
-		final BeanProperty<Personne, Boolean> personneBeanProperty_11 = BeanProperty
-				.create("student");
-		final BeanProperty<JRadioButton, String> jRadioButtonBeanProperty = BeanProperty
-				.create("text");
-		final AutoBinding<Personne, Boolean, JRadioButton, String> autoBinding_11 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_11,
-						this.getYesStudentRadioButton(),
-						jRadioButtonBeanProperty);
-		autoBinding_11.bind();
-		//
-		final BeanProperty<JRadioButton, Boolean> jRadioButtonBeanProperty_1 = BeanProperty
-				.create("selected");
-		final AutoBinding<Personne, Boolean, JRadioButton, Boolean> autoBinding_12 = Bindings
-				.createAutoBinding(UpdateStrategy.READ, this.personne,
-						personneBeanProperty_11,
-						this.getNoStudentRadioButton(),
-						jRadioButtonBeanProperty_1);
-		autoBinding_12.bind();
+		this.bindingGroup = new BindingGroup();
+		{
+			final BeanProperty<Personne, String> personneBeanProperty = BeanProperty
+					.create("name");
+			final BeanProperty<Object, Object> objectBeanProperty = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, String, Object, Object> autoBinding = Bindings
+					.createAutoBinding(UpdateStrategy.READ_WRITE,
+							this.personne, personneBeanProperty,
+							this.getNameField(), objectBeanProperty,
+							"nameBinding");
+			autoBinding.bind();
+			//
+			final BeanProperty<Personne, String> personneBeanProperty_1 = BeanProperty
+					.create("firstname");
+			final BeanProperty<JTextField, String> jTextFieldBeanProperty = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, String, JTextField, String> autoBinding_1 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_1, this.getFirstNameField(),
+							jTextFieldBeanProperty, "firstNameBinding");
+			autoBinding_1.bind();
+			//
+			final BeanProperty<Personne, Date> personneBeanProperty_2 = BeanProperty
+					.create("birthdate");
+			final BeanProperty<WebDateField, Date> webDateFieldBeanProperty = BeanProperty
+					.create("date");
+			final AutoBinding<Personne, Date, WebDateField, Date> autoBinding_2 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_2, this.getBirthDateField(),
+							webDateFieldBeanProperty);
+			autoBinding_2.bind();
+			//
+			final BeanProperty<Personne, String> personneBeanProperty_3 = BeanProperty
+					.create("address");
+			final BeanProperty<JTextField, String> jTextFieldBeanProperty_1 = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, String, JTextField, String> autoBinding_3 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_3, this.getStreetField(),
+							jTextFieldBeanProperty_1);
+			autoBinding_3.bind();
+			//
+			final BeanProperty<Personne, String> personneBeanProperty_4 = BeanProperty
+					.create("city");
+			final BeanProperty<JTextField, String> jTextFieldBeanProperty_2 = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, String, JTextField, String> autoBinding_4 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_4, this.getTownField(),
+							jTextFieldBeanProperty_2);
+			autoBinding_4.bind();
+			//
+			final BeanProperty<Personne, String> personneBeanProperty_5 = BeanProperty
+					.create("postalCode");
+			final BeanProperty<JTextField, String> jTextFieldBeanProperty_3 = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, String, JTextField, String> autoBinding_5 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_5, this.getPostalCodeField(),
+							jTextFieldBeanProperty_3);
+			autoBinding_5.bind();
+			//
+			final BeanProperty<Personne, String> personneBeanProperty_6 = BeanProperty
+					.create("email");
+			final BeanProperty<JTextField, String> jTextFieldBeanProperty_4 = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, String, JTextField, String> autoBinding_6 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_6, this.getEmailField(),
+							jTextFieldBeanProperty_4);
+			autoBinding_6.bind();
+			//
+			final BeanProperty<Personne, String> personneBeanProperty_7 = BeanProperty
+					.create("phone");
+			final BeanProperty<JTextField, String> jTextFieldBeanProperty_5 = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, String, JTextField, String> autoBinding_7 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_7, this.getPhoneField(),
+							jTextFieldBeanProperty_5);
+			autoBinding_7.bind();
+			//
+			final BeanProperty<Personne, String> personneBeanProperty_8 = BeanProperty
+					.create("mobilePhone");
+			final BeanProperty<JTextField, String> jTextFieldBeanProperty_6 = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, String, JTextField, String> autoBinding_8 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_8, this.getMobilePhoneField(),
+							jTextFieldBeanProperty_6);
+			autoBinding_8.bind();
+			//
+			final BeanProperty<Personne, String> personneBeanProperty_9 = BeanProperty
+					.create("identityCardNumber");
+			final BeanProperty<JTextField, String> jTextFieldBeanProperty_7 = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, String, JTextField, String> autoBinding_9 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_9,
+							this.getIdentityCardField(),
+							jTextFieldBeanProperty_7);
+			autoBinding_9.bind();
+			//
+			final BeanProperty<Personne, Date> personneBeanProperty_10 = BeanProperty
+					.create("passportValidity");
+			final AutoBinding<Personne, Date, WebDateField, Date> autoBinding_10 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_10,
+							this.getIdentityCardValidityDateField(),
+							webDateFieldBeanProperty);
+			autoBinding_10.bind();
+			//
+			final BeanProperty<Personne, Boolean> personneBeanProperty_11 = BeanProperty
+					.create("student");
+			final BeanProperty<JRadioButton, String> jRadioButtonBeanProperty = BeanProperty
+					.create("text");
+			final AutoBinding<Personne, Boolean, JRadioButton, String> autoBinding_11 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_11,
+							this.getYesStudentRadioButton(),
+							jRadioButtonBeanProperty);
+			autoBinding_11.bind();
+			//
+			final BeanProperty<JRadioButton, Boolean> jRadioButtonBeanProperty_1 = BeanProperty
+					.create("selected");
+			final AutoBinding<Personne, Boolean, JRadioButton, Boolean> autoBinding_12 = Bindings
+					.createAutoBinding(UpdateStrategy.READ, this.personne,
+							personneBeanProperty_11,
+							this.getNoStudentRadioButton(),
+							jRadioButtonBeanProperty_1);
+			autoBinding_12.bind();
+		}
+		this.bindingGroup.bind();
 	}
 }

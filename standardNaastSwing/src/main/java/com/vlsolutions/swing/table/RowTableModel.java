@@ -451,6 +451,10 @@ abstract class RowTableModel<T> extends AbstractTableModel {
 		this.fireTableRowsDeleted(start, end);
 	}
 
+	public List<T> getAllRows() {
+		return this.modelData;
+	}
+
 	/**
 	 * Remove the specified rows from the model. The row indexes in the array
 	 * must be in increasing order. Notification of the rows being removed will
@@ -531,13 +535,13 @@ abstract class RowTableModel<T> extends AbstractTableModel {
 
 	/*
 	 * Convert an unformatted column name to a formatted column name. That is:
-	 * 
+	 *
 	 * - insert a space when a new uppercase character is found, insert multiple
 	 * upper case characters are grouped together. - replace any "_" with a
 	 * space
-	 * 
+	 *
 	 * @param columnName unformatted column name
-	 * 
+	 *
 	 * @return the formatted column name
 	 */
 	public static String formatColumnName(final String columnName) {
@@ -562,4 +566,5 @@ abstract class RowTableModel<T> extends AbstractTableModel {
 
 		return buffer.toString().replaceAll("_", " ");
 	}
+
 }

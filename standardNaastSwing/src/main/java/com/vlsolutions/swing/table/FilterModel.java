@@ -34,7 +34,7 @@ import javax.swing.table.TableModel;
  */
 @SuppressWarnings("serial")
 public class FilterModel extends AbstractTableModel implements
-TableModelListener {
+		TableModelListener {
 
 	// our sorting constants (3 modes : unsorted, sorted asc, sorted desc)
 	/**
@@ -209,7 +209,7 @@ TableModelListener {
 				}
 				this.fireTableChanged(new TableModelEvent(this,
 						e.getFirstRow(), e.getLastRow(), e.getColumn(), e
-						.getType()));
+								.getType()));
 			}
 		}
 	}
@@ -244,7 +244,8 @@ TableModelListener {
 				for (int j = 0; j < colCount && !reject; j++) {
 					final VLJTableFilter filter = this.filters[j];
 					if (filter != null) {
-						if (!filter.accept(this.model.getValueAt(i, j))) {
+						final Object valueAt = this.model.getValueAt(i, j);
+						if (valueAt != null && !filter.accept(valueAt)) {
 							reject = true;
 						}
 					}

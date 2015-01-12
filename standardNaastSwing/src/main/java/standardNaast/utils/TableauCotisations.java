@@ -25,8 +25,7 @@ import standardNaast.entities.PersonneCotisation;
 import standardNaast.entities.Season;
 import standardNaast.service.PersonneService;
 import standardNaast.service.PersonneServiceImpl;
-import standardNaast.service.SaisonService;
-import standardNaast.service.SaisonServiceImpl;
+import standardNaast.service.SeasonService;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -44,7 +43,7 @@ public class TableauCotisations extends PdfPageEventHelper {
 
 	private PersonneService personneService;
 
-	private SaisonService saisonService;
+	private SeasonService saisonService;
 
 	private static final int YEAR = GregorianCalendar.getInstance().get(
 			Calendar.YEAR);
@@ -201,7 +200,7 @@ public class TableauCotisations extends PdfPageEventHelper {
 
 	private List<PersonneCotisationModel> buildPersonCotisation() {
 		Date advantageDate = new DateTime(TableauCotisations.YEAR, 4, 1, 0, 0)
-		.toDate();
+				.toDate();
 		final List<Season> seasonList = this.getSeasons();
 		final List<Personne> personList = this.getMembers();
 		final List<PersonneCotisationModel> personCotisationList = new ArrayList<>();
@@ -293,7 +292,7 @@ public class TableauCotisations extends PdfPageEventHelper {
 
 	private List<Personne> getMembers() {
 		final List<Personne> personneList = this.getPersonneService()
-				.findAllPerson();
+				.findAllPerson(false);
 		final List<Personne> memberList = new ArrayList<Personne>();
 		for (final Personne personne : personneList) {
 			if (personne.getMemberNumber() < 10000) {
@@ -311,9 +310,9 @@ public class TableauCotisations extends PdfPageEventHelper {
 		return this.personneService;
 	}
 
-	private SaisonService getSaisonService() {
+	private SeasonService getSaisonService() {
 		if (this.saisonService == null) {
-			this.saisonService = new SaisonServiceImpl();
+			this.saisonService = new SeasonService();
 		}
 		return this.saisonService;
 	}

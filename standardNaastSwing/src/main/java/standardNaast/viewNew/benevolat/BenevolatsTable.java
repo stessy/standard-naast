@@ -81,7 +81,7 @@ public class BenevolatsTable extends JPanel {
 
 	/**
 	 * Action called whenever a row is selected in tghe benevolat table.
-	 * 
+	 *
 	 * @param e
 	 *            the event.
 	 */
@@ -91,24 +91,25 @@ public class BenevolatsTable extends JPanel {
 
 	/**
 	 * Action called when the addBenevolatButton is clicked.
-	 * 
+	 *
 	 * @param e
 	 *            the event.
 	 */
 	private void addBenevolatActionPerformed(final ActionEvent e) {
-		String registerBundleString = this.bundle.getString("REGISTER");
-		Benevolat benevolat = this.createBenevolatDialog(registerBundleString,
-				new Benevolat());
+		final String registerBundleString = this.bundle.getString("REGISTER");
+		final Benevolat benevolat = this.createBenevolatDialog(
+				registerBundleString, new Benevolat());
 
 		if (benevolat != null) {
 			// Validation should be done on all benevolat data. Time to persist
 			// the entity.
 			benevolat.setPersonne(this.personne);
 			this.personneService = this.getPersonneService();
-			List<Benevolat> benevolatList = this.personne.getBenevolatList();
+			final List<Benevolat> benevolatList = this.personne
+					.getBenevolatList();
 			benevolatList.add(benevolat);
 			this.personne.setBenevolatList(benevolatList);
-			this.personneService.update(this.personne);
+			// this.personneService.update(this.personne);
 			// this.setPerson(this.personne);
 			// int row = this.benevolatList.size() - 1;
 			// this.benevolatsTable.setRowSelectionInterval(row, row);
@@ -119,18 +120,19 @@ public class BenevolatsTable extends JPanel {
 
 	/**
 	 * Action called when the modifyBenevolatButton is clicked.
-	 * 
+	 *
 	 * @param e
 	 *            the event.
 	 */
 	private void modifyBenevolatActionPerformed(final ActionEvent e) {
-		String registerBundleString = this.bundle.getString("REGISTER");
-		Benevolat benevolat = this.createBenevolatDialog(registerBundleString,
-				this.selectedBenevolat);
+		final String registerBundleString = this.bundle.getString("REGISTER");
+		final Benevolat benevolat = this.createBenevolatDialog(
+				registerBundleString, this.selectedBenevolat);
 
 		if (benevolat != null) {
 			this.personneService = this.getPersonneService();
-			Personne managedPerson = this.personneService.update(this.personne);
+			// final Personne managedPerson = this.personneService
+			// .update(this.personne);
 			// this.setPerson(managedPerson);
 			// int row = this.benevolatList.size() - 1;
 			// this.benevolatsTable.setRowSelectionInterval(row, row);
@@ -141,14 +143,14 @@ public class BenevolatsTable extends JPanel {
 
 	private Benevolat createBenevolatDialog(final String registerBundleString,
 			final Benevolat benevolat) {
-		Object[] options = { registerBundleString,
+		final Object[] options = { registerBundleString,
 				this.bundle.getString("CANCEL") };
-		BenevolatForm benevolatForm = new BenevolatForm();
+		final BenevolatForm benevolatForm = new BenevolatForm();
 		benevolatForm.setBenevolat(benevolat);
-		JOptionPane benevolatOptionPane = new JOptionPane(benevolatForm,
+		final JOptionPane benevolatOptionPane = new JOptionPane(benevolatForm,
 				JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				options, options[1]);
-		JDialog benevolatDialog = benevolatOptionPane.createDialog(this,
+		final JDialog benevolatDialog = benevolatOptionPane.createDialog(this,
 				this.bundle.getString("BENEVOLAT"));
 		benevolatDialog.setSize(new Dimension(400, 300));
 		benevolatDialog.setResizable(true);
@@ -160,7 +162,7 @@ public class BenevolatsTable extends JPanel {
 	}
 
 	private void deleteBenevolatActionPerformed(final ActionEvent e) {
-		long benevolatId = this.selectedBenevolat.getId();
+		final long benevolatId = this.selectedBenevolat.getId();
 		// for (int i = 0; i < this.benevolatList.size(); i++) {
 		// Benevolat benevolat = this.benevolatList.get(i);
 		// if (benevolatId == benevolat.getId()) {
@@ -170,7 +172,8 @@ public class BenevolatsTable extends JPanel {
 		// }
 
 		this.personneService = this.getPersonneService();
-		Personne managedPerson = this.personneService.update(this.personne);
+		// final Personne managedPerson = this.personneService
+		// .update(this.personne);
 		// this.setPerson(managedPerson);
 		// int row = this.benevolatList.size() - 1;
 		// this.benevolatsTable.setRowSelectionInterval(row, row);
@@ -196,7 +199,7 @@ public class BenevolatsTable extends JPanel {
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY
 		// //GEN-BEGIN:initComponents
-		ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+		final ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
 		this.benevolatsPanel = new JPanel();
 		this.benevolatScrollPane = new JScrollPane();
 		this.benevolatsTable = new JTable();
@@ -206,7 +209,7 @@ public class BenevolatsTable extends JPanel {
 		this.deleteBenevolatButton = new JButton();
 		this.selectedBenevolat = new Benevolat();
 		this.benevolatModel = new BenevolatModel();
-		CellConstraints cc = new CellConstraints();
+		final CellConstraints cc = new CellConstraints();
 
 		// ======== this ========
 		this.setLayout(new FormLayout("default, $lcgap, default",
@@ -253,34 +256,34 @@ public class BenevolatsTable extends JPanel {
 
 				// ---- modifyBenevolatButton ----
 				this.modifyBenevolatButton
-						.setText(bundle
-								.getString("BenevolatsTable.modifyBenevolatButton.text"));
+				.setText(bundle
+						.getString("BenevolatsTable.modifyBenevolatButton.text"));
 				this.modifyBenevolatButton.setEnabled(false);
 				this.modifyBenevolatButton
-						.addActionListener(new ActionListener() {
+				.addActionListener(new ActionListener() {
 
-							@Override
-							public void actionPerformed(final ActionEvent e) {
-								BenevolatsTable.this
-										.modifyBenevolatActionPerformed(e);
-							}
-						});
+					@Override
+					public void actionPerformed(final ActionEvent e) {
+						BenevolatsTable.this
+						.modifyBenevolatActionPerformed(e);
+					}
+				});
 				this.benevolatButtonPanel.add(this.modifyBenevolatButton);
 
 				// ---- deleteBenevolatButton ----
 				this.deleteBenevolatButton
-						.setText(bundle
-								.getString("BenevolatsTable.deleteBenevolatButton.text"));
+				.setText(bundle
+						.getString("BenevolatsTable.deleteBenevolatButton.text"));
 				this.deleteBenevolatButton.setEnabled(false);
 				this.deleteBenevolatButton
-						.addActionListener(new ActionListener() {
+				.addActionListener(new ActionListener() {
 
-							@Override
-							public void actionPerformed(final ActionEvent e) {
-								BenevolatsTable.this
-										.deleteBenevolatActionPerformed(e);
-							}
-						});
+					@Override
+					public void actionPerformed(final ActionEvent e) {
+						BenevolatsTable.this
+						.deleteBenevolatActionPerformed(e);
+					}
+				});
 				this.benevolatButtonPanel.add(this.deleteBenevolatButton);
 			}
 			this.benevolatsPanel.add(this.benevolatButtonPanel, cc.xy(1, 3));
@@ -297,24 +300,24 @@ public class BenevolatsTable extends JPanel {
 		// //GEN-BEGIN:initBindings
 		this.bindingGroup = new BindingGroup();
 		{
-			JTableBinding binding = SwingBindings.createJTableBinding(
+			final JTableBinding binding = SwingBindings.createJTableBinding(
 					UpdateStrategy.READ_WRITE, this.benevolatModel,
 					(BeanProperty) BeanProperty.create("benevolatList"),
 					this.benevolatsTable);
 			binding.addColumnBinding(BeanProperty.create("dateBenevolat"))
-					.setColumnName(
-							this.bundle
-									.getString("BenevolatsTable.benevolatsTable.columnName.1"))
+			.setColumnName(
+					this.bundle
+					.getString("BenevolatsTable.benevolatsTable.columnName.1"))
 					.setColumnClass(Date.class);
 			binding.addColumnBinding(BeanProperty.create("amount"))
-					.setColumnName(
-							this.bundle
-									.getString("BenevolatsTable.benevolatsTable.columnName_2"))
+			.setColumnName(
+					this.bundle
+					.getString("BenevolatsTable.benevolatsTable.columnName_2"))
 					.setColumnClass(BigDecimal.class);
 			binding.addColumnBinding(BeanProperty.create("typeBenevolat"))
-					.setColumnName(
-							this.bundle
-									.getString("BenevolatsTable.benevolatsTable.columnName_3"))
+			.setColumnName(
+					this.bundle
+					.getString("BenevolatsTable.benevolatsTable.columnName_3"))
 					.setColumnClass(String.class);
 			this.bindingGroup.addBinding(binding);
 		}

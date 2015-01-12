@@ -13,11 +13,12 @@ import java.util.TreeSet;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import standardNaast.constants.DateFormat;
 import standardNaast.dao.AbonnementDAO;
+import standardNaast.dao.AbonnementDAOImpl;
 import standardNaast.dao.SeasonDAO;
+import standardNaast.dao.SeasonDAOImpl;
 import standardNaast.entities.Abonnement;
 import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
@@ -35,11 +36,9 @@ public class AbonnementService implements Serializable {
 
 	private static final long serialVersionUID = -7174502180535914551L;
 
-	@Inject
-	AbonnementDAO abonnementDao;
+	AbonnementDAO abonnementDao = new AbonnementDAOImpl();
 
-	@Inject
-	SeasonDAO seasonDao;
+	SeasonDAO seasonDao = new SeasonDAOImpl();
 
 	public void setAsPurchased(final List<Abonnement> abonnements) {
 		for (final Abonnement abonnement : abonnements) {
