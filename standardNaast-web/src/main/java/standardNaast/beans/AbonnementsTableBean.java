@@ -12,7 +12,7 @@ import standardNaast.entities.Abonnement;
 import standardNaast.entities.Season;
 import standardNaast.model.AbonnementsModel;
 import standardNaast.service.AbonnementService;
-import standardNaast.service.SeasonService;
+import standardNaast.service.SeasonServiceImpl;
 
 @Named(value = "abonnementsTable")
 @SessionScoped
@@ -21,7 +21,7 @@ public class AbonnementsTableBean implements Serializable {
 	private static final long serialVersionUID = -4747235749146019196L;
 
 	@Inject
-	private SeasonService seasonService;
+	private SeasonServiceImpl seasonService;
 
 	private List<Season> seasons;
 

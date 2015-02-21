@@ -7,12 +7,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
 import standardNaast.entities.Season;
-import standardNaast.service.SeasonService;
+import standardNaast.service.SeasonServiceImpl;
 
 @SuppressWarnings("serial")
 public class SeasonComboBox extends JComboBox<Season> {
 
-	private static SeasonService seasonService = new SeasonService();
+	private static SeasonServiceImpl seasonService = new SeasonServiceImpl();
 
 	private static SeasonComboBox seasonComboBox;
 

@@ -9,10 +9,10 @@
 		<p:column headerText="#{messages['NUMERO.MEMBRE']}">
 			<h:outputText value="#{member.memberNumber}" />
 		</p:column>
-		<p:column headerText="#{messages['NOM']}" filterBy="#{member.name}" filterMatchMode="startsWith">
+		<p:column headerText="#{messages['NOM']}" filterBy="#{member.name}" filterMatchMode="startsWith" filterFunction="#{membersTable.filterByName}">
 			<h:outputText value="#{member.name}" />
 		</p:column>
-		<p:column headerText="#{messages['PRENOM']}" filterBy="#{member.firstname}" filterMatchMode="startsWith">
+		<p:column headerText="#{messages['PRENOM']}" filterBy="#{member.firstname}" filterMatchMode="startsWith"  filterFunction="#{membersTable.filterByFirstName}">
 			<h:outputText value="#{member.firstname}" />
 		</p:column>
 		<p:column headerText="#{messages['ADRESSE']}">

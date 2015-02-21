@@ -25,7 +25,7 @@ import standardNaast.entities.PersonneCotisation;
 import standardNaast.entities.Season;
 import standardNaast.service.PersonneService;
 import standardNaast.service.PersonneServiceImpl;
-import standardNaast.service.SeasonService;
+import standardNaast.service.SeasonServiceImpl;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -43,7 +43,7 @@ public class TableauCotisations extends PdfPageEventHelper {
 
 	private PersonneService personneService;
 
-	private SeasonService saisonService;
+	private SeasonServiceImpl saisonService;
 
 	private static final int YEAR = GregorianCalendar.getInstance().get(
 			Calendar.YEAR);
@@ -310,9 +310,9 @@ public class TableauCotisations extends PdfPageEventHelper {
 		return this.personneService;
 	}
 
-	private SeasonService getSaisonService() {
+	private SeasonServiceImpl getSaisonService() {
 		if (this.saisonService == null) {
-			this.saisonService = new SeasonService();
+			this.saisonService = new SeasonServiceImpl();
 		}
 		return this.saisonService;
 	}

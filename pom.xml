@@ -8,11 +8,11 @@
 	<packaging>pom</packaging>
 	<name>standardNaast</name>
 	<modules>
-		<module>standardNaast-ear</module>
+<!-- 		<module>standardNaast-ear</module> -->
 		<module>standardNaast-web</module>
-		<module>standardNaast-business</module>
-		<module>standardNaast-persistence</module>
-		<module>standardNaast-common</module>
+<!-- 		<module>standardNaast-business</module> -->
+<!-- 		<module>standardNaast-persistence</module> -->
+<!-- 		<module>standardNaast-common</module> -->
 		<!-- <module>standardNaastAngular</module> -->
 		<!-- <module>standardNaast-webservices</module> -->
 	</modules>
@@ -142,7 +142,7 @@
 			<dependency>
 				<groupId>org.primefaces</groupId>
 				<artifactId>primefaces</artifactId>
-				<version>5.0</version>
+				<version>5.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.primefaces.themes</groupId>

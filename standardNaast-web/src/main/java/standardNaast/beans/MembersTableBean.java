@@ -4,25 +4,27 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.SelectEvent;
 
 import standardNaast.entities.Abonnement;
 import standardNaast.entities.Benevolat;
 import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
-import standardNaast.service.PersonneServiceImpl;
+import standardNaast.service.PersonneService;
 
 @Named(value = "membersTable")
 @ViewScoped
 public class MembersTableBean implements Serializable {
 
-	private static final long serialVersionUID = 7614568701955199215L;
+	private static final long serialVersionUID = 9148227569155809725L;
 
 	private List<Personne> members = new ArrayList<>();
 
@@ -43,7 +45,7 @@ public class MembersTableBean implements Serializable {
 	private MemberFormBean memberForm;
 
 	@Inject
-	private PersonneServiceImpl personneService;
+	private PersonneService personneService;
 
 	@Inject
 	private MemberTravelsBean memberTravelsBean;
@@ -60,6 +62,10 @@ public class MembersTableBean implements Serializable {
 
 	public List<Personne> getMembers() {
 		return this.members;
+	}
+
+	public void setMembers(final List<Personne> members) {
+		this.members = members;
 	}
 
 	public List<Personne> getFilteredMembers() {
@@ -93,6 +99,37 @@ public class MembersTableBean implements Serializable {
 		this.memberTravelsBean.setSelectedMember(this.getSelectedMember());
 		this.memberTravelsBean.setSelectedSeason("");
 		this.memberTravelsBean.setSeasonTravels();
+	}
+
+	public boolean filterByName(final Object value, final Object filter,
+			final Locale locale) {
+		return this.filter(value, filter, locale);
+	}
+
+	public boolean filterByFirstName(final Object value, final Object filter,
+			final Locale locale) {
+		return this.filter(value, filter, locale);
+	}
+
+	public boolean filter(final Object value, final Object filter,
+			final Locale locale) {
+		final String filterText = (filter == null) ? null : filter.toString()
+				.trim();
+		if (StringUtils.isBlank(filterText)) {
+			return true;
+		}
+
+		if (value == null) {
+			return false;
+		}
+
+		final String name = value.toString();
+
+		if (StringUtils.containsIgnoreCase(name, filterText)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

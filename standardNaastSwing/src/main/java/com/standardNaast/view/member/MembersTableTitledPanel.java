@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -20,11 +22,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 import org.jdesktop.swingx.JXTitledPanel;
@@ -39,12 +47,14 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.vlsolutions.swing.table.BeanTableModel;
-import com.vlsolutions.swing.table.FilterModel;
 import com.vlsolutions.swing.table.VLJTable;
 import com.vlsolutions.swing.table.filters.RegExpFilter;
 
 @SuppressWarnings("serial")
 public class MembersTableTitledPanel extends JXTitledPanel {
+
+	private static final ResourceBundle BUNDLE2 = ResourceBundle
+			.getBundle("com.standardNaast.bundle.Bundle"); //$NON-NLS-1$
 
 	private static final ResourceBundle BUNDLE = ResourceBundle
 			.getBundle("com.standardNaast.bundle.Bundle"); //$NON-NLS-1$
@@ -80,6 +90,8 @@ public class MembersTableTitledPanel extends JXTitledPanel {
 
 	private List<Personne> personnes;
 
+	private Personne selectedPersonne;
+
 	// private List<Personne> members;
 	//
 	// private List<Personne> nonMembers;
@@ -88,38 +100,47 @@ public class MembersTableTitledPanel extends JXTitledPanel {
 
 	private final VLJTable membersTable = new VLJTable();
 
-	TableRowSorter<BeanTableModel<Personne>> sorter;
+	TableRowSorter<TableModel> sorter;
+
+	private final JTextField nameFilterTextField;
+
+	private final JTextField firstNameFilterTextField;
 
 	public MembersTableTitledPanel(final Subject subject) {
 
 		this.subject = subject;
+		this.membersTable.setSortEnabled(false);
 
 		this.membersTable.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseClicked(final MouseEvent e) {
-				@SuppressWarnings("unchecked")
-				final BeanTableModel<Personne> model = (BeanTableModel<Personne>) MembersTableTitledPanel.this.membersTable
-				.getBaseModel();
-				final FilterModel filterModel = (FilterModel) MembersTableTitledPanel.this.membersTable
-						.getModel();
-				final int row = MembersTableTitledPanel.this.membersTable
-						.rowAtPoint(e.getPoint());
-				final int sourceRow = filterModel.getSourceRow(row);
-				final Personne personneRow = model.getRow(sourceRow);
-				MembersTableTitledPanel.this.subject
-				.notifyObservers(personneRow);
+				// @SuppressWarnings("unchecked")
+				// final JTableBinding.BindingTableModel model =
+				// (BindingTableModel) MembersTableTitledPanel.this.membersTable
+				// .getBaseModel();
+				// final FilterModel filterModel = (FilterModel)
+				// MembersTableTitledPanel.this.membersTable
+				// .getModel();
+				// final int row = MembersTableTitledPanel.this.membersTable
+				// .rowAtPoint(e.getPoint());
+				// final int sourceRow = filterModel.getSourceRow(row);
+				// final Personne personneRow = model.getRow(sourceRow);
+				// MembersTableTitledPanel.this.subject
+				// .notifyObservers(MembersTableTitledPanel.this.selectedPersonne);
+				System.out.println("test");
 			}
 		});
 		this.membersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.getData();
-		this.buildTableModel();
-
-		this.installFilters();
+		this.sorter = new TableRowSorter<>(this.membersTable.getModel());
+		this.membersTable.setRowSorter(this.sorter);
+		// this.buildTableModel();
 
 		final JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(this.membersTable);
-		this.membersTable.setFilterHeaderVisible(true);
+		// this.installFilters();
+		// this.membersTable.setFilterHeaderVisible(true);
 		final JPanel membersTablePanel = new JPanel();
 		membersTablePanel.setLayout(new BorderLayout(0, 10));
 
@@ -134,7 +155,7 @@ public class MembersTableTitledPanel extends JXTitledPanel {
 						FormFactory.DEFAULT_COLSPEC,
 						FormFactory.DEFAULT_COLSPEC,
 						FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC,
+						ColumnSpec.decode("default:grow"),
 						FormFactory.RELATED_GAP_COLSPEC,
 						FormFactory.DEFAULT_COLSPEC,
 						FormFactory.RELATED_GAP_COLSPEC,
@@ -163,10 +184,28 @@ public class MembersTableTitledPanel extends JXTitledPanel {
 		lblNewLabel.setSize(new Dimension(0, 10));
 		membersSearchPanel.add(lblNewLabel, "1, 1, 24, 1");
 
-		final JLabel label = new JLabel("");
-		label.setSize(new Dimension(10, 10));
-		label.setPreferredSize(new Dimension(20, 10));
-		membersSearchPanel.add(label, "10, 2, 13, 1, fill, default");
+		final JLabel lblNewLabel_1 = new JLabel(
+				MembersTableTitledPanel.BUNDLE2.getString("NOM")); //$NON-NLS-1$
+		membersSearchPanel.add(lblNewLabel_1, "4, 2");
+
+		this.nameFilterTextField = new JTextField();
+		this.nameFilterTextField.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(final KeyEvent e) {
+				final String text = MembersTableTitledPanel.this.nameFilterTextField
+						.getText();
+				if (StringUtils.isBlank(text)) {
+					MembersTableTitledPanel.this.sorter.setRowFilter(null);
+				} else {
+					MembersTableTitledPanel.this.sorter.setRowFilter(RowFilter
+							.regexFilter(text, 1));
+				}
+			}
+		});
+		lblNewLabel_1.setLabelFor(this.nameFilterTextField);
+		membersSearchPanel.add(this.nameFilterTextField, "6, 2, fill, default");
+		this.nameFilterTextField.setColumns(10);
 
 		final JCheckBox chckbxNewCheckBox = new JCheckBox(
 				"Afficher les non membres");
@@ -194,6 +233,18 @@ public class MembersTableTitledPanel extends JXTitledPanel {
 				model.insertRows(0, allPersons);
 			}
 		});
+
+		final JLabel label = new JLabel(
+				MembersTableTitledPanel.BUNDLE2.getString("PRENOM")); //$NON-NLS-1$
+		label.setSize(new Dimension(10, 10));
+		label.setPreferredSize(new Dimension(20, 10));
+		membersSearchPanel.add(label, "10, 2, fill, default");
+
+		this.firstNameFilterTextField = new JTextField();
+		label.setLabelFor(this.firstNameFilterTextField);
+		membersSearchPanel.add(this.firstNameFilterTextField,
+				"12, 2, fill, default");
+		this.firstNameFilterTextField.setColumns(10);
 		membersSearchPanel.add(chckbxNewCheckBox, "24, 2");
 
 		this.add(membersTablePanel);
@@ -322,6 +373,15 @@ public class MembersTableTitledPanel extends JXTitledPanel {
 		// .get(i)));
 		// this.membersTable.installFilter(modelFilterColumnIndexes.get(i),
 		// new RegExpFilter(true));
+
+		// }
+		// for (int i = 0; i < baseModel.getColumnCount(); i++) {
+		// modelFilterColumnIndexes.add(modelColumnsName
+		// .indexOf(MembersTableTitledPanel.COLUMNS_FILTERING_LIST
+		// .get(i)));
+		// this.membersTable.installFilter(modelFilterColumnIndexes.get(i),
+		// new RegExpFilter(true));
+		// this.membersTable.installFilter(i, new RegExpFilter(true));
 		// }
 		//
 		// for (int i = 0; i < this.membersTable.getColumnCount(); i++) {
@@ -331,6 +391,18 @@ public class MembersTableTitledPanel extends JXTitledPanel {
 		// }
 		// }
 
+	}
+
+	private void filter() {
+
+		RowFilter<TableModel, Object> rf = null;
+		try {
+			final String filtertext = this.nameFilterTextField.getText();
+			rf = RowFilter.regexFilter(filtertext, 1);
+		} catch (final java.util.regex.PatternSyntaxException e) {
+			return;
+		}
+		this.sorter.setRowFilter(rf);
 	}
 
 	protected void initDataBindings() {
@@ -372,7 +444,14 @@ public class MembersTableTitledPanel extends JXTitledPanel {
 				.create("phone");
 		jTableBinding.addColumnBinding(personneBeanProperty_6).setColumnName(
 				"T\u00E9l\u00E9phone");
-		// this.membersTable);
+		//
 		jTableBinding.bind();
+		//
+		final BeanProperty<VLJTable, Personne> vLJTableBeanProperty = BeanProperty
+				.create("selectedElement");
+		final AutoBinding<Personne, Personne, VLJTable, Personne> autoBinding = Bindings
+				.createAutoBinding(UpdateStrategy.READ, this.selectedPersonne,
+						this.membersTable, vLJTableBeanProperty);
+		autoBinding.bind();
 	}
 }

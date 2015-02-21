@@ -39,8 +39,6 @@ public class PrixPlace implements Serializable {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Season saison;
 
-	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "PRIX_PLACE_ID", unique = true, nullable = false, precision = 10)

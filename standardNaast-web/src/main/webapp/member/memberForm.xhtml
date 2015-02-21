@@ -2,13 +2,13 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
 	<p:messages id="displayMemberMessages" showDetail="true" autoUpdate="true" closable="true" />
 	<p:tooltip />
-	<p:panelGrid style="width:100%" styleClass="memberForm" id="memberFormGrid">
+	<p:panelGrid style="width:100%" id="memberFormGrid">
 		<p:row>
 			<p:column style="text-align:right;">
 				<p:outputLabel for="displayLastName" value="#{messages['NOM']}" />
 			</p:column>
 			<p:column style="align:left;">
-				<p:inputText id="displayLastName" required="true" value="#{memberForm.personne.name}" style="width:98%;" maxLength="50" readonly="true">
+				<p:inputText id="displayLastName" required="true" value="#{membersTable.selectedMember.name}" style="width:98%;" maxLength="50" readonly="true">
 					<f:validateLength maximum="50"></f:validateLength>
 				</p:inputText>
 				<p:message for="displayLastName" display="tooltip" />
@@ -17,7 +17,7 @@
 				<p:outputLabel for="displayFirstName" value="#{messages['PRENOM']}" />
 			</p:column>
 			<p:column>
-				<p:inputText id="displayFirstName" required="true" value="#{memberForm.personne.firstname}" style="width:98%;" maxLength="50" readonly="true">
+				<p:inputText id="displayFirstName" required="true" value="#{membersTable.selectedMember.firstname}" style="width:98%;" maxLength="50" readonly="true">
 					<f:validateLength maximum="50"></f:validateLength>
 				</p:inputText>
 				<p:message for="displayFirstName" display="tooltip" />
@@ -26,14 +26,14 @@
 				<p:outputLabel for="displayBirthDate" value="#{messages['DATE.NAISSANCE']}" />
 			</p:column>
 			<p:column style="margin-left: 0;">
-				<p:calendar id="displayBirthDate" navigator="true" required="true" value="#{memberForm.personne.birthdate}" pattern="dd/MM/yyyy" readonly="true" />
+				<p:calendar id="displayBirthDate" navigator="true" required="true" value="#{membersTable.selectedMember.birthdate}" pattern="dd/MM/yyyy" readonly="true" />
 				<p:message for="displayBirthDate" display="tooltip" />
 			</p:column>
 			<p:column style="text-align:right;">
 				<p:outputLabel for="displayMemberNumber" value="#{messages['NUMERO.MEMBRE']}" />
 			</p:column>
 			<p:column>
-				<p:inputText id="displayMemberNumber" value="#{memberForm.personne.memberNumber}" size="3" readonly="true" />
+				<p:inputText id="displayMemberNumber" value="#{membersTable.selectedMember.memberNumber}" size="3" readonly="true" />
 			</p:column>
 		</p:row>
 		<p:row>
@@ -41,7 +41,7 @@
 				<p:outputLabel for="displayAddress" value="#{messages['ADRESSE']}" />
 			</p:column>
 			<p:column colspan="3">
-				<p:inputText id="displayAddress" value="#{memberForm.personne.address}" style="width:98%;" maxLength="120" readonly="true">
+				<p:inputText id="displayAddress" value="#{membersTable.selectedMember.address}" style="width:98%;" maxLength="120" readonly="true">
 					<f:validateLength maximum="120"></f:validateLength>
 				</p:inputText>
 			</p:column>
@@ -49,7 +49,7 @@
 				<p:outputLabel for="displayPostalCode" value="#{messages['CODE.POSTAL']}" />
 			</p:column>
 			<p:column>
-				<p:inputText id="displayPostalCode" value="#{memberForm.personne.postalCode}" size="4" maxLength="4" readonly="true">
+				<p:inputText id="displayPostalCode" value="#{membersTable.selectedMember.postalCode}" size="4" maxLength="4" readonly="true">
 					<f:validateLength maximum="4"></f:validateLength>
 				</p:inputText>
 			</p:column>
@@ -57,7 +57,7 @@
 				<p:outputLabel for="displayCity" value="#{messages['VILLE']}" />
 			</p:column>
 			<p:column>
-				<p:inputText id="displayCity" value="#{memberForm.personne.city}" style="width:98%;" maxLength="50" readonly="true">
+				<p:inputText id="displayCity" value="#{membersTable.selectedMember.city}" style="width:98%;" maxLength="50" readonly="true">
 					<f:validateLength maximum="50"></f:validateLength>
 				</p:inputText>
 			</p:column>
@@ -67,7 +67,7 @@
 				<p:outputLabel for="displayEmail" value="#{messages['EMAIL']}" />
 			</p:column>
 			<p:column colspan="3">
-				<p:inputText id="displayEmail" value="#{memberForm.personne.email}" style="width:98%;" maxLength="120" readonly="true">
+				<p:inputText id="displayEmail" value="#{membersTable.selectedMember.email}" style="width:98%;" maxLength="120" readonly="true">
 					<f:validateLength maximum="120"></f:validateLength>
 				</p:inputText>
 			</p:column>
@@ -75,7 +75,7 @@
 				<p:outputLabel for="displayPhoneNumber" value="#{messages['TELEPHONE']}" />
 			</p:column>
 			<p:column>
-				<p:inputText id="displayPhoneNumber" value="#{memberForm.personne.phone}" readonly="true">
+				<p:inputText id="displayPhoneNumber" value="#{membersTable.selectedMember.phone}" readonly="true">
 					<f:validateLength maximum="12"></f:validateLength>
 				</p:inputText>
 			</p:column>
@@ -83,7 +83,7 @@
 				<p:outputLabel for="displayMobilePhone" value="#{messages['GSM']}" />
 			</p:column>
 			<p:column>
-				<p:inputText id="displayMobilePhone" value="#{memberForm.personne.mobilePhone}" readonly="true">
+				<p:inputText id="displayMobilePhone" value="#{membersTable.selectedMember.mobilePhone}" readonly="true">
 					<f:validateLength maximum="13"></f:validateLength>
 				</p:inputText>
 			</p:column>
@@ -93,19 +93,19 @@
 				<p:outputLabel for="displayIdentityCard" value="#{messages['CARTE.IDENTITE']}" />
 			</p:column>
 			<p:column>
-				<p:inputText id="displayIdentityCard" value="#{memberForm.personne.identityCardNumber}" readonly="true" />
+				<p:inputText id="displayIdentityCard" value="#{membersTable.selectedMember.identityCardNumber}" readonly="true" />
 			</p:column>
 			<p:column style="text-align:right;">
 				<p:outputLabel for="displayIdentityCardValidity" value="#{messages['IDENTITY.VALIDITY']}" />
 			</p:column>
 			<p:column>
-				<p:calendar id="displayIdentityCardValidity" navigator="true" value="#{memberForm.personne.passportValidity}" pattern="dd/MM/yyyy" readonly="true" />
+				<p:calendar id="displayIdentityCardValidity" navigator="true" value="#{membersTable.selectedMember.passportValidity}" pattern="dd/MM/yyyy" readonly="true" />
 			</p:column>
 			<p:column style="text-align:right;">
 				<p:outputLabel for="displayStudent" value="#{messages['ETUDIANT']}" />
 			</p:column>
 			<p:column>
-				<p:selectOneRadio id="displayStudent" value="#{memberForm.personne.student}" readonly="true">
+				<p:selectOneRadio id="displayStudent" value="#{membersTable.selectedMember.student}" readonly="true">
 					<f:selectItem itemLabel="#{messages['OUI']}" itemValue="true" />
 					<f:selectItem itemLabel="#{messages['NON']}" itemValue="false" />
 				</p:selectOneRadio>
@@ -130,7 +130,7 @@
 						<p:outputLabel for="lastName" value="#{messages['NOM']}" />
 					</p:column>
 					<p:column style="align:left;">
-						<p:inputText id="lastName" required="true" value="#{memberForm.personne.name}" style="width:98%;" maxLength="50">
+						<p:inputText id="lastName" required="true" value="#{membersTable.selectedMember.name}" style="width:98%;" maxLength="50">
 							<f:validateLength maximum="50"></f:validateLength>
 						</p:inputText>
 						<p:message for="lastName" display="tooltip" />
@@ -139,7 +139,7 @@
 						<p:outputLabel for="firstName" value="#{messages['PRENOM']}" />
 					</p:column>
 					<p:column>
-						<p:inputText id="firstName" required="true" value="#{memberForm.personne.firstname}" style="width:98%;" maxLength="50">
+						<p:inputText id="firstName" required="true" value="#{membersTable.selectedMember.firstname}" style="width:98%;" maxLength="50">
 							<f:validateLength maximum="50"></f:validateLength>
 						</p:inputText>
 						<p:message for="firstName" display="tooltip" />
@@ -148,14 +148,14 @@
 						<p:outputLabel for="birthDate" value="#{messages['DATE.NAISSANCE']}" />
 					</p:column>
 					<p:column style="margin-left: 0;">
-						<p:calendar id="birthDate" navigator="true" required="true" value="#{memberForm.personne.birthdate}" pattern="dd/MM/yyyy" />
+						<p:calendar id="birthDate" navigator="true" required="true" value="#{membersTable.selectedMember.birthdate}" pattern="dd/MM/yyyy" />
 						<p:message for="birthDate" display="tooltip" />
 					</p:column>
 					<p:column style="text-align:right;">
 						<p:outputLabel for="memberNumber" value="#{messages['NUMERO.MEMBRE']}" />
 					</p:column>
 					<p:column>
-						<p:inputText id="memberNumber" readonly="true" value="#{memberForm.personne.memberNumber}" size="3" />
+						<p:inputText id="memberNumber" readonly="true" value="#{membersTable.selectedMember.memberNumber}" size="3" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -163,7 +163,7 @@
 						<p:outputLabel for="address" value="#{messages['ADRESSE']}" />
 					</p:column>
 					<p:column colspan="3">
-						<p:inputText id="address" value="#{memberForm.personne.address}" style="width:98%;" maxLength="120">
+						<p:inputText id="address" value="#{membersTable.selectedMember.address}" style="width:98%;" maxLength="120">
 							<f:validateLength maximum="120"></f:validateLength>
 						</p:inputText>
 					</p:column>
@@ -171,7 +171,7 @@
 						<p:outputLabel for="postalCode" value="#{messages['CODE.POSTAL']}" />
 					</p:column>
 					<p:column>
-						<p:inputText id="postalCode" value="#{memberForm.personne.postalCode}" size="4" maxLength="4">
+						<p:inputText id="postalCode" value="#{membersTable.selectedMember.postalCode}" size="4" maxLength="4">
 							<f:validateLength maximum="4"></f:validateLength>
 						</p:inputText>
 					</p:column>
@@ -179,7 +179,7 @@
 						<p:outputLabel for="city" value="#{messages['VILLE']}" />
 					</p:column>
 					<p:column>
-						<p:inputText id="city" value="#{memberForm.personne.city}" style="width:98%;" maxLength="50">
+						<p:inputText id="city" value="#{membersTable.selectedMember.city}" style="width:98%;" maxLength="50">
 							<f:validateLength maximum="50"></f:validateLength>
 						</p:inputText>
 					</p:column>
@@ -189,7 +189,7 @@
 						<p:outputLabel for="email" value="#{messages['EMAIL']}" />
 					</p:column>
 					<p:column colspan="3">
-						<p:inputText id="email" value="#{memberForm.personne.email}" style="width:98%;" maxLength="120">
+						<p:inputText id="email" value="#{membersTable.selectedMember.email}" style="width:98%;" maxLength="120">
 							<f:validateLength maximum="120"></f:validateLength>
 						</p:inputText>
 					</p:column>
@@ -197,7 +197,7 @@
 						<p:outputLabel for="phoneNumber" value="#{messages['TELEPHONE']}" />
 					</p:column>
 					<p:column>
-						<p:inputText id="phoneNumber" value="#{memberForm.personne.phone}">
+						<p:inputText id="phoneNumber" value="#{membersTable.selectedMember.phone}">
 							<f:validateLength maximum="12"></f:validateLength>
 						</p:inputText>
 					</p:column>
@@ -205,7 +205,7 @@
 						<p:outputLabel for="mobilePhone" value="#{messages['GSM']}" />
 					</p:column>
 					<p:column>
-						<p:inputText id="mobilePhone" value="#{memberForm.personne.mobilePhone}">
+						<p:inputText id="mobilePhone" value="#{membersTable.selectedMember.mobilePhone}">
 							<f:validateLength maximum="13"></f:validateLength>
 						</p:inputText>
 					</p:column>
@@ -215,19 +215,19 @@
 						<p:outputLabel for="identityCard" value="#{messages['CARTE.IDENTITE']}" />
 					</p:column>
 					<p:column>
-						<p:inputText id="identityCard" value="#{memberForm.personne.identityCardNumber}" />
+						<p:inputText id="identityCard" value="#{membersTable.selectedMember.identityCardNumber}" />
 					</p:column>
 					<p:column style="text-align:right;">
 						<p:outputLabel for="identityCardValidity" value="#{messages['IDENTITY.VALIDITY']}" />
 					</p:column>
 					<p:column>
-						<p:calendar id="identityCardValidity" navigator="true" value="#{memberForm.personne.passportValidity}" pattern="dd/MM/yyyy" />
+						<p:calendar id="identityCardValidity" navigator="true" value="#{membersTable.selectedMember.passportValidity}" pattern="dd/MM/yyyy" />
 					</p:column>
 					<p:column style="text-align:right;">
 						<p:outputLabel for="student" value="#{messages['ETUDIANT']}" />
 					</p:column>
 					<p:column>
-						<p:selectOneRadio id="student" value="#{memberForm.personne.student}">
+						<p:selectOneRadio id="student" value="#{membersTable.selectedMember.student}">
 							<f:selectItem itemLabel="#{messages['OUI']}" itemValue="true" />
 							<f:selectItem itemLabel="#{messages['NON']}" itemValue="false" />
 						</p:selectOneRadio>

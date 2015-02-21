@@ -15,7 +15,7 @@ import javax.swing.border.TitledBorder;
 import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
 import standardNaast.model.MemberSeasonTravels;
-import standardNaast.service.SeasonService;
+import standardNaast.service.SeasonServiceImpl;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -39,7 +39,7 @@ public class MemberTravels extends JPanel implements Observer {
 
 	private Personne personne;
 
-	private final SeasonService seasonService = new SeasonService();
+	private final SeasonServiceImpl seasonService = new SeasonServiceImpl();
 
 	/**
 	 * Create the panel.

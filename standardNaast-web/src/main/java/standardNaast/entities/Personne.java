@@ -20,9 +20,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import standardNaast.annotations.PersonneColumnOrdering;
+
 /**
  * @author stessy
- * 
+ *
  */
 @Entity
 @Table(name = "PERSONNES")
@@ -51,18 +53,23 @@ public class Personne implements Serializable, Comparable<Personne> {
 	private long personneId;
 
 	@Column(name = "NOM", length = Personne.NAME_MAX_LENGTH)
+	@PersonneColumnOrdering(order = 2)
 	private String name;
 
 	@Column(name = "PRENOM", length = Personne.NAME_MAX_LENGTH)
+	@PersonneColumnOrdering(order = 3)
 	private String firstname;
 
 	@Column(name = "ADRESSE", length = Personne.ADDRESS_MAX_LENGTH)
+	@PersonneColumnOrdering(order = 4)
 	private String address;
 
 	@Column(name = "CODE_POSTAL", length = Personne.POSTAL_CODE_MAX_LENGTH)
+	@PersonneColumnOrdering(order = 5)
 	private String postalCode;
 
 	@Column(name = "VILLE")
+	@PersonneColumnOrdering(order = 6)
 	private String city;
 
 	@Column(name = "DATE_NAISSANCE")
@@ -76,6 +83,7 @@ public class Personne implements Serializable, Comparable<Personne> {
 	private String mobilePhone;
 
 	@Column(name = "TELEPHONE", length = Personne.PHONE_MAX_LENGTH)
+	@PersonneColumnOrdering(order = 7)
 	private String phone;
 
 	@Column(name = "VALIDITE_CARTE_IDENTITE")
@@ -95,6 +103,7 @@ public class Personne implements Serializable, Comparable<Personne> {
 	private List<PersonneCotisation> personnesCotisations;
 
 	@Column(name = "NUMERO_MEMBRE")
+	@PersonneColumnOrdering(order = 1)
 	private long memberNumber;
 
 	@Column(name = "ETUDIANT")
@@ -133,6 +142,11 @@ public class Personne implements Serializable, Comparable<Personne> {
 	public String getAddress() {
 		return this.address;
 	}
+
+	// public String getFullAddress() {
+	// return MessageFormat.format("{0} {1} {2}", this.getAddress(),
+	// this.getPostalCode(), this.getCity());
+	// }
 
 	public void setAddress(final String address) {
 		this.address = address;
@@ -245,8 +259,8 @@ public class Personne implements Serializable, Comparable<Personne> {
 
 	@Override
 	public int compareTo(final Personne otherPerson) {
-		long memberNumber1 = this.getMemberNumber();
-		long memberNumber2 = otherPerson.getMemberNumber();
+		final long memberNumber1 = this.getMemberNumber();
+		final long memberNumber2 = otherPerson.getMemberNumber();
 		return (memberNumber1 < memberNumber2 ? -1
 				: (memberNumber1 == memberNumber2 ? 0 : 1));
 	}

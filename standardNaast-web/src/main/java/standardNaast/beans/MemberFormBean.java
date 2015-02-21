@@ -10,6 +10,7 @@ import javax.inject.Named;
 import standardNaast.entities.Personne;
 import standardNaast.service.PersonneServiceImpl;
 
+@SuppressWarnings("serial")
 @Named(value = "memberForm")
 @ViewScoped
 public class MemberFormBean implements Serializable {
