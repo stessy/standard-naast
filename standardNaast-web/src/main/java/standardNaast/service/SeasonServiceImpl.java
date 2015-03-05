@@ -3,6 +3,7 @@
  */
 package standardNaast.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -22,7 +23,7 @@ import standardNaast.model.MemberSeasonTravels;
  */
 @Stateless
 @LocalBean
-public class SeasonServiceImpl implements SeasonService {
+public class SeasonServiceImpl implements SeasonService, Serializable {
 
 	@Inject
 	SeasonDAO saisonDAO;

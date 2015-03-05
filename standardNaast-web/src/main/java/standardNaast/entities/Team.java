@@ -18,14 +18,14 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the EQUIPE database table.
- * 
+ *
  */
 @Entity
 @Table(name = "EQUIPE")
 @Access(AccessType.FIELD)
 public class Team implements Serializable, Comparable<Team> {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7539343801481344476L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,11 +38,6 @@ public class Team implements Serializable, Comparable<Team> {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "SAISON_EQUIPE", joinColumns = { @JoinColumn(name = "EQUIPE_ID") }, inverseJoinColumns = { @JoinColumn(name = "SAISON_ID") })
 	private List<Season> saisons;
-
-
-
-	public Team() {
-	}
 
 	public long getEquipeId() {
 		return this.equipeId;

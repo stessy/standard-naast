@@ -125,4 +125,9 @@
 	<changeSet id="22" author="stessy">
 		<dropColumn tableName="ABONNEMENT" columnName="PLACE_COMMANDEE" />
 	</changeSet>
+	<changeSet id="23" author="stessy">
+		<addColumn tableName="SAISON">
+		<column name="MONTANT_COTISATION" type="NUMBER(3,0)"></column>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

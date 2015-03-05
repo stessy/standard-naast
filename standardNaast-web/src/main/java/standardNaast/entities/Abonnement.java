@@ -34,31 +34,6 @@ import standardNaast.types.AbonnementStatus;
 @NamedQuery(name = "getAbonnementsPerSeason", query = "select A from Abonnement A where A.season = :season")
 public class Abonnement implements Serializable, Comparable<Abonnement> {
 
-	@Size(max = 100)
-	@Column(name = "PLACE")
-	private String place;
-
-	@Basic(optional = false)
-	@NotNull
-	@Column(name = "REDUCTION")
-	private long reduction;
-
-	@Basic(optional = false)
-	// @NotNull
-	@Column(name = "PAYE")
-	private boolean paye;
-
-	@Size(max = 6)
-	@Column(name = "RANG")
-	private String rang;
-
-	@Column(name = "ACOMPTE")
-	private BigInteger acompte;
-
-	@JoinColumn(name = "SAISON", referencedColumnName = "SAISON_ID")
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Season season;
-
 	private static final long serialVersionUID = 3083188497640356561L;
 
 	public static final int DEFAULT_NUMERIC_PRECISION = 6;
@@ -74,6 +49,30 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "BLOC_ID")
 	private Bloc blocId;
+
+	@Size(max = 6)
+	@Column(name = "RANG")
+	private String rang;
+
+	@Size(max = 100)
+	@Column(name = "PLACE")
+	private String place;
+
+	@Basic(optional = false)
+	@NotNull
+	@Column(name = "REDUCTION")
+	private long reduction;
+
+	@Basic(optional = false)
+	@Column(name = "PAYE")
+	private boolean paye;
+
+	@Column(name = "ACOMPTE")
+	private BigInteger acompte;
+
+	@JoinColumn(name = "SAISON", referencedColumnName = "SAISON_ID")
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	private Season season;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PERSONNE_ID")

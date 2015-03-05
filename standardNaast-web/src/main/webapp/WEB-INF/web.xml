@@ -13,7 +13,6 @@
 	<context-param>
 		<param-name>liquibase.datasource</param-name>
 		<param-value>java:jboss/datasources/StandardNaastDS</param-value>
-		<!-- <param-value>jdbc/standardNaast</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>liquibase.onerror.fail</param-name>

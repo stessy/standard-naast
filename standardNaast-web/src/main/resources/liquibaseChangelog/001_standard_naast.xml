@@ -124,4 +124,5 @@ SET competition_type =
 	<changeSet id="22" author="stessy">
 		<dropColumn tableName="ABONNEMENT" columnName="PLACE_COMMANDEE" />
 	</changeSet>
+	
 </databaseChangeLog>
