@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
-	<p:panelGrid style="width:100%" id="memberTravels">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+                xmlns:rich="http://richfaces.org/rich">
+	<p:panelGrid style="width:100%" styleClass="my-panelgrid" id="memberTravels">
 		<p:row>
 			<p:column style="text-align:right;">
 				<p:outputLabel for="seasonMenu" value="#{messages['SAISON']}" />
@@ -26,6 +27,7 @@
 				<p:outputLabel for="travelAway" value="#{messages['DEPLACEMENT']}" />
 			</p:column>
 			<p:column style="float:left;">
+				
 				<p:inputText disabled="true" id="travelAway" value="#{memberTravelsBean.away}"></p:inputText>
 			</p:column>
 		</p:row>

@@ -4,9 +4,9 @@
 <h:head>
 	<title>Application du Standard de Naast</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<h:outputStylesheet name="/css/screen.css" />
 </h:head>
 <h:body>
+	<h:outputStylesheet name="/css/screen.css" />
 	<h:panelGroup id="page" layout="block">
 		<h:panelGroup id="header" layout="block">
 			<img src="resources/images/banniere_club.png" alt="Banniere" height="140" width="900" />
@@ -29,15 +29,12 @@
 				<p:tab style="width:100%" title="Abonnements" id="abonnementsTab"><h:form><ui:include src="abonnement/abonnementsTable.xhtml" /></h:form></p:tab>
 				<p:tab style="width:100%" title="Matchs"></p:tab>
 				<p:tab style="width:100%" title="Configuration générale">
-<!-- 					<h:form id="generalConfigurationForm"> -->
 						<ui:include src="configuration/generalConfiguration.xhtml" />
-<!-- 					</h:form> -->
 				</p:tab>
 			</p:tabView>
 		</h:panelGroup>
 		<h:panelGroup id="footer" layout="block"></h:panelGroup>
 	</h:panelGroup>
 	 <ui:debug rendered="true" hotkey="x"/>
-<!-- 	 <ui:include src="member/createMemberForm.xhtml" /> -->
 </h:body>
 </html>

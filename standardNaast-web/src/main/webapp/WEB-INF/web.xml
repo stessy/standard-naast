@@ -1,63 +1,86 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	version="3.0"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-	<context-param>
-		<param-name>liquibase.changelog</param-name>
-		<param-value>changelog.xml</param-value>
-	</context-param>
-	<context-param>
-		<param-name>primefaces.THEME</param-name>
-		<param-value>bootstrap</param-value>
-	</context-param>
-	<context-param>
-		<param-name>liquibase.datasource</param-name>
-		<param-value>java:jboss/datasources/StandardNaastDS</param-value>
-	</context-param>
-	<context-param>
-		<param-name>liquibase.onerror.fail</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<context-param>
-		<param-name>liquibase.contexts</param-name>
-		<param-value>production</param-value>
-	</context-param>
-	<listener>
-		<listener-class>liquibase.integration.servlet.LiquibaseServletListener</listener-class>
-	</listener>
-	<context-param>
-		<param-name>facelets.DEVELOPMENT</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<servlet>
-		<servlet-name>Faces Servlet</servlet-name>
-		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Faces Servlet</servlet-name>
-		<url-pattern>*.jsf</url-pattern>
-	</servlet-mapping>
-	<context-param>
-		<description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>
-		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-		<param-value>client</param-value>
-	</context-param>
-	<context-param>
-		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
-		<param-value>resources.application</param-value>
-	</context-param>
-	<env-entry>
-		<env-entry-name>jsf/ClientSideSecretKey</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>am9kZXRlcHV0b2hhY2tlcg==</env-entry-value>
-	</env-entry>
-	<!-- <servlet> -->
-	<!-- <servlet-name>javax.ws.rs.core.Application</servlet-name> -->
-	<!-- <load-on-startup>1</load-on-startup> -->
-	<!-- </servlet> -->
-	<!-- <servlet-mapping> -->
-	<!-- <servlet-name>javax.ws.rs.core.Application</servlet-name> -->
-	<!-- <url-pattern>/rest/*</url-pattern> -->
-	<!-- </servlet-mapping> -->
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         version="3.0"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <context-param>
+        <param-name>liquibase.changelog</param-name>
+        <param-value>changelog.xml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>bootstrap</param-value>
+    </context-param>
+    <context-param>
+        <param-name>liquibase.datasource</param-name>
+        <param-value>java:jboss/datasources/StandardNaastDS</param-value>
+    </context-param>
+    <context-param>
+        <param-name>liquibase.onerror.fail</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>liquibase.contexts</param-name>
+        <param-value>production</param-value>
+    </context-param>
+    <listener>
+        <listener-class>liquibase.integration.servlet.LiquibaseServletListener
+        </listener-class>
+    </listener>
+    <context-param>
+        <param-name>facelets.DEVELOPMENT</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>VaadinApplicationServlet</servlet-name>
+        <servlet-class>com.vaadin.cdi.server.VaadinCDIServlet</servlet-class>
+        <init-param>
+            <param-name>UI</param-name>
+            <param-value>standardNaast.ui.MembersLayout</param-value>
+        </init-param>
+        <init-param>
+        	<description>
+        	Application widgetset</description>
+        	<param-name>widgetset</param-name>
+        	<param-value>standardNaast.ui.Standardnaast_webWidgetset</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>VaadinApplicationServlet</servlet-name>
+        <url-pattern>/vaadin</url-pattern>
+    </servlet-mapping>
+    <context-param>
+    <description>State saving method: 'client' or 'server' (=default). See
+    JSF Specification 2.5.2
+    </description>
+    <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+    <param-value>client</param-value>
+    </context-param>
+    <context-param>
+    <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+    <param-value>resources.application</param-value>
+    </context-param>
+    <env-entry>
+    <env-entry-name>jsf/ClientSideSecretKey</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>am9kZXRlcHV0b2hhY2tlcg==</env-entry-value>
+    </env-entry>
+<!--     <servlet> -->
+<!--     <servlet-name>javax.ws.rs.core.Application</servlet-name> -->
+<!--     <load-on-startup>1</load-on-startup> -->
+<!--     </servlet> -->
+<!--     <servlet-mapping> -->
+<!--     <servlet-name>javax.ws.rs.core.Application</servlet-name> -->
+<!--     <url-pattern>/rest/*</url-pattern> -->
+<!--     </servlet-mapping> -->
 </web-app>

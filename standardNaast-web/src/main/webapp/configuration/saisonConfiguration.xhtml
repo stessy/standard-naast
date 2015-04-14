@@ -16,6 +16,9 @@
 		<p:column headerText="#{messages['SaisonsTable.seasonsTable.columnName_5']}">
 			<p:selectBooleanCheckbox value="#{season.european}" />
 		</p:column>
+		<p:column headerText="#{messages['cotisation.montant']}">
+			<h:outputText value="#{season.montantCotisation}" />
+		</p:column>
 		<f:facet name="footer">
 			<p:row>
 				<p:column colspan="5">

@@ -6,14 +6,14 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
 import standardNaast.entities.Season;
 import standardNaast.service.SeasonServiceImpl;
 
 @Named(value = "seasonsBean")
-@ViewScoped
+@ApplicationScoped
 public class SeasonBean implements Serializable {
 
 	private static final long serialVersionUID = 7004625731973211539L;

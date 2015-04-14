@@ -2,110 +2,111 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
 	<p:messages id="displayMemberMessages" showDetail="true" autoUpdate="true" closable="true" />
 	<p:tooltip />
-	<p:panelGrid style="width:100%" id="memberFormGrid">
+	<h:form id="memberForm">
+	<p:panelGrid style="width:100%" styleClass="my-panelgrid" id="memberFormGrid">
 		<p:row>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayLastName" value="#{messages['NOM']}" />
 			</p:column>
-			<p:column style="align:left;">
-				<p:inputText id="displayLastName" required="true" value="#{membersTable.selectedMember.name}" style="width:98%;" maxLength="50" readonly="true">
+			<p:column style="float:left;border:none;">
+				<p:inputText id="displayLastName" required="true" value="#{membersTable.selectedMember.name}" style="width:98%;" maxLength="50">
 					<f:validateLength maximum="50"></f:validateLength>
 				</p:inputText>
 				<p:message for="displayLastName" display="tooltip" />
 			</p:column>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayFirstName" value="#{messages['PRENOM']}" />
 			</p:column>
-			<p:column>
-				<p:inputText id="displayFirstName" required="true" value="#{membersTable.selectedMember.firstname}" style="width:98%;" maxLength="50" readonly="true">
+			<p:column style="float:left;border:none;">
+				<p:inputText id="displayFirstName" required="true" value="#{membersTable.selectedMember.firstname}" style="width:98%;" maxLength="50">
 					<f:validateLength maximum="50"></f:validateLength>
 				</p:inputText>
 				<p:message for="displayFirstName" display="tooltip" />
 			</p:column>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayBirthDate" value="#{messages['DATE.NAISSANCE']}" />
 			</p:column>
-			<p:column style="margin-left: 0;">
-				<p:calendar id="displayBirthDate" navigator="true" required="true" value="#{membersTable.selectedMember.birthdate}" pattern="dd/MM/yyyy" readonly="true" />
+			<p:column style="float:left;border:none;">
+				<p:calendar id="displayBirthDate" navigator="true" required="true" value="#{membersTable.selectedMember.birthdate}" pattern="dd/MM/yyyy" />
 				<p:message for="displayBirthDate" display="tooltip" />
 			</p:column>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayMemberNumber" value="#{messages['NUMERO.MEMBRE']}" />
 			</p:column>
-			<p:column>
-				<p:inputText id="displayMemberNumber" value="#{membersTable.selectedMember.memberNumber}" size="3" readonly="true" />
+			<p:column style="float:left;border:none;">
+				<p:inputText id="displayMemberNumber" value="#{membersTable.selectedMember.memberNumber}" size="3" />
 			</p:column>
 		</p:row>
 		<p:row>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayAddress" value="#{messages['ADRESSE']}" />
 			</p:column>
-			<p:column colspan="3">
-				<p:inputText id="displayAddress" value="#{membersTable.selectedMember.address}" style="width:98%;" maxLength="120" readonly="true">
+			<p:column colspan="3" style="float:left;border:none;">
+				<p:inputText id="displayAddress" value="#{membersTable.selectedMember.address}" style="width:98%;" maxLength="120">
 					<f:validateLength maximum="120"></f:validateLength>
 				</p:inputText>
 			</p:column>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayPostalCode" value="#{messages['CODE.POSTAL']}" />
 			</p:column>
-			<p:column>
-				<p:inputText id="displayPostalCode" value="#{membersTable.selectedMember.postalCode}" size="4" maxLength="4" readonly="true">
+			<p:column style="float:left;border:none;">
+				<p:inputText id="displayPostalCode" value="#{membersTable.selectedMember.postalCode}" size="4" maxLength="4">
 					<f:validateLength maximum="4"></f:validateLength>
 				</p:inputText>
 			</p:column>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayCity" value="#{messages['VILLE']}" />
 			</p:column>
-			<p:column>
-				<p:inputText id="displayCity" value="#{membersTable.selectedMember.city}" style="width:98%;" maxLength="50" readonly="true">
+			<p:column style="float:left;border:none;">
+				<p:inputText id="displayCity" value="#{membersTable.selectedMember.city}" style="width:98%;" maxLength="50">
 					<f:validateLength maximum="50"></f:validateLength>
 				</p:inputText>
 			</p:column>
 		</p:row>
 		<p:row>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayEmail" value="#{messages['EMAIL']}" />
 			</p:column>
-			<p:column colspan="3">
-				<p:inputText id="displayEmail" value="#{membersTable.selectedMember.email}" style="width:98%;" maxLength="120" readonly="true">
+			<p:column colspan="3" style="float:left;border:none;">
+				<p:inputText id="displayEmail" value="#{membersTable.selectedMember.email}" style="width:98%;" maxLength="120">
 					<f:validateLength maximum="120"></f:validateLength>
 				</p:inputText>
 			</p:column>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayPhoneNumber" value="#{messages['TELEPHONE']}" />
 			</p:column>
-			<p:column>
-				<p:inputText id="displayPhoneNumber" value="#{membersTable.selectedMember.phone}" readonly="true">
+			<p:column style="float:left;border:none;">
+				<p:inputText id="displayPhoneNumber" value="#{membersTable.selectedMember.phone}">
 					<f:validateLength maximum="12"></f:validateLength>
 				</p:inputText>
 			</p:column>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayMobilePhone" value="#{messages['GSM']}" />
 			</p:column>
-			<p:column>
-				<p:inputText id="displayMobilePhone" value="#{membersTable.selectedMember.mobilePhone}" readonly="true">
+			<p:column style="float:left;border:none;">
+				<p:inputText id="displayMobilePhone" value="#{membersTable.selectedMember.mobilePhone}">
 					<f:validateLength maximum="13"></f:validateLength>
 				</p:inputText>
 			</p:column>
 		</p:row>
 		<p:row>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayIdentityCard" value="#{messages['CARTE.IDENTITE']}" />
 			</p:column>
-			<p:column>
-				<p:inputText id="displayIdentityCard" value="#{membersTable.selectedMember.identityCardNumber}" readonly="true" />
+			<p:column style="float:left;border:none;">
+				<p:inputText id="displayIdentityCard" value="#{membersTable.selectedMember.identityCardNumber}" />
 			</p:column>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayIdentityCardValidity" value="#{messages['IDENTITY.VALIDITY']}" />
 			</p:column>
-			<p:column>
-				<p:calendar id="displayIdentityCardValidity" navigator="true" value="#{membersTable.selectedMember.passportValidity}" pattern="dd/MM/yyyy" readonly="true" />
+			<p:column style="float:left;border:none;">
+				<p:calendar id="displayIdentityCardValidity" navigator="true" value="#{membersTable.selectedMember.passportValidity}" pattern="dd/MM/yyyy" />
 			</p:column>
-			<p:column style="text-align:right;">
+			<p:column style="text-align:right;border:none;">
 				<p:outputLabel for="displayStudent" value="#{messages['ETUDIANT']}" />
 			</p:column>
-			<p:column>
-				<p:selectOneRadio id="displayStudent" value="#{membersTable.selectedMember.student}" readonly="true">
+			<p:column style="float:left;border:none;">
+				<p:selectOneRadio id="displayStudent" value="#{membersTable.selectedMember.student}">
 					<f:selectItem itemLabel="#{messages['OUI']}" itemValue="true" />
 					<f:selectItem itemLabel="#{messages['NON']}" itemValue="false" />
 				</p:selectOneRadio>
@@ -114,13 +115,14 @@
 		<f:facet name="footer">
 			<p:row>
 				<p:column colspan="8">
-					<p:commandButton type="button" value="#{messages['AJOUTER.MEMBRE']}" icon="ui-icon-check" style="margin:5px;" onclick="PF('createMemberDlg').show()" > </p:commandButton>
+					<p:commandButton type="button" value="#{messages['AJOUTER.MEMBRE']}" icon="ui-icon-disk" style="margin:5px;" onclick="PF('createMemberDlg').show()" > </p:commandButton>
 					<p:commandButton type="submit" value="#{messages['EFFACER.MEMBRE']}" icon="ui-icon-trash" style="margin:5px;" ><p:resetInput target="memberFormPanel" /></p:commandButton>
-					<p:commandButton type="button" value="#{messages['modify.member.informations']}" icon="ui-icon-disk" style="margin:5px;" onclick="PF('createMemberDlg').show()" ></p:commandButton>
+					<p:commandButton type="submit" value="#{messages['MODIFY']}" icon="ui-icon-disk" style="margin:5px;" actionListener="#{membersTable.updateMember}" update="@([id$=membersTableId])"></p:commandButton>
 				</p:column>
 			</p:row>
 		</f:facet>
 	</p:panelGrid>
+	</h:form>
 	<p:dialog id="createMemberDialog" widgetVar="createMemberDlg" modal="true" rendered="true">
 		<p:messages id="createMemberMessages" showDetail="true" autoUpdate="true" closable="true" />
 		<h:form>
@@ -155,7 +157,7 @@
 						<p:outputLabel for="memberNumber" value="#{messages['NUMERO.MEMBRE']}" />
 					</p:column>
 					<p:column>
-						<p:inputText id="memberNumber" readonly="true" value="#{membersTable.selectedMember.memberNumber}" size="3" />
+						<p:inputText id="memberNumber" value="#{membersTable.selectedMember.memberNumber}" size="3" />
 					</p:column>
 				</p:row>
 				<p:row>

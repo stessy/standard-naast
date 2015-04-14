@@ -13,7 +13,6 @@
 					style="width: 60px; vertical-align:middle;">
 					<p:ajax listener="#{cotisationsTable.updateCotisations}"
 						update="paidCotisationsCardSentTable paidCotisationsCardNotSentTable unpaidCotisationsTable totalPaid totalUnpaid totalAmountPaid" />
-					<!-- 					<f:selectItem itemLabel=""/> -->
 					<f:selectItems itemValue="#{cotisation.anneeCotisation}"
 						itemLabel="#{cotisation.anneeCotisation}"
 						value="#{cotisationsTable.cotisations}" var="cotisation" />
@@ -23,19 +22,19 @@
 				<p:outputLabel for="totalPaid"
 					value="#{messages['COTISATIONS.TOTAL.PAYE']} : " />
 				<p:inputText id="totalPaid" disabled="true"
-					value="#{cotisationsTable.totalPaid}" size="3"></p:inputText>
+					value="#{cotisationsTable.totalPaid}" size="3"/>
 			</p:column>
 			<p:column>
 				<p:outputLabel for="totalUnpaid"
 					value="#{messages['COTISATIONS.TOTAL.NON.PAYE']} : " />
 				<p:inputText id="totalUnpaid" disabled="true"
-					value="#{cotisationsTable.totalUnpaid}" size="3"></p:inputText>
+					value="#{cotisationsTable.totalUnpaid}" size="3"/>
 			</p:column>
 			<p:column>
 				<p:outputLabel for="totalAmountPaid"
 					value="#{messages['COTISATIONS.MONTANT.TOTAL.PAYE']} : " />
 				<p:inputText id="totalAmountPaid" disabled="true"
-					value="#{cotisationsTable.totalAmountPaid} €" size="5"></p:inputText>
+					value="#{cotisationsTable.totalAmountPaid} €" size="5"/>
 			</p:column>
 		</p:row>
 		<p:row>
@@ -48,8 +47,6 @@
 						value="#{cotisationsTable.paidCotisationsCardSent}"
 						widgetVar="paidCotisationsCardSentTableVar" paginator="true"
 						rows="25" rowKey="#{paidCotisationsCardSent.memberNumber}">
-<!-- 						<p:column selectionMode="multiple" -->
-<!-- 							style="width:16px;text-align:center" /> -->
 						<p:column headerText="#{messages['NUMERO.MEMBRE']}">
 							<h:outputText value="#{paidCotisationsCardSent.memberNumber}" />
 						</p:column>
@@ -64,6 +61,9 @@
 								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
 							</h:outputText>
 						</p:column>
+						<f:facet name="footer">
+									<h:outputText value=""/>
+						</f:facet>
 					</p:dataTable>
 				</p:panel>
 			</p:column>
@@ -91,15 +91,11 @@
 							<h:outputText value="#{unpaidCotisations.name}" />
 						</p:column>
 						<f:facet name="footer">
-							<p:row>
-								<p:column colspan="8">
 									<p:commandButton type="submit"
 										value="#{messages['COTISATION.PAID']}"
 										update="@([id$=paidCotisationsCardSentTable], [id$=paidCotisationsCardNotSentTable], [id$=unpaidCotisationsTable], [id$=totalPaid], [id$=totalUnpaid], [id$=totalAmountPaid], [id$=growl])"
 										icon="ui-icon-check" style="margin:5px;"
 										actionListener="#{cotisationsTable.setPaidForSelected}" />
-								</p:column>
-							</p:row>
 						</f:facet>
 					</p:dataTable>
 				</p:panel>
@@ -134,15 +130,11 @@
 							</h:outputText>
 						</p:column>
 						<f:facet name="footer">
-							<p:row>
-								<p:column colspan="8">
 									<p:commandButton id="memberCardSentSelectedButton"
 										type="submit" value="#{messages['MEMBER.CARD.SENT']}"
 										update="@([id$=paidCotisationsCardSentTable], [id$=paidCotisationsCardNotSentTable], [id$=unpaidCotisationsTable], [id$=totalPaid], [id$=totalUnpaid], [id$=totalAmountPaid], [id$=growl])"
 										icon="ui-icon-check" style="margin:5px;"
 										actionListener="#{cotisationsTable.setSentForSelected}" />
-								</p:column>
-							</p:row>
 						</f:facet>
 					</p:dataTable>
 				</p:panel>
