@@ -1,8 +1,9 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+                xmlns:rich="http://richfaces.org/rich">
 	<p:dialog modal="true" widgetVar="statusDialog" header="#{messages['MEMBER.DATA.LOADING']}" draggable="false" closable="false">
 		<p:graphicImage value="/images/ajaxloadingbar.gif" />
 	</p:dialog>
-	<p:dataTable var="member" value="#{membersTable.members}" filteredValue="#{membersTable.filteredMembers}" widgetVar="membersTableVar" paginator="true" rows="10" tableStyle="width:98%" selectionMode="single" selection="#{membersTable.selectedMember}"
+	<p:dataTable id="membersTableId" var="member" value="#{membersTable.members}" filteredValue="#{membersTable.filteredMembers}" widgetVar="membersTableVar" paginator="true" rows="10" tableStyle="width:98%" selectionMode="single" selection="#{membersTable.selectedMember}"
 		rowKey="#{member}" paginatorPosition="bottom">
 		<p:ajax event="rowSelect" listener="#{membersTable.onRowSelect}"
 			update="@([id$=memberFormGrid], [id$=memberAbonnementsTable], [id$=memberCotisationsTable], [id$=memberBenevolatsTable], [id$=memberTravels])" />

@@ -86,7 +86,12 @@ public class Season implements Serializable, Comparable<Season> {
 		this.id = id;
 	}
 
-	public Season() {
+	public Short getMontantCotisation() {
+		return montantCotisation;
+	}
+
+	public void setMontantCotisation(Short montantCotisation) {
+		this.montantCotisation = montantCotisation;
 	}
 
 	@Override

@@ -1,16 +1,17 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 	<ui:debug />
 	<p:panelGrid id="generalConfigurationGrid" style="width:100%">
 		<p:row>
-			<p:column style="width:70%;vertical-align:top;">
-				<p:panel id="seasonConfigurationPanel" header="Saisons" style="text-align:center;">
-					<ui:include src="saisonConfiguration.xhtml" />
-                                        <!--<ui:include src="/season/List.xhtml" />-->
-				</p:panel>
-			</p:column>
-			<p:column style="width:30%">
-				<p:panel header="Cotisations" style="text-align:center;">
-					<ui:include src="cotisationConfiguration.xhtml" />
+			<p:column style="width:100%;vertical-align:top;">
+				<p:panel id="seasonConfigurationPanel" style="text-align:center;">
+					<f:facet name="header">
+						<ui:include src="/components/seasonMenu.xhtml" />
+					</f:facet>
+					<ui:include src="/configuration/season/seasonConfiguration.xhtml" />
 				</p:panel>
 			</p:column>
 		</p:row>
@@ -20,21 +21,12 @@
 					<ui:include src="travelsConfiguration.xhtml" />
 				</p:panel>
 			</p:column>
-			<p:column style="width:30%">
-				<p:panel header="Cotisations" style="text-align:center;">
-<!-- 					<ui:include src="/cotisationConfiguration.xhtml" /> -->
-				</p:panel>
-			</p:column>
+
 		</p:row>
 		<p:row>
 			<p:column style="width:70%;vertical-align:top;">
 				<p:panel header="Types de personnes" style="text-align:center;">
 					<ui:include src="memberTypeConfiguration.xhtml" />
-				</p:panel>
-			</p:column>
-			<p:column style="width:30%">
-				<p:panel header="Cotisations" style="text-align:center;">
-<!-- 					<ui:include src="/cotisationConfiguration.xhtml" /> -->
 				</p:panel>
 			</p:column>
 		</p:row>

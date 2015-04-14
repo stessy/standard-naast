@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -52,7 +53,6 @@ public class MembersTableBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		System.out.println("Initializing MembersTableBean");
 		final List<Personne> findAllPerson = this.personneService
 				.findAllPerson(false);
 		Collections.sort(findAllPerson);
@@ -130,6 +130,11 @@ public class MembersTableBean implements Serializable {
 		} else {
 			return false;
 		}
+	}
+
+	public void updateMember(final ActionEvent event) {
+		this.personneService.savePerson(this.selectedMember);
+		this.init();
 	}
 
 }
