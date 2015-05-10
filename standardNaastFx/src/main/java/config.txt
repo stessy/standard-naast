@@ -1,0 +1,8 @@
+smtpMailServer = relay.skynet.be
+mail_username = sb132661@skynet.be
+mail_password = 6bvd3deu
+mail_from = sb132661@skynet.be
+name_from = André Legrève
+db_username = standard_naast
+db_password = z6qz5wwr
+db_connection_url = jdbc:oracle:thin:@192.168.1.14:1521:orcl

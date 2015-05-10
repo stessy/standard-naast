@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet id="1" author="stessy">
+		<sql><![CDATA[alter table prix_locomotion rename to travel_price]]></sql>
+	</changeSet>
+	<changeSet id="2" author="stessy">
+		<sql><![CDATA[alter table travel_price alter column PRIX_LOCOMOTION_ID rename to ID]]></sql>
+	</changeSet>
+	<changeSet id="3" author="stessy">
+		<sql><![CDATA[alter table travel_price drop column age_minimum]]></sql>
+	</changeSet>
+	<changeSet id="4" author="stessy">
+		<sql><![CDATA[alter table travel_price drop column age_maximum]]></sql>
+	</changeSet>
+	<changeSet id="5" author="stessy">
+		<sql><![CDATA[alter table travel_price drop column annee]]></sql>
+	</changeSet>
+	<changeSet id="6" author="stessy">
+		<sql><![CDATA[create sequence TRAVEL_PRICE_SEQ as bigint start with 100000 increment by 1]]></sql>
+	</changeSet>	
+</databaseChangeLog>

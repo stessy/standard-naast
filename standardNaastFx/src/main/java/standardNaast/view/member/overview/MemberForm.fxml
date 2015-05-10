@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="232.0" prefWidth="600.0" text="Données du membre" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.member.overview.MemberFormController">
+  <content>
+    <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+         <children>
+            <BorderPane layoutX="147.0" layoutY="64.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+      <GridPane hgap="10.0" vgap="10.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="nameLabel" GridPane.columnIndex="1" />
+            <Label text="Nom" />
+            <Label text="Prénom" GridPane.columnIndex="2" />
+            <Label text="N° de membre" GridPane.columnIndex="4" />
+            <TextField fx:id="firstNameLabel" GridPane.columnIndex="3" />
+            <TextField fx:id="memberNumberLabel" editable="false" GridPane.columnIndex="5" />
+            <Label text="Adresse" GridPane.rowIndex="1" />
+            <Label text="Code postal" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Label text="Ville" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <Label text="Date de naissance" GridPane.rowIndex="3" />
+            <Label text="Téléphone" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="GSM" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <TextField fx:id="postalCodeLabel" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <TextField fx:id="cityLabel" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+            <TextField fx:id="phoneNumberLabel" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <TextField fx:id="mobilePhoneLabel" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+            <Label text="Carte d'identité" GridPane.rowIndex="4" />
+            <TextField fx:id="identityCardNumberLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <DatePicker fx:id="passwordValidityLabel" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <DatePicker fx:id="birthDateLabel" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Validité carte" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label text="Etudiant" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="5" GridPane.rowIndex="4">
+                           <children>
+                              <RadioButton fx:id="studentYes" mnemonicParsing="false" text="OUI">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="studentLabel" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="studentNo" mnemonicParsing="false" text="NON" toggleGroup="$studentLabel" />
+                           </children>
+            </HBox>
+                        <Label text="Email" GridPane.rowIndex="2" />
+                        <TextField fx:id="addressLabel" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="emailLabel" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" />
+         </children>
+         <BorderPane.margin>
+            <Insets top="5.0" />
+         </BorderPane.margin>
+      </GridPane>
+   </center>
+   <bottom>
+      <ButtonBar prefHeight="0.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <buttons>
+          <Button defaultButton="true" mnemonicParsing="false" onAction="#onAddMember" text="Ajouter" />
+                        <Group />
+                        <Button mnemonicParsing="false" onAction="#onUpdate" text="Modifier" />
+        </buttons>
+         <BorderPane.margin>
+            <Insets bottom="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </ButtonBar>
+   </bottom>
+            </BorderPane>
+         </children></AnchorPane>
+  </content>
+</TitledPane>

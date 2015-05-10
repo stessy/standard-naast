@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.customComponent.SeasonComboBoxController">
+   <children>
+      <HBox>
+	<!-- TODO Add Nodes -->
+</HBox>
+   </children>
+</HBox>
