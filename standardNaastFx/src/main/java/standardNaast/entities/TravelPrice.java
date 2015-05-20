@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -28,6 +30,7 @@ import standardNaast.types.Place;
 @Entity
 @Table(name = "TRAVEL_PRICE")
 @Access(AccessType.FIELD)
+@NamedQueries({ @NamedQuery(name = "findBySeason", query = "select t from TravelPrice t where t.season = :season") })
 public class TravelPrice implements Serializable {
 
 	@ManyToOne

@@ -19,7 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -53,6 +52,10 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 	@JoinColumn(name = "BLOC_ID")
 	private Bloc bloc;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PRICE_ID")
+	private AbonnementPrices abonnementPrice;
+
 	@Size(max = 6)
 	@Column(name = "RANG")
 	private String rang;
@@ -84,9 +87,6 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 	@Column(name = "ABONNEMENT_STATUS")
 	@Enumerated(EnumType.STRING)
 	private AbonnementStatus abonnementStatus;
-
-	@Transient
-	private Long abonnementPrice;
 
 	public long getId() {
 		return this.id;
@@ -167,11 +167,11 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 		this.abonnementStatus = abonnementStatus;
 	}
 
-	public Long getAbonnementPrice() {
+	public AbonnementPrices getAbonnementPrice() {
 		return this.abonnementPrice;
 	}
 
-	public void setAbonnementPrice(final Long abonnementPrice) {
+	public void setAbonnementPrice(final AbonnementPrices abonnementPrice) {
 		this.abonnementPrice = abonnementPrice;
 	}
 

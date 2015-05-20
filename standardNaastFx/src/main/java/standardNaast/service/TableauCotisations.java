@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -20,7 +19,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
@@ -190,7 +188,6 @@ public class TableauCotisations {
 
 	private List<PersonneCotisationRow> buildPersonCotisation() {
 		LocalDate.of(TableauCotisations.YEAR, 4, 1);
-		Date advantageDate = new LocalDateTime(TableauCotisations.YEAR, 4, 1, 0, 0).toDate();
 		final List<Season> seasonList = this.getSeasons();
 		final List<Personne> personList = this.getMembers();
 		final List<PersonneCotisationRow> personCotisationList = new ArrayList<>();
@@ -217,10 +214,7 @@ public class TableauCotisations {
 						// La cotisation a été payée
 						personneCotisation.setPaied("P");
 						personneCotisation.setBonus(1);
-						final Date paymentDate = memberCotisation.getDatePaiement();
-						if (paymentDate.compareTo(advantageDate) == -1) {
-							personneCotisation.setBonus(2);
-						}
+
 					} else {
 						personneCotisation.setPaied(StringUtils.EMPTY);
 						personneCotisation.setBonus(0);
@@ -250,12 +244,7 @@ public class TableauCotisations {
 							if (paymentDateYear == TableauCotisations.YEAR) {
 								personneCotisation.setPaied("P");
 							}
-							advantageDate = new DateTime(seasontDateYear, 4, 1, 0, 0).toDate();
-							if (paymentDate.compareTo(advantageDate) == -1) {
-								bonus = bonus + 2;
-							} else {
-								bonus = bonus + 1;
-							}
+							bonus = bonus + 1;
 							break;
 						}
 					}

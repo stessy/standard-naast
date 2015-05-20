@@ -1,6 +1,7 @@
 package standardNaast.entities;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -134,10 +135,10 @@ public class Personne implements Serializable, Comparable<Personne> {
 		return this.address;
 	}
 
-	// public String getFullAddress() {
-	// return MessageFormat.format("{0} {1} {2}", this.getAddress(),
-	// this.getPostalCode(), this.getCity());
-	// }
+	public String getFullAddress() {
+		return MessageFormat.format("{0} {1} {2}", this.getAddress(),
+				this.getPostalCode(), this.getCity());
+	}
 
 	public void setAddress(final String address) {
 		this.address = address;

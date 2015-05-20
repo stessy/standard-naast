@@ -1,23 +1,17 @@
 package standardNaast.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * The persistent class for the BLOC database table.
@@ -41,9 +35,6 @@ public class Bloc implements Serializable {
 	@Column(name = "EQUIPE_ID")
 	private long equipeId;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bloc", fetch = FetchType.LAZY)
-	private Collection<Abonnement> abonnementCollection;
-
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -53,10 +44,6 @@ public class Bloc implements Serializable {
 
 	@Column(name = "BLOC_VALUE", unique = true, nullable = false, length = 50)
 	private String blocValue;
-
-	// bi-directional many-to-one association to CommandePlace
-	@OneToMany(mappedBy = "bloc", fetch = FetchType.LAZY)
-	private List<CommandePlace> commandePlaces;
 
 	public Bloc() {
 	}
@@ -101,20 +88,4 @@ public class Bloc implements Serializable {
 		this.tribune = tribune;
 	}
 
-	public List<CommandePlace> getCommandePlaces() {
-		return this.commandePlaces;
-	}
-
-	public void setCommandePlaces(final List<CommandePlace> commandePlaces) {
-		this.commandePlaces = commandePlaces;
-	}
-
-	@XmlTransient
-	public Collection<Abonnement> getAbonnementCollection() {
-		return this.abonnementCollection;
-	}
-
-	public void setAbonnementCollection(final Collection<Abonnement> abonnementCollection) {
-		this.abonnementCollection = abonnementCollection;
-	}
 }

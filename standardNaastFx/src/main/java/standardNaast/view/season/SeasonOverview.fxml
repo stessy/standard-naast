@@ -31,5 +31,6 @@
          </children>
       </HBox>
             <fx:include fx:id="seasonInformation" source="SeasonInformation.fxml" GridPane.columnIndex="0" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+            <fx:include fx:id="seasonTravels" source="SeasonTravels.fxml" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
    </children>
 </GridPane>

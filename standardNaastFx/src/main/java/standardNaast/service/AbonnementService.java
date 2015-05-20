@@ -130,7 +130,7 @@ public class AbonnementService implements Serializable {
 			// PurchasableAbonnements(person.getName(), person.getFirstname(),
 			// birthdate, person.getFullAddress(),
 			// person.getIdentityCardNumber(),
-			// abonnement.getBlocId().getBlocValue(), abonnement.getRang(),
+			// abonnement.getBloc()., abonnement.getRang(),
 			// abonnement.getPlace(), amount)
 		}
 	}
@@ -161,4 +161,9 @@ public class AbonnementService implements Serializable {
 		}
 
 	}
+
+	public AbonnementModel addAbonnement(final AbonnementModel model) {
+
+	}
+
 }
