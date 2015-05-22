@@ -3,7 +3,6 @@ package standardNaast.view.member.overview;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.TableRow;
-import standardNaast.entities.Personne;
 import standardNaast.model.PersonModel;
 import standardNaast.service.PersonneService;
 import standardNaast.service.PersonneServiceImpl;
@@ -66,11 +65,10 @@ public class MembersOverviewController {
 	}
 
 	private void onMemberTableRowSelected(final PersonModel personModel) {
-		final Personne person = this.personneService.getPerson(personModel.getPersonneId());
-		this.memberFormController.fillForm(person);
+		this.memberFormController.fillForm(personModel);
 		this.memberTravelsController.setPersonneId(personModel.getPersonneId());
-		this.memberAbonnementsController.onSelectedMember(person);
-		this.memberBenevolatsController.onMemberSelected(person);
-		this.memberCotisationsController.onSelectedMember(person);
+		this.memberAbonnementsController.onSelectedMember(personModel);
+		this.memberBenevolatsController.onMemberSelected(personModel);
+		this.memberCotisationsController.onSelectedMember(personModel);
 	}
 }

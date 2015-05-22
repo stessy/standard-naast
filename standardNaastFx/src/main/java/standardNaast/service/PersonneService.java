@@ -5,7 +5,7 @@ package standardNaast.service;
 
 import java.util.List;
 
-import standardNaast.entities.Personne;
+import standardNaast.model.PersonModel;
 
 /**
  * @author stessy
@@ -13,14 +13,14 @@ import standardNaast.entities.Personne;
  */
 public interface PersonneService {
 
-	public List<Personne> findAllPerson(final boolean allPersons);
+	public List<PersonModel> findAllPerson(final boolean allPersons);
 
-	public Personne getPerson(final long id);
+	public PersonModel getPerson(final long id);
 
-	public Personne getPersonByMemberNumber(final long memberNumber);
+	public PersonModel getPersonByMemberNumber(final long memberNumber);
 
-	public Personne savePerson(final Personne person);
+	public PersonModel savePerson(final PersonModel person);
 
-	public Personne addPerson(final Personne person);
+	public PersonModel addPerson(final PersonModel person);
 
 }

@@ -21,11 +21,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import standardNaast.entities.Benevolat;
-import standardNaast.entities.Personne;
 import standardNaast.model.BenevolatModel;
+import standardNaast.model.PersonModel;
 import standardNaast.service.BenevolatService;
-import standardNaast.utils.DateUtils;
 import standardNaast.view.benevolat.BenevolatFormController;
 
 public class MemberBenevolatsController {
@@ -33,8 +31,6 @@ public class MemberBenevolatsController {
 	BenevolatService benevolatService = new BenevolatService();
 
 	private final ObservableList<BenevolatModel> benevolatList = FXCollections.observableArrayList();
-
-	private Personne personne;
 
 	@FXML
 	private TableView<BenevolatModel> memberBenevolatsTable;
@@ -56,6 +52,8 @@ public class MemberBenevolatsController {
 
 	private BenevolatModel selectedBenevolat;
 
+	private PersonModel personModel;
+
 	@FXML
 	public void initialize() {
 		this.memberBenevolatsTable.setPlaceholder(new Label("Aucun bénévolat pour le membre"));
@@ -72,19 +70,11 @@ public class MemberBenevolatsController {
 		});
 	}
 
-	public void onMemberSelected(final Personne personne) {
-		this.personne = personne;
-		final List<Benevolat> memberBenevolats = personne.getBenevolatList();
-
+	public void onMemberSelected(final PersonModel personModel) {
+		this.personModel = personModel;
+		final List<BenevolatModel> benevolats = this.benevolatService.getBenevolats(personModel);
 		this.benevolatList.clear();
-		for (final Benevolat benevolat : memberBenevolats) {
-			final BenevolatModel model = new BenevolatModel();
-			model.setDate(DateUtils.toLocalDate(benevolat.getDateBenevolat()));
-			model.setMontant(benevolat.getAmount().longValue());
-			model.setDescription(benevolat.getTypeBenevolat());
-			model.setId(benevolat.getId());
-			this.benevolatList.add(model);
-		}
+		this.benevolatList.addAll(benevolats);
 		this.memberBenevolatsTable.setItems(this.benevolatList);
 		this.bindProperties();
 	}
@@ -107,7 +97,7 @@ public class MemberBenevolatsController {
 			final BorderPane pane = (BorderPane) loader.load();
 			final BenevolatFormController controller = (BenevolatFormController) loader.getController();
 			controller.setMemberBenevolatsController(this);
-			controller.setPerson(this.personne);
+			controller.setPerson(this.personModel);
 			controller.setBenevolatModel(this.selectedBenevolat);
 			controller.fillForm();
 			final Stage benevolatDialog = new Stage();

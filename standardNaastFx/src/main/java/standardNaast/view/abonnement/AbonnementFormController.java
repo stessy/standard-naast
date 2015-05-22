@@ -15,9 +15,10 @@ import javafx.stage.Stage;
 
 import org.apache.commons.lang3.StringUtils;
 
-import standardNaast.entities.Bloc;
 import standardNaast.entities.Season;
 import standardNaast.model.AbonnementModel;
+import standardNaast.model.MemberAbonnementsModel;
+import standardNaast.model.SeasonModel;
 import standardNaast.observer.Observer;
 import standardNaast.observer.SubjectImpl;
 import standardNaast.service.AbonnementService;
@@ -30,22 +31,22 @@ public class AbonnementFormController implements Observer {
 
 	private final AbonnementService abonnementService = new AbonnementService();
 
-	private AbonnementModel model;
+	private MemberAbonnementsModel model;
 
 	private Stage dialogStage;
 
 	private boolean isNew;
 
-	private final ObservableList<Season> seasonsList = FXCollections.observableArrayList();
+	private final ObservableList<SeasonModel> seasonsList = FXCollections.observableArrayList();
 
 	@FXML
-	private ComboBox<Season> saison;
+	private ComboBox<SeasonModel> saison;
 
 	@FXML
 	private Label memberLabel;
 
 	@FXML
-	private ComboBox<Bloc> bloc;
+	private ComboBox<String> bloc;
 
 	@FXML
 	private TextField rang;
@@ -99,11 +100,11 @@ public class AbonnementFormController implements Observer {
 		if (this.isNew()) {
 			// Recupérer la saison d'avant
 			final int selectedIndex = this.saison.getSelectionModel().getSelectedIndex();
-			final Season previousSeason = this.seasonsList.get(selectedIndex + 1);
+			final SeasonModel previousSeason = this.seasonsList.get(selectedIndex + 1);
 			final AbonnementModel previousAbonnement = this.abonnementService.getPreviousAbonnement(previousSeason,
-					this.model.getMemberId());
+					this.model.get);
 			this.place.setText(String.valueOf(previousAbonnement.getPlace()));
-			this.bloc.getSelectionModel().select(previousAbonnement.getBloc());
+			this.bloc.getSelectionModel().select(previousAbonnement.getPrice().getBloc());
 			this.rang.setText(String.valueOf(previousAbonnement.getRang()));
 			// Calculer la réduction
 		}
@@ -112,15 +113,15 @@ public class AbonnementFormController implements Observer {
 	@FXML
 	private void onSelectedBloc() {
 		// Calculer prix abonnement
-		final Season selectedSeason = this.saison.getSelectionModel().getSelectedItem();
+		final SeasonModel selectedSeason = this.saison.getSelectionModel().getSelectedItem();
 		// Calculer le solde
 	}
 
 	public void fillForm() {
 		if (this.model != null) {
-			this.memberLabel.setText(this.model.getMemberFirstName() + " " + this.model.getMemberName());
+			this.memberLabel.setText(this.model.getPerson().getFirstName() + " " + this.model.getPerson().getName());
 			this.saison.getSelectionModel().select(this.model.getSaison());
-			this.bloc.getSelectionModel().select(this.model.getBloc());
+			this.bloc.getSelectionModel().select(this.model.);
 			this.rang.setText(String.valueOf(this.model.getRang()));
 			this.place.setText(String.valueOf(this.model.getPlace()));
 			this.reduction.setText(String.valueOf(this.model.getReduction()));

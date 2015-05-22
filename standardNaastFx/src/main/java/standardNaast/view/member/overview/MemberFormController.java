@@ -2,10 +2,7 @@ package standardNaast.view.member.overview;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -29,11 +26,10 @@ import javafx.stage.Stage;
 
 import org.apache.commons.lang3.StringUtils;
 
-import standardNaast.entities.Personne;
+import standardNaast.model.PersonModel;
 import standardNaast.service.PersonneService;
 import standardNaast.service.PersonneServiceImpl;
 import standardNaast.utils.AlertDialogUtils;
-import standardNaast.utils.DateUtils;
 
 public class MemberFormController {
 
@@ -84,38 +80,29 @@ public class MemberFormController {
 	@FXML
 	private TextField emailLabel;
 
-	private Personne person;
+	private PersonModel model;
 
 	private Stage dialogStage;
 
 	private final List<String> validationErrors = new ArrayList<>();
 
-	public void fillForm(final Personne person) {
-		this.person = person;
-		this.memberNumberLabel.setText(String.valueOf(person.getMemberNumber()));
-		this.firstNameLabel.setText(person.getFirstname());
-		this.nameLabel.setText(person.getName());
-		this.addressLabel.setText(person.getAddress());
-		this.postalCodeLabel.setText(person.getPostalCode());
-		this.cityLabel.setText(person.getCity());
-		this.phoneNumberLabel.setText(person.getPhone());
-		this.mobilePhoneLabel.setText(person.getMobilePhone());
-		this.studentYes.setSelected(person.isStudent());
-		this.studentNo.setSelected(!person.isStudent());
-		this.emailLabel.setText(person.getEmail());
-		final Date birthdate = person.getBirthdate();
-		if (birthdate != null) {
-			this.birthDateLabel.setValue(LocalDateTime.ofInstant(birthdate.toInstant(), ZoneId.systemDefault())
-					.toLocalDate());
-		}
-		this.identityCardNumberLabel.setText(person.getIdentityCardNumber());
-		final Date passportValidity = person.getPassportValidity();
-		if (passportValidity != null) {
-			this.passwordValidityLabel.setValue(LocalDateTime.ofInstant(passportValidity.toInstant(),
-					ZoneId.systemDefault()).toLocalDate());
-		} else {
-			this.passwordValidityLabel.setValue(null);
-		}
+	public void fillForm(final PersonModel model) {
+		this.model = model;
+		this.memberNumberLabel.setText(String.valueOf(model.getMemberNumber()));
+		this.firstNameLabel.setText(model.getFirstName());
+		this.nameLabel.setText(model.getName());
+		this.addressLabel.setText(model.getAddress());
+		this.postalCodeLabel.setText(model.getPostalCode());
+		this.cityLabel.setText(model.getCity());
+		this.phoneNumberLabel.setText(model.getPhone());
+		this.mobilePhoneLabel.setText(model.getMobilePhone());
+		this.studentYes.setSelected(model.getStudent());
+		this.studentNo.setSelected(!model.getStudent());
+		this.emailLabel.setText(model.getEmail());
+		final LocalDate birthdate = model.getBirthdate();
+		this.birthDateLabel.setValue(birthdate);
+		this.identityCardNumberLabel.setText(model.getIdentityCardNumber());
+		this.passwordValidityLabel.setValue(model.getPassportValidity());
 	}
 
 	@FXML
@@ -153,21 +140,20 @@ public class MemberFormController {
 
 	@FXML
 	private void onUpdate() {
-		this.person.setFirstname(this.firstNameLabel.getText());
-		this.person.setName(this.nameLabel.getText());
-		this.person.setAddress(this.addressLabel.getText());
-		this.person.setPostalCode(this.postalCodeLabel.getText());
-		this.person.setCity(this.cityLabel.getText());
-		this.person.setBirthdate(DateUtils.toDate(this.birthDateLabel.getValue()));
-		this.person.setEmail(this.emailLabel.getText());
-		this.person.setIdentityCardNumber(this.identityCardNumberLabel.getText());
-		this.person.setMobilePhone(this.mobilePhoneLabel.getText());
-		this.person.setPassportValidity(DateUtils.toDate(this.passwordValidityLabel.getValue()));
-		this.person.setPhone(this.phoneNumberLabel.getText());
-		this.person.setStudent(this.studentYes.isSelected() ? true : false);
-		this.personneService.savePerson(this.person);
+		this.model.setFirstName(this.firstNameLabel.getText());
+		this.model.setName(this.nameLabel.getText());
+		this.model.setAddress(this.addressLabel.getText());
+		this.model.setPostalCode(this.postalCodeLabel.getText());
+		this.model.setCity(this.cityLabel.getText());
+		this.model.setBirthdate(this.birthDateLabel.getValue());
+		this.model.setEmail(this.emailLabel.getText());
+		this.model.setIdentityCardNumber(this.identityCardNumberLabel.getText());
+		this.model.setMobilePhone(this.mobilePhoneLabel.getText());
+		this.model.setPassportValidity(this.passwordValidityLabel.getValue());
+		this.model.setPhone(this.phoneNumberLabel.getText());
+		this.model.setStudent(this.studentYes.isSelected() ? true : false);
+		this.personneService.savePerson(this.model);
 		AlertDialogUtils.displaySuccessALert("Les informations du membres ont bien été mises à jour");
-
 	}
 
 	public void setDialogStage(final Stage stage) {
@@ -188,10 +174,15 @@ public class MemberFormController {
 
 	private void addMember(final ActionEvent event) {
 		if (this.isValid()) {
-
+			this.personneService.addPerson(this.model);
 		} else {
 			AlertDialogUtils.displayInvalidAlert(this.dialogStage, this.validationErrors);
 		}
+	}
+
+	@FXML
+	private void cancel(final Stage dialogStage) {
+		dialogStage.close();
 	}
 
 	private boolean validateFirstName() {

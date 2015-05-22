@@ -1,6 +1,7 @@
 package standardNaast.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.LongProperty;
@@ -10,6 +11,8 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import standardNaast.entities.Personne;
+import standardNaast.utils.DateUtils;
 
 public class PersonModel {
 
@@ -207,6 +210,51 @@ public class PersonModel {
 
 	public BooleanProperty studentProperty() {
 		return this.student;
+	}
+
+	public static PersonModel toModel(final Personne person) {
+		final PersonModel model = new PersonModel();
+		model.setAddress(person.getAddress());
+		final Date birthDate = person.getBirthdate() != null ? person.getBirthdate() : new Date(0);
+		model.setBirthdate(DateUtils.toLocalDate(birthDate));
+		model.setCity(person.getCity());
+		model.setEmail(person.getEmail());
+		model.setFirstName(person.getFirstname());
+		model.setIdentityCardNumber(person.getIdentityCardNumber());
+		model.setMemberNumber(person.getMemberNumber());
+		model.setMobilePhone(person.getMobilePhone());
+		model.setName(person.getName());
+		final Date passportValidityDate = person.getPassportValidity() != null ? person.getPassportValidity()
+				: new Date(0);
+		model.setPassportValidity(DateUtils.toLocalDate(passportValidityDate));
+		model.setPersonneId(person.getPersonneId());
+		model.setPhone(person.getPhone());
+		model.setPostalCode(person.getPostalCode());
+		model.setStudent(person.isStudent());
+		return model;
+	}
+
+	public static Personne toEntity(final PersonModel model) {
+		final Personne person = new Personne();
+		return PersonModel.toUpdateEntity(model, person);
+	}
+
+	public static Personne toUpdateEntity(final PersonModel model, final Personne person) {
+		person.setAddress(model.getAddress());
+		person.setBirthdate(DateUtils.toDate(model.getBirthdate()));
+		person.setCity(model.getCity());
+		person.setEmail(model.getEmail());
+		person.setFirstname(model.getFirstName());
+		person.setIdentityCardNumber(model.getIdentityCardNumber());
+		person.setMemberNumber(model.getMemberNumber());
+		person.setMobilePhone(model.getMobilePhone());
+		person.setName(model.getName());
+		person.setPassportValidity(DateUtils.toDate(model.getPassportValidity()));
+		person.setPersonneId(model.getPersonneId());
+		person.setPhone(model.getPhone());
+		person.setPostalCode(model.getPostalCode());
+		person.setStudent(model.getStudent());
+		return person;
 	}
 
 }

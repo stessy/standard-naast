@@ -9,11 +9,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import standardNaast.entities.Abonnement;
-import standardNaast.entities.Personne;
 import standardNaast.model.MemberAbonnementsModel;
+import standardNaast.model.PersonModel;
+import standardNaast.model.SeasonModel;
+import standardNaast.service.AbonnementService;
 import standardNaast.types.AbonnementStatus;
 
 public class MemberAbonnementsController {
+
+	private final AbonnementService abonnementService = new AbonnementService();
 
 	private final ObservableList<MemberAbonnementsModel> abonnementsList = FXCollections.observableArrayList();
 
@@ -49,22 +53,19 @@ public class MemberAbonnementsController {
 		this.abonnementsTable.setPlaceholder(new Label("Aucun abonnement pour le membre"));
 	}
 
-	public void onSelectedMember(final Personne personne) {
-
-		final List<Abonnement> memberAbonnements = personne.getAbonnementList();
+	public void onSelectedMember(final PersonModel personne) {
+		final List<MemberAbonnementsModel> memberAbonnements = this.abonnementService.getMemberAbonnements(personne);
 
 		this.abonnementsList.clear();
-		for (final Abonnement abonnement : memberAbonnements) {
-			this.abonnementsList.add(MemberAbonnementsController.memberAbonnementOf(abonnement));
-		}
+		this.abonnementsList.addAll(memberAbonnements);
 		this.abonnementsTable.setItems(this.abonnementsList);
 		this.bindProperties();
 	}
 
 	private void bindProperties() {
-		this.saison.setCellValueFactory(cellData -> cellData.getValue().saisonProperty());
+		this.saison.setCellValueFactory(cellData -> cellData.getValue().saisonProperty().get().idProperty());
 		this.paye.setCellValueFactory(cellData -> cellData.getValue().payeProperty());
-		this.bloc.setCellValueFactory(cellData -> cellData.getValue().blocProperty());
+		this.bloc.setCellValueFactory(cellData -> cellData.getValue().abonnementPriceProperty().get().blocProperty());
 		this.rang.setCellValueFactory(cellData -> cellData.getValue().rangProperty());
 		this.place.setCellValueFactory(cellData -> cellData.getValue().placeProperty());
 		this.reduction.setCellValueFactory(cellData -> cellData.getValue().reductionProperty().asObject());
@@ -77,12 +78,11 @@ public class MemberAbonnementsController {
 		final MemberAbonnementsModel model = new MemberAbonnementsModel();
 		model.setAbonnementId(abonnement.getId());
 		model.setAcompte(abonnement.getAcompte().longValue());
-		// model.setBloc(abonnement.getBlocId().getBlocValue());
 		model.setPaye(abonnement.getPaye());
 		model.setPlace(abonnement.getPlace());
 		model.setRang(abonnement.getRang());
 		model.setReduction(abonnement.getReduction());
-		model.setSaison(abonnement.getSaison().getId());
+		model.setSaison(SeasonModel.of(abonnement.getSaison()));
 		model.setStatus(abonnement.getAbonnementStatus());
 		return model;
 	}

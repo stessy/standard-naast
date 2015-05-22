@@ -17,12 +17,13 @@ import com.standardnaast.persistence.EntityManagerFactoryHelper;
 public class PersonDAOImpl implements PersonDAO {
 
 	@Override
-	public void addPerson(final Personne person) {
+	public Personne addPerson(final Personne person) {
 		final EntityManager entityManager = this.getEntityManager();
 		entityManager.getTransaction().begin();
 		entityManager.persist(person);
 		entityManager.getTransaction().commit();
 		entityManager.close();
+		return person;
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class PersonDAOImpl implements PersonDAO {
 
 	@Override
 	public Personne getPerson(final long id) {
-		EntityManager entityManager = this.getEntityManager();
+		final EntityManager entityManager = this.getEntityManager();
 		final Personne find = entityManager.find(Personne.class, id);
 		entityManager.refresh(find);
 		return find;

@@ -14,8 +14,8 @@ import javafx.util.StringConverter;
 
 import org.apache.commons.lang3.StringUtils;
 
-import standardNaast.entities.Personne;
 import standardNaast.model.BenevolatModel;
+import standardNaast.model.PersonModel;
 import standardNaast.service.BenevolatService;
 import standardNaast.utils.AlertDialogUtils;
 import standardNaast.view.member.overview.MemberBenevolatsController;
@@ -37,7 +37,7 @@ public class BenevolatFormController {
 
 	private Stage dialogStage;
 
-	private Personne person;
+	private PersonModel personModel;
 
 	private MemberBenevolatsController memberBenevolatsController;
 
@@ -54,7 +54,7 @@ public class BenevolatFormController {
 			this.displayInvalidAlert();
 		} else {
 			final BenevolatModel model = this.buildBenevolat();
-			this.benevolatService.addBenevolat(model, this.person);
+			this.benevolatService.addBenevolat(model, this.personModel);
 			this.memberBenevolatsController.onBenevolatAdded(model);
 			this.dialogStage.close();
 		}
@@ -173,8 +173,8 @@ public class BenevolatFormController {
 		this.dialogStage = stage;
 	}
 
-	public void setPerson(final Personne person) {
-		this.person = person;
+	public void setPerson(final PersonModel personModel) {
+		this.personModel = personModel;
 	}
 
 	public void setMemberBenevolatsController(final MemberBenevolatsController memberBenevolatsController) {

@@ -1,8 +1,5 @@
 package standardNaast.view.member.overview;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -17,7 +14,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import standardNaast.entities.Personne;
 import standardNaast.model.PersonModel;
 import standardNaast.service.PersonneService;
 import standardNaast.service.PersonneServiceImpl;
@@ -61,41 +57,16 @@ public class MembersTableController {
 
 	@FXML
 	private void initialize() {
-		final List<Personne> allMembers = this.personneService.findAllPerson(false);
+		final List<PersonModel> allMembers = this.personneService.findAllPerson(false);
 		this.buildModel(allMembers);
 		this.bindProperties();
 		this.installFiltering();
 
 	}
 
-	private void buildModel(final List<Personne> allMembers) {
-		for (final Personne personne : allMembers) {
-			final PersonModel personModel = new PersonModel();
-			personModel.setMemberNumber(personne.getMemberNumber());
-			personModel.setFirstName(personne.getFirstname());
-			personModel.setName(personne.getName());
-			personModel.setAddress(personne.getAddress());
-			personModel.setPostalCode(personne.getPostalCode());
-			personModel.setCity(personne.getCity());
-			personModel.setPhone(personne.getPhone());
-			personModel.setMobilePhone(personne.getMobilePhone());
-			personModel.setStudent(personne.isStudent());
-			personModel.setIdentityCardNumber(personne.getIdentityCardNumber());
-			Date birthdate = personne.getBirthdate();
-			if (birthdate == null) {
-				birthdate = new Date(0);
-			}
-			personModel.setBirthdate(LocalDateTime.ofInstant(birthdate.toInstant(), ZoneId.systemDefault())
-					.toLocalDate());
-			personModel.setEmail(personne.getEmail());
-			Date passportValidity = personne.getPassportValidity();
-			if (passportValidity == null) {
-				passportValidity = new Date(0);
-			}
-			personModel.setPassportValidity(LocalDateTime.ofInstant(passportValidity.toInstant(),
-					ZoneId.systemDefault()).toLocalDate());
-			personModel.setPersonneId(personne.getPersonneId());
-			this.memberList.add(personModel);
+	private void buildModel(final List<PersonModel> allMembers) {
+		for (final PersonModel model : allMembers) {
+			this.memberList.add(model);
 		}
 
 		this.membersTable.setItems(this.memberList);

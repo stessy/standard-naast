@@ -5,8 +5,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import standardNaast.entities.Abonnement;
-import standardNaast.entities.Bloc;
-import standardNaast.entities.Season;
 import standardNaast.types.AbonnementStatus;
 
 public class AbonnementModel {
@@ -15,13 +13,11 @@ public class AbonnementModel {
 
 	private ObjectProperty<SeasonModel> saison = new SimpleObjectProperty<>();
 
-	private Bloc bloc;
+	private ObjectProperty<AbonnementPriceChampionshipModel> price = new SimpleObjectProperty<>();
 
 	private LongProperty rang = new SimpleLongProperty();
 
 	private LongProperty place = new SimpleLongProperty();
-
-	private LongProperty prixAbonnement = new SimpleLongProperty();
 
 	private LongProperty reduction = new SimpleLongProperty();
 
@@ -31,76 +27,112 @@ public class AbonnementModel {
 
 	private ObjectProperty<AbonnementStatus> abonnementStatus = new SimpleObjectProperty<>();
 
-	public Season getSaison() {
-		return this.saison;
+	public PersonModel getPerson() {
+		return this.person.get();
 	}
 
-	public void setSaison(final Season saison) {
-		this.saison = saison;
+	public void setPerson(final PersonModel person) {
+		this.person.set(person);
 	}
 
-	public Bloc getBloc() {
-		return this.bloc;
+	public SeasonModel getSaison() {
+		return this.saison.get();
 	}
 
-	public void setBloc(final Bloc bloc) {
-		this.bloc = bloc;
+	public void setSaison(final SeasonModel saison) {
+		this.saison.set(saison);
+	}
+
+	public AbonnementPriceChampionshipModel getPrice() {
+		return this.price.get();
+	}
+
+	public void setPrice(final AbonnementPriceChampionshipModel price) {
+		this.price.set(price);
 	}
 
 	public Long getRang() {
-		return this.rang;
+		return this.rang.get();
 	}
 
 	public void setRang(final Long rang) {
-		this.rang = rang;
+		this.rang.set(rang);
 	}
 
 	public Long getPlace() {
-		return this.place;
+		return this.place.get();
 	}
 
 	public void setPlace(final Long place) {
-		this.place = place;
-	}
-
-	public Long getPrixAbonnement() {
-		return this.prixAbonnement;
-	}
-
-	public void setPrixAbonnement(final Long prixAbonnement) {
-		this.prixAbonnement = prixAbonnement;
+		this.place.set(place);
 	}
 
 	public Long getReduction() {
-		return this.reduction;
+		return this.reduction.get();
 	}
 
 	public void setReduction(final Long reduction) {
-		this.reduction = reduction;
+		this.reduction.set(reduction);
 	}
 
 	public Long getAcompte() {
-		return this.acompte;
+		return this.acompte.get();
 	}
 
 	public void setAcompte(final Long acompte) {
-		this.acompte = acompte;
+		this.acompte.set(acompte);
 	}
 
 	public Long getSolde() {
-		return this.solde;
+		return this.solde.get();
 	}
 
 	public void setSolde(final Long solde) {
-		this.solde = solde;
+		this.solde.set(solde);
 	}
 
 	public AbonnementStatus getAbonnementStatus() {
-		return this.abonnementStatus;
+		return this.abonnementStatus.get();
 	}
 
 	public void setAbonnementStatus(final AbonnementStatus abonnementStatus) {
-		this.abonnementStatus = abonnementStatus;
+		this.abonnementStatus.set(abonnementStatus);
+	}
+
+	public ObjectProperty<PersonModel> personProperty() {
+		return this.person;
+	}
+
+	public ObjectProperty<SeasonModel> saisonProperty() {
+		return this.saison;
+	}
+
+	public ObjectProperty<AbonnementPriceChampionshipModel> priceProperty() {
+		return this.price;
+	}
+
+	public LongProperty rangProperty() {
+		return this.rang;
+	}
+
+	public LongProperty placeProperty() {
+		return this.place;
+	}
+
+	public LongProperty reductionProperty() {
+		return this.reduction;
+	}
+
+	public LongProperty acompteProperty() {
+		return this.acompte;
+	}
+
+	public LongProperty soldeProperty() {
+		return this.solde;
+	}
+
+	public ObjectProperty<AbonnementStatus> abonnementStatusProperty() {
+		return this.abonnementStatus;
 	}
 
 	public static Abonnement of(final AbonnementModel model) {
@@ -109,7 +141,6 @@ public class AbonnementModel {
 		abonnement.setPlace(String.valueOf(model.getPlace()));
 		abonnement.setRang(String.valueOf(model.getRang()));
 		abonnement.setSaison(model.getSaison());
-		abonnement.setBloc(model.getBloc());
 		return abonnement;
 	}
 
@@ -118,7 +149,7 @@ public class AbonnementModel {
 		model.setAbonnementStatus(abonnement.getAbonnementStatus());
 		model.setAcompte(abonnement.getAcompte());
 		model.setBloc(abonnement.getBloc());
-		model.setMemberFirstName(abonnement.getPersonne().getFirstname());
+		model.setPerson(abonnement.getPersonne());
 		model.setMemberId(abonnement.getPersonne().getPersonneId());
 		model.setMemberName(abonnement.getPersonne().getName());
 		model.setPlace(Long.valueOf(abonnement.getPlace()));

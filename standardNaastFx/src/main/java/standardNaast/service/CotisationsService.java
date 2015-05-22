@@ -9,28 +9,32 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.log4j.Logger;
 
+import standardNaast.dao.PersonDAO;
+import standardNaast.dao.PersonDAOImpl;
 import standardNaast.entities.Cotisation;
 import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
 import standardNaast.model.CotisationViewModel;
+import standardNaast.model.PersonModel;
 import standardNaast.model.PersonnesCotisationsModel;
+import standardNaast.model.SeasonModel;
+
+import com.standardnaast.persistence.EntityManagerFactoryHelper;
 
 public class CotisationsService implements Serializable {
 
 	private static final long serialVersionUID = -3608269572256839874L;
 
-	@Inject
 	private PersonneService personneService;
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	private EntityManager entityManager = EntityManagerFactoryHelper.getFactory().createEntityManager();
+
+	private PersonDAO personDAO = new PersonDAOImpl();
 
 	private static final Logger LOGGER = Logger
 			.getLogger(CotisationsService.class);
@@ -51,9 +55,8 @@ public class CotisationsService implements Serializable {
 			final List<PersonnesCotisationsModel> personnesCotisationsModel,
 			final Cotisation cotisation) {
 		for (final PersonnesCotisationsModel personnesCotisationsModel2 : personnesCotisationsModel) {
-			final Personne personne = this.personneService
-					.getPersonByMemberNumber(personnesCotisationsModel2
-							.getMemberNumber());
+			final Personne personne = this.personDAO.getPersonneByMemberNumber(personnesCotisationsModel2
+					.getMemberNumber());
 			final PersonneCotisation personneCotisation = new PersonneCotisation();
 			personneCotisation.setPersonne(personne);
 			personneCotisation.setCotisation(cotisation);
@@ -67,9 +70,8 @@ public class CotisationsService implements Serializable {
 			final List<PersonnesCotisationsModel> personnesCotisationsModel,
 			final Cotisation cotisation) {
 		for (final PersonnesCotisationsModel personnesCotisationsModel2 : personnesCotisationsModel) {
-			final Personne personne = this.personneService
-					.getPersonByMemberNumber(personnesCotisationsModel2
-							.getMemberNumber());
+			final Personne personne = this.personDAO.getPersonneByMemberNumber(personnesCotisationsModel2
+					.getMemberNumber());
 			final List<PersonneCotisation> personneCotisations = personne
 					.getPersonnesCotisations();
 			for (final PersonneCotisation personneCotisation : personneCotisations) {
@@ -83,17 +85,15 @@ public class CotisationsService implements Serializable {
 	}
 
 	public CotisationViewModel getPaiedCotisationsPerYear(
-			final String selectedYear) {
-		final Cotisation selectedCotisation = this.getCotisationPerYear(Long
-				.valueOf(selectedYear));
-		final long year = selectedCotisation.getAnneeCotisation();
+			final SeasonModel seasonModel) {
+
 		boolean found = false;
-		final List<Personne> allPerson = this.personneService
+		final List<PersonModel> allPerson = this.personneService
 				.findAllPerson(false);
 		final List<PersonnesCotisationsModel> unpaidPersonnesCotisationsModel = new ArrayList<>();
 		final List<PersonnesCotisationsModel> paidCotisationMemberCardSent = new ArrayList<>();
 		final List<PersonnesCotisationsModel> paidCotisationMemberCardNotSent = new ArrayList<>();
-		for (final Personne personne : allPerson) {
+		for (final PersonModel personne : allPerson) {
 			final List<PersonneCotisation> personnesCotisations = personne
 					.getPersonnesCotisations();
 			for (final PersonneCotisation personneCotisation : personnesCotisations) {

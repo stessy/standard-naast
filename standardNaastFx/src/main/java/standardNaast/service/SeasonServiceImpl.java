@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import standardNaast.dao.PersonDAO;
+import standardNaast.dao.PersonDAOImpl;
 import standardNaast.dao.SeasonDAO;
 import standardNaast.dao.SeasonDAOImpl;
 import standardNaast.entities.Personne;
@@ -25,6 +27,8 @@ public class SeasonServiceImpl implements SeasonService, Serializable {
 
 	PersonneService personneService = new PersonneServiceImpl();
 
+	PersonDAO personDAO = new PersonDAOImpl();
+
 	private static final Logger LOGGER = Logger.getLogger(SeasonServiceImpl.class);
 
 	@Override
@@ -34,10 +38,10 @@ public class SeasonServiceImpl implements SeasonService, Serializable {
 
 	@Override
 	public MemberSeasonTravels getTravelsPerSeason(final Season season, final long memberId) {
-		final Personne member = this.personneService.getPerson(memberId);
+		final Personne person = this.personDAO.getPerson(memberId);
 		final MemberSeasonTravels travels = new MemberSeasonTravels();
-		travels.setAway(this.saisonDAO.getTravelsPerSeasonAway(season, member));
-		travels.setHome(this.saisonDAO.getTravelsPerSeasonHome(season, member));
+		travels.setAway(this.saisonDAO.getTravelsPerSeasonAway(season, person));
+		travels.setHome(this.saisonDAO.getTravelsPerSeasonHome(season, person));
 		return travels;
 	}
 

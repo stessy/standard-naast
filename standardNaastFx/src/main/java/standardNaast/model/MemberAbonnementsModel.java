@@ -8,15 +8,14 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import standardNaast.entities.Abonnement;
 import standardNaast.types.AbonnementStatus;
 
 public class MemberAbonnementsModel {
 
 	private final LongProperty abonnementId = new SimpleLongProperty();
 
-	private final StringProperty saison = new SimpleStringProperty();
-
-	private final StringProperty bloc = new SimpleStringProperty();
+	private final ObjectProperty<SeasonModel> saison = new SimpleObjectProperty<>();
 
 	private final StringProperty rang = new SimpleStringProperty();
 
@@ -30,6 +29,8 @@ public class MemberAbonnementsModel {
 
 	private final ObjectProperty<AbonnementStatus> status = new SimpleObjectProperty<>();
 
+	private final ObjectProperty<AbonnementPriceChampionshipModel> abonnementPrice = new SimpleObjectProperty<>();
+
 	public Long getAbonnementId() {
 		return this.abonnementId.longValue();
 	}
@@ -38,20 +39,12 @@ public class MemberAbonnementsModel {
 		this.abonnementId.set(abonnementId);
 	}
 
-	public String getSaison() {
+	public SeasonModel getSaison() {
 		return this.saison.get();
 	}
 
-	public void setSaison(final String saison) {
+	public void setSaison(final SeasonModel saison) {
 		this.saison.set(saison);
-	}
-
-	public String getBloc() {
-		return this.bloc.get();
-	}
-
-	public void setBloc(final String bloc) {
-		this.bloc.set(bloc);
 	}
 
 	public String getRang() {
@@ -106,12 +99,8 @@ public class MemberAbonnementsModel {
 		return this.abonnementId;
 	}
 
-	public StringProperty saisonProperty() {
+	public ObjectProperty<SeasonModel> saisonProperty() {
 		return this.saison;
-	}
-
-	public StringProperty blocProperty() {
-		return this.bloc;
 	}
 
 	public StringProperty rangProperty() {
@@ -138,4 +127,42 @@ public class MemberAbonnementsModel {
 		return this.status;
 	}
 
+	public AbonnementPriceChampionshipModel getAbonnementPrice() {
+		return this.abonnementPrice.get();
+	}
+
+	public void setAbonnementPrice(final AbonnementPriceChampionshipModel abonnementPrice) {
+		this.abonnementPrice.set(abonnementPrice);
+	}
+
+	public ObjectProperty<AbonnementPriceChampionshipModel> abonnementPriceProperty() {
+		return this.abonnementPrice;
+	}
+
+	public static MemberAbonnementsModel toModel(final Abonnement abonnement) {
+		final MemberAbonnementsModel model = new MemberAbonnementsModel();
+		model.setAbonnementId(abonnement.getId());
+		model.setAbonnementPrice(AbonnementPriceChampionshipModel.toModel(abonnement.getAbonnementPrice()));
+		model.setAcompte(abonnement.getAcompte());
+		model.setPaye(abonnement.getPaye());
+		model.setPlace(abonnement.getPlace());
+		model.setRang(abonnement.getRang());
+		model.setReduction(abonnement.getReduction());
+		model.setSaison(SeasonModel.of(abonnement.getSaison()));
+		model.setStatus(abonnement.getAbonnementStatus());
+		return model;
+	}
+
+	public static Abonnement toEntity(final MemberAbonnementsModel model) {
+		final Abonnement abonnement = new Abonnement();
+		abonnement.setAbonnementPrice(AbonnementPriceChampionshipModel.toEntity(model.getAbonnementPrice()));
+		abonnement.setAcompte(model.getAcompte());
+		abonnement.setPaye(model.getPaye());
+		abonnement.setPlace(model.getPlace());
+		abonnement.setRang(model.getRang());
+		abonnement.setReduction(model.getReduction());
+		abonnement.setSaison(SeasonModel.of(model.getSaison()));
+		abonnement.setAbonnementStatus(model.getStatus());
+		return abonnement;
+	}
 }

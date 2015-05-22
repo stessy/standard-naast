@@ -49,10 +49,6 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 	private long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "BLOC_ID")
-	private Bloc bloc;
-
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PRICE_ID")
 	private AbonnementPrices abonnementPrice;
 
@@ -90,14 +86,6 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 
 	public long getId() {
 		return this.id;
-	}
-
-	public Bloc getBloc() {
-		return this.bloc;
-	}
-
-	public void setBloc(final Bloc bloc) {
-		this.bloc = bloc;
 	}
 
 	public Personne getPersonne() {

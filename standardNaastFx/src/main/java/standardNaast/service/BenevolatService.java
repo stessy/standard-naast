@@ -5,12 +5,17 @@ package standardNaast.service;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
+import standardNaast.dao.PersonDAO;
+import standardNaast.dao.PersonDAOImpl;
 import standardNaast.entities.Benevolat;
 import standardNaast.entities.Personne;
 import standardNaast.model.BenevolatModel;
+import standardNaast.model.PersonModel;
 import standardNaast.utils.DateUtils;
 
 import com.standardnaast.persistence.EntityManagerFactoryHelper;
@@ -21,16 +26,19 @@ import com.standardnaast.persistence.EntityManagerFactoryHelper;
  */
 public class BenevolatService implements Serializable {
 
-	public Benevolat addBenevolat(final BenevolatModel model, final Personne personne) {
+	private final PersonDAO personDAO = new PersonDAOImpl();
+
+	public Benevolat addBenevolat(final BenevolatModel model, final PersonModel personModel) {
 		final Benevolat benevolat = new Benevolat();
 		this.fillBenevolat(model, benevolat);
 		final EntityManager entityManager = this.getEntityManager();
 		entityManager.getTransaction().begin();
-		final Personne managedPersonne = entityManager.merge(personne);
+		final Personne person = this.personDAO.getPerson(personModel.getPersonneId());
+		final Personne managedPersonne = entityManager.merge(person);
 		managedPersonne.getBenevolatList().add(benevolat);
 		benevolat.setPersonne(managedPersonne);
 		entityManager.persist(benevolat);
-		entityManager.merge(personne);
+		entityManager.merge(managedPersonne);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		return benevolat;
@@ -61,6 +69,14 @@ public class BenevolatService implements Serializable {
 		entityManager.merge(benevolat);
 		entityManager.getTransaction().commit();
 		entityManager.close();
+	}
+
+	public List<BenevolatModel> getBenevolats(final PersonModel model) {
+		final Personne person = this.personDAO.getPerson(model.getPersonneId());
+		final List<Benevolat> benevolats = person.getBenevolatList();
+		final List<BenevolatModel> benevolatsModel = benevolats.stream().map(b -> BenevolatModel.toModel(b))
+				.collect(Collectors.toList());
+		return benevolatsModel;
 	}
 
 	private EntityManager getEntityManager() {

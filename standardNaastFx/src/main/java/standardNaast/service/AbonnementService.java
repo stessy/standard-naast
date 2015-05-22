@@ -5,15 +5,20 @@ package standardNaast.service;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import standardNaast.constants.DateFormat;
 import standardNaast.dao.AbonnementDAO;
 import standardNaast.dao.AbonnementDAOImpl;
+import standardNaast.dao.PersonDAO;
+import standardNaast.dao.PersonDAOImpl;
 import standardNaast.dao.PriceDAO;
 import standardNaast.dao.PriceDAOImpl;
 import standardNaast.dao.SeasonDAO;
@@ -24,9 +29,13 @@ import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
 import standardNaast.model.AbonnementModel;
 import standardNaast.model.AbonnementsModel;
+import standardNaast.model.MemberAbonnementsModel;
+import standardNaast.model.PersonModel;
 import standardNaast.model.PurchasableAbonnements;
+import standardNaast.model.SeasonModel;
 import standardNaast.types.AbonnementStatus;
 import standardNaast.types.CompetitionType;
+import standardNaast.types.PersonType;
 import standardNaast.utils.AbonnementPricesImporter;
 import standardNaast.utils.AbonnementPricesImporter.BlocAbonnementPrices;
 
@@ -39,6 +48,8 @@ public class AbonnementService implements Serializable {
 	private final SeasonDAO seasonDao = new SeasonDAOImpl();
 
 	private final PersonneService personneService = new PersonneServiceImpl();
+
+	private final PersonDAO personDAO = new PersonDAOImpl();
 
 	private final PriceDAO priceDAO = new PriceDAOImpl();
 
@@ -135,15 +146,23 @@ public class AbonnementService implements Serializable {
 		}
 	}
 
-	public AbonnementModel getPreviousAbonnement(final Season previousSeason, final Long memberId) {
-		final Personne person = this.personneService.getPerson(memberId);
+	public List<MemberAbonnementsModel> getMemberAbonnements(final PersonModel personModel) {
+		final Personne person = this.personDAO.getPerson(personModel.getPersonneId());
+		final List<Abonnement> abonnementList = person.getAbonnementList();
+		return abonnementList.stream().map(a -> MemberAbonnementsModel.toModel(a)).collect(Collectors.toList());
+	}
+
+	public AbonnementModel getPreviousAbonnement(final SeasonModel previousSeason, final Long memberId) {
+		final PersonModel person = this.personneService.getPerson(memberId);
 		return AbonnementModel.of(this.abonnementDao.getPreviousAbonnement(previousSeason, person));
 	}
 
-	public Long getAbonnementPrice(final Season season, final Long memberId) {
-		final Personne person = this.personneService.getPerson(memberId);
-		final Date birthdate = person.getBirthdate();
-		final Date dateFirstMatch = season.getDateFirstMatchChampionship();
+	public Long getAbonnementPrice(final SeasonModel season, final PersonModel model) {
+		final Boolean isStudent = model.getStudent();
+		final LocalDate birthdate = model.getBirthdate();
+		final LocalDate dateFirstMatch = season.getFirstMatchDate();
+		final Period yearsBetween = Period.between(dateFirstMatch, birthdate);
+		final PersonType[] personTypes = PersonType.values();
 		return new Long(5);
 	}
 

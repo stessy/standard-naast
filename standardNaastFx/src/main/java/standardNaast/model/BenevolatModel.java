@@ -8,6 +8,8 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import standardNaast.entities.Benevolat;
+import standardNaast.utils.DateUtils;
 
 public class BenevolatModel {
 
@@ -65,6 +67,15 @@ public class BenevolatModel {
 
 	public LongProperty idProperty() {
 		return this.id;
+	}
+
+	public static BenevolatModel toModel(final Benevolat benevolat) {
+		final BenevolatModel model = new BenevolatModel();
+		model.setDate(DateUtils.toLocalDate(benevolat.getDateBenevolat()));
+		model.setMontant(benevolat.getAmount().longValue());
+		model.setDescription(benevolat.getTypeBenevolat());
+		model.setId(benevolat.getId());
+		return model;
 	}
 
 }

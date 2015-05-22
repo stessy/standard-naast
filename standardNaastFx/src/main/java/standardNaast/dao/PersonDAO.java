@@ -6,7 +6,7 @@ import standardNaast.entities.Personne;
 
 public interface PersonDAO {
 
-	void addPerson(Personne person);
+	Personne addPerson(Personne person);
 
 	Personne updatePerson(Personne personne);
 

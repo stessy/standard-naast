@@ -9,9 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
 import standardNaast.model.MemberCotisationsModel;
+import standardNaast.model.PersonModel;
 import standardNaast.utils.DateUtils;
 
 public class MemberCotisationsController {
@@ -35,8 +35,8 @@ public class MemberCotisationsController {
 		this.memberCotisationsTable.setPlaceholder(new Label("Aucune cotisation pour le membre"));
 	}
 
-	public void onSelectedMember(final Personne person) {
-		final List<PersonneCotisation> personnesCotisations = person.getPersonnesCotisations();
+	public void onSelectedMember(final PersonModel personModel) {
+		final List<PersonneCotisation> personnesCotisations = personModel.getPersonnesCotisations();
 		this.memberCotisationsList.clear();
 		for (final PersonneCotisation personneCotisation : personnesCotisations) {
 			final MemberCotisationsModel model = new MemberCotisationsModel();
