@@ -14,7 +14,7 @@ import javafx.beans.property.StringProperty;
 import standardNaast.entities.Personne;
 import standardNaast.utils.DateUtils;
 
-public class PersonModel {
+public class PersonModel implements Comparable<PersonModel> {
 
 	private final LongProperty personneId = new SimpleLongProperty();
 
@@ -257,4 +257,8 @@ public class PersonModel {
 		return person;
 	}
 
+	@Override
+	public int compareTo(final PersonModel o) {
+		return this.memberNumber.get() < o.memberNumber.get() ? -1 : 1;
+	}
 }

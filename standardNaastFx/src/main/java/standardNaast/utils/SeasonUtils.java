@@ -3,12 +3,12 @@
  */
 package standardNaast.utils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
-import standardNaast.entities.Season;
+import standardNaast.model.SeasonModel;
 
 /**
  * @author stessy
@@ -16,15 +16,15 @@ import standardNaast.entities.Season;
  */
 public class SeasonUtils {
 
-	public static List<Season> getCotisationsEuropeanSeasons(final List<Season> seasonList) {
-		Date today = new Date();
+	public static List<SeasonModel> getCotisationsEuropeanSeasons(final List<SeasonModel> seasonList) {
+		final LocalDate today = LocalDate.now();
 		Collections.sort(seasonList);
 		Collections.reverse(seasonList);
-		List<Season> subSeasonList = new ArrayList<Season>();
+		final List<SeasonModel> subSeasonList = new ArrayList<>();
 		boolean passedOnce = false;
-		for (Season season : seasonList) {
-			if (today.compareTo(season.getDateStart()) == 1) {
-				if (season.isEuropean()) {
+		for (final SeasonModel season : seasonList) {
+			if (today.compareTo(season.getStartDate()) == 1) {
+				if (season.getEuropean()) {
 					if (passedOnce) {
 						break;
 					} else {

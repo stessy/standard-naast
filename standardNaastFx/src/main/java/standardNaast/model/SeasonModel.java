@@ -13,7 +13,7 @@ import javafx.beans.property.StringProperty;
 import standardNaast.entities.Season;
 import standardNaast.utils.DateUtils;
 
-public class SeasonModel {
+public class SeasonModel implements Comparable<SeasonModel> {
 
 	private final StringProperty id = new SimpleStringProperty();
 
@@ -132,6 +132,11 @@ public class SeasonModel {
 	@Override
 	public String toString() {
 		return this.id.get();
+	}
+
+	@Override
+	public int compareTo(final SeasonModel o) {
+		return this.startDate.get().compareTo(o.startDate.get());
 	}
 
 }

@@ -23,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
 import standardNaast.entities.Season;
+import standardNaast.model.PersonModel;
+import standardNaast.model.SeasonModel;
 import standardNaast.utils.SeasonUtils;
 
 import com.itextpdf.text.BaseColor;
@@ -41,8 +43,6 @@ public class TableauCotisations {
 	private PersonneServiceImpl personneService;
 
 	private SeasonServiceImpl saisonService;
-
-	private static final int YEAR = GregorianCalendar.getInstance().get(Calendar.YEAR);
 
 	public static void main(final String args[]) {
 		final TableauCotisations tableauCotisations = new TableauCotisations();
@@ -188,16 +188,13 @@ public class TableauCotisations {
 
 	private List<PersonneCotisationRow> buildPersonCotisation() {
 		LocalDate.of(TableauCotisations.YEAR, 4, 1);
-		final List<Season> seasonList = this.getSeasons();
-		final List<Personne> personList = this.getMembers();
+		final List<SeasonModel> seasonList = this.getSeasons();
+		final List<PersonModel> personList = this.getMembers();
 		final List<PersonneCotisationRow> personCotisationList = new ArrayList<>();
-		final Date today = new Date();
-		final Calendar todayCalendar = GregorianCalendar.getInstance();
-		todayCalendar.setTime(today);
-		final int todayYear = todayCalendar.get(Calendar.YEAR);
+		final LocalDate today = LocalDate.now();
 		final Calendar seasonCalendar = GregorianCalendar.getInstance();
-		final Season latestSeason = seasonList.get(0);
-		seasonCalendar.setTime(latestSeason.getDateEnd());
+		final SeasonModel latestSeason = seasonList.get(0);
+		seasonCalendar.setTime(latestSeason.getEndDate());
 		final int seasonYear = seasonCalendar.get(Calendar.YEAR);
 		// Si l'année de la date d'aujourd'hui et égale à l'année de la première
 		// saison de la liste, qui correspond à la
@@ -256,21 +253,15 @@ public class TableauCotisations {
 		return personCotisationList;
 	}
 
-	private List<Season> getSeasons() {
-		final List<Season> seasonList = this.getSaisonService().findAllSaison();
+	private List<SeasonModel> getSeasons() {
+		final List<SeasonModel> seasonList = this.getSaisonService().findAllSaison();
 		return SeasonUtils.getCotisationsEuropeanSeasons(seasonList);
 	}
 
-	private List<Personne> getMembers() {
-		final List<Personne> personneList = this.getPersonneService().findAllPerson(false);
-		final List<Personne> memberList = new ArrayList<Personne>();
-		for (final Personne personne : personneList) {
-			if (personne.getMemberNumber() < 10000) {
-				memberList.add(personne);
-			}
-		}
-		Collections.sort(memberList);
-		return memberList;
+	private List<PersonModel> getMembers() {
+		final List<PersonModel> personneList = this.getPersonneService().findAllPerson(false);
+		Collections.sort(personneList);
+		return personneList;
 	}
 
 	private PersonneServiceImpl getPersonneService() {
