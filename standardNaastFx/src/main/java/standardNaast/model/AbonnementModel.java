@@ -140,7 +140,7 @@ public class AbonnementModel {
 		abonnement.setAcompte(model.getAcompte());
 		abonnement.setPlace(String.valueOf(model.getPlace()));
 		abonnement.setRang(String.valueOf(model.getRang()));
-		abonnement.setSaison(model.getSaison());
+		abonnement.setSaison(SeasonModel.of(model.getSaison()));
 		return abonnement;
 	}
 
@@ -148,13 +148,9 @@ public class AbonnementModel {
 		final AbonnementModel model = new AbonnementModel();
 		model.setAbonnementStatus(abonnement.getAbonnementStatus());
 		model.setAcompte(abonnement.getAcompte());
-		model.setBloc(abonnement.getBloc());
-		model.setPerson(abonnement.getPersonne());
-		model.setMemberId(abonnement.getPersonne().getPersonneId());
-		model.setMemberName(abonnement.getPersonne().getName());
+		model.setPerson(PersonModel.toModel(abonnement.getPersonne()));
 		model.setPlace(Long.valueOf(abonnement.getPlace()));
 		model.setRang(Long.valueOf(abonnement.getRang()));
-		model.setPrixAbonnement(abonnement.getAbonnementPrice().getPrice());
 		model.setReduction(abonnement.getReduction());
 		model.setSolde(abonnement.getAbonnementPrice().getPrice() - abonnement.getReduction() - abonnement.getAcompte());
 		return model;

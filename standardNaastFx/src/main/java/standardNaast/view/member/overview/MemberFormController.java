@@ -5,22 +5,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -80,6 +74,12 @@ public class MemberFormController {
 	@FXML
 	private TextField emailLabel;
 
+	@FXML
+	private Button addButton;
+
+	@FXML
+	private Button updateButton;
+
 	private PersonModel model;
 
 	private Stage dialogStage;
@@ -88,6 +88,8 @@ public class MemberFormController {
 
 	public void fillForm(final PersonModel model) {
 		this.model = model;
+		this.addButton.setDisable(false);
+		this.updateButton.setDisable(false);
 		this.memberNumberLabel.setText(String.valueOf(model.getMemberNumber()));
 		this.firstNameLabel.setText(model.getFirstName());
 		this.nameLabel.setText(model.getName());
@@ -109,30 +111,17 @@ public class MemberFormController {
 	private void onAddMember() {
 		try {
 			final FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MemberFormController.class.getResource("MemberForm.fxml"));
+			loader.setLocation(MemberFormController.class.getResource("NewMemberForm.fxml"));
 			final TitledPane rootPane = (TitledPane) loader.load();
-			final AnchorPane anchorPane = (AnchorPane) rootPane.getContent();
-			final ObservableList<Node> children = anchorPane.getChildren();
-			final BorderPane borderPane = (BorderPane) children.get(0);
-			final ButtonBar buttonBar = (ButtonBar) borderPane.getBottom();
-			final ObservableList<Node> buttons = buttonBar.getButtons();
-			buttons.stream().forEach(b -> b.setVisible(false));
-			final Button addButton = new Button("Ajouter le membre");
-			addButton.setOnAction(this::addMember);
-			final Button cancelButton = new Button("Annuler");
-			ButtonBar.setButtonData(addButton, ButtonData.YES);
-			ButtonBar.setButtonData(cancelButton, ButtonData.CANCEL_CLOSE);
-			buttonBar.getButtons().addAll(addButton, cancelButton);
-
-			final MemberFormController controller = (MemberFormController) loader.getController();
+			final NewMemberFormController controller = (NewMemberFormController) loader.getController();
 			final Stage memberFormDialog = new Stage();
 			memberFormDialog.setWidth(750);
 			memberFormDialog.setTitle("Membre");
 			memberFormDialog.initModality(Modality.APPLICATION_MODAL);
+			controller.setDialogStage(memberFormDialog);
 			final Scene scene = new Scene(rootPane);
 			memberFormDialog.setScene(scene);
-			controller.setDialogStage(memberFormDialog);
-			memberFormDialog.show();
+			memberFormDialog.showAndWait();
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

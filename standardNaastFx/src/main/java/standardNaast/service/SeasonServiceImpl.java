@@ -5,6 +5,7 @@ package standardNaast.service;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
@@ -32,16 +33,17 @@ public class SeasonServiceImpl implements SeasonService, Serializable {
 	private static final Logger LOGGER = Logger.getLogger(SeasonServiceImpl.class);
 
 	@Override
-	public List<Season> findAllSaison() {
-		return this.saisonDAO.getAllSeasons();
+	public List<SeasonModel> findAllSaison() {
+		return this.saisonDAO.getAllSeasons().stream().map(s -> SeasonModel.of(s)).collect(Collectors.toList());
 	}
 
 	@Override
-	public MemberSeasonTravels getTravelsPerSeason(final Season season, final long memberId) {
+	public MemberSeasonTravels getTravelsPerSeason(final SeasonModel season, final long memberId) {
 		final Personne person = this.personDAO.getPerson(memberId);
+		final Season selectedSeason = this.saisonDAO.getSeasonById(season.getId());
 		final MemberSeasonTravels travels = new MemberSeasonTravels();
-		travels.setAway(this.saisonDAO.getTravelsPerSeasonAway(season, person));
-		travels.setHome(this.saisonDAO.getTravelsPerSeasonHome(season, person));
+		travels.setAway(this.saisonDAO.getTravelsPerSeasonAway(selectedSeason, person));
+		travels.setHome(this.saisonDAO.getTravelsPerSeasonHome(selectedSeason, person));
 		return travels;
 	}
 

@@ -49,7 +49,6 @@ public class PersonDAOImpl implements PersonDAO {
 		final TypedQuery<Personne> query = this.getEntityManager()
 				.createNamedQuery("getByMemberNumber", Personne.class);
 		query.setParameter("memberNumber", memberNumber);
-		// query.setParameter(1, memberNumber);
 		return query.getSingleResult();
 	}
 

@@ -45,6 +45,9 @@ public class MemberBenevolatsController {
 	private TableColumn<BenevolatModel, String> description;
 
 	@FXML
+	private Button addButton;
+
+	@FXML
 	private Button modifyButton;
 
 	@FXML
@@ -77,6 +80,9 @@ public class MemberBenevolatsController {
 		this.benevolatList.addAll(benevolats);
 		this.memberBenevolatsTable.setItems(this.benevolatList);
 		this.bindProperties();
+		this.addButton.setDisable(false);
+		this.deleteButton.setDisable(false);
+		this.modifyButton.setDisable(false);
 	}
 
 	public void bindProperties() {
@@ -87,10 +93,10 @@ public class MemberBenevolatsController {
 
 	@FXML
 	public void onAddBenevolat() {
-		this.displayBenevolatDIalog();
+		this.displayBenevolatDialog();
 	}
 
-	private void displayBenevolatDIalog() {
+	private void displayBenevolatDialog() {
 		try {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(BenevolatFormController.class.getResource("BenevolatForm.fxml"));
@@ -136,7 +142,7 @@ public class MemberBenevolatsController {
 
 	@FXML
 	public void onModifyBenevolat() {
-		this.displayBenevolatDIalog();
+		this.displayBenevolatDialog();
 	}
 
 }

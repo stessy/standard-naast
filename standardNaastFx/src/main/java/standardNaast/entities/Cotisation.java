@@ -4,40 +4,30 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
 /**
  * The persistent class for the COTISATIONS database table.
  * 
  */
-@Entity
-@Table(name = "COTISATIONS")
-@Access(AccessType.FIELD)
+// @Entity
+// @Table(name = "COTISATIONS")
+// @Access(AccessType.FIELD)
 public class Cotisation implements Serializable, Comparable<Cotisation> {
 
 	/** The serialVersionUID. */
 	private static final long serialVersionUID = 5083386018969229201L;
 
-	@Id
-	@Basic(optional = false)
-	@NotNull
-	@Column(name = "ANNEE_COTISATION2")
+	// @Id
+	// @Basic(optional = false)
+	// @NotNull
+	// @Column(name = "ANNEE_COTISATION2")
 	private long anneeCotisation;
 
-	@Column(name = "MONTANT_COTISATION", nullable = false, precision = 10, scale = 2)
+	// @Column(name = "MONTANT_COTISATION", nullable = false, precision = 10,
+	// scale = 2)
 	private BigDecimal montantCotisation;
 
-	@OneToMany(mappedBy = "cotisation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// @OneToMany(mappedBy = "cotisation", fetch = FetchType.LAZY, cascade =
+	// CascadeType.ALL)
 	private List<PersonneCotisation> personneCotisations;
 
 	public Cotisation() {
@@ -95,7 +85,7 @@ public class Cotisation implements Serializable, Comparable<Cotisation> {
 		if (!(obj instanceof Cotisation)) {
 			return false;
 		}
-		Cotisation other = (Cotisation) obj;
+		final Cotisation other = (Cotisation) obj;
 		if (this.anneeCotisation != other.anneeCotisation) {
 			return false;
 		}

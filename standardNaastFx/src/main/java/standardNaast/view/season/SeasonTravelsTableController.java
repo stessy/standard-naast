@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import standardNaast.entities.Season;
 import standardNaast.model.SeasonModel;
 import standardNaast.model.TravelModel;
 import standardNaast.service.TravelService;
@@ -67,10 +66,9 @@ public class SeasonTravelsTableController {
 
 	}
 
-	public void fillTable(final Season selectedSeason) {
+	public void fillTable(final SeasonModel selectedSeason) {
 		this.travels.clear();
-		final SeasonModel model = SeasonModel.of(selectedSeason);
-		final List<TravelModel> travelsPerSeason = this.travelService.getTravelsPerSeason(model);
+		final List<TravelModel> travelsPerSeason = this.travelService.getTravelsPerSeason(selectedSeason);
 		this.travels.addAll(travelsPerSeason);
 		this.travelsTable.setItems(this.travels);
 	}

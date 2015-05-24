@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet id="1" author="stessy">
+		<sql><![CDATA[alter table PERSONNES_COTISATIONS drop column annee_cotisation2]]></sql>
+	</changeSet>
+	<changeSet id="2" author="stessy">
+		<sql><![CDATA[alter table PERSONNES_COTISATIONS add season_id varchar(10)]]></sql>
+	</changeSet>
+	<changeSet id="3" author="stessy">
+		<sql><![CDATA[alter table PERSONNES_COTISATIONS add constraint PERSONNES_COTISATIONS_SEASON_FK foreign key (SEASON_ID) references SAISON(SAISON_ID)]]></sql>
+	</changeSet>
+	<changeSet id="4" author="stessy">
+		<sql><![CDATA[  create sequence PERSONNE_COTISATION_SEQ as bigint start with 100 increment by 1]]></sql>
+	</changeSet>
+	<changeSet id="5" author="stessy">
+		<sql><![CDATA[  alter table personnes_cotisations add id bigint]]></sql>
+	</changeSet>
+	<changeSet id="6" author="stessy">
+		<sql><![CDATA[  alter table personnes_cotisations add constraint personnes_cotisations_pk primary key (id)]]></sql>
+	</changeSet>
+</databaseChangeLog>

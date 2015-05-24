@@ -5,6 +5,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -49,6 +50,12 @@ public class MemberAbonnementsController {
 	private TableColumn<MemberAbonnementsModel, AbonnementStatus> status;
 
 	@FXML
+	private Button addButton;
+
+	@FXML
+	private Button updateButton;
+
+	@FXML
 	public void initialize() {
 		this.abonnementsTable.setPlaceholder(new Label("Aucun abonnement pour le membre"));
 	}
@@ -60,6 +67,8 @@ public class MemberAbonnementsController {
 		this.abonnementsList.addAll(memberAbonnements);
 		this.abonnementsTable.setItems(this.abonnementsList);
 		this.bindProperties();
+		this.addButton.setDefaultButton(false);
+		// this.updateButton.setDisable(false);
 	}
 
 	private void bindProperties() {

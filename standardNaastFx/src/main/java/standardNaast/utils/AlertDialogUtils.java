@@ -28,4 +28,13 @@ public class AlertDialogUtils {
 		alert.showAndWait();
 	}
 
+	public static void displayErrorAlert(final Stage parentStage, final String error) {
+		final Alert alert = new Alert(AlertType.ERROR);
+		alert.initOwner(parentStage);
+		alert.setTitle("Erreur");
+		alert.setHeaderText(null);
+		alert.setContentText(error);
+		alert.showAndWait();
+	}
+
 }

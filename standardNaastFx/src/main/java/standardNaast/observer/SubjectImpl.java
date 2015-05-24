@@ -3,7 +3,7 @@ package standardNaast.observer;
 import java.util.ArrayList;
 import java.util.List;
 
-import standardNaast.entities.Season;
+import standardNaast.model.SeasonModel;
 import standardNaast.service.SeasonService;
 import standardNaast.service.SeasonServiceImpl;
 
@@ -11,7 +11,7 @@ public class SubjectImpl implements Subject {
 
 	private final SeasonService seasonService = new SeasonServiceImpl();
 
-	private List<Season> seasons = new ArrayList<>();
+	private List<SeasonModel> seasons = new ArrayList<>();
 
 	private final List<Observer> observers = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public class SubjectImpl implements Subject {
 		}
 	}
 
-	public List<Season> getSeasons() {
+	public List<SeasonModel> getSeasons() {
 		return this.seasons;
 	}
 

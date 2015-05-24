@@ -53,8 +53,6 @@ public class MembersTableController {
 
 	private final FirstNameHeaderColumnFiltering firstNameHeaderColumnFiltering = new FirstNameHeaderColumnFiltering();
 
-	private final NameHeaderColumnFiltering nameHeaderColumnFiltering = new NameHeaderColumnFiltering();
-
 	@FXML
 	private void initialize() {
 		final List<PersonModel> allMembers = this.personneService.findAllPerson(false);
@@ -82,7 +80,6 @@ public class MembersTableController {
 		this.phoneNumberMemberColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
 		this.mobilePhoneMemberColumn.setCellValueFactory(cellData -> cellData.getValue().mobilePhoneProperty());
 		this.firstNameMemberColumn.setGraphic(this.firstNameHeaderColumnFiltering);
-		this.memberNameColumn.setGraphic(this.nameHeaderColumnFiltering);
 	}
 
 	private class FirstNameHeaderColumnFiltering extends VBox {
@@ -98,22 +95,6 @@ public class MembersTableController {
 
 		public TextField getFirstNameFieldFiltering() {
 			return this.firstNameFieldFiltering;
-		}
-	}
-
-	private class NameHeaderColumnFiltering extends VBox {
-		private final Label nameLabel = new Label("Nom");
-
-		private final TextField nameFieldFiltering = new TextField();
-
-		public NameHeaderColumnFiltering() {
-			this.getChildren().addAll(this.nameLabel, this.nameFieldFiltering);
-			this.setPadding(new Insets(5));
-			this.setAlignment(Pos.TOP_CENTER);
-		}
-
-		public TextField getNameFieldFiltering() {
-			return this.nameFieldFiltering;
 		}
 	}
 
@@ -133,23 +114,6 @@ public class MembersTableController {
 
 							if (person.getFirstName().toUpperCase().contains(lowerCaseFilter)) {
 								return true; // Filter matches first
-												// name.
-							}
-							return false; // Does not match.
-						});
-				});
-		this.nameHeaderColumnFiltering.getNameFieldFiltering().textProperty()
-				.addListener((observable, oldValue, newValue) -> {
-					filteredData.setPredicate(person -> {
-						// If filter text is empty, display all persons.
-							if (newValue == null || newValue.isEmpty()) {
-								return true;
-							}
-
-							final String lowerCaseFilter = newValue.toUpperCase();
-
-							if (person.getName().toUpperCase().contains(lowerCaseFilter)) {
-								return true; // Filter matches last
 												// name.
 							}
 							return false; // Does not match.

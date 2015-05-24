@@ -8,9 +8,9 @@ import standardNaast.model.SeasonModel;
 
 public interface SeasonService {
 
-	List<Season> findAllSaison();
+	List<SeasonModel> findAllSaison();
 
-	MemberSeasonTravels getTravelsPerSeason(Season season, long memberId);
+	MemberSeasonTravels getTravelsPerSeason(SeasonModel season, long memberId);
 
 	Season getSaisonById(String saisonId);
 

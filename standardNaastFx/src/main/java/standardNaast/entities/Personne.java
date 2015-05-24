@@ -47,7 +47,7 @@ public class Personne implements Serializable, Comparable<Personne> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PERSONNES_SEQ")
-	@SequenceGenerator(name = "PERSONNES_SEQ", sequenceName = "PERSONNES_SEQ")
+	@SequenceGenerator(name = "PERSONNES_SEQ", sequenceName = "PERSON_SEQ")
 	@Column(name = "PERSONNE_ID")
 	private long personneId;
 

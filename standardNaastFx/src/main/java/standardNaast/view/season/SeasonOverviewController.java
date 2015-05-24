@@ -15,14 +15,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import standardNaast.entities.Season;
 import standardNaast.model.SeasonModel;
 import standardNaast.observer.Observer;
 import standardNaast.observer.SubjectImpl;
 
 public class SeasonOverviewController implements Observer {
 
-	private final ObservableList<Season> seasonsList = FXCollections.observableArrayList();
+	private final ObservableList<SeasonModel> seasonsList = FXCollections.observableArrayList();
 
 	@FXML
 	private Parent seasonInformation;
@@ -37,9 +36,9 @@ public class SeasonOverviewController implements Observer {
 	private SeasonTravelsTableController seasonTravelsController;
 
 	@FXML
-	private ComboBox<Season> season;
+	private ComboBox<SeasonModel> season;
 
-	private ChangeListener<Season> seasonListener;
+	private ChangeListener<SeasonModel> seasonListener;
 
 	@FXML
 	private Button addButton;
@@ -59,7 +58,7 @@ public class SeasonOverviewController implements Observer {
 	}
 
 	@Override
-	public void update(final List<Season> seasons) {
+	public void update(final List<SeasonModel> seasons) {
 		this.season.valueProperty().removeListener(this.seasonListener);
 		this.seasonsList.clear();
 		this.seasonsList.addAll(seasons);
@@ -69,9 +68,8 @@ public class SeasonOverviewController implements Observer {
 		this.seasonInformationController.reset();
 	}
 
-	private void onSelectedSeason(final Season selectedSeason) {
-		final SeasonModel model = SeasonModel.of(selectedSeason);
-		this.seasonInformationController.onSelectedSeason(model);
+	private void onSelectedSeason(final SeasonModel selectedSeason) {
+		this.seasonInformationController.onSelectedSeason(selectedSeason);
 		this.modifyButton.setDisable(false);
 		this.seasonTravelsController.fillTable(selectedSeason);
 	}
@@ -97,10 +95,9 @@ public class SeasonOverviewController implements Observer {
 			loader.setLocation(SeasonFormController.class.getResource("SeasonForm.fxml"));
 			final GridPane pane = (GridPane) loader.load();
 			final SeasonFormController controller = (SeasonFormController) loader.getController();
-			final Season selectedSeason = this.season.getSelectionModel().getSelectedItem();
+			final SeasonModel selectedSeason = this.season.getSelectionModel().getSelectedItem();
 			if (selectedSeason != null && !this.newSeason) {
-				final SeasonModel selectedSeasonModel = SeasonModel.of(selectedSeason);
-				controller.setModel(selectedSeasonModel);
+				controller.setModel(selectedSeason);
 				controller.fillForm();
 			}
 			final Stage seasonDialog = new Stage();

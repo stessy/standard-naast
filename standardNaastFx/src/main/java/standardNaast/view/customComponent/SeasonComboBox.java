@@ -5,15 +5,15 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-import standardNaast.entities.Season;
+import standardNaast.model.SeasonModel;
 import standardNaast.service.SeasonService;
 import standardNaast.service.SeasonServiceImpl;
 
-public class SeasonComboBox extends ComboBox<Season> {
+public class SeasonComboBox extends ComboBox<SeasonModel> {
 
 	private final SeasonService seasonService = new SeasonServiceImpl();
 
-	private final ObservableList<Season> seasons = FXCollections.observableArrayList();
+	private final ObservableList<SeasonModel> seasons = FXCollections.observableArrayList();
 
 	private static SeasonComboBox seasonComboBox = null;
 
@@ -34,7 +34,7 @@ public class SeasonComboBox extends ComboBox<Season> {
 
 	public void update() {
 		this.seasons.clear();
-		final List<Season> allSeasons = this.seasonService.findAllSaison();
+		final List<SeasonModel> allSeasons = this.seasonService.findAllSaison();
 		this.seasons.addAll(allSeasons);
 		this.setItems(this.seasons);
 	}

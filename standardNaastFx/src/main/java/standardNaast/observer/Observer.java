@@ -2,7 +2,7 @@ package standardNaast.observer;
 
 import java.util.List;
 
-import standardNaast.entities.Season;
+import standardNaast.model.SeasonModel;
 
 /**
  * @author stessy
@@ -10,6 +10,6 @@ import standardNaast.entities.Season;
  */
 public interface Observer {
 
-	void update(final List<Season> seasons);
+	void update(final List<SeasonModel> seasons);
 
 }

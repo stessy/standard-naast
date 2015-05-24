@@ -9,22 +9,32 @@ public class PersonnesCotisationsId implements Serializable {
 
 	private static final long serialVersionUID = 2123076087541889869L;
 
-	// @Column(name = "PERSONNE_ID", unique = true, nullable = false, precision
-	// = 10)
-	private long personne;
+	private Personne personne;
 
-	// @Column(name = "ANNEE_COTISATION2", unique = true, nullable = false,
-	// length = 4)
-	private long cotisation;
+	private Season season;
+
+	public Personne getPersonne() {
+		return this.personne;
+	}
+
+	public void setPersonne(final Personne personne) {
+		this.personne = personne;
+	}
+
+	public Season getSeason() {
+		return this.season;
+	}
+
+	public void setSeason(final Season season) {
+		this.season = season;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result)
-				+ (int) (this.cotisation ^ (this.cotisation >>> 32));
-		result = (prime * result)
-				+ (int) (this.personne ^ (this.personne >>> 32));
+		result = prime * result + ((this.personne == null) ? 0 : this.personne.hashCode());
+		result = prime * result + ((this.season == null) ? 0 : this.season.hashCode());
 		return result;
 	}
 
@@ -36,33 +46,25 @@ public class PersonnesCotisationsId implements Serializable {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof PersonnesCotisationsId)) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		PersonnesCotisationsId other = (PersonnesCotisationsId) obj;
-		if (this.cotisation != other.cotisation) {
+		final PersonnesCotisationsId other = (PersonnesCotisationsId) obj;
+		if (this.personne == null) {
+			if (other.personne != null) {
+				return false;
+			}
+		} else if (!this.personne.equals(other.personne)) {
 			return false;
 		}
-		if (this.personne != other.personne) {
+		if (this.season == null) {
+			if (other.season != null) {
+				return false;
+			}
+		} else if (!this.season.equals(other.season)) {
 			return false;
 		}
 		return true;
-	}
-
-	public long getPersonneId() {
-		return this.personne;
-	}
-
-	public void setPersonneId(final long personneId) {
-		this.personne = personneId;
-	}
-
-	public long getAnneeCotisation() {
-		return this.cotisation;
-	}
-
-	public void setAnneeCotisation(final long cotisation) {
-		this.cotisation = cotisation;
 	}
 
 }

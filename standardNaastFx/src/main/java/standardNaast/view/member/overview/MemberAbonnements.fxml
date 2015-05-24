@@ -25,7 +25,7 @@
          <bottom>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <buttons>
-                <Button mnemonicParsing="false" text="Button" />
+                <Button fx:id="addButton" disable="true" mnemonicParsing="false" text="Button" />
               </buttons>
             </ButtonBar>
          </bottom>

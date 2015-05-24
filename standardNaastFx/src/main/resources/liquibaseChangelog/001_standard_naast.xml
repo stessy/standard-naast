@@ -132,4 +132,10 @@ SET competition_type =
 	<changeSet id="24" author="stessy">
 		<sql><![CDATA[  create sequence benevolat_seq as bigint start with 10000 increment by 1]]></sql>
 	</changeSet>
+	<changeSet id="25" author="stessy">
+		<sql><![CDATA[  create sequence person_seq as bigint start with 2000000 increment by 1]]></sql>
+	</changeSet>
+	<changeSet id="26" author="stessy">
+		<sql><![CDATA[  delete from personnes_cotisations]]></sql>
+	</changeSet>
 </databaseChangeLog>

@@ -129,4 +129,9 @@ public class SeasonModel {
 		return season;
 	}
 
+	@Override
+	public String toString() {
+		return this.id.get();
+	}
+
 }

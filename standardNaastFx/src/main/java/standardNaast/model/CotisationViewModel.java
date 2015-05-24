@@ -1,40 +1,37 @@
 package standardNaast.model;
 
-import java.math.BigDecimal;
 import java.util.List;
-
-import standardNaast.entities.Cotisation;
 
 public class CotisationViewModel {
 
-	private final List<PersonnesCotisationsModel> paidCotisationsMemberCardSent;
+	private final List<CotisationsOverviewModel> paidCotisationsMemberCardSent;
 
-	private final List<PersonnesCotisationsModel> paidCotisationsMemberCardNotSent;
+	private final List<CotisationsOverviewModel> paidCotisationsMemberCardNotSent;
 
-	private final List<PersonnesCotisationsModel> unpaidCotisationsModel;
+	private final List<CotisationsOverviewModel> unpaidCotisationsModel;
 
-	private final Cotisation cotisation;
+	private final SeasonModel season;
 
 	public CotisationViewModel(
-			final List<PersonnesCotisationsModel> paidCotisationsMemberCardSent,
-			final List<PersonnesCotisationsModel> paidCotisationsMemberCardNotSent,
-			final List<PersonnesCotisationsModel> unpaidCotisationsModel,
-			final Cotisation cotisation) {
+			final List<CotisationsOverviewModel> paidCotisationsMemberCardSent,
+			final List<CotisationsOverviewModel> paidCotisationsMemberCardNotSent,
+			final List<CotisationsOverviewModel> unpaidCotisationsModel,
+			final SeasonModel cotisation) {
 		this.paidCotisationsMemberCardSent = paidCotisationsMemberCardSent;
 		this.paidCotisationsMemberCardNotSent = paidCotisationsMemberCardNotSent;
 		this.unpaidCotisationsModel = unpaidCotisationsModel;
-		this.cotisation = cotisation;
+		this.season = cotisation;
 	}
 
-	public List<PersonnesCotisationsModel> getPaidCotisationsMemberCardSent() {
+	public List<CotisationsOverviewModel> getPaidCotisationsMemberCardSent() {
 		return this.paidCotisationsMemberCardSent;
 	}
 
-	public List<PersonnesCotisationsModel> getUnpaidCotisationsModel() {
+	public List<CotisationsOverviewModel> getUnpaidCotisationsModel() {
 		return this.unpaidCotisationsModel;
 	}
 
-	public List<PersonnesCotisationsModel> getPaidCotisationsMemberCardNotSent() {
+	public List<CotisationsOverviewModel> getPaidCotisationsMemberCardNotSent() {
 		return this.paidCotisationsMemberCardNotSent;
 	}
 
@@ -48,15 +45,15 @@ public class CotisationViewModel {
 	}
 
 	public long getTotalAmountPaid() {
-		final BigDecimal amount = this.cotisation.getMontantCotisation();
+		final Long amount = this.season.getCotisationAMount();
 		final int memberCardSentSize = this.paidCotisationsMemberCardSent
 				.size();
-		final int memberCardSentTotalAMount = memberCardSentSize
-				* amount.intValue();
+		final Long memberCardSentTotalAMount = memberCardSentSize
+				* amount;
 		final int memberCardNotSentSize = this.paidCotisationsMemberCardNotSent
 				.size();
-		final int memberCardNotSentTotalAmount = memberCardNotSentSize
-				* amount.intValue();
+		final Long memberCardNotSentTotalAmount = memberCardNotSentSize
+				* amount;
 		return memberCardSentTotalAMount + memberCardNotSentTotalAmount;
 	}
 

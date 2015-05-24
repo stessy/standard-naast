@@ -121,12 +121,12 @@ public class AbonnementFormController implements Observer {
 		if (this.model != null) {
 			this.memberLabel.setText(this.model.getPerson().getFirstName() + " " + this.model.getPerson().getName());
 			this.saison.getSelectionModel().select(this.model.getSaison());
-			this.bloc.getSelectionModel().select(this.model.);
+			this.bloc.getSelectionModel().select(this.model.getAbonnementPrice().getBloc());
 			this.rang.setText(String.valueOf(this.model.getRang()));
 			this.place.setText(String.valueOf(this.model.getPlace()));
 			this.reduction.setText(String.valueOf(this.model.getReduction()));
 			this.acompte.setText(String.valueOf(this.model.getAcompte()));
-			final AbonnementStatus abonnementStatus = this.model.getAbonnementStatus();
+			final AbonnementStatus abonnementStatus = this.model.getStatus();
 			this.saison.setDisable(true);
 			this.bloc.setDisable(abonnementStatus == AbonnementStatus.NEW ? false : true);
 			this.rang.setEditable(abonnementStatus == AbonnementStatus.NEW ? true : false);

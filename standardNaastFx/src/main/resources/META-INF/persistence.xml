@@ -13,7 +13,7 @@
 		<class>standardNaast.entities.Personne</class>
 		<class>standardNaast.entities.Season</class>
 		<class>standardNaast.entities.Benevolat</class>
-		<class>standardNaast.entities.Cotisation</class>
+<!-- 		<class>standardNaast.entities.Cotisation</class> -->
 		<class>standardNaast.entities.Bloc</class>
 		<class>standardNaast.entities.CommandePlace</class>
 		<class>standardNaast.entities.Team</class>

@@ -20,7 +20,7 @@
          <bottom>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <buttons>
-                <Button mnemonicParsing="false" onAction="#onAddBenevolat" text="Ajouter un bénévolat" />
+                <Button fx:id="addButton" disable="true" mnemonicParsing="false" onAction="#onAddBenevolat" text="Ajouter un bénévolat" />
                   <Button fx:id="modifyButton" disable="true" mnemonicParsing="false" onAction="#onModifyBenevolat" text="Modifier un bénévolat" />
                   <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteBenevolat" text="Effacer" />
               </buttons>

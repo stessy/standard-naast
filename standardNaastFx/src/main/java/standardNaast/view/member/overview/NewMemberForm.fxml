@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="232.0" prefWidth="600.0" text="Données du membre" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.member.overview.MemberFormController">
+<TitledPane alignment="CENTER" animated="false" collapsible="false" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="232.0" prefWidth="600.0" text="Données du membre" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.member.overview.NewMemberFormController">
   <content>
     <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
          <children>
@@ -48,8 +48,8 @@
             <TextField fx:id="mobilePhoneLabel" GridPane.columnIndex="5" GridPane.rowIndex="3" />
             <Label text="Carte d'identité" GridPane.rowIndex="4" />
             <TextField fx:id="identityCardNumberLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <DatePicker fx:id="passwordValidityLabel" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-            <DatePicker fx:id="birthDateLabel" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <DatePicker fx:id="passwordValidityLabel" promptText="dd/MM/yyyy" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <DatePicker fx:id="birthDateLabel" promptText="dd/MM/yyyy" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="Validité carte" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Label text="Etudiant" GridPane.columnIndex="4" GridPane.rowIndex="4" />
             <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="5" GridPane.rowIndex="4">
@@ -74,9 +74,9 @@
    <bottom>
       <ButtonBar prefHeight="0.0" prefWidth="600.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button fx:id="addButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#onAddMember" text="Ajouter" />
+          <Button defaultButton="true" mnemonicParsing="false" onAction="#onAddMember" text="Ajouter" />
                         <Group />
-                        <Button fx:id="updateButton" disable="true" mnemonicParsing="false" onAction="#onUpdate" text="Modifier" />
+                        <Button mnemonicParsing="false" onAction="#onCancel" text="Annuler" />
         </buttons>
          <BorderPane.margin>
             <Insets bottom="5.0" right="5.0" top="5.0" />

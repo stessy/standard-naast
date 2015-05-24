@@ -6,10 +6,14 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,9 +24,16 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "PERSONNES_COTISATIONS")
-@IdClass(PersonnesCotisationsId.class)
 @Access(AccessType.FIELD)
+@NamedQueries({
+		@NamedQuery(name = "gePersonneCotisationPerSeason", query = "select pc from PersonneCotisation pc where pc.personne = :personne and pc.season = :season"),
+		@NamedQuery(name = "gePersonneCotisations", query = "select pc from PersonneCotisation pc where pc.personne = :personne") })
 public class PersonneCotisation {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PERSONNE_COTISATION_SEQ")
+	@SequenceGenerator(name = "PERSONNE_COTISATION_SEQ", sequenceName = "PERSONNE_COTISATION_SEQ")
+	private Long id;
 
 	@Column(name = "CARTE_MEMBRE_ENVOYEE")
 	private boolean carteMembreEnvoyee;
@@ -31,15 +42,13 @@ public class PersonneCotisation {
 	@Column(name = "DATE_PAIEMENT")
 	private Date datePaiement;
 
-	@Id
 	@ManyToOne
 	@JoinColumn(name = "PERSONNE_ID", insertable = true, updatable = false)
 	private Personne personne;
 
-	@Id
 	@ManyToOne
-	@JoinColumn(name = "ANNEE_COTISATION2", insertable = true, updatable = true)
-	private Cotisation cotisation;
+	@JoinColumn(name = "SEASON_ID", insertable = true, updatable = true)
+	private Season season;
 
 	public PersonneCotisation() {
 	}
@@ -60,33 +69,20 @@ public class PersonneCotisation {
 		this.datePaiement = datePaiement;
 	}
 
-	/**
-	 * @return the personne
-	 */
 	public Personne getPersonne() {
 		return this.personne;
 	}
 
-	/**
-	 * @param personne
-	 *            the personne to set
-	 */
 	public void setPersonne(final Personne personne) {
 		this.personne = personne;
 	}
 
-	/**
-	 * @return the cotisation
-	 */
-	public Cotisation getCotisation() {
-		return this.cotisation;
+	public Season getSeason() {
+		return this.season;
 	}
 
-	/**
-	 * @param cotisation
-	 *            the cotisation to set
-	 */
-	public void setCotisation(final Cotisation cotisation) {
-		this.cotisation = cotisation;
+	public void setSeason(final Season season) {
+		this.season = season;
 	}
+
 }

@@ -2,8 +2,10 @@ package standardNaast.model;
 
 import java.time.LocalDate;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,6 +21,8 @@ public class PersonnesCotisationsModel implements
 	private StringProperty firstName = new SimpleStringProperty();
 
 	private ObjectProperty<LocalDate> paymentDate = new SimpleObjectProperty<>();
+
+	private BooleanProperty cardSent = new SimpleBooleanProperty();
 
 	public long getMemberNumber() {
 		return this.memberNumber.get();
@@ -66,6 +70,18 @@ public class PersonnesCotisationsModel implements
 
 	public ObjectProperty<LocalDate> paymentDateProperty() {
 		return this.paymentDate;
+	}
+
+	public Boolean isCardSent() {
+		return this.cardSent.getValue();
+	}
+
+	public void setCardSent(final Boolean cardSent) {
+		this.cardSent.set(cardSent);
+	}
+
+	public BooleanProperty cardSentProperty() {
+		return this.cardSent;
 	}
 
 	@Override

@@ -3,43 +3,73 @@ package standardNaast.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 import standardNaast.entities.Cotisation;
+import standardNaast.entities.Personne;
+import standardNaast.entities.PersonneCotisation;
+import standardNaast.entities.Season;
+
+import com.standardnaast.persistence.EntityManagerFactoryHelper;
 
 public class CotisationDAOImpl implements CotisationDAO {
 
-	@PersistenceContext
-	private EntityManager entityManager;
-
 	@Override
 	public List<Cotisation> getAllCotisations() {
-		CriteriaQuery<Cotisation> queryAll = this.entityManager
+		final EntityManager entityManager = this.getEntityManager();
+		final CriteriaQuery<Cotisation> queryAll = entityManager
 				.getCriteriaBuilder().createQuery(Cotisation.class);
 		queryAll.from(Cotisation.class);
-		return this.entityManager.createQuery(queryAll).getResultList();
+		final List<Cotisation> allCotisations = entityManager.createQuery(queryAll).getResultList();
+		return allCotisations;
 
 	}
 
 	@Override
 	public List<Cotisation> getAllCotisationsPerYear(final String year) {
-		CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
-		CriteriaQuery<Cotisation> cq = cb.createQuery(Cotisation.class);
+		final EntityManager entityManager = this.getEntityManager();
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<Cotisation> cq = cb.createQuery(Cotisation.class);
 		cq.from(Cotisation.class);
-		TypedQuery<Cotisation> q = this.entityManager.createQuery(cq);
+		final TypedQuery<Cotisation> q = entityManager.createQuery(cq);
 		return q.getResultList();
+	}
 
+	@Override
+	public List<PersonneCotisation> getMemberCotisation(final Personne member, final Season season) {
+		final EntityManager entityManager = this.getEntityManager();
+		final TypedQuery<PersonneCotisation> query = entityManager.createNamedQuery("gePersonneCotisationPerSeason",
+				PersonneCotisation.class);
+		query.setParameter("season", season);
+		query.setParameter("personne", member);
+		final List<PersonneCotisation> resultList = query.getResultList();
+		return resultList;
+	}
+
+	@Override
+	public List<PersonneCotisation> getMemberCotisations(final Personne member) {
+		final EntityManager entityManager = this.getEntityManager();
+		final TypedQuery<PersonneCotisation> query = entityManager.createNamedQuery("gePersonneCotisations",
+				PersonneCotisation.class);
+		query.setParameter("personne", member);
+		final List<PersonneCotisation> resultList = query.getResultList();
+		return resultList;
+	}
+
+	@Override
+	public PersonneCotisation addMemberCotisation(final PersonneCotisation cotisation) {
+		final EntityManager entityManager = this.getEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.persist(cotisation);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		return cotisation;
 	}
 
 	public EntityManager getEntityManager() {
-		return this.entityManager;
-	}
-
-	public void setEntityManager(final EntityManager entityManager) {
-		this.entityManager = entityManager;
+		return EntityManagerFactoryHelper.getFactory().createEntityManager();
 	}
 
 }

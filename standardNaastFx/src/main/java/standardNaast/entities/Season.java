@@ -3,6 +3,7 @@ package standardNaast.entities;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -10,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,6 +48,9 @@ public class Season implements Serializable, Comparable<Season> {
 
 	@Column(name = "MONTANT_COTISATION")
 	private Long montantCotisation;
+
+	@OneToMany(mappedBy = "season")
+	private List<PersonneCotisation> personnesCotisations;
 
 	@PrePersist
 	private void setId() {
