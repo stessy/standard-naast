@@ -20,5 +20,5 @@ public interface AbonnementDAO {
 
 	List<Abonnement> getAbonnementsPerSeason(Season season);
 
-	Abonnement getPreviousAbonnement(Season previousSeason, Personne personne);
+	List<Abonnement> getPreviousAbonnement(Season previousSeason, Personne personne);
 }

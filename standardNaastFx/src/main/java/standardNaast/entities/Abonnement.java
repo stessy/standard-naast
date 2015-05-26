@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -49,7 +50,7 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 	private long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PRICE_ID")
+	@JoinColumn(name = "PRICES_ID")
 	private AbonnementPrices abonnementPrice;
 
 	@Size(max = 6)
@@ -73,7 +74,7 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 	private Long acompte;
 
 	@JoinColumn(name = "SAISON", referencedColumnName = "SAISON_ID")
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private Season season;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -83,6 +84,17 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 	@Column(name = "ABONNEMENT_STATUS")
 	@Enumerated(EnumType.STRING)
 	private AbonnementStatus abonnementStatus;
+
+	@Column(name = "BLOC_VALUE")
+	private String bloc;
+
+	public String getBloc() {
+		return this.bloc;
+	}
+
+	public void setBloc(final String bloc) {
+		this.bloc = bloc;
+	}
 
 	public long getId() {
 		return this.id;

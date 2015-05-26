@@ -12,7 +12,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import standardNaast.constants.DateFormat;
 import standardNaast.dao.AbonnementDAO;
@@ -27,7 +31,7 @@ import standardNaast.entities.Abonnement;
 import standardNaast.entities.AbonnementPrices;
 import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
-import standardNaast.model.AbonnementModel;
+import standardNaast.model.AbonnementPriceChampionshipModel;
 import standardNaast.model.AbonnementsModel;
 import standardNaast.model.MemberAbonnementsModel;
 import standardNaast.model.PersonModel;
@@ -39,7 +43,11 @@ import standardNaast.types.PersonType;
 import standardNaast.utils.AbonnementPricesImporter;
 import standardNaast.utils.AbonnementPricesImporter.BlocAbonnementPrices;
 
+import com.standardnaast.persistence.EntityManagerFactoryHelper;
+
 public class AbonnementService implements Serializable {
+
+	private final EntityManager entityManager = EntityManagerFactoryHelper.getFactory().createEntityManager();
 
 	private static final long serialVersionUID = -7174502180535914551L;
 
@@ -147,27 +155,79 @@ public class AbonnementService implements Serializable {
 	}
 
 	public List<MemberAbonnementsModel> getMemberAbonnements(final PersonModel personModel) {
+		// this.entityManager.getTransaction().begin();
 		final Personne person = this.personDAO.getPerson(personModel.getPersonneId());
 		final List<Abonnement> abonnementList = person.getAbonnementList();
-		return abonnementList.stream().map(a -> MemberAbonnementsModel.toModel(a)).collect(Collectors.toList());
+		return abonnementList.stream().filter(new Predicate<Abonnement>() {
+
+			@Override
+			public boolean test(final Abonnement t) {
+				return t.getAbonnementPrice() != null;
+			}
+		}).map(a -> MemberAbonnementsModel.toModel(a)).collect(Collectors.toList());
 	}
 
-	public AbonnementModel getPreviousAbonnement(final SeasonModel previousSeason, final Long memberId) {
-		final PersonModel person = this.personneService.getPerson(memberId);
-		return AbonnementModel.of(this.abonnementDao.getPreviousAbonnement(previousSeason, person));
+	public MemberAbonnementsModel getPreviousAbonnement(final SeasonModel previousSeasonModel, final Long memberId) {
+		final Personne person = this.personDAO.getPerson(memberId);
+		final Season previousSeason = this.seasonDao.getSeasonById(previousSeasonModel.getId());
+		final List<Abonnement> previousAbonnement = this.abonnementDao.getPreviousAbonnement(previousSeason, person);
+		if (previousAbonnement.isEmpty()) {
+			return null;
+		}
+		else {
+			return MemberAbonnementsModel.toModel(previousAbonnement.get(0));
+		}
 	}
 
-	public Long getAbonnementPrice(final SeasonModel season, final PersonModel model) {
+	public AbonnementPriceChampionshipModel getAbonnementPrice(final SeasonModel seasonModel, final PersonModel model,
+			final String bloc,
+			final CompetitionType competitionType) {
 		final Boolean isStudent = model.getStudent();
 		final LocalDate birthdate = model.getBirthdate();
-		final LocalDate dateFirstMatch = season.getFirstMatchDate();
-		final Period yearsBetween = Period.between(dateFirstMatch, birthdate);
+		final LocalDate dateFirstMatch = seasonModel.getFirstMatchDate();
+		final Period yearsBetween = Period.between(birthdate, dateFirstMatch);
+		PersonType personType = null;
 		final PersonType[] personTypes = PersonType.values();
-		return new Long(5);
+		for (final PersonType type : personTypes) {
+			final int minAge = type.getMinAge();
+			final int maxAge = type.getMaxAge();
+			if (yearsBetween.getYears() >= minAge && yearsBetween.getYears() <= maxAge) {
+				if (type == PersonType.STUDENT && !isStudent) {
+					personType = PersonType.ADULT;
+				}
+				else if (type == PersonType.ADULT && isStudent) {
+					personType = PersonType.STUDENT;
+				}
+				else {
+					personType = type;
+				}
+				break;
+			}
+		}
+
+		final Season season = this.entityManager.find(Season.class, seasonModel.getId());
+		final TypedQuery<AbonnementPrices> query = this.entityManager.createNamedQuery("findAbonnementPrice",
+				AbonnementPrices.class);
+		query.setParameter("season", season);
+		query.setParameter("competitionType", competitionType);
+		query.setParameter("bloc", bloc);
+		query.setParameter("personType", personType);
+		final List<AbonnementPrices> resultList = query.getResultList();
+		return AbonnementPriceChampionshipModel.toModel(resultList.get(0));
+	}
+
+	public List<String> getBlocList(final SeasonModel seasonModel, final CompetitionType competitionType) {
+		final Season season = this.seasonDao.getSeasonById(seasonModel.getId());
+		final TypedQuery<String> query = this.entityManager.createNamedQuery("findBlocsPerSeason",
+				String.class);
+		query.setParameter("season", season);
+		query.setParameter("competitionType", competitionType);
+		final List<String> resultList = query.getResultList();
+		return resultList;
 	}
 
 	public void addAbonnementPrices(final List<AbonnementPricesImporter.BlocAbonnementPrices> abonnementPrices,
-			final CompetitionType competitionType, final Season season) {
+			final CompetitionType competitionType, final SeasonModel season) {
 		final Season managedSeason = this.seasonDao.getSeasonById(season.getId());
 		for (final BlocAbonnementPrices blocAbonnementPrices : abonnementPrices) {
 			final AbonnementPrices prices = new AbonnementPrices();
@@ -181,8 +241,21 @@ public class AbonnementService implements Serializable {
 
 	}
 
-	public AbonnementModel addAbonnement(final AbonnementModel model) {
-
+	public MemberAbonnementsModel addAbonnement(final MemberAbonnementsModel model) {
+		final SeasonModel seasonModel = model.getSaison();
+		final Season season = this.seasonDao.getSeasonById(seasonModel.getId());
+		final PersonModel personModel = model.getPerson();
+		final Personne person = this.personDAO.getPerson(personModel.getPersonneId());
+		final AbonnementPriceChampionshipModel priceModel = model.getAbonnementPrice();
+		final AbonnementPrices price = this.priceDAO.getPrice(priceModel.getId());
+		final Abonnement entity = MemberAbonnementsModel.toEntity(model);
+		entity.setSaison(season);
+		entity.setAbonnementPrice(price);
+		entity.setPersonne(person);
+		this.entityManager.getTransaction().begin();
+		this.entityManager.persist(entity);
+		this.entityManager.getTransaction().commit();
+		return MemberAbonnementsModel.toModel(entity);
 	}
 
 }

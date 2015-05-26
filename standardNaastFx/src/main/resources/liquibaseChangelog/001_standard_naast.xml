@@ -101,7 +101,7 @@ SET competition_type =
 	</changeSet>
 	<changeSet id="17" author="stessy">
 		<update tableName="PRIX_LOCOMOTION">
-			<column name="ANNEE2" valueComputed="TO_DATE(ANNEE,'YYYY')"></column>
+			<column name="ANNEE2" valueComputed="parsedatetime(ANNEE,'YYYY')"></column>
 		</update>
 	</changeSet>
 	<changeSet id="18" author="stessy">
@@ -130,10 +130,10 @@ SET competition_type =
 		</addColumn>
 	</changeSet>
 	<changeSet id="24" author="stessy">
-		<sql><![CDATA[  create sequence benevolat_seq as bigint start with 10000 increment by 1]]></sql>
+		<sql><![CDATA[  create sequence benevolat_seq start with 10000 increment by 1]]></sql>
 	</changeSet>
 	<changeSet id="25" author="stessy">
-		<sql><![CDATA[  create sequence person_seq as bigint start with 2000000 increment by 1]]></sql>
+		<sql><![CDATA[  create sequence person_seq start with 2000000 increment by 1]]></sql>
 	</changeSet>
 	<changeSet id="26" author="stessy">
 		<sql><![CDATA[  delete from personnes_cotisations]]></sql>

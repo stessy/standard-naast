@@ -1,20 +1,28 @@
 package standardNaast.view.member.overview;
 
+import java.io.IOException;
 import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import standardNaast.entities.Abonnement;
 import standardNaast.model.MemberAbonnementsModel;
 import standardNaast.model.PersonModel;
 import standardNaast.model.SeasonModel;
 import standardNaast.service.AbonnementService;
 import standardNaast.types.AbonnementStatus;
+import standardNaast.view.abonnement.AbonnementFormController;
 
 public class MemberAbonnementsController {
 
@@ -55,20 +63,89 @@ public class MemberAbonnementsController {
 	@FXML
 	private Button updateButton;
 
+	private PersonModel memberModel;
+
+	private MemberAbonnementsModel memberAbonnementModel;
+
 	@FXML
 	public void initialize() {
 		this.abonnementsTable.setPlaceholder(new Label("Aucun abonnement pour le membre"));
+		this.bindProperties();
+		this.addMembersTableEvent();
+	}
+
+	private void addMembersTableEvent() {
+		this.abonnementsTable.setRowFactory(tv -> {
+			final TableRow<MemberAbonnementsModel> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (!row.isEmpty()) {
+					this.onAbonnementSelected(row.getItem());
+				}
+			});
+			return row;
+		});
+	}
+
+	private void onAbonnementSelected(final MemberAbonnementsModel item) {
+		this.memberAbonnementModel = item;
+		this.updateButton.setDisable(false);
 	}
 
 	public void onSelectedMember(final PersonModel personne) {
+		this.memberModel = personne;
 		final List<MemberAbonnementsModel> memberAbonnements = this.abonnementService.getMemberAbonnements(personne);
 
 		this.abonnementsList.clear();
 		this.abonnementsList.addAll(memberAbonnements);
 		this.abonnementsTable.setItems(this.abonnementsList);
-		this.bindProperties();
-		this.addButton.setDefaultButton(false);
-		// this.updateButton.setDisable(false);
+		this.addButton.setDisable(false);
+		this.updateButton.setDisable(true);
+	}
+
+	@FXML
+	private void onAdd() {
+		try {
+			final FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(AbonnementFormController.class.getResource("AbonnementForm.fxml"));
+			final GridPane pane = (GridPane) loader.load();
+			final AbonnementFormController controller = (AbonnementFormController) loader.getController();
+			controller.setMember(this.memberModel);
+			controller.fillForm();
+			final Stage benevolatDialog = new Stage();
+			benevolatDialog.setTitle("Benevolat");
+			benevolatDialog.initModality(Modality.APPLICATION_MODAL);
+			final Scene scene = new Scene(pane);
+			benevolatDialog.setScene(scene);
+			controller.setStage(benevolatDialog);
+			controller.addAcompteListener();
+			benevolatDialog.show();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void onUpdate() {
+		try {
+			final FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(AbonnementFormController.class.getResource("AbonnementForm.fxml"));
+			final GridPane pane = (GridPane) loader.load();
+			final AbonnementFormController controller = (AbonnementFormController) loader.getController();
+			controller.setMember(this.memberModel);
+			controller.setAbonnement(this.memberAbonnementModel);
+			controller.fillForm();
+			controller.setNew(false);
+			final Stage benevolatDialog = new Stage();
+			benevolatDialog.setTitle("Benevolat");
+			benevolatDialog.initModality(Modality.APPLICATION_MODAL);
+			final Scene scene = new Scene(pane);
+			benevolatDialog.setScene(scene);
+			controller.setStage(benevolatDialog);
+			controller.addAcompteListener();
+			benevolatDialog.show();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void bindProperties() {
@@ -80,7 +157,6 @@ public class MemberAbonnementsController {
 		this.reduction.setCellValueFactory(cellData -> cellData.getValue().reductionProperty().asObject());
 		this.acompte.setCellValueFactory(cellData -> cellData.getValue().acompteProperty().asObject());
 		this.status.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
-
 	}
 
 	public static MemberAbonnementsModel memberAbonnementOf(final Abonnement abonnement) {

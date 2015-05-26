@@ -12,12 +12,15 @@
 		<sql><![CDATA[alter table PERSONNES_COTISATIONS add constraint PERSONNES_COTISATIONS_SEASON_FK foreign key (SEASON_ID) references SAISON(SAISON_ID)]]></sql>
 	</changeSet>
 	<changeSet id="4" author="stessy">
-		<sql><![CDATA[  create sequence PERSONNE_COTISATION_SEQ as bigint start with 100 increment by 1]]></sql>
+		<sql><![CDATA[  create sequence PERSONNE_COTISATION_SEQ start with 100 increment by 1]]></sql>
 	</changeSet>
 	<changeSet id="5" author="stessy">
 		<sql><![CDATA[  alter table personnes_cotisations add id bigint]]></sql>
 	</changeSet>
 	<changeSet id="6" author="stessy">
+		<sql><![CDATA[  alter table personnes_cotisations alter column id set not null]]></sql>
+	</changeSet>
+	<changeSet id="7" author="stessy">
 		<sql><![CDATA[  alter table personnes_cotisations add constraint personnes_cotisations_pk primary key (id)]]></sql>
 	</changeSet>
 </databaseChangeLog>

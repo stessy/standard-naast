@@ -12,7 +12,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import standardNaast.entities.Season;
+import standardNaast.model.SeasonModel;
 import standardNaast.service.AbonnementService;
 import standardNaast.types.CompetitionType;
 import standardNaast.types.PersonType;
@@ -21,7 +21,7 @@ public class AbonnementPricesImporter {
 
 	private final AbonnementService abonnementService = new AbonnementService();
 
-	public void importAbonnementsPrices(final String pathFileToImport, final Season season,
+	public void importAbonnementsPrices(final String pathFileToImport, final SeasonModel season,
 			final CompetitionType competitionType) {
 		try {
 			final FileInputStream file = new FileInputStream(new File(pathFileToImport));
@@ -142,13 +142,12 @@ public class AbonnementPricesImporter {
 
 	}
 
-	// public static void main(final String args[]) {
-	// final Season season = new Season();
-	// season.setId("2015-2016");
-	// new
-	// AbonnementPricesImporter().importAbonnementsPrices("C:\\tmp\\abonnements.xlsx",
-	// season,
-	// CompetitionType.CHAMPIONSHIP);
-	// }
+	public static void main(final String args[]) {
+		final SeasonModel season = new SeasonModel();
+		season.setId("2015-2016");
+		new AbonnementPricesImporter().importAbonnementsPrices("C:\\tmp\\abonnements.xlsx",
+				season,
+				CompetitionType.CHAMPIONSHIP);
+	}
 
 }

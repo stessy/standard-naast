@@ -4,12 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.TableRow;
 import standardNaast.model.PersonModel;
-import standardNaast.service.PersonneService;
-import standardNaast.service.PersonneServiceImpl;
 
 public class MembersOverviewController {
-
-	private final PersonneService personneService = new PersonneServiceImpl();
 
 	@FXML
 	private Parent memberTravels;

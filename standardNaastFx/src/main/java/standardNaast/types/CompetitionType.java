@@ -1,5 +1,7 @@
 package standardNaast.types;
 
+import java.util.ResourceBundle;
+
 public enum CompetitionType {
 
 	CHAMPIONSHIP("competitionType.championship"),
@@ -15,7 +17,9 @@ public enum CompetitionType {
 
 	private MatchType[] matchType;
 
-	private CompetitionType(String name, MatchType... matchType) {
+	private ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+
+	private CompetitionType(final String name, final MatchType... matchType) {
 		this.name = name;
 		this.matchType = matchType;
 
@@ -27,6 +31,11 @@ public enum CompetitionType {
 
 	public MatchType[] getMatchType() {
 		return this.matchType;
+	}
+
+	@Override
+	public String toString() {
+		return this.bundle.getString(this.getName());
 	}
 
 }

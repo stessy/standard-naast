@@ -58,7 +58,6 @@ public class AbonnementDAOImpl implements AbonnementDAO {
 
 	@Override
 	public List<Abonnement> getAbonnementsPerSeason(final Season season) {
-		this.entityManager.getTransaction().begin();
 		final TypedQuery<Abonnement> query = this.entityManager.createNamedQuery("getAbonnementsPerSeason",
 				Abonnement.class);
 		query.setParameter("season", season);
@@ -66,13 +65,12 @@ public class AbonnementDAOImpl implements AbonnementDAO {
 	}
 
 	@Override
-	public Abonnement getPreviousAbonnement(final Season previousSeason, final Personne personne) {
-		this.entityManager.getTransaction().begin();
+	public List<Abonnement> getPreviousAbonnement(final Season previousSeason, final Personne personne) {
 		final TypedQuery<Abonnement> query = this.entityManager.createNamedQuery("getAbonnementsPreviousSeason",
 				Abonnement.class);
 		query.setParameter("season", previousSeason);
 		query.setParameter("person", personne);
-		return query.getSingleResult();
+		return query.getResultList();
 	}
 
 }

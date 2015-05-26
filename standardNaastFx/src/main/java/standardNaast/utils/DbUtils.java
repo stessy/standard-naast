@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 
 import liquibase.Liquibase;
 import liquibase.database.Database;
-import liquibase.database.core.HsqlDatabase;
+import liquibase.database.core.H2Database;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
@@ -40,7 +40,7 @@ public class DbUtils {
 		try {
 			DbUtils.entityManager.getTransaction().begin();
 			final Connection connection = DbUtils.entityManager.unwrap(Connection.class);
-			final Database database = new HsqlDatabase();
+			final Database database = new H2Database();
 			final JdbcConnection jdbcConnection = new JdbcConnection(connection);
 			database.setConnection(jdbcConnection);
 

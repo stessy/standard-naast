@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -20,9 +19,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.StringUtils;
 
-import standardNaast.entities.Personne;
-import standardNaast.entities.PersonneCotisation;
-import standardNaast.entities.Season;
+import standardNaast.model.MemberCotisationsModel;
 import standardNaast.model.PersonModel;
 import standardNaast.model.SeasonModel;
 import standardNaast.utils.SeasonUtils;
@@ -40,9 +37,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class TableauCotisations {
 
-	private PersonneServiceImpl personneService;
+	private final PersonneService personneService = new PersonneServiceImpl();;
 
-	private SeasonServiceImpl saisonService;
+	private final SeasonService saisonService = new SeasonServiceImpl();
+
+	private final CotisationsService cotisationService = new CotisationsService();
 
 	public static void main(final String args[]) {
 		final TableauCotisations tableauCotisations = new TableauCotisations();
@@ -50,6 +49,11 @@ public class TableauCotisations {
 	}
 
 	public String creationTableau() {
+		final List<SeasonModel> findAllSaison = this.saisonService.findAllSaison();
+		Collections.sort(findAllSaison);
+		Collections.reverse(findAllSaison);
+		final SeasonModel currentSeason = findAllSaison.get(0);
+
 		final Document pdfDocument = new Document(PageSize.A4.rotate(), -30F, -30F, 10F, 10F);
 		FileOutputStream fo = null;
 		File pdfFile = null;
@@ -61,7 +65,7 @@ public class TableauCotisations {
 			FontFactory.register("comicbd.ttf");
 			FontFactory.register("comic.ttf");
 			final com.itextpdf.text.Font comic24 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252", 24F);
-			pdfPath = "Tableau_Cotisations_" + TableauCotisations.YEAR + ".pdf";
+			pdfPath = "Tableau_Cotisations_" + currentSeason.getId() + ".pdf";
 			pdfFile = new File(pdfPath);
 			fo = new FileOutputStream(pdfFile);
 			PdfWriter.getInstance(pdfDocument, fo);
@@ -114,7 +118,7 @@ public class TableauCotisations {
 
 			pdfDocument.add(mainTable);
 			pdfDocument.close();
-			JOptionPane.showMessageDialog(null, "Le fichier des cotisations " + TableauCotisations.YEAR
+			JOptionPane.showMessageDialog(null, "Le fichier des cotisations " + currentSeason.getId()
 					+ " a été généré.");
 		} catch (final Exception fnfe) {
 			fnfe.printStackTrace();
@@ -187,53 +191,48 @@ public class TableauCotisations {
 	}
 
 	private List<PersonneCotisationRow> buildPersonCotisation() {
-		LocalDate.of(TableauCotisations.YEAR, 4, 1);
 		final List<SeasonModel> seasonList = this.getSeasons();
 		final List<PersonModel> personList = this.getMembers();
 		final List<PersonneCotisationRow> personCotisationList = new ArrayList<>();
 		final LocalDate today = LocalDate.now();
-		final Calendar seasonCalendar = GregorianCalendar.getInstance();
 		final SeasonModel latestSeason = seasonList.get(0);
-		seasonCalendar.setTime(latestSeason.getEndDate());
-		final int seasonYear = seasonCalendar.get(Calendar.YEAR);
-		// Si l'année de la date d'aujourd'hui et égale à l'année de la première
+		final LocalDate latestSeasonEndDate = latestSeason.getEndDate();
+		final LocalDate latestSeasonStartDate = latestSeason.getStartDate();
+		// Si date d'aujourd'hui et égale à l'année de la première
 		// saison de la liste, qui correspond à la
 		// dernière saison en cours, alors les compteurs sont remis à zéro.
-		if (todayYear == seasonYear) {
-			for (final Personne member : personList) {
+		if (today.isAfter(latestSeasonStartDate) && today.isBefore(latestSeasonEndDate)) {
+			for (final PersonModel member : personList) {
 				final PersonneCotisationRow personneCotisation = new PersonneCotisationRow();
-				personneCotisation.setFirstname(member.getFirstname());
+				personneCotisation.setFirstname(member.getFirstName());
 				personneCotisation.setName(member.getName());
 				personneCotisation.setMemberNumber(member.getMemberNumber());
-				final List<PersonneCotisation> memberCotisationList = member.getPersonnesCotisations();
-				for (final PersonneCotisation memberCotisation : memberCotisationList) {
-					if (memberCotisation.getCotisation().getAnneeCotisation() == todayYear) {
+				final List<MemberCotisationsModel> memberCotisationList = this.getCotisations(member);
+				for (final MemberCotisationsModel memberCotisation : memberCotisationList) {
+					if (memberCotisation.getSeason().equals(latestSeason)) {
 						// La cotisation a été payée
 						personneCotisation.setPaied("P");
-						personneCotisation.setBonus(1);
-
 					} else {
 						personneCotisation.setPaied(StringUtils.EMPTY);
-						personneCotisation.setBonus(0);
 					}
 				}
 				personCotisationList.add(personneCotisation);
 			}
 		} else {
-			for (final Personne member : personList) {
+			for (final PersonModel member : personList) {
 				int bonus = 0;
 				final PersonneCotisationRow personneCotisation = new PersonneCotisationRow();
-				personneCotisation.setFirstname(member.getFirstname());
+				personneCotisation.setFirstname(member.getFirstName());
 				personneCotisation.setName(member.getName());
 				personneCotisation.setMemberNumber(member.getMemberNumber());
-				final List<PersonneCotisation> memberCotisationList = member.getPersonnesCotisations();
-				for (final PersonneCotisation memberCotisation : memberCotisationList) {
-					final Date paymentDate = memberCotisation.getDatePaiement();
+				final List<MemberCotisationsModel> memberCotisationList = this.getCotisations(member);
+				for (final MemberCotisationsModel memberCotisation : memberCotisationList) {
+					final LocalDate paymentDate = memberCotisation.getDatePaiement();
 					final Calendar paymentDateCalendar = Calendar.getInstance();
 					paymentDateCalendar.setTime(paymentDate);
 					final int paymentDateYear = paymentDateCalendar.get(Calendar.YEAR);
-					for (final Season season : seasonList) {
-						final Date seasonDateStart = season.getDateStart();
+					for (final SeasonModel season : seasonList) {
+						final LocalDate seasonDateStart = season.getStartDate();
 						final Calendar seasonDateCalendar = Calendar.getInstance();
 						seasonDateCalendar.setTime(seasonDateStart);
 						final int seasontDateYear = seasonDateCalendar.get(Calendar.YEAR);
@@ -253,29 +252,20 @@ public class TableauCotisations {
 		return personCotisationList;
 	}
 
+	private List<MemberCotisationsModel> getCotisations(final PersonModel personModel) {
+		return this.cotisationService.getMemberCotisations(personModel);
+
+	}
+
 	private List<SeasonModel> getSeasons() {
-		final List<SeasonModel> seasonList = this.getSaisonService().findAllSaison();
+		final List<SeasonModel> seasonList = this.saisonService.findAllSaison();
 		return SeasonUtils.getCotisationsEuropeanSeasons(seasonList);
 	}
 
 	private List<PersonModel> getMembers() {
-		final List<PersonModel> personneList = this.getPersonneService().findAllPerson(false);
+		final List<PersonModel> personneList = this.personneService.findAllPerson(false);
 		Collections.sort(personneList);
 		return personneList;
-	}
-
-	private PersonneServiceImpl getPersonneService() {
-		if (this.personneService == null) {
-			this.personneService = new PersonneServiceImpl();
-		}
-		return this.personneService;
-	}
-
-	private SeasonServiceImpl getSaisonService() {
-		if (this.saisonService == null) {
-			this.saisonService = new SeasonServiceImpl();
-		}
-		return this.saisonService;
 	}
 
 	static class PersonneCotisationRow {

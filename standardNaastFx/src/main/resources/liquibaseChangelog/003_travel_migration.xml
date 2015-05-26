@@ -18,7 +18,7 @@
 		<sql><![CDATA[alter table travel_price drop column annee]]></sql>
 	</changeSet>
 	<changeSet id="6" author="stessy">
-		<sql><![CDATA[create sequence TRAVEL_PRICE_SEQ as bigint start with 100000 increment by 1]]></sql>
+		<sql><![CDATA[create sequence TRAVEL_PRICE_SEQ start with 100000 increment by 1]]></sql>
 	</changeSet>	
 	<changeSet id="7" author="stessy">
 		<sql><![CDATA[alter table travel_price add SEASON_ID varchar(10)]]></sql>

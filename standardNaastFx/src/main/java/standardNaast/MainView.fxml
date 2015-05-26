@@ -41,6 +41,9 @@
           <Tab closable="false" text="Cotisations" >
           <fx:include source = "view/cotisation/CotisationsOverview.fxml"/>
           </Tab>
+          <Tab closable="false" text="Facturier" >
+          <fx:include source = "view/accounting/AccountingOverview.fxml"/>
+          </Tab>
         </tabs>
       </TabPane>
    </center>

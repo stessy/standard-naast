@@ -11,6 +11,7 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -86,13 +87,13 @@ public class Personne implements Serializable, Comparable<Personne> {
 	@Column(name = "CARTE_IDENTITE")
 	private String identityCardNumber;
 
-	@OneToMany(mappedBy = "personne", cascade = CascadeType.ALL, targetEntity = Abonnement.class)
+	@OneToMany(mappedBy = "personne", cascade = CascadeType.ALL, targetEntity = Abonnement.class, fetch = FetchType.EAGER)
 	private List<Abonnement> abonnementList;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Benevolat.class, mappedBy = "personne")
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Benevolat.class, mappedBy = "personne", fetch = FetchType.EAGER)
 	private List<Benevolat> benevolatList;
 
-	@OneToMany(mappedBy = "personne", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "personne", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<PersonneCotisation> personnesCotisations;
 
 	@Column(name = "NUMERO_MEMBRE")

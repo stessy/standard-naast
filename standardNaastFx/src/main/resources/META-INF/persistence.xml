@@ -30,16 +30,22 @@
 		<class>standardNaast.entities.PersonnesCotisationsId</class>
 		<class>standardNaast.entities.Prices</class>
 		<class>standardNaast.entities.AbonnementPrices</class>
+		<class>standardNaast.entities.Accounting</class>
 		<properties>
 			<property name="eclipselink.weaving" value="false" />
 			<property name="eclipselink.target-server" value="None" />
-			<property name="eclipselink.target-database" value="HSQL" />
+<!-- 			<property name="eclipselink.target-database" value="HSQL" /> -->
 			<!-- <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:file:D:\SkyDrive\standard_naast.db;shutdown=true"/> -->
-			<property name="javax.persistence.jdbc.url"
-				value="jdbc:hsqldb:hsql://localhost:9001/standardNaast" />
+<!-- 			<property name="javax.persistence.jdbc.url" -->
+<!-- 				value="jdbc:hsqldb:hsql://localhost:9001/standardNaast" /> -->
+<!-- 			<property name="javax.persistence.jdbc.user" value="sa" /> -->
+<!-- 			<property name="javax.persistence.jdbc.password" value="" /> -->
+<!-- 			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" /> -->
+<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:~/standard_naast" />
 			<property name="javax.persistence.jdbc.user" value="sa" />
-			<property name="javax.persistence.jdbc.password" value="" />
-			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" />
+<!-- 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" /> -->
+			<property name="eclipselink.ddl-generation.output-mode" value="database" />
 			<property name="javax.persistence.validation.mode" value="NONE" />
 			<property name="eclipselink.logging.level" value="FINE" />
 			<property name="eclipselink.logging.parameters" value="true" />

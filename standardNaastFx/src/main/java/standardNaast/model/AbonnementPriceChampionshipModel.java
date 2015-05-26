@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import standardNaast.entities.AbonnementPrices;
+import standardNaast.types.CompetitionType;
 import standardNaast.types.PersonType;
 
 public class AbonnementPriceChampionshipModel {
@@ -20,6 +21,8 @@ public class AbonnementPriceChampionshipModel {
 	private ObjectProperty<PersonType> personType = new SimpleObjectProperty<>();
 
 	private StringProperty bloc = new SimpleStringProperty();
+
+	private ObjectProperty<CompetitionType> typeCompetition = new SimpleObjectProperty<>();
 
 	public Long getId() {
 		return this.id.get();
@@ -81,6 +84,18 @@ public class AbonnementPriceChampionshipModel {
 		return this.bloc.get();
 	}
 
+	public ObjectProperty<CompetitionType> typeCompetitionProperty() {
+		return this.typeCompetition;
+	}
+
+	public CompetitionType getTypeCompetition() {
+		return this.typeCompetition.get();
+	}
+
+	public void setCompetitionType(final CompetitionType competitionType) {
+		this.typeCompetition.set(competitionType);
+	}
+
 	public static AbonnementPriceChampionshipModel toModel(final AbonnementPrices price) {
 		final AbonnementPriceChampionshipModel model = new AbonnementPriceChampionshipModel();
 		model.setBloc(price.getBloc());
@@ -88,6 +103,7 @@ public class AbonnementPriceChampionshipModel {
 		model.setPersonType(price.getTypePersonne());
 		model.setPrice(price.getPrice());
 		model.setSeason(SeasonModel.of(price.getSeason()));
+		model.setCompetitionType(price.getTypeCompetition());
 		return model;
 	}
 
@@ -97,6 +113,7 @@ public class AbonnementPriceChampionshipModel {
 		price.setTypePersonne(model.getPersonType());
 		price.setPrice(model.getPrice());
 		price.setSeason(SeasonModel.of(model.getSeason()));
+		price.setTypeCompetition(model.getTypeCompetition());
 		return price;
 	}
 

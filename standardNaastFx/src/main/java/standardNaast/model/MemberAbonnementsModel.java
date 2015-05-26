@@ -15,7 +15,11 @@ public class MemberAbonnementsModel {
 
 	private final LongProperty abonnementId = new SimpleLongProperty();
 
+	private ObjectProperty<PersonModel> person = new SimpleObjectProperty<>();
+
 	private final ObjectProperty<SeasonModel> saison = new SimpleObjectProperty<>();
+
+	private final ObjectProperty<AbonnementPriceChampionshipModel> abonnementPrice = new SimpleObjectProperty<>();
 
 	private final StringProperty rang = new SimpleStringProperty();
 
@@ -27,9 +31,17 @@ public class MemberAbonnementsModel {
 
 	private final BooleanProperty paye = new SimpleBooleanProperty();
 
+	private LongProperty solde = new SimpleLongProperty();
+
 	private final ObjectProperty<AbonnementStatus> status = new SimpleObjectProperty<>();
 
-	private final ObjectProperty<AbonnementPriceChampionshipModel> abonnementPrice = new SimpleObjectProperty<>();
+	public PersonModel getPerson() {
+		return this.person.get();
+	}
+
+	public void setPerson(final PersonModel person) {
+		this.person.set(person);
+	}
 
 	public Long getAbonnementId() {
 		return this.abonnementId.longValue();
@@ -95,6 +107,18 @@ public class MemberAbonnementsModel {
 		this.status.set(status);
 	}
 
+	public Long getSolde() {
+		return this.solde.get();
+	}
+
+	public void setSolde(final Long solde) {
+		this.solde.set(solde);
+	}
+
+	public ObjectProperty<PersonModel> personProperty() {
+		return this.person;
+	}
+
 	public LongProperty abonnementIdProperty() {
 		return this.abonnementId;
 	}
@@ -139,6 +163,10 @@ public class MemberAbonnementsModel {
 		return this.abonnementPrice;
 	}
 
+	public LongProperty soldeProperty() {
+		return this.solde;
+	}
+
 	public static MemberAbonnementsModel toModel(final Abonnement abonnement) {
 		final MemberAbonnementsModel model = new MemberAbonnementsModel();
 		model.setAbonnementId(abonnement.getId());
@@ -150,19 +178,21 @@ public class MemberAbonnementsModel {
 		model.setReduction(abonnement.getReduction());
 		model.setSaison(SeasonModel.of(abonnement.getSaison()));
 		model.setStatus(abonnement.getAbonnementStatus());
+		model.setPerson(PersonModel.toModel(abonnement.getPersonne()));
 		return model;
 	}
 
 	public static Abonnement toEntity(final MemberAbonnementsModel model) {
-		final Abonnement abonnement = new Abonnement();
-		abonnement.setAbonnementPrice(AbonnementPriceChampionshipModel.toEntity(model.getAbonnementPrice()));
-		abonnement.setAcompte(model.getAcompte());
-		abonnement.setPaye(model.getPaye());
-		abonnement.setPlace(model.getPlace());
-		abonnement.setRang(model.getRang());
-		abonnement.setReduction(model.getReduction());
-		abonnement.setSaison(SeasonModel.of(model.getSaison()));
-		abonnement.setAbonnementStatus(model.getStatus());
-		return abonnement;
+		final Abonnement entity = new Abonnement();
+		entity.setAbonnementPrice(AbonnementPriceChampionshipModel.toEntity(model.getAbonnementPrice()));
+		entity.setAcompte(model.getAcompte());
+		entity.setPaye(model.getPaye());
+		entity.setPlace(model.getPlace());
+		entity.setRang(model.getRang());
+		entity.setReduction(model.getReduction());
+		entity.setSaison(SeasonModel.of(model.getSaison()));
+		entity.setAbonnementStatus(model.getStatus());
+		entity.setPersonne(PersonModel.toEntity(model.getPerson()));
+		return entity;
 	}
 }
