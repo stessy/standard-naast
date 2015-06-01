@@ -34,6 +34,7 @@
          <children>
             <GridPane hgap="5.0" GridPane.rowSpan="2147483647">
               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -43,11 +44,12 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Mois" textFill="#d0cdcd" />
-                  <ComboBox fx:id="month" onAction="#onSelectedMonth" prefWidth="150.0" GridPane.columnIndex="1" />
-                  <Label text="Année" textFill="#d0cdcd" GridPane.rowIndex="1" />
-                  <ComboBox fx:id="year" onAction="#onSelectedYear" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <CheckBox mnemonicParsing="false" text="Année en cours" textFill="#d0cdcd" GridPane.columnIndex="2" GridPane.rowSpan="2147483647" />
+                  <Label text="Mois" textFill="#d0cdcd" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="month" onAction="#onSelectedMonth" prefWidth="150.0" GridPane.columnIndex="2" />
+                  <Label text="Année" textFill="#d0cdcd" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="year" onAction="#onSelectedYear" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <CheckBox mnemonicParsing="false" text="Année en cours" textFill="#d0cdcd" GridPane.columnIndex="3" GridPane.rowSpan="2147483647" />
+                  <Button fx:id="refresh" mnemonicParsing="false" onAction="#onRefresh" text="Rafraichir" GridPane.rowSpan="2147483647" />
                </children>
             </GridPane>
             <GridPane hgap="5.0" vgap="5.0" GridPane.columnIndex="1" GridPane.rowSpan="2147483647">

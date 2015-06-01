@@ -102,9 +102,10 @@ public class MemberBenevolatsController {
 			loader.setLocation(BenevolatFormController.class.getResource("BenevolatForm.fxml"));
 			final BorderPane pane = (BorderPane) loader.load();
 			final BenevolatFormController controller = (BenevolatFormController) loader.getController();
-			controller.setMemberBenevolatsController(this);
+			controller.setParentController(this);
 			controller.setPerson(this.personModel);
 			controller.setBenevolatModel(this.selectedBenevolat);
+			controller.setParentController(this);
 			controller.fillForm();
 			final Stage benevolatDialog = new Stage();
 			benevolatDialog.setTitle("Benevolat");

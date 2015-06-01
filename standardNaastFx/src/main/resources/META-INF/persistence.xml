@@ -7,13 +7,12 @@
 	<persistence-unit name="StandardNaastPeristenceUnit"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-<!-- 		<jta-data-source>java:jboss/datasources/StandardNaastDS</jta-data-source> -->
-<!-- 		<jta-data-source>jdbc/standardNaast</jta-data-source> -->
+		<!-- <jta-data-source>java:jboss/datasources/StandardNaastDS</jta-data-source> -->
+		<!-- <jta-data-source>jdbc/standardNaast</jta-data-source> -->
 		<class>standardNaast.entities.Abonnement</class>
 		<class>standardNaast.entities.Personne</class>
 		<class>standardNaast.entities.Season</class>
 		<class>standardNaast.entities.Benevolat</class>
-<!-- 		<class>standardNaast.entities.Cotisation</class> -->
 		<class>standardNaast.entities.Bloc</class>
 		<class>standardNaast.entities.CommandePlace</class>
 		<class>standardNaast.entities.Team</class>
@@ -34,18 +33,12 @@
 		<properties>
 			<property name="eclipselink.weaving" value="false" />
 			<property name="eclipselink.target-server" value="None" />
-<!-- 			<property name="eclipselink.target-database" value="HSQL" /> -->
-			<!-- <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:file:D:\SkyDrive\standard_naast.db;shutdown=true"/> -->
-<!-- 			<property name="javax.persistence.jdbc.url" -->
-<!-- 				value="jdbc:hsqldb:hsql://localhost:9001/standardNaast" /> -->
-<!-- 			<property name="javax.persistence.jdbc.user" value="sa" /> -->
-<!-- 			<property name="javax.persistence.jdbc.password" value="" /> -->
-<!-- 			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" /> -->
-<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:h2:~/standard_naast" />
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:h2:file:../database/h2/dbs/standard_naast" />
 			<property name="javax.persistence.jdbc.user" value="sa" />
-<!-- 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" /> -->
-			<property name="eclipselink.ddl-generation.output-mode" value="database" />
+			<property name="eclipselink.ddl-generation.output-mode"
+				value="database" />
 			<property name="javax.persistence.validation.mode" value="NONE" />
 			<property name="eclipselink.logging.level" value="FINE" />
 			<property name="eclipselink.logging.parameters" value="true" />

@@ -30,10 +30,16 @@ public class SeasonOverviewController implements Observer {
 	private Parent seasonTravels;
 
 	@FXML
+	private Parent seasonAbonnementPrices;
+
+	@FXML
 	private SeasonInformationController seasonInformationController;
 
 	@FXML
 	private SeasonTravelsTableController seasonTravelsController;
+
+	@FXML
+	private SeasonAbonnementPricesController seasonAbonnementPricesController;
 
 	@FXML
 	private ComboBox<SeasonModel> season;
@@ -72,6 +78,7 @@ public class SeasonOverviewController implements Observer {
 		this.seasonInformationController.onSelectedSeason(selectedSeason);
 		this.modifyButton.setDisable(false);
 		this.seasonTravelsController.fillTable(selectedSeason);
+		this.seasonAbonnementPricesController.buildCompetitionTypes(selectedSeason);
 	}
 
 	@FXML

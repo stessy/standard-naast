@@ -1,15 +1,12 @@
 package standardNaast.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 public class PurchasableAbonnements {
 
 	private final String name;
 
 	private final String firstName;
 
-	private final Date birthDate;
+	private final String birthDate;
 
 	private final String fullAddress;
 
@@ -21,12 +18,14 @@ public class PurchasableAbonnements {
 
 	private final String place;
 
-	private final BigDecimal amount;
+	private final String amount;
+
+	private final String tarif;
 
 	public PurchasableAbonnements(final String name, final String firstName,
-			final Date birthDate, final String fullAddress,
+			final String birthDate, final String fullAddress,
 			final String identityCard, final String bloc, final String rank,
-			final String place, final BigDecimal amount) {
+			final String place, final String amount, final String tarif) {
 		this.name = name;
 		this.firstName = firstName;
 		this.birthDate = birthDate;
@@ -36,6 +35,7 @@ public class PurchasableAbonnements {
 		this.rank = rank;
 		this.place = place;
 		this.amount = amount;
+		this.tarif = tarif;
 	}
 
 	public String getName() {
@@ -46,7 +46,7 @@ public class PurchasableAbonnements {
 		return this.firstName;
 	}
 
-	public Date getBirthDate() {
+	public String getBirthDate() {
 		return this.birthDate;
 	}
 
@@ -70,8 +70,12 @@ public class PurchasableAbonnements {
 		return this.place;
 	}
 
-	public BigDecimal getAmount() {
+	public String getAmount() {
 		return this.amount;
+	}
+
+	public String getTarif() {
+		return this.tarif;
 	}
 
 }

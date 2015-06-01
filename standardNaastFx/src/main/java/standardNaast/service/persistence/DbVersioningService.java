@@ -7,7 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import standardNaast.exception.TechnicalException;
 
@@ -24,7 +25,7 @@ import com.standardnaast.persistence.EntityManagerFactoryHelper;
 public class DbVersioningService {
 
 	/** The LOG. */
-	private static final Logger LOG = Logger.getLogger(DbVersioningService.class);
+	private static final Logger LOG = LogManager.getLogger(DbVersioningService.class);
 
 	/** The dataSource. */
 	// @Resource(lookup = "java:jboss/datasources/StandardNaastDS")

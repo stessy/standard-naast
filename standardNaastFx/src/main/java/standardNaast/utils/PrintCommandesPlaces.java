@@ -8,8 +8,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
+
+import standardNaast.model.PurchasableAbonnements;
+import standardNaast.model.SeasonModel;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -19,18 +21,15 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class PrintCommandesPlaces {
 
-	private String type;
-
-	public static void main(final String args1[]) {
-		new PrintCommandesPlaces().printCommandeAbonnements("2009-2010");
-	}
+	// public static void main(final String args1[]) {
+	// new PrintCommandesPlaces().printCommandeAbonnements("2009-2010");
+	// }
 
 	public PrintCommandesPlaces() {
 		/*
@@ -39,21 +38,21 @@ public class PrintCommandesPlaces {
 		 */
 	}
 
-	public String printCommandeAbonnements(final String saison) {
-		Document pdfDocument = new Document(PageSize.A4.rotate(), -60F, -60F,
+	public String printCommandeAbonnements(final SeasonModel season,
+			final List<PurchasableAbonnements> abonnementsToPurchase) {
+		final Document pdfDocument = new Document(PageSize.A4.rotate(), -60F, -60F,
 				30F, 30F);
 		FileOutputStream fo = null;
 		File pdfFile = null;
 		String pdfPath = null;
 		try {
-			Image image = Image.getInstance("image_cotisations.PNG");
+			final Image image = Image.getInstance("img/image_cotisations.PNG");
 			image.scalePercent(24F);
-			FontFactory.register("comicbd.TTF");
-			FontFactory.register("comic.TTF");
-			Rectangle r = pdfDocument.getPageSize();
-			com.itextpdf.text.Font comic24 = FontFactory.getFont(
+			FontFactory.register("img/comicbd.TTF");
+			FontFactory.register("img/comic.TTF");
+			final com.itextpdf.text.Font comic24 = FontFactory.getFont(
 					"ComicSansMS-Bold", "Cp1252", 24F);
-			com.itextpdf.text.Font comic16 = FontFactory.getFont(
+			final com.itextpdf.text.Font comic16 = FontFactory.getFont(
 					"ComicSansMS-Bold", "Cp1252", 16F);
 			pdfPath = "Commande Abonnements-"
 					+ new SimpleDateFormat("dd-MM-yyyy").format(new Date())
@@ -62,7 +61,7 @@ public class PrintCommandesPlaces {
 			fo = new FileOutputStream(pdfFile);
 			PdfWriter.getInstance(pdfDocument, fo);
 			pdfDocument.open();
-			PdfPTable imageTable = new PdfPTable(108);
+			final PdfPTable imageTable = new PdfPTable(108);
 			PdfPCell cell = new PdfPCell();
 			cell.setColspan(20);
 			cell.setBorder(0);
@@ -78,9 +77,9 @@ public class PrintCommandesPlaces {
 			imageTable.addCell(cell);
 			pdfDocument.add(imageTable);
 
-			PdfPTable headerTable = new PdfPTable(108);
+			final PdfPTable headerTable = new PdfPTable(108);
 			cell = new PdfPCell(
-					new Paragraph("Commande d'abonnements", comic24));
+					new Paragraph("Commande d'abonnements (Saison " + season.getId() + ")", comic24));
 			cell.setColspan(108);
 			cell.setBorder(0);
 			cell.setHorizontalAlignment(1);
@@ -102,7 +101,7 @@ public class PrintCommandesPlaces {
 			cell.setBorder(1);
 			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			headerTable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("Andr� Legreve", comic16));
+			cell = new PdfPCell(new Paragraph("André Legreve", comic16));
 			cell.setColspan(27);
 			cell.setBorder(1);
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -130,98 +129,81 @@ public class PrintCommandesPlaces {
 			headerTable.addCell(cell);
 			pdfDocument.add(headerTable);
 
-			PdfPTable mainTable = new PdfPTable(108);
+			final PdfPTable mainTable = new PdfPTable(108);
 			this.setHeadersAbonnement(mainTable);
 			mainTable.setHeaderRows(1);
 
-			Vector allAbonnements = new Vector();
-			/*
-			 * new AbonnementDB() .getAllAbonnementsNonCommandes(saison);
-			 */
-			String bonus;
 			int total = 0;
 			com.itextpdf.text.Font comic12;
-			for (Enumeration enumeration = allAbonnements.elements(); enumeration
-					.hasMoreElements();) {
-				Vector commandeAbonnement = (Vector) enumeration.nextElement();
-				String nom = (String) commandeAbonnement.get(0);
-				String prenom = (String) commandeAbonnement.get(1);
-				String dateNaissance = (String) commandeAbonnement.get(2);
-				String adresse = (String) commandeAbonnement.get(3);
-				String carteIdentite = (String) commandeAbonnement.get(4);
-				String tarif = "" + commandeAbonnement.get(5);
-				String bloc = (String) commandeAbonnement.get(6);
-				String rang = (String) commandeAbonnement.get(7);
-				String place = (String) commandeAbonnement.get(8);
-				String montant = "" + commandeAbonnement.get(9);
+			for (final PurchasableAbonnements purchasable : abonnementsToPurchase) {
 
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(nom, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getName(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(15);
 				mainTable.addCell(cell);
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(prenom, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getFirstName(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(15);
 				mainTable.addCell(cell);
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(dateNaissance, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getBirthDate(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(10);
 				mainTable.addCell(cell);
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(adresse, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getFullAddress(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(25);
 				mainTable.addCell(cell);
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(carteIdentite, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getIdentityCard(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(17);
 				mainTable.addCell(cell);
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(tarif, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getTarif(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(6);
 				mainTable.addCell(cell);
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(bloc, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getBloc(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(5);
 				mainTable.addCell(cell);
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(rang, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getRank(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(5);
 				mainTable.addCell(cell);
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(place, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getPlace(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(5);
 				mainTable.addCell(cell);
-				total = total + (Integer) commandeAbonnement.get(9);
+				total = total + Integer.valueOf(purchasable.getAmount());
 				comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252",
 						10F, 0, BaseColor.BLUE);
-				cell = new PdfPCell(new Paragraph(montant, comic12));
+				cell = new PdfPCell(new Paragraph(purchasable.getAmount(), comic12));
 				cell.setHorizontalAlignment(1);
 				cell.setVerticalAlignment(5);
 				cell.setColspan(5);
@@ -229,9 +211,9 @@ public class PrintCommandesPlaces {
 
 			}
 			pdfDocument.add(mainTable);
-			Paragraph p = new Paragraph("");
+			final Paragraph p = new Paragraph("");
 			pdfDocument.add(p);
-			PdfPTable totalTable = new PdfPTable(108);
+			final PdfPTable totalTable = new PdfPTable(108);
 			comic12 = FontFactory.getFont("ComicSansMS-Bold", "Cp1252", 10F, 0,
 					BaseColor.BLUE);
 			cell = new PdfPCell(new Paragraph("Total: ", comic12));
@@ -250,25 +232,24 @@ public class PrintCommandesPlaces {
 			pdfDocument.close();
 			System.out.println(pdfFile.getAbsolutePath());
 
-		} catch (Exception fnfe) {
+		} catch (final Exception fnfe) {
 			fnfe.printStackTrace();
 		}
 		return pdfFile.getAbsolutePath();
-		// return pdfPath;
 	}
 
 	private void setHeadersAbonnement(final PdfPTable table) {
 		try {
-			String headerNames[] = { "Nom", "Prénom", "Date de naissance",
+			final String headerNames[] = { "Nom", "Prénom", "Date de naissance",
 					"Adresse", "N° carte identité", "Tarif", "Bloc", "Rang",
 					"Place", "Prix" };
-			int colspan[] = { 15, 15, 10, 25, 17, 6, 5, 5, 5, 5 };
+			final int colspan[] = { 15, 15, 10, 25, 17, 6, 5, 5, 5, 5 };
 			for (int i = 0; i < 1; i++) {
 				for (int j = 0; j < headerNames.length; j++) {
-					com.itextpdf.text.Font comic12 = FontFactory.getFont(
+					final com.itextpdf.text.Font comic12 = FontFactory.getFont(
 							"ComicSansMS-Bold", "Cp1252", 12F, 1,
 							BaseColor.BLACK);
-					PdfPCell cell = new PdfPCell(new Paragraph(headerNames[j],
+					final PdfPCell cell = new PdfPCell(new Paragraph(headerNames[j],
 							comic12));
 					cell.setColspan(colspan[j]);
 					cell.setHorizontalAlignment(1);
@@ -277,8 +258,9 @@ public class PrintCommandesPlaces {
 
 			}
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new ExceptionConverter(e);
 		}
 	}
+
 }

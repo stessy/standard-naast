@@ -59,7 +59,6 @@ public class MembersTableController {
 		this.buildModel(allMembers);
 		this.bindProperties();
 		this.installFiltering();
-
 	}
 
 	private void buildModel(final List<PersonModel> allMembers) {

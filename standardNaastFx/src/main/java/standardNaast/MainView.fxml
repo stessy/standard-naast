@@ -34,7 +34,7 @@
           <Tab closable="false" text="Membres" >
           <fx:include source = "view/member/overview/MembersOverview.fxml"/>
           </Tab>
-          <Tab closable="false" text="Abonnements" />
+          <Tab closable="false" text="Abonnements"><fx:include source = "view/abonnement/AbonnementsOverview.fxml"/></Tab>
           <Tab closable="false" text="Saisons" >
           <fx:include source = "view/season/SeasonOverview.fxml"/>
           </Tab>

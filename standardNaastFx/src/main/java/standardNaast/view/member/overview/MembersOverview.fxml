@@ -21,9 +21,6 @@
 				<fx:include fx:id="memberCotisations" source="MemberCotisations.fxml" HBox.hgrow="ALWAYS" />
 				<fx:include fx:id="memberBenevolats" source="MemberBenevolats.fxml" HBox.hgrow="ALWAYS" />
 			</children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
 		</HBox>
 	</children>
 </VBox>

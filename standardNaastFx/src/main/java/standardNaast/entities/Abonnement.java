@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -34,7 +33,8 @@ import standardNaast.types.AbonnementStatus;
 @Access(AccessType.FIELD)
 @NamedQueries({
 		@NamedQuery(name = "getAbonnementsPerSeason", query = "select A from Abonnement A where A.season = :season"),
-		@NamedQuery(name = "getAbonnementsPreviousSeason", query = "select A from Abonnement A where A.season = :season and A.personne = :person") })
+		@NamedQuery(name = "getAbonnementsPreviousSeason", query = "select A from Abonnement A join AbonnementPrices P where A.season = :season and A.personne = :person and P.typeCompetition = :competitionType"),
+		@NamedQuery(name = "getPurchasableAbonnements", query = "select A from Abonnement A where A.season = :season and A.paye = true and A.abonnementStatus = standardNaast.types.AbonnementStatus.NEW") })
 public class Abonnement implements Serializable, Comparable<Abonnement> {
 
 	private static final long serialVersionUID = 3083188497640356561L;
@@ -74,7 +74,7 @@ public class Abonnement implements Serializable, Comparable<Abonnement> {
 	private Long acompte;
 
 	@JoinColumn(name = "SAISON", referencedColumnName = "SAISON_ID")
-	@ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private Season season;
 
 	@ManyToOne(fetch = FetchType.LAZY)

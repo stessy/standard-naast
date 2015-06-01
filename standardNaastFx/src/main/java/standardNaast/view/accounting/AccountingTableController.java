@@ -76,6 +76,9 @@ public class AccountingTableController {
 	@FXML
 	private TextField monthlyDifference;
 
+	@FXML
+	private Button refresh;
+
 	private AccountingModel model;
 
 	@FXML
@@ -271,5 +274,10 @@ public class AccountingTableController {
 			this.monthlyExits.setText(exits.toString());
 			this.monthlyDifference.setText(entries.subtract(exits).toString());
 		}
+	}
+
+	@FXML
+	private void onRefresh() {
+		this.filterTable();
 	}
 }

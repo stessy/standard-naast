@@ -1,7 +1,10 @@
 package standardNaast.view.abonnement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,7 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import standardNaast.model.AbonnementPriceChampionshipModel;
 import standardNaast.model.BenevolatModel;
-import standardNaast.model.MemberAbonnementsModel;
+import standardNaast.model.MemberAbonnementModel;
+import standardNaast.model.MemberCotisationsModel;
 import standardNaast.model.MemberSeasonTravels;
 import standardNaast.model.PersonModel;
 import standardNaast.model.SeasonModel;
@@ -26,11 +30,16 @@ import standardNaast.observer.Observer;
 import standardNaast.observer.SubjectImpl;
 import standardNaast.service.AbonnementService;
 import standardNaast.service.BenevolatService;
+import standardNaast.service.CotisationsService;
+import standardNaast.service.PricesService;
 import standardNaast.service.SeasonService;
 import standardNaast.service.SeasonServiceImpl;
 import standardNaast.types.AbonnementStatus;
 import standardNaast.types.CompetitionType;
+import standardNaast.types.Place;
 import standardNaast.utils.AlertDialogUtils;
+import standardNaast.utils.RefundsUtils;
+import standardNaast.view.member.overview.MemberAbonnementsController;
 
 public class AbonnementFormController implements Observer {
 
@@ -42,9 +51,13 @@ public class AbonnementFormController implements Observer {
 
 	private final SeasonService seasonService = new SeasonServiceImpl();
 
+	private final CotisationsService cotisationService = new CotisationsService();
+
+	private final PricesService pricesService = new PricesService();
+
 	private PersonModel memberModel;
 
-	private MemberAbonnementsModel model;
+	private MemberAbonnementModel model;
 
 	private Stage dialogStage;
 
@@ -94,16 +107,20 @@ public class AbonnementFormController implements Observer {
 
 	private AbonnementPriceChampionshipModel selectedAbonnementPrice;
 
+	private MemberAbonnementsController parentController;
+
 	@FXML
 	private void initialize() {
 		final List<SeasonModel> seasons = SubjectImpl.getInstance().getSeasons();
 		this.update(seasons);
-		this.prepareCompetitionTypeBox(true);
+		this.typeCompetition.setDisable(true);
 	}
 
 	private void prepareCompetitionTypeBox(final boolean disabled) {
+		final List<CompetitionType> configuredCompetitionTypePerSeason = this.pricesService
+				.getConfiguredCompetitionTypePerSeason(this.saison.getSelectionModel().getSelectedItem());
 		this.competitionTypes.clear();
-		this.competitionTypes.addAll(CompetitionType.values());
+		this.competitionTypes.addAll(configuredCompetitionTypePerSeason);
 		this.typeCompetition.setItems(this.competitionTypes);
 		this.typeCompetition.setDisable(disabled);
 	}
@@ -114,7 +131,7 @@ public class AbonnementFormController implements Observer {
 			AlertDialogUtils.displayInvalidAlert(this.dialogStage, this.validationErrors);
 		} else {
 			if (this.isNew) {
-				final MemberAbonnementsModel model = new MemberAbonnementsModel();
+				final MemberAbonnementModel model = new MemberAbonnementModel();
 				model.setStatus(AbonnementStatus.NEW);
 				model.setAcompte(Long.valueOf(this.acompte.getText()));
 				model.setPerson(this.memberModel);
@@ -123,7 +140,9 @@ public class AbonnementFormController implements Observer {
 				model.setRang(this.rang.getText());
 				model.setReduction(Long.valueOf(this.reduction.getText()));
 				model.setSaison(this.saison.getSelectionModel().getSelectedItem());
-				this.abonnementService.addAbonnement(model);
+				model.setPaye(this.paye.isSelected());
+				final MemberAbonnementModel addedAbonnement = this.abonnementService.addAbonnement(model);
+				this.parentController.onAddedAbonnement(addedAbonnement);
 			}
 			else {
 				this.model.setAcompte(Long.valueOf(this.acompte.getText()));
@@ -131,7 +150,8 @@ public class AbonnementFormController implements Observer {
 				this.model.setAbonnementPrice(this.selectedAbonnementPrice);
 				this.model.setRang(this.rang.getText());
 				this.model.setReduction(Long.valueOf(this.reduction.getText()));
-				this.abonnementService.addAbonnement(this.model);
+				this.model.setPaye(this.paye.isSelected());
+				this.abonnementService.updateAbonnement(this.model);
 			}
 			AlertDialogUtils.displaySuccessALert("Abonnement ajouté");
 			this.dialogStage.close();
@@ -145,25 +165,55 @@ public class AbonnementFormController implements Observer {
 
 	@FXML
 	private void onSelectedCompetitionType() {
+		final CompetitionType selectedCompetitionType = this.typeCompetition.getSelectionModel().getSelectedItem();
+
+		// Fill season combobox with configured blocs
 		this.bloc.setDisable(true);
 		this.blocs.clear();
 		final List<String> blocList = this.abonnementService.getBlocList(this.saison.getSelectionModel()
-				.getSelectedItem(), this.typeCompetition
-				.getSelectionModel().getSelectedItem());
+				.getSelectedItem(), selectedCompetitionType);
 		if (blocList.isEmpty()) {
 			AlertDialogUtils.displayErrorAlert(this.dialogStage, "Aucun bloc n'est disponible pour la saison ["
 					+ this.saison.getSelectionModel().getSelectedItem().getId() + "] et le type de compétition ["
-					+ this.typeCompetition.getSelectionModel().getSelectedItem().toString() + "]");
+					+ selectedCompetitionType.toString() + "]");
 		}
 		else {
 			this.blocs.addAll(blocList);
 			this.bloc.setItems(this.blocs);
 			this.bloc.setDisable(false);
 		}
+
+		// Fill data from previous abonnement
+		final int selectedIndex = this.saison.getSelectionModel().getSelectedIndex();
+		final SeasonModel previousSeason = this.seasonsList.get(selectedIndex + 1);
+		final MemberAbonnementModel previousAbonnement = this.abonnementService.getPreviousAbonnement(
+				previousSeason,
+				this.memberModel.getPersonneId(), selectedCompetitionType);
+		if (previousAbonnement != null) {
+			this.place.setText(String.valueOf(previousAbonnement.getPlace()));
+			final AbonnementPriceChampionshipModel price = previousAbonnement.getAbonnementPrice();
+			if (price != null) {
+				this.bloc.getSelectionModel().select(price.getBloc());
+			}
+			this.rang.setText(String.valueOf(previousAbonnement.getRang()));
+		}
+
 	}
 
 	@FXML
 	private void onSelectedSeason() {
+		// Check if the cotisation has been paid for the selected season
+		final List<MemberCotisationsModel> memberCotisations = this.cotisationService
+				.getMemberCotisations(this.memberModel);
+		final SeasonModel selectedSeason = this.saison.getSelectionModel().getSelectedItem();
+		final Optional<MemberCotisationsModel> findFirst = memberCotisations.stream()
+				.filter(p -> p.getSeason().equals(selectedSeason)).findFirst();
+		if (!findFirst.isPresent()) {
+			AlertDialogUtils.displayErrorAlert(this.dialogStage,
+					"Ce membre ne peut pas commander d'abonnement!!!. Cotisation non payée pour la saison ["
+							+ selectedSeason.getId() + "] !!!!!");
+			this.dialogStage.close();
+		}
 		this.prepareCompetitionTypeBox(false);
 		this.bloc.setDisable(true);
 		this.rang.setEditable(true);
@@ -172,40 +222,45 @@ public class AbonnementFormController implements Observer {
 			// Recupérer la saison d'avant
 			final int selectedIndex = this.saison.getSelectionModel().getSelectedIndex();
 			final SeasonModel previousSeason = this.seasonsList.get(selectedIndex + 1);
-			final MemberAbonnementsModel previousAbonnement = this.abonnementService.getPreviousAbonnement(
-					previousSeason,
-					this.memberModel.getPersonneId());
-			if (previousAbonnement != null) {
-				this.place.setText(String.valueOf(previousAbonnement.getPlace()));
-				final AbonnementPriceChampionshipModel price = previousAbonnement.getAbonnementPrice();
-				if (price != null) {
-					this.bloc.getSelectionModel().select(price.getBloc());
-				}
-				this.rang.setText(String.valueOf(previousAbonnement.getRang()));
-			}
+
 			// Calculer la réduction
 			final List<BenevolatModel> benevolatsForASeason = this.benevolatService.getBenevolatsForASeason(
 					this.memberModel, previousSeason);
 			long totalRefund = 0;
 			final long benevolatRefund = benevolatsForASeason.stream().mapToLong(BenevolatModel::getMontant).sum();
-			long travelsRefund = 0;
-			final MemberSeasonTravels travelsPerSeason = this.seasonService.getTravelsPerSeason(previousSeason,
-					this.memberModel.getPersonneId());
-			final int away = travelsPerSeason.getAway();
-			final int home = travelsPerSeason.getHome();
-			if (away > 11 || home > 11) {
-				travelsRefund = away + home;
-			}
-			totalRefund = benevolatRefund + travelsRefund;
-			final StringBuilder builder = new StringBuilder();
-			builder.append("Bénévolats: ");
-			builder.append(benevolatRefund);
-			builder.append("\n");
-			builder.append("Déplacements : ");
-			builder.append(travelsRefund);
+			final Map<Place, Integer> travelsRefund = this.getTravelsRefund(previousSeason);
+			totalRefund = benevolatRefund + travelsRefund.entrySet().stream().mapToInt(e -> e.getValue()).sum();
 			this.reduction.setText(String.valueOf(totalRefund));
-			this.reduction.setTooltip(new Tooltip(builder.toString()));
+			this.reduction.setTooltip(new Tooltip(this.buildRefundTooltip(benevolatRefund, travelsRefund).toString()));
 		}
+	}
+
+	private StringBuilder buildRefundTooltip(final long benevolatRefund, final Map<Place, Integer> travelsRefund) {
+		final StringBuilder builder = new StringBuilder();
+		builder.append("Bénévolats: ");
+		builder.append(benevolatRefund);
+		builder.append("\n");
+		builder.append("Déplacements : ");
+		builder.append("\n\t");
+		builder.append("Domicile : ");
+		builder.append(travelsRefund.get(Place.HOME));
+		builder.append("\n\t");
+		builder.append("Extérieur : ");
+		builder.append(travelsRefund.get(Place.AWAY));
+		return builder;
+	}
+
+	private Map<Place, Integer> getTravelsRefund(final SeasonModel previousSeason) {
+		final Map<Place, Integer> refunds = new HashMap<>();
+		final MemberSeasonTravels travelsPerSeason = this.seasonService.getTravelsPerSeason(previousSeason,
+				this.memberModel.getPersonneId());
+		final int away = travelsPerSeason.getAway();
+		final int home = travelsPerSeason.getHome();
+		final int awayRefund = RefundsUtils.getRefund(away);
+		refunds.put(Place.AWAY, awayRefund);
+		final int homeRefund = RefundsUtils.getRefund(home);
+		refunds.put(Place.HOME, homeRefund);
+		return refunds;
 	}
 
 	@FXML
@@ -223,12 +278,21 @@ public class AbonnementFormController implements Observer {
 	}
 
 	private void calculateBalance() {
-		final Long price = Long.valueOf(this.prixAbonnement.getText());
+		final Long fullAbonnementPrice = Long.valueOf(this.prixAbonnement.getText());
 		final String reductionValue = this.reduction.getText();
 		final Long reduction = Long.valueOf(StringUtils.isEmpty(reductionValue) ? "0" : reductionValue);
+
+		final Long abonnementPrice = fullAbonnementPrice - reduction;
+
 		final String text = this.acompte.getText();
-		final Long acompte = Long.valueOf(StringUtils.isEmpty(text) ? "0" : text);
-		this.solde.setText(String.valueOf(price - reduction - acompte));
+		Long acompteValue = Long.valueOf(StringUtils.isEmpty(text) ? "0" : text);
+		if (acompteValue >= abonnementPrice) {
+			this.acompte.setText(String.valueOf(abonnementPrice));
+			acompteValue = abonnementPrice;
+			this.paye.setSelected(true);
+		}
+		final long solde = fullAbonnementPrice - reduction - acompteValue;
+		this.solde.setText(String.valueOf(solde));
 
 	}
 
@@ -236,6 +300,7 @@ public class AbonnementFormController implements Observer {
 		this.memberLabel.setText(this.memberModel.getFirstName() + " " + this.memberModel.getName());
 		this.acompte.setText("0");
 		if (this.model != null) {
+			this.model = this.abonnementService.getMemberAbonnement(this.model);
 			this.saison.getSelectionModel().select(this.model.getSaison());
 			this.bloc.getSelectionModel().select(this.model.getAbonnementPrice().getBloc());
 			this.typeCompetition.getSelectionModel().select(this.model.getAbonnementPrice().getTypeCompetition());
@@ -249,6 +314,7 @@ public class AbonnementFormController implements Observer {
 			this.rang.setEditable(abonnementStatus == AbonnementStatus.NEW ? true : false);
 			this.place.setEditable(abonnementStatus == AbonnementStatus.NEW ? true : false);
 			this.prixAbonnement.setText(String.valueOf(this.model.getAbonnementPrice().getPrice()));
+			this.acompte.setDisable(true);
 			this.calculateBalance();
 		}
 
@@ -315,10 +381,32 @@ public class AbonnementFormController implements Observer {
 		this.acompte
 				.textProperty()
 				.addListener(
-						(ov, t, t1) -> this.calculateBalance());
+						(ov, t, t1) -> {
+							if (!t1.matches("\\d*")) {
+								this.acompte.setText(t);
+							}
+							this.calculateBalance();
+						});
 	}
 
-	public void setAbonnement(final MemberAbonnementsModel abonnementModel) {
+	public void setAbonnement(final MemberAbonnementModel abonnementModel) {
 		this.model = abonnementModel;
+		this.selectedAbonnementPrice = abonnementModel.getAbonnementPrice();
+	}
+
+	public void setParentController(final MemberAbonnementsController parentController) {
+		this.parentController = parentController;
+	}
+
+	@FXML
+	private void onPaid() {
+		final Long prixAbonnement = Long.valueOf(this.prixAbonnement.getText());
+		final Long reduction = Long.valueOf(this.reduction.getText());
+		this.acompte.setText(String.valueOf(prixAbonnement - reduction));
+	}
+
+	@FXML
+	private void onUnpaid() {
+		this.acompte.setText(this.isNew ? "0" : String.valueOf(this.model.getAcompte()));
 	}
 }

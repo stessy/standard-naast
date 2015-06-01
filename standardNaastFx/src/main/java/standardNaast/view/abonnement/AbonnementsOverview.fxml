@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.abonnement.AbonnementOverviewController">
+   <children>
+      <HBox alignment="TOP_CENTER" prefHeight="30.0" spacing="5.0">
+         <children>
+            <HBox alignment="CENTER_RIGHT" prefHeight="30.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Saison" textAlignment="RIGHT" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="5.0">
+               <children>
+                  <ComboBox fx:id="season" onAction="#onSelectedSeason" prefWidth="150.0" />
+                  <Button fx:id="printButton" disable="true" mnemonicParsing="false" onAction="#onPrint" text="Imprimer la liste des abonnements" />
+               </children>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </HBox>
+      <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Abonnements à commander" VBox.vgrow="ALWAYS">
+         <content>
+            <BorderPane maxHeight="1.7976931348623157E308">
+               <center>
+                  <TableView fx:id="newAbonnementsTable" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn fx:id="newAbonnementsMemberNumber" prefWidth="75.0" text="N° membre" />
+                      <TableColumn fx:id="newAbonnementsMemberFirstName" prefWidth="75.0" text="Prénom" />
+                        <TableColumn fx:id="newAbonnementsMemberName" prefWidth="75.0" text="Nom" />
+                        <TableColumn fx:id="newAbonnementsAcompte" prefWidth="75.0" text="Column X" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </center>
+               <bottom>
+                  <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <buttons>
+                      <Button mnemonicParsing="false" onAction="#setAsPurchased" text="Commandés" />
+                    </buttons>
+                  </ButtonBar>
+               </bottom>
+            </BorderPane>
+         </content>
+      </TitledPane>
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
+         <children>
+            <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Abonnements commandés" HBox.hgrow="ALWAYS">
+               <content>
+                  <BorderPane>
+                     <center>
+                        <TableView fx:id="purchasedAbonnementsTable" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn fx:id="purchasedAbonnementsMemberNumber" prefWidth="75.0" text="N° membre" />
+                            <TableColumn fx:id="receivedAbonnementsMemberFirstName" prefWidth="75.0" text="Prénom" />
+                              <TableColumn fx:id="purchasedAbonnementsMemberName" prefWidth="75.0" text="Nom" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </center>
+                     <bottom>
+                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <buttons>
+                            <Button mnemonicParsing="false" onAction="#setAsReceived" text="Reçus" />
+                          </buttons>
+                        </ButtonBar>
+                     </bottom>
+                  </BorderPane>
+               </content>
+            </TitledPane>
+            <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Abonnements reçus" HBox.hgrow="ALWAYS">
+               <content>
+                  <BorderPane>
+                     <center>
+                        <TableView fx:id="receivedAbonnementsTable" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn fx:id="receivedAbonnementsMemberNumber" prefWidth="75.0" text="N° membre" />
+                            <TableColumn fx:id="purchasedAbonnementsMemberFirstName" prefWidth="75.0" text="Prénom" />
+                              <TableColumn fx:id="receivedAbonnementsMemberName" prefWidth="75.0" text="Nom" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </center>
+                     <bottom>
+                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <buttons>
+                            <Button mnemonicParsing="false" onAction="#setAsDistributed" text="Distribués" />
+                          </buttons>
+                        </ButtonBar>
+                     </bottom>
+                  </BorderPane>
+               </content>
+            </TitledPane>
+         </children>
+      </HBox>
+      <HBox spacing="5.0" VBox.vgrow="ALWAYS">
+         <children>
+            <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Abonnements distribués" HBox.hgrow="ALWAYS">
+               <content>
+                  <BorderPane>
+                     <center>
+                        <TableView fx:id="distributedAbonnementsTable" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn fx:id="distributedAbonnementsMemberNumber" prefWidth="75.0" text="N° membre" />
+                            <TableColumn fx:id="distributedAbonnementsMemberFirstName" prefWidth="75.0" text="Prénom" />
+                              <TableColumn fx:id="distributedAbonnementsMemberName" prefWidth="75.0" text="Nom" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </center>
+                     <bottom>
+                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                     </bottom>
+                  </BorderPane>
+               </content>
+            </TitledPane>
+            <TitledPane alignment="CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Abonnements non payés" HBox.hgrow="ALWAYS">
+               <content>
+                  <BorderPane>
+                     <center>
+                        <TableView fx:id="unpaidAbonnementsTable" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn fx:id="unpaidAbonnementsMemberNumber" prefWidth="75.0" text="N° membre" />
+                            <TableColumn fx:id="unpaidAbonnementsMemberFirstName" prefWidth="75.0" text="Prénom" />
+                              <TableColumn fx:id="unpaidAbonnementsMemberName" prefWidth="75.0" text="Nom" />
+                              <TableColumn fx:id="unpaidAbonnementsAcompte" prefWidth="75.0" text="Solde" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </center>
+                     <bottom>
+                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <buttons>
+                            <Button mnemonicParsing="false" onAction="#setAsPaid" text="Payés" />
+                          </buttons>
+                        </ButtonBar>
+                     </bottom>
+                  </BorderPane>
+               </content>
+            </TitledPane>
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -1,7 +1,9 @@
 /* Copyright 2012 BuyWay-Services */
 package standardNaast.utils;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 
@@ -11,6 +13,7 @@ import liquibase.database.core.H2Database;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import liquibase.util.file.FilenameUtils;
 import standardNaast.exception.TechnicalException;
 
 import com.standardnaast.persistence.EntityManagerFactoryHelper;
@@ -25,7 +28,7 @@ public class DbUtils {
 
 	private static final EntityManager entityManager = EntityManagerFactoryHelper.getFactory().createEntityManager();
 
-	private static final String CHANGELOG = "changelog.xml";
+	private static final String CHANGELOG = "META-INF/changelog.xml";
 
 	/**
 	 * Run liquibase with given connection. This is static public in order to be
@@ -45,9 +48,20 @@ public class DbUtils {
 			database.setConnection(jdbcConnection);
 
 			// resource accessor
-			final Thread currentThread = Thread.currentThread();
-			final ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-			final ClassLoaderResourceAccessor resourceAccessor = new ClassLoaderResourceAccessor(contextClassLoader);
+			final ClassLoaderResourceAccessor resourceAccessor = new ClassLoaderResourceAccessor() {
+
+				@Override
+				public Set<String> list(String relativeTo, final String path, final boolean includeFiles,
+						final boolean includeDirectories, final boolean recursive)
+						throws IOException {
+
+					System.out.println(relativeTo);
+					relativeTo = FilenameUtils.getFullPath(relativeTo);
+					System.out.println(relativeTo);
+					System.out.println(path);
+					return super.list(relativeTo, path, includeFiles, includeDirectories, recursive);
+				}
+			};
 
 			// run the changelogs
 			final Liquibase liquibase = new Liquibase(DbUtils.CHANGELOG, resourceAccessor, database);

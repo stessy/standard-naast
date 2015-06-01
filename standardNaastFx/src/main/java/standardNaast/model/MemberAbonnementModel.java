@@ -11,7 +11,7 @@ import javafx.beans.property.StringProperty;
 import standardNaast.entities.Abonnement;
 import standardNaast.types.AbonnementStatus;
 
-public class MemberAbonnementsModel {
+public class MemberAbonnementModel implements Comparable<MemberAbonnementModel> {
 
 	private final LongProperty abonnementId = new SimpleLongProperty();
 
@@ -167,8 +167,8 @@ public class MemberAbonnementsModel {
 		return this.solde;
 	}
 
-	public static MemberAbonnementsModel toModel(final Abonnement abonnement) {
-		final MemberAbonnementsModel model = new MemberAbonnementsModel();
+	public static MemberAbonnementModel toModel(final Abonnement abonnement) {
+		final MemberAbonnementModel model = new MemberAbonnementModel();
 		model.setAbonnementId(abonnement.getId());
 		model.setAbonnementPrice(AbonnementPriceChampionshipModel.toModel(abonnement.getAbonnementPrice()));
 		model.setAcompte(abonnement.getAcompte());
@@ -179,10 +179,11 @@ public class MemberAbonnementsModel {
 		model.setSaison(SeasonModel.of(abonnement.getSaison()));
 		model.setStatus(abonnement.getAbonnementStatus());
 		model.setPerson(PersonModel.toModel(abonnement.getPersonne()));
+		model.setSolde(abonnement.getAbonnementPrice().getPrice() - abonnement.getReduction() - abonnement.getAcompte());
 		return model;
 	}
 
-	public static Abonnement toEntity(final MemberAbonnementsModel model) {
+	public static Abonnement toEntity(final MemberAbonnementModel model) {
 		final Abonnement entity = new Abonnement();
 		entity.setAbonnementPrice(AbonnementPriceChampionshipModel.toEntity(model.getAbonnementPrice()));
 		entity.setAcompte(model.getAcompte());
@@ -194,5 +195,10 @@ public class MemberAbonnementsModel {
 		entity.setAbonnementStatus(model.getStatus());
 		entity.setPersonne(PersonModel.toEntity(model.getPerson()));
 		return entity;
+	}
+
+	@Override
+	public int compareTo(final MemberAbonnementModel o) {
+		return this.getPerson().getMemberNumber() < o.getPerson().getMemberNumber() ? 0 : 1;
 	}
 }

@@ -53,13 +53,15 @@ public class AbonnementPricesImporter {
 				final Cell fullPrice = cellList.get(1);
 				final Cell pensionedCell = cellList.get(2);
 				final Cell between12and18Cell = cellList.get(3);
-				final Cell lessThan12Cell = cellList.get(4);
+				final Cell studentCell = cellList.get(4);
+				final Cell lessThan12Cell = cellList.get(5);
 
 				final String[] blocValue = blocCell.getStringCellValue().split("-");
 				final double fullPriceValue = this.getCellValue(fullPrice, evaluator);
 				final double pensionedPriceValue = this.getCellValue(pensionedCell, evaluator);
 				final double between12and18PriceValue = this.getCellValue(between12and18Cell, evaluator);
 				final double lessThan12PriceValue = this.getCellValue(lessThan12Cell, evaluator);
+				final double studentPriceValue = this.getCellValue(studentCell, evaluator);
 
 				for (final String bloc : blocValue) {
 					BlocAbonnementPrices price = new BlocAbonnementPrices(bloc.trim(), fullPriceValue, PersonType.ADULT);
@@ -69,6 +71,8 @@ public class AbonnementPricesImporter {
 					price = new BlocAbonnementPrices(bloc.trim(), between12and18PriceValue, PersonType.TWELVE_EIGHTEEN);
 					prices.add(price);
 					price = new BlocAbonnementPrices(bloc.trim(), lessThan12PriceValue, PersonType.LESS_THAN_TWELVE);
+					prices.add(price);
+					price = new BlocAbonnementPrices(bloc.trim(), studentPriceValue, PersonType.STUDENT);
 					prices.add(price);
 				}
 

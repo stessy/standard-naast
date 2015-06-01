@@ -18,7 +18,10 @@ import javax.persistence.NamedQuery;
 @DiscriminatorValue("ABONNEMENT")
 @NamedQueries({
 		@NamedQuery(name = "findBlocsPerSeason", query = "select distinct ap.bloc from AbonnementPrices ap where ap.season = :season and ap.typeCompetition = :competitionType"),
-		@NamedQuery(name = "findAbonnementPrice", query = "select ap from AbonnementPrices ap where ap.season = :season and ap.typeCompetition = :competitionType and ap.bloc = :bloc and ap.typePersonne = :personType") })
+		@NamedQuery(name = "findAbonnementPrice", query = "select ap from AbonnementPrices ap where ap.season = :season and ap.typeCompetition = :competitionType and ap.bloc = :bloc and ap.typePersonne = :personType"),
+		@NamedQuery(name = "distinctCompetitionType", query = "select distinct ap.typeCompetition from AbonnementPrices ap where ap.season = :season"),
+		@NamedQuery(name = "getAbonnementPricesPerSeason", query = "select ap from AbonnementPrices ap where ap.season = :season and ap.typeCompetition = :competitionType"),
+		@NamedQuery(name = "getBlocPricesPerSeason", query = "select ap from AbonnementPrices ap where ap.season = :season and ap.typeCompetition = :competitionType and ap.bloc = :bloc") })
 public class AbonnementPrices extends Prices implements Serializable {
 
 	private static final long serialVersionUID = -8719676380965584167L;

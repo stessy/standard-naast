@@ -163,7 +163,7 @@ public class SeasonModel implements Comparable<SeasonModel> {
 			if (other.id != null) {
 				return false;
 			}
-		} else if (!this.id.equals(other.id)) {
+		} else if (!this.id.get().equals(other.id.get())) {
 			return false;
 		}
 		return true;

@@ -7,7 +7,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import standardNaast.dao.PersonDAO;
 import standardNaast.dao.PersonDAOImpl;
@@ -30,7 +31,7 @@ public class SeasonServiceImpl implements SeasonService, Serializable {
 
 	PersonDAO personDAO = new PersonDAOImpl();
 
-	private static final Logger LOGGER = Logger.getLogger(SeasonServiceImpl.class);
+	private static final Logger LOGGER = LogManager.getLogger(SeasonServiceImpl.class);
 
 	@Override
 	public List<SeasonModel> findAllSaison() {

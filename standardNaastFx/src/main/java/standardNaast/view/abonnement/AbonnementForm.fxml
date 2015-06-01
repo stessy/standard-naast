@@ -16,7 +16,7 @@
       <Label text="Prix" GridPane.rowIndex="6" />
       <Label text="Réduction" GridPane.rowIndex="7" />
       <Label text="Solde" GridPane.rowIndex="9" />
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="10">
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="11">
         <buttons>
           <Button mnemonicParsing="false" onAction="#onAddAbonnement" text="Enregistrer" />
             <Button mnemonicParsing="false" onAction="#onCancel" text="Annuler" />
@@ -33,6 +33,17 @@
       <ComboBox fx:id="typeCompetition" onAction="#onSelectedCompetitionType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Label text="Compétition" GridPane.rowIndex="2" />
       <TextField fx:id="prixAbonnement" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <Label text="Payé" GridPane.rowIndex="10" />
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+         <children>
+            <RadioButton fx:id="paye" mnemonicParsing="false" onAction="#onPaid" text="Oui">
+               <toggleGroup>
+                  <ToggleGroup fx:id="paidToggleGroup" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="nonPaye" mnemonicParsing="false" onAction="#onUnpaid" text="Non" toggleGroup="$paidToggleGroup" />
+         </children>
+      </HBox>
    </children>
    <columnConstraints>
       <ColumnConstraints halignment="RIGHT" />
@@ -40,6 +51,7 @@
    </columnConstraints>
    <rowConstraints>
       <RowConstraints />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />

@@ -6,7 +6,8 @@ package standardNaast.service;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import standardNaast.dao.TeamDAO;
 import standardNaast.dao.TeamDAOImpl;
@@ -20,7 +21,7 @@ public class TeamService implements Serializable {
 
 	private final TeamDAO TeamDAO = new TeamDAOImpl();
 
-	private static final Logger LOGGER = Logger.getLogger(PersonneServiceImpl.class);
+	private static final Logger LOGGER = LogManager.getLogger(PersonneServiceImpl.class);
 
 	public List<Team> findAllTeam() {
 		return this.TeamDAO.getAllTeams();

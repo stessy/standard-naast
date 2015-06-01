@@ -43,6 +43,8 @@ public class BenevolatFormController {
 
 	private BenevolatModel benevolatModel;
 
+	private MemberBenevolatsController parentController;
+
 	@FXML
 	private void initialize() {
 		this.formatDatePicker();
@@ -70,6 +72,7 @@ public class BenevolatFormController {
 			this.benevolatModel.setMontant(Long.valueOf(this.montantBenevolat.getText()));
 			this.benevolatModel.setDescription(this.description.getText());
 			this.benevolatService.saveBenevolat(this.benevolatModel);
+			this.parentController.onBenevolatAdded(this.benevolatModel);
 			this.dialogStage.close();
 		}
 
@@ -177,7 +180,7 @@ public class BenevolatFormController {
 		this.personModel = personModel;
 	}
 
-	public void setMemberBenevolatsController(final MemberBenevolatsController memberBenevolatsController) {
+	public void setParentController(final MemberBenevolatsController memberBenevolatsController) {
 		this.memberBenevolatsController = memberBenevolatsController;
 	}
 

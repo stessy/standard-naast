@@ -26,6 +26,7 @@ public class AccountingService {
 		query.setParameter("startDate", DateUtils.toDate(start));
 		query.setParameter("endDate", DateUtils.toDate(end));
 		final List<Accounting> resultList = query.getResultList();
+		resultList.stream().forEach(a -> this.entityManager.refresh(a));
 		return resultList.stream().map(a -> AccountingModel.toModel(a)).collect(Collectors.toList());
 	}
 

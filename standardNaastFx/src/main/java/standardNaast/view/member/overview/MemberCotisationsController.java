@@ -81,11 +81,18 @@ public class MemberCotisationsController {
 			memberFormDialog.initModality(Modality.APPLICATION_MODAL);
 			controller.setDialogStage(memberFormDialog);
 			controller.setPerson(this.personModel);
+			controller.setParentController(this);
 			final Scene scene = new Scene(rootPane);
 			memberFormDialog.setScene(scene);
 			memberFormDialog.showAndWait();
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void onCotisationAdded(final MemberCotisationsModel model) {
+		this.memberCotisationsList.add(model);
+		this.memberCotisationsTable.setItems(this.memberCotisationsList);
+		this.bindProperties();
 	}
 }

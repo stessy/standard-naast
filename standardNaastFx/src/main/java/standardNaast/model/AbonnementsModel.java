@@ -1,72 +1,70 @@
 package standardNaast.model;
 
-import java.util.SortedSet;
-
-import standardNaast.entities.Abonnement;
+import java.util.List;
 
 public class AbonnementsModel {
 
-	private SortedSet<Abonnement> paidAbonnements;
+	private List<MemberAbonnementModel> paidAbonnements;
 
-	private SortedSet<Abonnement> unpaidAbonnements;
+	private List<MemberAbonnementModel> unpaidAbonnements;
 
-	private SortedSet<Abonnement> newAbonnements;
+	private List<MemberAbonnementModel> newAbonnements;
 
-	private SortedSet<Abonnement> purchasedAbonnements;
+	private List<MemberAbonnementModel> purchasedAbonnements;
 
-	private SortedSet<Abonnement> receivedAbonnements;
+	private List<MemberAbonnementModel> receivedAbonnements;
 
-	private SortedSet<Abonnement> distributedAbonnements;
+	private List<MemberAbonnementModel> distributedAbonnements;
 
-	public SortedSet<Abonnement> getPaidAbonnements() {
+	public List<MemberAbonnementModel> getPaidAbonnements() {
 		return this.paidAbonnements;
 	}
 
-	public void setPaidAbonnements(final SortedSet<Abonnement> paidAbonnements) {
+	public void setPaidAbonnements(final List<MemberAbonnementModel> paidAbonnements) {
 		this.paidAbonnements = paidAbonnements;
 	}
 
-	public SortedSet<Abonnement> getUnpaidAbonnements() {
+	public List<MemberAbonnementModel> getUnpaidAbonnements() {
 		return this.unpaidAbonnements;
 	}
 
 	public void setUnpaidAbonnements(
-			final SortedSet<Abonnement> unpaidAbonnements) {
+			final List<MemberAbonnementModel> unpaidAbonnements) {
 		this.unpaidAbonnements = unpaidAbonnements;
 	}
 
-	public SortedSet<Abonnement> getNewAbonnements() {
+	public List<MemberAbonnementModel> getNewAbonnements() {
 		return this.newAbonnements;
 	}
 
-	public void setNewAbonnements(final SortedSet<Abonnement> newAbonnements) {
+	public void setNewAbonnements(final List<MemberAbonnementModel> newAbonnements) {
 		this.newAbonnements = newAbonnements;
 	}
 
-	public SortedSet<Abonnement> getPurchasedAbonnements() {
+	public List<MemberAbonnementModel> getPurchasedAbonnements() {
 		return this.purchasedAbonnements;
 	}
 
 	public void setPurchasedAbonnements(
-			final SortedSet<Abonnement> purchasedAbonnements) {
+			final List<MemberAbonnementModel> purchasedAbonnements) {
 		this.purchasedAbonnements = purchasedAbonnements;
 	}
 
-	public SortedSet<Abonnement> getReceivedAbonnements() {
+	public List<MemberAbonnementModel> getReceivedAbonnements() {
 		return this.receivedAbonnements;
 	}
 
 	public void setReceivedAbonnements(
-			final SortedSet<Abonnement> receivedAbonnements) {
+			final List<MemberAbonnementModel> receivedAbonnements) {
 		this.receivedAbonnements = receivedAbonnements;
 	}
 
-	public SortedSet<Abonnement> getDistributedAbonnements() {
+	public List<MemberAbonnementModel> getDistributedAbonnements() {
 		return this.distributedAbonnements;
 	}
 
 	public void setDistributedAbonnements(
-			final SortedSet<Abonnement> distributedAbonnements) {
+			final List<MemberAbonnementModel> distributedAbonnements) {
 		this.distributedAbonnements = distributedAbonnements;
 	}
 

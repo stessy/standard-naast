@@ -4,6 +4,7 @@
 package standardNaast.service;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +15,8 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import standardNaast.dao.CotisationDAO;
 import standardNaast.dao.CotisationDAOImpl;
@@ -26,12 +28,14 @@ import standardNaast.entities.Cotisation;
 import standardNaast.entities.Personne;
 import standardNaast.entities.PersonneCotisation;
 import standardNaast.entities.Season;
+import standardNaast.model.AccountingModel;
 import standardNaast.model.CotisationViewModel;
 import standardNaast.model.CotisationsOverviewModel;
 import standardNaast.model.MemberCotisationsModel;
 import standardNaast.model.PersonModel;
 import standardNaast.model.PersonnesCotisationsModel;
 import standardNaast.model.SeasonModel;
+import standardNaast.types.AccountingType;
 import standardNaast.utils.DateUtils;
 
 import com.standardnaast.persistence.EntityManagerFactoryHelper;
@@ -39,8 +43,6 @@ import com.standardnaast.persistence.EntityManagerFactoryHelper;
 public class CotisationsService implements Serializable {
 
 	private static final long serialVersionUID = -3608269572256839874L;
-
-	private PersonneService personneService;
 
 	private EntityManager entityManager = EntityManagerFactoryHelper.getFactory().createEntityManager();
 
@@ -50,7 +52,9 @@ public class CotisationsService implements Serializable {
 
 	private CotisationDAO cotisationDAO = new CotisationDAOImpl();
 
-	private static final Logger LOGGER = Logger
+	private AccountingService accountingService = new AccountingService();
+
+	private static final Logger LOGGER = LogManager
 			.getLogger(CotisationsService.class);
 
 	public List<Cotisation> findAllCotisations() {
@@ -61,7 +65,8 @@ public class CotisationsService implements Serializable {
 		return this.entityManager.createQuery(queryAll).getResultList();
 	}
 
-	public void addMemberCotisation(final PersonModel member, final SeasonModel season, final LocalDate paymentDate)
+	public MemberCotisationsModel addMemberCotisation(final PersonModel member, final SeasonModel season,
+			final LocalDate paymentDate)
 			throws Exception {
 		final Personne person = this.personDAO.getPerson(member.getPersonneId());
 		final Season selectedSeason = this.seasonDAO.getSeasonById(season.getId());
@@ -76,7 +81,15 @@ public class CotisationsService implements Serializable {
 		cotisation.setPersonne(person);
 		cotisation.setDatePaiement(DateUtils.toDate(paymentDate));
 		cotisation.setCarteMembreEnvoyee(false);
-		this.cotisationDAO.addMemberCotisation(cotisation);
+		final PersonneCotisation memberCotisation = this.cotisationDAO.addMemberCotisation(cotisation);
+		final AccountingModel accountingModel = new AccountingModel();
+		accountingModel.setAccountingDate(LocalDate.now());
+		accountingModel.setDescription("Cotisation pour la saison [" + season.getId() + "] de ["
+				+ person.getFirstname() + " " + person.getName() + "]");
+		accountingModel.setMontant(new BigDecimal(season.getCotisationAMount()));
+		accountingModel.setType(AccountingType.ENTRY);
+		this.accountingService.addAccounting(accountingModel);
+		return MemberCotisationsModel.toModel(memberCotisation);
 
 	}
 

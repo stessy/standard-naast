@@ -11,12 +11,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import standardNaast.model.MemberCotisationsModel;
 import standardNaast.model.PersonModel;
 import standardNaast.model.SeasonModel;
 import standardNaast.observer.Observer;
 import standardNaast.observer.SubjectImpl;
 import standardNaast.service.CotisationsService;
 import standardNaast.utils.AlertDialogUtils;
+import standardNaast.view.member.overview.MemberCotisationsController;
 
 public class MemberCotisationFormController implements Observer {
 
@@ -39,6 +41,8 @@ public class MemberCotisationFormController implements Observer {
 	@FXML
 	private DatePicker paymentDate;
 
+	private MemberCotisationsController memberCotisationsController;
+
 	@FXML
 	private void initialize() {
 		SubjectImpl.getInstance().registerObserver(this);
@@ -58,9 +62,11 @@ public class MemberCotisationFormController implements Observer {
 	private void onAdd() {
 		if (this.isValid()) {
 			try {
-				this.cotisationService.addMemberCotisation(this.personModel, this.season.getSelectionModel()
-						.getSelectedItem(), this.paymentDate.getValue());
+				final MemberCotisationsModel model = this.cotisationService.addMemberCotisation(this.personModel,
+						this.season.getSelectionModel()
+								.getSelectedItem(), this.paymentDate.getValue());
 				AlertDialogUtils.displaySuccessALert("Cotisation ajoutée");
+				this.memberCotisationsController.onCotisationAdded(model);
 				this.dialogStage.close();
 			} catch (final Exception e) {
 				AlertDialogUtils.displayErrorAlert(this.dialogStage, e.getMessage());
@@ -100,5 +106,9 @@ public class MemberCotisationFormController implements Observer {
 
 	public void setPerson(final PersonModel personModel) {
 		this.personModel = personModel;
+	}
+
+	public void setParentController(final MemberCotisationsController memberCotisationsController) {
+		this.memberCotisationsController = memberCotisationsController;
 	}
 }

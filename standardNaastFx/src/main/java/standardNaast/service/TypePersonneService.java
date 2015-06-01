@@ -8,7 +8,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import standardNaast.dao.TypePersonneDAO;
 import standardNaast.entities.TypePersonne;
@@ -23,7 +24,7 @@ public class TypePersonneService implements Serializable {
 	@Inject
 	TypePersonneDAO typePersonnesDAO;
 
-	private static final Logger LOGGER = Logger
+	private static final Logger LOGGER = LogManager
 			.getLogger(PersonneServiceImpl.class);
 
 	public List<TypePersonne> findAllTypePersonnes() {

@@ -5,6 +5,7 @@ import java.util.List;
 import standardNaast.entities.Abonnement;
 import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
+import standardNaast.types.CompetitionType;
 
 public interface AbonnementDAO {
 
@@ -20,5 +21,7 @@ public interface AbonnementDAO {
 
 	List<Abonnement> getAbonnementsPerSeason(Season season);
 
-	List<Abonnement> getPreviousAbonnement(Season previousSeason, Personne personne);
+	List<Abonnement> getPreviousAbonnement(Season previousSeason, Personne personne, CompetitionType competitionType);
+
+	List<Abonnement> getPurchasableAbonnements(String season);
 }
