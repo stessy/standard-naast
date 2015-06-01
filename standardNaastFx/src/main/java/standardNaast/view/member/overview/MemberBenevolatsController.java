@@ -93,10 +93,10 @@ public class MemberBenevolatsController {
 
 	@FXML
 	public void onAddBenevolat() {
-		this.displayBenevolatDialog();
+		this.displayBenevolatDialog(true);
 	}
 
-	private void displayBenevolatDialog() {
+	private void displayBenevolatDialog(final boolean isNew) {
 		try {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(BenevolatFormController.class.getResource("BenevolatForm.fxml"));
@@ -106,6 +106,7 @@ public class MemberBenevolatsController {
 			controller.setPerson(this.personModel);
 			controller.setBenevolatModel(this.selectedBenevolat);
 			controller.setParentController(this);
+			controller.setNew(isNew);
 			controller.fillForm();
 			final Stage benevolatDialog = new Stage();
 			benevolatDialog.setTitle("Benevolat");
@@ -143,7 +144,7 @@ public class MemberBenevolatsController {
 
 	@FXML
 	public void onModifyBenevolat() {
-		this.displayBenevolatDialog();
+		this.displayBenevolatDialog(false);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -39,11 +40,17 @@ public class BenevolatFormController {
 
 	private PersonModel personModel;
 
-	private MemberBenevolatsController memberBenevolatsController;
-
 	private BenevolatModel benevolatModel;
 
 	private MemberBenevolatsController parentController;
+
+	private boolean isNew;
+
+	@FXML
+	private Button addButton;
+
+	@FXML
+	private Button modifyButton;
 
 	@FXML
 	private void initialize() {
@@ -57,7 +64,7 @@ public class BenevolatFormController {
 		} else {
 			final BenevolatModel model = this.buildBenevolat();
 			this.benevolatService.addBenevolat(model, this.personModel);
-			this.memberBenevolatsController.onBenevolatAdded(model);
+			this.parentController.onBenevolatAdded(model);
 			this.dialogStage.close();
 		}
 
@@ -72,10 +79,14 @@ public class BenevolatFormController {
 			this.benevolatModel.setMontant(Long.valueOf(this.montantBenevolat.getText()));
 			this.benevolatModel.setDescription(this.description.getText());
 			this.benevolatService.saveBenevolat(this.benevolatModel);
-			this.parentController.onBenevolatAdded(this.benevolatModel);
 			this.dialogStage.close();
 		}
 
+	}
+
+	@FXML
+	private void onCancel() {
+		this.dialogStage.close();
 	}
 
 	private BenevolatModel buildBenevolat() {
@@ -91,7 +102,7 @@ public class BenevolatFormController {
 	}
 
 	public void fillForm() {
-		if (this.benevolatModel != null) {
+		if (this.benevolatModel != null && !this.isNew) {
 			this.dateBenevolat.setValue(this.benevolatModel.getDate());
 			this.description.setText(this.benevolatModel.getDescription());
 			this.montantBenevolat.setText(String.valueOf(this.benevolatModel.getMontant()));
@@ -181,11 +192,24 @@ public class BenevolatFormController {
 	}
 
 	public void setParentController(final MemberBenevolatsController memberBenevolatsController) {
-		this.memberBenevolatsController = memberBenevolatsController;
+		this.parentController = memberBenevolatsController;
 	}
 
 	public void setBenevolatModel(final BenevolatModel benevolatModel) {
 		this.benevolatModel = benevolatModel;
+	}
+
+	public void setNew(final boolean isNew) {
+		this.isNew = isNew;
+		if (isNew) {
+			this.modifyButton.setVisible(false);
+			this.addButton.setVisible(true);
+		}
+		else {
+			this.addButton.setVisible(false);
+			this.modifyButton.setVisible(true);
+
+		}
 	}
 
 }

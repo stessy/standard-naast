@@ -83,7 +83,7 @@ public class CotisationsService implements Serializable {
 		cotisation.setCarteMembreEnvoyee(false);
 		final PersonneCotisation memberCotisation = this.cotisationDAO.addMemberCotisation(cotisation);
 		final AccountingModel accountingModel = new AccountingModel();
-		accountingModel.setAccountingDate(LocalDate.now());
+		accountingModel.setAccountingDate(paymentDate);
 		accountingModel.setDescription("Cotisation pour la saison [" + season.getId() + "] de ["
 				+ person.getFirstname() + " " + person.getName() + "]");
 		accountingModel.setMontant(new BigDecimal(season.getCotisationAMount()));
