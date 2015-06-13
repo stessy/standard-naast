@@ -11,10 +11,10 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -29,7 +29,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "PERSONNES")
 @Access(AccessType.FIELD)
-@NamedQuery(name = "getByMemberNumber", query = "select P from Personne P where P.memberNumber = :memberNumber")
+@NamedQueries({
+		@NamedQuery(name = "getByMemberNumber", query = "select P from Personne P where P.memberNumber = :memberNumber"),
+		@NamedQuery(name = "getMaxMemberNumber", query = "select max(P.memberNumber) from Personne P where P.memberNumber < 1000") })
 public class Personne implements Serializable, Comparable<Personne> {
 
 	private static final long serialVersionUID = -8863656538935308776L;
@@ -87,13 +89,13 @@ public class Personne implements Serializable, Comparable<Personne> {
 	@Column(name = "CARTE_IDENTITE")
 	private String identityCardNumber;
 
-	@OneToMany(mappedBy = "personne", cascade = CascadeType.ALL, targetEntity = Abonnement.class, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "personne", cascade = CascadeType.ALL, targetEntity = Abonnement.class)
 	private List<Abonnement> abonnementList;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Benevolat.class, mappedBy = "personne", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Benevolat.class, mappedBy = "personne")
 	private List<Benevolat> benevolatList;
 
-	@OneToMany(mappedBy = "personne", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "personne", cascade = CascadeType.ALL)
 	private List<PersonneCotisation> personnesCotisations;
 
 	@Column(name = "NUMERO_MEMBRE")

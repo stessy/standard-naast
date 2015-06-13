@@ -45,6 +45,8 @@ public class MemberCotisationsController {
 
 	private PersonModel personModel;
 
+	private MembersOverviewController parentController;
+
 	@FXML
 	public void initialize() {
 		this.memberCotisationsTable.setPlaceholder(new Label("Aucune cotisation pour le membre"));
@@ -94,5 +96,10 @@ public class MemberCotisationsController {
 		this.memberCotisationsList.add(model);
 		this.memberCotisationsTable.setItems(this.memberCotisationsList);
 		this.bindProperties();
+		this.parentController.getMembersTableController().buildModel();
+	}
+
+	public void setParentController(final MembersOverviewController parentController) {
+		this.parentController = parentController;
 	}
 }

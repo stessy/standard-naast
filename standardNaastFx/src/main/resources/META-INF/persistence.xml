@@ -34,6 +34,8 @@
 			<property name="eclipselink.weaving" value="false" />
 			<property name="eclipselink.target-server" value="None" />
 			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+<!-- 			<property name="javax.persistence.jdbc.url" -->
+<!-- 				value="jdbc:h2:file:D:/Google Drive/Standard_Naast/prod/database/h2/dbs/standard_naast" /> -->
 			<property name="javax.persistence.jdbc.url"
 				value="jdbc:h2:file:../database/h2/dbs/standard_naast" />
 			<property name="javax.persistence.jdbc.user" value="sa" />

@@ -23,4 +23,6 @@ public interface PersonneService {
 
 	public PersonModel addPerson(final PersonModel person);
 
+	Long getMaxMemberNumber();
+
 }

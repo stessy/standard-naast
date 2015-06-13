@@ -54,7 +54,13 @@ public class PersonneServiceImpl implements PersonneService {
 	@Override
 	public PersonModel addPerson(final PersonModel model) {
 		final Personne entity = PersonModel.toEntity(model);
+		entity.setMemberNumber(1000);
 		return PersonModel.toModel(this.personneDAO.addPerson(entity));
+	}
+
+	@Override
+	public Long getMaxMemberNumber() {
+		return this.personneDAO.getMaxMemberNumber();
 	}
 
 }

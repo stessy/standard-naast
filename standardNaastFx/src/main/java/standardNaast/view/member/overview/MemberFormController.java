@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -82,9 +81,9 @@ public class MemberFormController {
 
 	private PersonModel model;
 
-	private Stage dialogStage;
-
 	private final List<String> validationErrors = new ArrayList<>();
+
+	private MembersOverviewController parentController;
 
 	public void fillForm(final PersonModel model) {
 		this.model = model;
@@ -119,6 +118,7 @@ public class MemberFormController {
 			memberFormDialog.setTitle("Membre");
 			memberFormDialog.initModality(Modality.APPLICATION_MODAL);
 			controller.setDialogStage(memberFormDialog);
+			controller.setParentController(this.parentController);
 			final Scene scene = new Scene(rootPane);
 			memberFormDialog.setScene(scene);
 			memberFormDialog.showAndWait();
@@ -129,24 +129,24 @@ public class MemberFormController {
 
 	@FXML
 	private void onUpdate() {
-		this.model.setFirstName(this.firstNameLabel.getText());
-		this.model.setName(this.nameLabel.getText());
-		this.model.setAddress(this.addressLabel.getText());
-		this.model.setPostalCode(this.postalCodeLabel.getText());
-		this.model.setCity(this.cityLabel.getText());
-		this.model.setBirthdate(this.birthDateLabel.getValue());
-		this.model.setEmail(this.emailLabel.getText());
-		this.model.setIdentityCardNumber(this.identityCardNumberLabel.getText());
-		this.model.setMobilePhone(this.mobilePhoneLabel.getText());
-		this.model.setPassportValidity(this.passwordValidityLabel.getValue());
-		this.model.setPhone(this.phoneNumberLabel.getText());
-		this.model.setStudent(this.studentYes.isSelected() ? true : false);
-		this.personneService.savePerson(this.model);
-		AlertDialogUtils.displaySuccessALert("Les informations du membres ont bien été mises à jour");
-	}
-
-	public void setDialogStage(final Stage stage) {
-		this.dialogStage = stage;
+		if (this.isValid()) {
+			this.model.setFirstName(this.firstNameLabel.getText());
+			this.model.setName(this.nameLabel.getText());
+			this.model.setAddress(this.addressLabel.getText());
+			this.model.setPostalCode(this.postalCodeLabel.getText());
+			this.model.setCity(this.cityLabel.getText());
+			this.model.setBirthdate(this.birthDateLabel.getValue());
+			this.model.setEmail(this.emailLabel.getText());
+			this.model.setIdentityCardNumber(this.identityCardNumberLabel.getText());
+			this.model.setMobilePhone(this.mobilePhoneLabel.getText());
+			this.model.setPassportValidity(this.passwordValidityLabel.getValue());
+			this.model.setPhone(this.phoneNumberLabel.getText());
+			this.model.setStudent(this.studentYes.isSelected() ? true : false);
+			this.personneService.savePerson(this.model);
+			AlertDialogUtils.displaySuccessALert("Les informations du membres ont bien été mises à jour");
+		} else {
+			AlertDialogUtils.displayInvalidAlert(null, this.validationErrors);
+		}
 	}
 
 	private boolean isValid() {
@@ -159,19 +159,6 @@ public class MemberFormController {
 		} else {
 			return true;
 		}
-	}
-
-	private void addMember(final ActionEvent event) {
-		if (this.isValid()) {
-			this.personneService.addPerson(this.model);
-		} else {
-			AlertDialogUtils.displayInvalidAlert(this.dialogStage, this.validationErrors);
-		}
-	}
-
-	@FXML
-	private void cancel(final Stage dialogStage) {
-		dialogStage.close();
 	}
 
 	private boolean validateFirstName() {
@@ -200,5 +187,9 @@ public class MemberFormController {
 			valid = false;
 		}
 		return valid;
+	}
+
+	public void setParentController(final MembersOverviewController parentController) {
+		this.parentController = parentController;
 	}
 }

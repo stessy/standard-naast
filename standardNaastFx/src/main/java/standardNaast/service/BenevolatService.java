@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
+import standardNaast.dao.BenevolatDAO;
+import standardNaast.dao.BenevolatDAOImpl;
 import standardNaast.dao.PersonDAO;
 import standardNaast.dao.PersonDAOImpl;
-import standardNaast.dao.SeasonDAO;
-import standardNaast.dao.SeasonDAOImpl;
 import standardNaast.entities.Benevolat;
 import standardNaast.entities.Personne;
 import standardNaast.model.BenevolatModel;
@@ -33,7 +33,7 @@ public class BenevolatService implements Serializable {
 
 	private final PersonDAO personDAO = new PersonDAOImpl();
 
-	private final SeasonDAO seasonDAO = new SeasonDAOImpl();
+	private final BenevolatDAO benevolatDAO = new BenevolatDAOImpl();
 
 	public Benevolat addBenevolat(final BenevolatModel model, final PersonModel personModel) {
 		final Benevolat benevolat = new Benevolat();
@@ -80,7 +80,7 @@ public class BenevolatService implements Serializable {
 
 	public List<BenevolatModel> getBenevolats(final PersonModel model) {
 		final Personne person = this.personDAO.getPerson(model.getPersonneId());
-		final List<Benevolat> benevolats = person.getBenevolatList();
+		final List<Benevolat> benevolats = this.benevolatDAO.getMemberBenevolats(person);
 		final List<BenevolatModel> benevolatsModel = benevolats.stream().map(b -> BenevolatModel.toModel(b))
 				.collect(Collectors.toList());
 		return benevolatsModel;

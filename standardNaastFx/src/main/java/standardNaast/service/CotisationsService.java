@@ -89,6 +89,9 @@ public class CotisationsService implements Serializable {
 		accountingModel.setMontant(new BigDecimal(season.getCotisationAMount()));
 		accountingModel.setType(AccountingType.ENTRY);
 		this.accountingService.addAccounting(accountingModel);
+		final Long maxMemberNumber = this.personDAO.getMaxMemberNumber();
+		person.setMemberNumber(maxMemberNumber + 1);
+		this.personDAO.updatePerson(person);
 		return MemberCotisationsModel.toModel(memberCotisation);
 
 	}

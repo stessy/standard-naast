@@ -55,18 +55,19 @@ public class MembersTableController {
 
 	@FXML
 	private void initialize() {
-		final List<PersonModel> allMembers = this.personneService.findAllPerson(false);
-		this.buildModel(allMembers);
-		this.bindProperties();
-		this.installFiltering();
+		this.buildModel();
 	}
 
-	private void buildModel(final List<PersonModel> allMembers) {
+	public void buildModel() {
+		final List<PersonModel> allMembers = this.personneService.findAllPerson(false);
+		this.memberList.clear();
 		for (final PersonModel model : allMembers) {
 			this.memberList.add(model);
 		}
 
 		this.membersTable.setItems(this.memberList);
+		this.bindProperties();
+		this.installFiltering();
 	}
 
 	private void bindProperties() {

@@ -24,4 +24,6 @@ public interface AbonnementDAO {
 	List<Abonnement> getPreviousAbonnement(Season previousSeason, Personne personne, CompetitionType competitionType);
 
 	List<Abonnement> getPurchasableAbonnements(String season);
+
+	List<Abonnement> getMemberAbonnements(Personne person);
 }

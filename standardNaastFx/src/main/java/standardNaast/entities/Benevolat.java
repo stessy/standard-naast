@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,6 +27,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "BENEVOLAT")
 @Access(AccessType.FIELD)
+@NamedQueries({ @NamedQuery(name = "getMemberBenevolats", query = "select b from Benevolat b where b.personne = :person") })
 public class Benevolat implements Serializable {
 
 	@Column(name = "MONTANT")

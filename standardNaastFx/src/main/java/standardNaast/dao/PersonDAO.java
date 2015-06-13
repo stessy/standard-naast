@@ -16,4 +16,6 @@ public interface PersonDAO {
 
 	Personne getPersonneByMemberNumber(long memberNumber);
 
+	Long getMaxMemberNumber();
+
 }

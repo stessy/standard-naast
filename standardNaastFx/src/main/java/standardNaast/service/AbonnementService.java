@@ -197,8 +197,8 @@ public class AbonnementService implements Serializable {
 
 	public List<MemberAbonnementModel> getMemberAbonnements(final PersonModel personModel) {
 		final Personne person = this.entityManager.find(Personne.class, personModel.getPersonneId());
-		final List<Abonnement> abonnementList = person.getAbonnementList();
-		abonnementList.stream().forEach(a -> this.entityManager.refresh(a));
+		final List<Abonnement> abonnementList = this.abonnementDao.getMemberAbonnements(person);
+		// abonnementList.stream().forEach(a -> this.entityManager.refresh(a));
 		return abonnementList.stream().filter(new Predicate<Abonnement>() {
 
 			@Override

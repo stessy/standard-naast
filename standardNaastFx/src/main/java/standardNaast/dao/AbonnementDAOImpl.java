@@ -90,4 +90,12 @@ public class AbonnementDAOImpl implements AbonnementDAO {
 		return query.getResultList();
 	}
 
+	@Override
+	public List<Abonnement> getMemberAbonnements(final Personne person) {
+		final TypedQuery<Abonnement> query = this.entityManager.createNamedQuery("getMemberAbonnements",
+				Abonnement.class);
+		query.setParameter("person", person);
+		return query.getResultList();
+	}
+
 }

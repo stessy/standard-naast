@@ -74,7 +74,7 @@
    <bottom>
       <ButtonBar prefHeight="0.0" prefWidth="600.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button fx:id="addButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#onAddMember" text="Ajouter" />
+          <Button fx:id="addButton" defaultButton="true" disable="false" mnemonicParsing="false" onAction="#onAddMember" text="Ajouter" />
                         <Group />
                         <Button fx:id="updateButton" disable="true" mnemonicParsing="false" onAction="#onUpdate" text="Modifier" />
         </buttons>

@@ -72,6 +72,8 @@ public class NewMemberFormController {
 
 	private final List<String> validationErrors = new ArrayList<>();
 
+	private MembersOverviewController parentController;
+
 	@FXML
 	public void initialize() {
 		this.birthDateLabel.setPromptText(DateFormat.DDSMMSYYYY);
@@ -110,7 +112,9 @@ public class NewMemberFormController {
 			model.setPhone(this.phoneNumberLabel.getText());
 			model.setPostalCode(this.postalCodeLabel.getText());
 			model.setStudent(this.studentYes.isSelected() ? true : false);
-			this.personneService.addPerson(model);
+			final PersonModel addPerson = this.personneService.addPerson(model);
+			this.parentController.onAddedMember(addPerson);
+			this.dialogStage.close();
 		} else {
 			AlertDialogUtils.displayInvalidAlert(this.dialogStage, this.validationErrors);
 		}
@@ -147,5 +151,9 @@ public class NewMemberFormController {
 			valid = false;
 		}
 		return valid;
+	}
+
+	public void setParentController(final MembersOverviewController parentController) {
+		this.parentController = parentController;
 	}
 }

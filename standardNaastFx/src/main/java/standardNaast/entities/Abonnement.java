@@ -34,7 +34,8 @@ import standardNaast.types.AbonnementStatus;
 @NamedQueries({
 		@NamedQuery(name = "getAbonnementsPerSeason", query = "select A from Abonnement A where A.season = :season"),
 		@NamedQuery(name = "getAbonnementsPreviousSeason", query = "select A from Abonnement A join AbonnementPrices P where A.season = :season and A.personne = :person and P.typeCompetition = :competitionType"),
-		@NamedQuery(name = "getPurchasableAbonnements", query = "select A from Abonnement A where A.season = :season and A.paye = true and A.abonnementStatus = standardNaast.types.AbonnementStatus.NEW") })
+		@NamedQuery(name = "getPurchasableAbonnements", query = "select A from Abonnement A where A.season = :season and A.paye = true and A.abonnementStatus = standardNaast.types.AbonnementStatus.NEW"),
+		@NamedQuery(name = "getMemberAbonnements", query = "select A from Abonnement A where A.personne = :person") })
 public class Abonnement implements Serializable, Comparable<Abonnement> {
 
 	private static final long serialVersionUID = 3083188497640356561L;

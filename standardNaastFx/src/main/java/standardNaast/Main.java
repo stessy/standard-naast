@@ -1,8 +1,10 @@
 package standardNaast;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -10,6 +12,7 @@ import javafx.stage.Stage;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.h2.tools.Backup;
 
 import standardNaast.utils.DbUtils;
 import standardNaast.view.member.overview.MembersOverview;
@@ -23,6 +26,14 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage primaryStage) {
+		Main.LOG.warn("Backing up database before continuing");
+		try {
+			Backup.execute("..\\database\\backup\\backup", "..\\database\\h2\\dbs", "standard_naast", false);
+		} catch (final SQLException e) {
+			Main.LOG.error("The database could not be backed up due to : ", e);
+			Platform.exit();
+		}
+		Main.LOG.warn("Database backed up");
 		Main.LOG.warn("Starting Liquibase migration");
 		DbUtils.runLiquibase();
 		Main.LOG.warn("Starting Application");

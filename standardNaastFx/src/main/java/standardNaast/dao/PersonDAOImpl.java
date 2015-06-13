@@ -74,4 +74,12 @@ public class PersonDAOImpl implements PersonDAO {
 		return EntityManagerFactoryHelper.getFactory().createEntityManager();
 	}
 
+	@Override
+	public Long getMaxMemberNumber() {
+		final TypedQuery<Long> query = this.getEntityManager()
+				.createNamedQuery("getMaxMemberNumber", Long.class);
+		return query.getSingleResult();
+
+	}
+
 }

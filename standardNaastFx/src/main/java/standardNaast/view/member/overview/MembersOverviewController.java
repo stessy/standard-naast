@@ -46,6 +46,7 @@ public class MembersOverviewController {
 	@FXML
 	private void initialize() {
 		this.addMembersTableEvent();
+		this.propagateController();
 	}
 
 	private void addMembersTableEvent() {
@@ -66,5 +67,18 @@ public class MembersOverviewController {
 		this.memberAbonnementsController.onSelectedMember(personModel);
 		this.memberBenevolatsController.onMemberSelected(personModel);
 		this.memberCotisationsController.onSelectedMember(personModel);
+	}
+
+	public void onAddedMember(final PersonModel addPerson) {
+		this.membersTableController.buildModel();
+	}
+
+	public MembersTableController getMembersTableController() {
+		return this.membersTableController;
+	}
+
+	private void propagateController() {
+		this.memberFormController.setParentController(this);
+		this.memberCotisationsController.setParentController(this);
 	}
 }
