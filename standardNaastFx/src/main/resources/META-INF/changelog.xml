@@ -10,4 +10,5 @@
 	<include file="META-INF/liquibaseChangelog/005_accounting.xml" />
 	<include file="META-INF/liquibaseChangelog/006_migration_2.xml" />
 	<include file="META-INF/liquibaseChangelog/007_personne_cotisation_sequence.xml" />
+	<include file="META-INF/liquibaseChangelog/008_match.xml" />
 </databaseChangeLog>

@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,6 +25,7 @@ import javax.persistence.TemporalType;
 import standardNaast.types.CompetitionType;
 import standardNaast.types.MatchType;
 import standardNaast.types.Place;
+import standardNaast.types.PriceType;
 
 /**
  * The persistent class for the "MATCH" database table.
@@ -35,8 +37,9 @@ import standardNaast.types.Place;
 public class Match implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "MATCH_ID", unique = true, nullable = false, precision = 10)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MATCH_SEQ")
+	@SequenceGenerator(name = "MATCH_SEQ", sequenceName = "MATCH_SEQ")
+	@Column(name = "MATCH_ID", unique = true, nullable = false)
 	private long id;
 
 	@JoinColumn(name = "OPPONENT", nullable = false)
@@ -64,9 +67,13 @@ public class Match implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private CompetitionType typeCompetition;
 
-	@Column(name = "MATCH_TYPE", nullable = true, length = MatchType.MATCH_TYPE_MAX_LENGTH)
+	@Column(name = "MATCH_TYPE", length = MatchType.MATCH_TYPE_MAX_LENGTH)
 	@Enumerated(EnumType.STRING)
 	private MatchType matchType;
+
+	@Column(name = "PRICE_TYPE", length = PriceType.MAX_LENGTH)
+	@Enumerated(EnumType.STRING)
+	private PriceType priceType;
 
 	@OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
 	private List<PersonnesMatch> personnesMatches;
@@ -118,7 +125,7 @@ public class Match implements Serializable {
 		return this.opponent;
 	}
 
-	public void setOpponent(Team opponent) {
+	public void setOpponent(final Team opponent) {
 		this.opponent = opponent;
 	}
 
@@ -126,7 +133,7 @@ public class Match implements Serializable {
 		return this.place;
 	}
 
-	public void setPlace(Place place) {
+	public void setPlace(final Place place) {
 		this.place = place;
 	}
 
