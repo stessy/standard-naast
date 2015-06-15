@@ -3,7 +3,21 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 	<changeSet id="1" author="stessy">
-		<sql><![CDATA[create sequence match_seq restart with 10000 increment by 50]]></sql>
+		<sql><![CDATA[create sequence match_seq start with 10000 increment by 50]]></sql>
 	</changeSet>
-	
+	<changeSet id="2" author="stessy">
+		<sql><![CDATA[alter table match add price_type varchar(6 char)]]></sql>
+	</changeSet>
+	<changeSet id="3" author="stessy">
+		<sql><![CDATA[update match set match_type = 'GROUP_MATCH' where type_match = 12]]></sql>
+	</changeSet>
+	<changeSet id="4" author="stessy">
+		<sql><![CDATA[update match set price_type = 'TOP' where type_match in (2,3)]]></sql>
+	</changeSet>
+	<changeSet id="5" author="stessy">
+		<sql><![CDATA[update match set price_type = 'NORMAL' where type_match = 1]]></sql>
+	</changeSet>
+	<changeSet id="6" author="stessy">
+		<sql><![CDATA[alter table match drop column type_match]]></sql>
+	</changeSet>
 </databaseChangeLog>
