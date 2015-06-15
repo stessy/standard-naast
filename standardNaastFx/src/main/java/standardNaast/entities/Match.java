@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -59,10 +58,6 @@ public class Match implements Serializable {
 	@JoinColumn(name = "SAISON_ID", nullable = false)
 	private Season season;
 
-	@ManyToOne
-	@JoinColumn(name = "TYPE_MATCH", nullable = false)
-	private TypeMatch typeMatch;
-
 	@Column(name = "COMPETITION_TYPE", nullable = false, length = CompetitionType.COMPETITION_TYPE_MAX_LENGTH)
 	@Enumerated(EnumType.STRING)
 	private CompetitionType typeCompetition;
@@ -105,14 +100,6 @@ public class Match implements Serializable {
 		this.commandePlaces = commandePlaces;
 	}
 
-	public TypeMatch getTypeMatch() {
-		return this.typeMatch;
-	}
-
-	public void setTypeMatch(final TypeMatch typeMatch) {
-		this.typeMatch = typeMatch;
-	}
-
 	public List<PersonnesMatch> getPersonnesMatches() {
 		return this.personnesMatches;
 	}
@@ -139,5 +126,21 @@ public class Match implements Serializable {
 
 	public long getId() {
 		return this.id;
+	}
+
+	public MatchType getMatchType() {
+		return this.matchType;
+	}
+
+	public void setMatchType(final MatchType matchType) {
+		this.matchType = matchType;
+	}
+
+	public PriceType getPriceType() {
+		return this.priceType;
+	}
+
+	public void setPriceType(final PriceType priceType) {
+		this.priceType = priceType;
 	}
 }
