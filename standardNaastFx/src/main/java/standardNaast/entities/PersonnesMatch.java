@@ -5,10 +5,13 @@ import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -16,19 +19,21 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "PERSONNES_MATCH")
+@Table(name = "PERSONNE_MATCH")
 @Access(AccessType.FIELD)
 public class PersonnesMatch implements Serializable {
 
 	/** The serialVersionUID. */
 	private static final long serialVersionUID = 228812753302395213L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PERSONNE_MATCH_SEQ")
+	@SequenceGenerator(name = "PERSONNE_MATCH_SEQ", sequenceName = "PERSONNE_MATCH_SEQ")
+	private Long id;
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "PERSONNE_ID", referencedColumnName = "PERSONNE_ID", insertable = false, updatable = false)
 	private Personne personne;
-
-	@EmbeddedId
-	private PersonnesMatchPK id;
 
 	@ManyToOne
 	@JoinColumn(name = "MATCH_ID", nullable = false, insertable = false, updatable = false)
@@ -48,14 +53,6 @@ public class PersonnesMatch implements Serializable {
 		this.personne = personne;
 	}
 
-	public PersonnesMatchPK getId() {
-		return this.id;
-	}
-
-	public void setId(final PersonnesMatchPK id) {
-		this.id = id;
-	}
-
 	public Match getMatch() {
 		return this.match;
 	}
@@ -71,4 +68,9 @@ public class PersonnesMatch implements Serializable {
 	public void setCarTravelAmount(final int carTravelAmount) {
 		this.carTravelAmount = carTravelAmount;
 	}
+
+	public Long getId() {
+		return this.id;
+	}
+
 }

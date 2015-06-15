@@ -20,4 +20,25 @@
 	<changeSet id="6" author="stessy">
 		<sql><![CDATA[alter table match drop column type_match]]></sql>
 	</changeSet>
+	<changeSet id="7" author="stessy">
+		<sql><![CDATA[create sequence personne_match_seq start with 100 increment by 50]]></sql>
+	</changeSet>
+	<changeSet id="8" author="stessy">
+		<sql><![CDATA[alter table personnes_match add id bigint ]]></sql>
+	</changeSet>
+	<changeSet id="9" author="stessy">
+		<sql><![CDATA[update personnes_match set id = personne_match_seq.nextval]]></sql>
+	</changeSet>
+	<changeSet id="10" author="stessy">
+		<sql><![CDATA[alter table PERSONNES_MATCH drop constraint constraint_34]]></sql>
+	</changeSet>
+	<changeSet id="11" author="stessy">
+		<sql><![CDATA[alter table PERSONNES_MATCH modify id bigint not null]]></sql>
+	</changeSet>
+	<changeSet id="12" author="stessy">
+		<sql><![CDATA[alter table personnes_match add constraint personnes_match_pk primary key (id)]]></sql>
+	</changeSet>
+	<changeSet id="13" author="stessy">
+		<sql><![CDATA[alter table personnes_match rename to personne_match]]></sql>
+	</changeSet>
 </databaseChangeLog>

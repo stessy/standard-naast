@@ -19,13 +19,8 @@
 		<class>standardNaast.entities.Match</class>
 		<class>standardNaast.entities.PersonneCotisation</class>
 		<class>standardNaast.entities.PersonnesMatch</class>
-		<class>standardNaast.entities.PersonnesMatchPK</class>
 		<class>standardNaast.entities.TravelPrice</class>
-		<class>standardNaast.entities.PrixPlace</class>
 		<class>standardNaast.entities.SaisonEquipe</class>
-		<class>standardNaast.entities.TypeCompetition</class>
-		<class>standardNaast.entities.TypeMatch</class>
-		<class>standardNaast.entities.TypePersonne</class>
 		<class>standardNaast.entities.PersonnesCotisationsId</class>
 		<class>standardNaast.entities.Prices</class>
 		<class>standardNaast.entities.AbonnementPrices</class>
