@@ -4,29 +4,22 @@ import java.util.ResourceBundle;
 
 public enum CompetitionType {
 
-	CHAMPIONSHIP("competitionType.championship"),
-	CHAMPIONS_LEAGUE("competitionType.championsLeague", MatchType.values()),
-	EUROPA_LEAGUE("competitionType.europaLeague", MatchType.values()),
-	CUP("competition.cup", MatchType.values()),
-	LEAGUE_CUP("competition.leagueCup", MatchType.values()),
-	PLAYOFFS("competitionType.playoffs");
+	CHAMPIONSHIP(),
+	CHAMPIONS_LEAGUE(MatchType.values()),
+	EUROPA_LEAGUE(MatchType.values()),
+	CUP(MatchType.values()),
+	LEAGUE_CUP(MatchType.values()),
+	PLAYOFFS();
 
 	public static final int COMPETITION_TYPE_MAX_LENGTH = 16;
 
-	private String name;
-
 	private MatchType[] matchType;
 
-	private ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+	private final ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
 
-	private CompetitionType(final String name, final MatchType... matchType) {
-		this.name = name;
+	private CompetitionType(final MatchType... matchType) {
 		this.matchType = matchType;
 
-	}
-
-	public String getName() {
-		return this.name;
 	}
 
 	public MatchType[] getMatchType() {
@@ -35,7 +28,7 @@ public enum CompetitionType {
 
 	@Override
 	public String toString() {
-		return this.bundle.getString(this.getName());
+		return this.bundle.getString(this.name());
 	}
 
 }

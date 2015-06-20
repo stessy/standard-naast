@@ -11,4 +11,5 @@
 	<include file="META-INF/liquibaseChangelog/006_migration_2.xml" />
 	<include file="META-INF/liquibaseChangelog/007_personne_cotisation_sequence.xml" />
 	<include file="META-INF/liquibaseChangelog/008_match.xml" />
+	<include file="META-INF/liquibaseChangelog/009_team.xml" />
 </databaseChangeLog>

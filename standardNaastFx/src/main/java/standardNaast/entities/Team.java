@@ -14,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -23,12 +26,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "EQUIPE")
 @Access(AccessType.FIELD)
+@NamedQueries({ @NamedQuery(name = "findPerSeason", query = "select t from Team t join Season s where s.id = :id") })
 public class Team implements Serializable, Comparable<Team> {
 
 	private static final long serialVersionUID = 7539343801481344476L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TEAM_SEQ")
+	@SequenceGenerator(name = "TEAM_SEQ", sequenceName = "TEAM_SEQ")
 	@Column(name = "EQUIPE_ID", unique = true, nullable = false, precision = 22)
 	private long equipeId;
 

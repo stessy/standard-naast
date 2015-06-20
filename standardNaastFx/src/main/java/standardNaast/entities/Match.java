@@ -52,9 +52,6 @@ public class Match implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Place place;
 
-	@OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
-	private List<CommandePlace> commandePlaces;
-
 	@JoinColumn(name = "SAISON_ID", nullable = false)
 	private Season season;
 
@@ -90,14 +87,6 @@ public class Match implements Serializable {
 
 	public void setDateMatch(final Date dateMatch) {
 		this.dateMatch = dateMatch;
-	}
-
-	public List<CommandePlace> getCommandePlaces() {
-		return this.commandePlaces;
-	}
-
-	public void setCommandePlaces(final List<CommandePlace> commandePlaces) {
-		this.commandePlaces = commandePlaces;
 	}
 
 	public List<PersonnesMatch> getPersonnesMatches() {
