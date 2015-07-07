@@ -8,9 +8,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import standardNaast.model.SeasonModel;
 import standardNaast.model.TravelModel;
 import standardNaast.service.TravelService;
+import standardNaast.types.PersonTravelType;
+import standardNaast.types.Place;
 
 public class SeasonTravelsTableController {
 
@@ -27,10 +30,10 @@ public class SeasonTravelsTableController {
 	private TableColumn<TravelModel, Long> amount;
 
 	@FXML
-	private TableColumn<TravelModel, String> category;
+	private TableColumn<TravelModel, PersonTravelType> category;
 
 	@FXML
-	private TableColumn<TravelModel, String> place;
+	private TableColumn<TravelModel, Place> place;
 
 	@FXML
 	private TableColumn<TravelModel, Boolean> member;
@@ -71,6 +74,15 @@ public class SeasonTravelsTableController {
 		final List<TravelModel> travelsPerSeason = this.travelService.getTravelsPerSeason(selectedSeason);
 		this.travels.addAll(travelsPerSeason);
 		this.travelsTable.setItems(this.travels);
+		this.bindProperties();
+	}
+
+	private void bindProperties() {
+		this.member.setCellFactory(CheckBoxTableCell.forTableColumn(this.member));
+		this.amount.setCellValueFactory(cellData -> cellData.getValue().amountProperty().asObject());
+		this.category.setCellValueFactory(cellData -> cellData.getValue().typePersonneProperty());
+		this.place.setCellValueFactory(cellData -> cellData.getValue().placeProperty());
+		this.member.setCellValueFactory(cellData -> cellData.getValue().memberProperty());
 	}
 
 }

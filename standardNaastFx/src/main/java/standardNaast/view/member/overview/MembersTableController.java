@@ -51,7 +51,7 @@ public class MembersTableController {
 	@FXML
 	private TableColumn<PersonModel, String> mobilePhoneMemberColumn;
 
-	private final FirstNameHeaderColumnFiltering firstNameHeaderColumnFiltering = new FirstNameHeaderColumnFiltering();
+	private final NameHeaderColumnFiltering nameHeaderColumnFiltering = new NameHeaderColumnFiltering();
 
 	@FXML
 	private void initialize() {
@@ -79,22 +79,22 @@ public class MembersTableController {
 		this.cityMemberColumn.setCellValueFactory(cellData -> cellData.getValue().cityProperty());
 		this.phoneNumberMemberColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
 		this.mobilePhoneMemberColumn.setCellValueFactory(cellData -> cellData.getValue().mobilePhoneProperty());
-		this.firstNameMemberColumn.setGraphic(this.firstNameHeaderColumnFiltering);
+		this.memberNameColumn.setGraphic(this.nameHeaderColumnFiltering);
 	}
 
-	private class FirstNameHeaderColumnFiltering extends VBox {
-		private final Label firstNameLabel = new Label("Prénom");
+	private class NameHeaderColumnFiltering extends VBox {
+		private final Label nameLabel = new Label("Nom");
 
-		private final TextField firstNameFieldFiltering = new TextField();
+		private final TextField nameFieldFiltering = new TextField();
 
-		public FirstNameHeaderColumnFiltering() {
-			this.getChildren().addAll(this.firstNameLabel, this.firstNameFieldFiltering);
+		public NameHeaderColumnFiltering() {
+			this.getChildren().addAll(this.nameLabel, this.nameFieldFiltering);
 			this.setPadding(new Insets(5));
 			this.setAlignment(Pos.TOP_CENTER);
 		}
 
-		public TextField getFirstNameFieldFiltering() {
-			return this.firstNameFieldFiltering;
+		public TextField getNameFieldFiltering() {
+			return this.nameFieldFiltering;
 		}
 	}
 
@@ -102,7 +102,7 @@ public class MembersTableController {
 		final FilteredList<PersonModel> filteredData = new FilteredList<>(this.memberList, p -> true);
 
 		// 2. Set the filter Predicate whenever the filter changes.
-		this.firstNameHeaderColumnFiltering.getFirstNameFieldFiltering().textProperty()
+		this.nameHeaderColumnFiltering.getNameFieldFiltering().textProperty()
 				.addListener((observable, oldValue, newValue) -> {
 					filteredData.setPredicate(person -> {
 						// If filter text is empty, display all persons.
@@ -112,7 +112,7 @@ public class MembersTableController {
 
 							final String lowerCaseFilter = newValue.toUpperCase();
 
-							if (person.getFirstName().toUpperCase().contains(lowerCaseFilter)) {
+							if (person.getName().toUpperCase().contains(lowerCaseFilter)) {
 								return true; // Filter matches first
 												// name.
 							}

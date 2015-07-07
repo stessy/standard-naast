@@ -1,21 +1,14 @@
 package standardNaast.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -26,7 +19,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "EQUIPE")
 @Access(AccessType.FIELD)
-@NamedQueries({ @NamedQuery(name = "findPerSeason", query = "select t from Team t join Season s where s.id = :id") })
 public class Team implements Serializable, Comparable<Team> {
 
 	private static final long serialVersionUID = 7539343801481344476L;
@@ -40,10 +32,6 @@ public class Team implements Serializable, Comparable<Team> {
 	@Column(name = "NOM_EQUIPE", nullable = false, length = 150)
 	private String nomEquipe;
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "SAISON_EQUIPE", joinColumns = { @JoinColumn(name = "EQUIPE_ID") }, inverseJoinColumns = { @JoinColumn(name = "SAISON_ID") })
-	private List<Season> saisons;
-
 	public long getEquipeId() {
 		return this.equipeId;
 	}
@@ -54,14 +42,6 @@ public class Team implements Serializable, Comparable<Team> {
 
 	public void setNomEquipe(final String nomEquipe) {
 		this.nomEquipe = nomEquipe;
-	}
-
-	public List<Season> getSaisons() {
-		return this.saisons;
-	}
-
-	public void setSaisons(final List<Season> saisons) {
-		this.saisons = saisons;
 	}
 
 	@Override

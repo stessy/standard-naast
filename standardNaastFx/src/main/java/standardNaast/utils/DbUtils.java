@@ -3,9 +3,9 @@ package standardNaast.utils;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Set;
+
+import javax.persistence.EntityManager;
 
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -14,11 +14,9 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.util.file.FilenameUtils;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import standardNaast.exception.TechnicalException;
+
+import com.standardnaast.persistence.EntityManagerFactoryHelper;
 
 /**
  * Description: Database utils.
@@ -28,7 +26,7 @@ import standardNaast.exception.TechnicalException;
  */
 public class DbUtils {
 
-	private static final Logger LOG = LogManager.getLogger(DbUtils.class);
+	private static final EntityManager entityManager = EntityManagerFactoryHelper.getFactory().createEntityManager();
 
 	private static final String CHANGELOG = "META-INF/changelog.xml";
 
@@ -43,46 +41,34 @@ public class DbUtils {
 	 */
 	public static void runLiquibase() {
 		try {
+			DbUtils.entityManager.getTransaction().begin();
+			final Connection connection = DbUtils.entityManager.unwrap(Connection.class);
 			final Database database = new H2Database();
-			final JdbcConnection jdbcConnection = new JdbcConnection(
-					DbUtils.getConnection());
+			final JdbcConnection jdbcConnection = new JdbcConnection(connection);
 			database.setConnection(jdbcConnection);
 
 			// resource accessor
 			final ClassLoaderResourceAccessor resourceAccessor = new ClassLoaderResourceAccessor() {
 
 				@Override
-				public Set<String> list(String relativeTo, final String path,
-						final boolean includeFiles,
-						final boolean includeDirectories,
-						final boolean recursive) throws IOException {
+				public Set<String> list(String relativeTo, final String path, final boolean includeFiles,
+						final boolean includeDirectories, final boolean recursive)
+						throws IOException {
+
+					System.out.println(relativeTo);
 					relativeTo = FilenameUtils.getFullPath(relativeTo);
-					return super.list(relativeTo, path, includeFiles,
-							includeDirectories, recursive);
+					System.out.println(relativeTo);
+					System.out.println(path);
+					return super.list(relativeTo, path, includeFiles, includeDirectories, recursive);
 				}
 			};
-			// run the changelogs
-			final Liquibase liquibase = new Liquibase(DbUtils.CHANGELOG,
-					resourceAccessor, database);
-			liquibase.update("");
-			jdbcConnection.commit();
-			jdbcConnection.close();
 
+			// run the changelogs
+			final Liquibase liquibase = new Liquibase(DbUtils.CHANGELOG, resourceAccessor, database);
+			liquibase.update("");
+			DbUtils.entityManager.getTransaction().commit();
 		} catch (final LiquibaseException liquibaseException) {
 			throw new TechnicalException(liquibaseException);
-		}
-	}
-
-	private static final Connection getConnection() {
-		try {
-			Class.forName("org.h2.Driver");
-			final Connection conn = DriverManager.getConnection(
-					"jdbc:h2:file:../database/h2/dbs/standard_naast", "sa", "");
-			return conn;
-		} catch (ClassNotFoundException | SQLException e) {
-			DbUtils.LOG.error(
-					"Unable to acquire database connection due to : ", e);
-			throw new RuntimeException();
 		}
 	}
 }

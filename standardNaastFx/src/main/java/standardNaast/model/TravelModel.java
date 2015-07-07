@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import standardNaast.entities.TravelPrice;
-import standardNaast.types.PersonType;
+import standardNaast.types.PersonTravelType;
 import standardNaast.types.Place;
 
 public class TravelModel {
@@ -18,7 +18,7 @@ public class TravelModel {
 
 	private LongProperty amount = new SimpleLongProperty();
 
-	private ObjectProperty<PersonType> typePersonne = new SimpleObjectProperty<>();
+	private ObjectProperty<PersonTravelType> typePersonne = new SimpleObjectProperty<>();
 
 	private ObjectProperty<Place> place = new SimpleObjectProperty<>();
 
@@ -32,7 +32,7 @@ public class TravelModel {
 		return this.amount;
 	}
 
-	public ObjectProperty<PersonType> typePersonneProperty() {
+	public ObjectProperty<PersonTravelType> typePersonneProperty() {
 		return this.typePersonne;
 	}
 
@@ -60,11 +60,11 @@ public class TravelModel {
 		this.amount.set(amount);
 	}
 
-	public PersonType getTypePersonne() {
+	public PersonTravelType getTypePersonne() {
 		return this.typePersonne.get();
 	}
 
-	public void setTypePersonne(final PersonType typePersonne) {
+	public void setTypePersonne(final PersonTravelType typePersonne) {
 		this.typePersonne.set(typePersonne);
 	}
 
@@ -88,7 +88,7 @@ public class TravelModel {
 		final TravelPrice price = new TravelPrice();
 		price.setMembre(model.getMember());
 		price.setMontant(BigDecimal.valueOf(model.getAmount()));
-		price.setPersonType(model.getTypePersonne());
+		price.setPersonTravelType(model.getTypePersonne());
 		price.setPlace(model.getPlace());
 		price.setSeason(SeasonModel.of(model.getSeason()));
 		return price;
@@ -100,7 +100,7 @@ public class TravelModel {
 		model.setAmount(price.getMontant().longValue());
 		model.setMember(price.isMembre());
 		model.setPlace(price.getPlace());
-		model.setTypePersonne(price.getPersonType());
+		model.setTypePersonne(price.getPersonTravelType());
 		return model;
 	}
 }

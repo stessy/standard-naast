@@ -92,6 +92,13 @@ public class CotisationsService implements Serializable {
 		final Long maxMemberNumber = this.personDAO.getMaxMemberNumber();
 		person.setMemberNumber(maxMemberNumber + 1);
 		this.personDAO.updatePerson(person);
+		final List<Personne> allPersons = this.personDAO.getAllPersons(false);
+		Collections.sort(allPersons);
+		int counter = 0;
+		for (final Personne personne : allPersons) {
+			personne.setMemberNumber(++counter);
+			this.personDAO.updatePerson(personne);
+		}
 		return MemberCotisationsModel.toModel(memberCotisation);
 
 	}

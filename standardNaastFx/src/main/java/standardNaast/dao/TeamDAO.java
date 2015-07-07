@@ -3,6 +3,7 @@ package standardNaast.dao;
 import java.util.List;
 
 import standardNaast.entities.Season;
+import standardNaast.entities.SeasonTeam;
 import standardNaast.entities.Team;
 
 public interface TeamDAO {
@@ -13,6 +14,10 @@ public interface TeamDAO {
 
 	Team updateTeam(Team team);
 
-	List<Team> getTeamsPerSeason(Season season);
+	List<SeasonTeam> getTeamsPerSeason(Season season);
+
+	Team getTeam(Long id);
+
+	void addTeamToSeason(Team team, Season season);
 
 }

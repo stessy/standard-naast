@@ -48,4 +48,47 @@ public class TeamModel {
 		model.setTeam(entity.getNomEquipe());
 		return model;
 	}
+
+	@Override
+	public String toString() {
+		return this.getTeam();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.getId() == null) ? 0 : this.getId().hashCode());
+		result = prime * result + ((this.getTeam() == null) ? 0 : this.getTeam().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final TeamModel other = (TeamModel) obj;
+		if (this.getId() == null) {
+			if (other.getId() != null) {
+				return false;
+			}
+		} else if (!this.getId().equals(other.getId())) {
+			return false;
+		}
+		if (this.getTeam() == null) {
+			if (other.getTeam() != null) {
+				return false;
+			}
+		} else if (!this.getTeam().equals(other.getTeam())) {
+			return false;
+		}
+		return true;
+	}
 }

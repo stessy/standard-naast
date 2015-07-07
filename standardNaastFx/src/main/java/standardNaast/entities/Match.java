@@ -132,4 +132,20 @@ public class Match implements Serializable {
 	public void setPriceType(final PriceType priceType) {
 		this.priceType = priceType;
 	}
+
+	public Season getSeason() {
+		return this.season;
+	}
+
+	public void setSeason(final Season season) {
+		this.season = season;
+	}
+
+	public CompetitionType getTypeCompetition() {
+		return this.typeCompetition;
+	}
+
+	public void setTypeCompetition(final CompetitionType typeCompetition) {
+		this.typeCompetition = typeCompetition;
+	}
 }

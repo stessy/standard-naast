@@ -20,7 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import standardNaast.types.PersonType;
+import standardNaast.types.PersonTravelType;
 import standardNaast.types.Place;
 
 /**
@@ -52,7 +52,7 @@ public class TravelPrice implements Serializable {
 
 	@Column(name = "TYPE_PERSONNE")
 	@Enumerated(EnumType.STRING)
-	private PersonType personType;
+	private PersonTravelType personTravelType;
 
 	@Id
 	@SequenceGenerator(name = "Travel_Sequence_Generator", sequenceName = "TRAVEL_PRICE_SEQ", allocationSize = 1)
@@ -99,12 +99,12 @@ public class TravelPrice implements Serializable {
 		this.season = season;
 	}
 
-	public PersonType getPersonType() {
-		return this.personType;
+	public PersonTravelType getPersonTravelType() {
+		return this.personTravelType;
 	}
 
-	public void setPersonType(final PersonType personType) {
-		this.personType = personType;
+	public void setPersonTravelType(final PersonTravelType personTravelType) {
+		this.personTravelType = personTravelType;
 	}
 
 }

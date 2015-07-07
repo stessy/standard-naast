@@ -25,5 +25,38 @@
 	</changeSet>	
 	<changeSet id="8" author="stessy">
 		<sql><![CDATA[alter table travel_price add constraint travel_price_season_fk foreign key (SEASON_ID) references SAISON(SAISON_ID)]]></sql>
-	</changeSet>	
+	</changeSet>
+	<changeSet id="9" author="stessy">
+		<sql><![CDATA[INSERT INTO TRAVEL_PRICE(ID, SEASON_ID, MONTANT, TYPE_PERSONNE, PLACE, MEMBRE) VALUES (TRAVEL_PRICE_SEQ.NEXTVAL, '2014-2015', 11, 'MAJOR', 'DOMICILE', 0)]]></sql>
+	</changeSet>
+	<changeSet id="10" author="stessy">
+		<sql><![CDATA[INSERT INTO TRAVEL_PRICE(ID, SEASON_ID, MONTANT, TYPE_PERSONNE, PLACE, MEMBRE) VALUES (TRAVEL_PRICE_SEQ.NEXTVAL, '2014-2015', 9, 'MAJOR', 'DOMICILE', 1)]]></sql>
+	</changeSet>
+	<changeSet id="11" author="stessy">
+		<sql><![CDATA[INSERT INTO TRAVEL_PRICE(ID, SEASON_ID, MONTANT, TYPE_PERSONNE, PLACE, MEMBRE) VALUES (TRAVEL_PRICE_SEQ.NEXTVAL, '2014-2015', 10, 'MAJOR', 'DEPLACEMENT', 1)]]></sql>
+	</changeSet>
+	<changeSet id="12" author="stessy">
+		<sql><![CDATA[INSERT INTO TRAVEL_PRICE(ID, SEASON_ID, MONTANT, TYPE_PERSONNE, PLACE, MEMBRE) VALUES (TRAVEL_PRICE_SEQ.NEXTVAL, '2014-2015', 12, 'MAJOR', 'DEPLACEMENT', 0)]]></sql>
+	</changeSet>
+	<changeSet id="13" author="stessy">
+		<sql><![CDATA[INSERT INTO TRAVEL_PRICE(ID, SEASON_ID, MONTANT, TYPE_PERSONNE, PLACE, MEMBRE) VALUES (TRAVEL_PRICE_SEQ.NEXTVAL, '2014-2015', 12, 'MINOR', 'DEPLACEMENT', 0)]]></sql>
+	</changeSet>
+	<changeSet id="14" author="stessy">
+		<sql><![CDATA[INSERT INTO TRAVEL_PRICE(ID, SEASON_ID, MONTANT, TYPE_PERSONNE, PLACE, MEMBRE) VALUES (TRAVEL_PRICE_SEQ.NEXTVAL, '2014-2015', 10, 'MINOR', 'DEPLACEMENT', 1)]]></sql>
+	</changeSet>
+	<changeSet id="15" author="stessy">
+		<sql><![CDATA[INSERT INTO TRAVEL_PRICE(ID, SEASON_ID, MONTANT, TYPE_PERSONNE, PLACE, MEMBRE) VALUES (TRAVEL_PRICE_SEQ.NEXTVAL, '2014-2015', 7, 'MINOR', 'DOMICILE', 1)]]></sql>
+	</changeSet>
+	<changeSet id="16" author="stessy">
+		<sql><![CDATA[INSERT INTO TRAVEL_PRICE(ID, SEASON_ID, MONTANT, TYPE_PERSONNE, PLACE, MEMBRE) VALUES (TRAVEL_PRICE_SEQ.NEXTVAL, '2014-2015', 9, 'MINOR', 'DOMICILE', 0)]]></sql>
+	</changeSet>
+	<changeSet id="17" author="stessy">
+		<sql><![CDATA[alter sequence team_seq restart with 10000 increment by 50]]></sql>
+	</changeSet>
+	<changeSet id="18" author="stessy">
+		<sql><![CDATA[UPDATE TRAVEL_PRICE SET PLACE = 'HOME' WHERE PLACE = 'DOMICILE']]></sql>
+	</changeSet>
+	<changeSet id="19" author="stessy">
+		<sql><![CDATA[UPDATE TRAVEL_PRICE SET PLACE = 'AWAY' WHERE PLACE = 'DEPLACEMENT']]></sql>
+	</changeSet>
 </databaseChangeLog>
