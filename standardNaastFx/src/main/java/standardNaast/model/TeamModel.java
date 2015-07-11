@@ -39,6 +39,7 @@ public class TeamModel {
 	public static Team toEntity(final TeamModel model) {
 		final Team entity = new Team();
 		entity.setNomEquipe(model.getTeam());
+		entity.setEquipeId(model.getId());
 		return entity;
 	}
 

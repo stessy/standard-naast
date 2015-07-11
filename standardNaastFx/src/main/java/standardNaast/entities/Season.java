@@ -12,7 +12,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,9 +51,8 @@ public class Season implements Serializable, Comparable<Season> {
 	@OneToMany(mappedBy = "season")
 	private List<PersonneCotisation> personnesCotisations;
 
-	@PrePersist
-	private void setId() {
-		this.id = this.toString();
+	public void setId(final String id) {
+		this.id = id;
 	}
 
 	public Date getDateStart() {

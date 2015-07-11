@@ -261,4 +261,35 @@ public class PersonModel implements Comparable<PersonModel> {
 	public int compareTo(final PersonModel o) {
 		return this.memberNumber.get() < o.memberNumber.get() ? -1 : 1;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.personneId.get() == 0) ? 0 : (int) this.personneId.get());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final PersonModel other = (PersonModel) obj;
+		if (this.personneId == null) {
+			if (other.personneId != null) {
+				return false;
+			}
+		} else if (this.personneId.get() != other.personneId.get()) {
+			return false;
+		}
+		return true;
+	}
+
 }

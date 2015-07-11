@@ -32,7 +32,7 @@ public class TeamService implements Serializable {
 	private final SeasonDAO seasonDAO = new SeasonDAOImpl();
 
 	private static final Logger LOGGER = LogManager
-			.getLogger(PersonneServiceImpl.class);
+			.getLogger(TeamService.class);
 
 	public List<TeamModel> findAllTeam() {
 		final List<Team> allTeams = this.teamDAO.getAllTeams();

@@ -9,12 +9,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import standardNaast.model.MemberSeasonTravels;
 import standardNaast.model.SeasonModel;
-import standardNaast.observer.Observer;
-import standardNaast.observer.SubjectImpl;
+import standardNaast.observer.SeasonObserver;
+import standardNaast.observer.SeasonSubjectImpl;
 import standardNaast.service.SeasonService;
 import standardNaast.service.SeasonServiceImpl;
 
-public class MemberTravelsController implements Observer {
+public class MemberTravelsController implements SeasonObserver {
 
 	private final ObservableList<SeasonModel> seasonsList = FXCollections.observableArrayList();
 
@@ -36,7 +36,7 @@ public class MemberTravelsController implements Observer {
 
 	@FXML
 	public void initialize() {
-		final List<SeasonModel> seasons = SubjectImpl.getInstance().getSeasons();
+		final List<SeasonModel> seasons = SeasonSubjectImpl.getInstance().getSeasons();
 		this.update(seasons);
 	}
 

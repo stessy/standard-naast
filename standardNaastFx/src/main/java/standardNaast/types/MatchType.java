@@ -1,5 +1,7 @@
 package standardNaast.types;
 
+import java.util.ResourceBundle;
+
 public enum MatchType {
 
 	GROUP_MATCH("matchType.groupMatch"),
@@ -14,11 +16,18 @@ public enum MatchType {
 
 	private String name;
 
-	private MatchType(String name) {
+	private final ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+
+	private MatchType(final String name) {
 		this.name = name;
 	}
 
 	public String getName() {
 		return this.name;
+	}
+
+	@Override
+	public String toString() {
+		return this.bundle.getString(this.name());
 	}
 }

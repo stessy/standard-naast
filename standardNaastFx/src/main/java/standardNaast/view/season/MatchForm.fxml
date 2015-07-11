@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+
+
+<GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.40" fx:controller="standardNaast.view.season.MatchFormController">
+   <children>
+      <ComboBox fx:id="competitionType" onAction="#onSelectedCompetition" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <ComboBox fx:id="matchTypeBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <ComboBox fx:id="priceType" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <ComboBox fx:id="place" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <ComboBox fx:id="opponent" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+      <DatePicker fx:id="matchDate" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+      <Label text="Compétition" GridPane.rowIndex="1" />
+      <Label text="Type match" GridPane.rowIndex="2" />
+      <Label text="Type prix" GridPane.rowIndex="3" />
+      <Label text="Adversaire" GridPane.rowIndex="5" />
+      <Label text="Date de match" GridPane.rowIndex="6" />
+      <Label text="Lieu" GridPane.rowIndex="4" />
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="7" GridPane.rowSpan="2147483647">
+        <buttons>
+          <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAdd" text="Ajouter" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" text="Annuler" />
+        </buttons>
+      </ButtonBar>
+   </children>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+   </rowConstraints>
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+   </columnConstraints>
+</GridPane>

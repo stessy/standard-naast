@@ -14,7 +14,7 @@ import javax.persistence.criteria.Root;
 
 import standardNaast.entities.Match;
 import standardNaast.entities.Personne;
-import standardNaast.entities.PersonnesMatch;
+import standardNaast.entities.PersonneTravel;
 import standardNaast.entities.Season;
 import standardNaast.types.Place;
 
@@ -67,8 +67,8 @@ public class SeasonDAOImpl implements SeasonDAO {
 		final CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
 
 		final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-		final Root<PersonnesMatch> root = cq.from(PersonnesMatch.class);
-		final Join<PersonnesMatch, Match> match = root.join("match");
+		final Root<PersonneTravel> root = cq.from(PersonneTravel.class);
+		final Join<PersonneTravel, Match> match = root.join("match");
 		cq.select(cb.count(root));
 		final List<Predicate> criteria = new ArrayList<Predicate>();
 		criteria.add(cb.equal(match.get("place"), place));
@@ -90,6 +90,7 @@ public class SeasonDAOImpl implements SeasonDAO {
 	@Override
 	public Season addSeason(final Season season) {
 		this.entityManager.getTransaction().begin();
+		season.setId(season.toString());
 		this.entityManager.persist(season);
 		this.entityManager.getTransaction().commit();
 		return season;

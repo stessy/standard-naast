@@ -26,8 +26,8 @@ import standardNaast.model.MemberCotisationsModel;
 import standardNaast.model.MemberSeasonTravels;
 import standardNaast.model.PersonModel;
 import standardNaast.model.SeasonModel;
-import standardNaast.observer.Observer;
-import standardNaast.observer.SubjectImpl;
+import standardNaast.observer.SeasonObserver;
+import standardNaast.observer.SeasonSubjectImpl;
 import standardNaast.service.AbonnementService;
 import standardNaast.service.BenevolatService;
 import standardNaast.service.CotisationsService;
@@ -41,7 +41,7 @@ import standardNaast.utils.AlertDialogUtils;
 import standardNaast.utils.RefundsUtils;
 import standardNaast.view.member.overview.MemberAbonnementsController;
 
-public class AbonnementFormController implements Observer {
+public class AbonnementFormController implements SeasonObserver {
 
 	private final List<String> validationErrors = new ArrayList<>();
 
@@ -111,7 +111,7 @@ public class AbonnementFormController implements Observer {
 
 	@FXML
 	private void initialize() {
-		final List<SeasonModel> seasons = SubjectImpl.getInstance().getSeasons();
+		final List<SeasonModel> seasons = SeasonSubjectImpl.getInstance().getSeasons();
 		this.update(seasons);
 		this.typeCompetition.setDisable(true);
 	}

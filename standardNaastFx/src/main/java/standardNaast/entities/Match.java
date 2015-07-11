@@ -2,7 +2,6 @@ package standardNaast.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -10,12 +9,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,6 +32,10 @@ import standardNaast.types.PriceType;
 @Entity
 @Table(name = "MATCH")
 @Access(AccessType.FIELD)
+@NamedQueries({
+		@NamedQuery(name = "matchListWithMatchType", query = "select m from Match m where m.season = :season and m.typeCompetition = :competitionType and m.matchType = :matchType"),
+		@NamedQuery(name = "matchList", query = "select m from Match m where m.season = :season and m.typeCompetition = :competitionType"),
+		@NamedQuery(name = "matchListWithPlace", query = "select m from Match m where m.season = :season and m.typeCompetition = :competitionType and m.place = :place") })
 public class Match implements Serializable {
 
 	@Id
@@ -67,9 +70,6 @@ public class Match implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private PriceType priceType;
 
-	@OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
-	private List<PersonnesMatch> personnesMatches;
-
 	public Match() {
 	}
 
@@ -87,14 +87,6 @@ public class Match implements Serializable {
 
 	public void setDateMatch(final Date dateMatch) {
 		this.dateMatch = dateMatch;
-	}
-
-	public List<PersonnesMatch> getPersonnesMatches() {
-		return this.personnesMatches;
-	}
-
-	public void setPersonnesMatches(final List<PersonnesMatch> personnesMatches) {
-		this.personnesMatches = personnesMatches;
 	}
 
 	public Team getOpponent() {

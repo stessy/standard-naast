@@ -105,7 +105,7 @@ public class Personne implements Serializable, Comparable<Personne> {
 	private Boolean student;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "personne")
-	private Collection<PersonnesMatch> personnesMatchCollection;
+	private Collection<PersonneTravel> personnesMatchCollection;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "personne")
 	private Collection<CommandePlace> commandePlaceCollection;
@@ -261,11 +261,11 @@ public class Personne implements Serializable, Comparable<Personne> {
 	public Personne() {
 	}
 
-	public Collection<PersonnesMatch> getPersonnesMatchCollection() {
+	public Collection<PersonneTravel> getPersonnesMatchCollection() {
 		return this.personnesMatchCollection;
 	}
 
-	public void setPersonnesMatchCollection(final Collection<PersonnesMatch> personnesMatchCollection) {
+	public void setPersonnesMatchCollection(final Collection<PersonneTravel> personnesMatchCollection) {
 		this.personnesMatchCollection = personnesMatchCollection;
 	}
 

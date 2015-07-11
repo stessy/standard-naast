@@ -49,8 +49,6 @@ import com.standardnaast.persistence.EntityManagerFactoryHelper;
 
 public class AbonnementService implements Serializable {
 
-	private final EntityManager entityManager = EntityManagerFactoryHelper.getFactory().createEntityManager();
-
 	private static final long serialVersionUID = -7174502180535914551L;
 
 	private final AbonnementDAO abonnementDao = new AbonnementDAOImpl();
@@ -65,41 +63,47 @@ public class AbonnementService implements Serializable {
 
 	public void setAsPurchased(final List<MemberAbonnementModel> abonnements) {
 		for (final MemberAbonnementModel model : abonnements) {
-			this.entityManager.getTransaction().begin();
-			final Abonnement mergedAbonnement = this.entityManager.find(Abonnement.class, model.getAbonnementId());
+			final EntityManager entityManager = this.getEntityManager();
+			entityManager.getTransaction().begin();
+			final Abonnement mergedAbonnement = entityManager.find(Abonnement.class, model.getAbonnementId());
 			mergedAbonnement.setAbonnementStatus(AbonnementStatus.PURCHASED);
-			this.entityManager.merge(mergedAbonnement);
-			this.entityManager.getTransaction().commit();
+			entityManager.merge(mergedAbonnement);
+			entityManager.getTransaction().commit();
+			entityManager.close();
 		}
 	}
 
 	public void setAsNotYetPaid(final List<MemberAbonnementModel> abonnements) {
 		for (final MemberAbonnementModel model : abonnements) {
-			this.entityManager.getTransaction().begin();
-			final Abonnement mergedAbonnement = this.entityManager.find(Abonnement.class, model.getAbonnementId());
+			final EntityManager entityManager = this.getEntityManager();
+			entityManager.getTransaction().begin();
+			final Abonnement mergedAbonnement = entityManager.find(Abonnement.class, model.getAbonnementId());
 			mergedAbonnement.setPaye(false);
-			this.entityManager.merge(mergedAbonnement);
-			this.entityManager.getTransaction().commit();
+			entityManager.merge(mergedAbonnement);
+			entityManager.getTransaction().commit();
 		}
 	}
 
 	public void setAsReceived(final List<MemberAbonnementModel> abonnements) {
+		final EntityManager entityManager = this.getEntityManager();
 		for (final MemberAbonnementModel model : abonnements) {
-			this.entityManager.getTransaction().begin();
-			final Abonnement mergedAbonnement = this.entityManager.find(Abonnement.class, model.getAbonnementId());
+			entityManager.getTransaction().begin();
+			final Abonnement mergedAbonnement = entityManager.find(Abonnement.class, model.getAbonnementId());
 			mergedAbonnement.setAbonnementStatus(AbonnementStatus.RECEIVED);
-			this.entityManager.merge(mergedAbonnement);
-			this.entityManager.getTransaction().commit();
+			entityManager.merge(mergedAbonnement);
+			entityManager.getTransaction().commit();
 		}
+		entityManager.close();
 	}
 
 	public void setAsPaid(final List<MemberAbonnementModel> abonnements) {
+		final EntityManager entityManager = this.getEntityManager();
 		for (final MemberAbonnementModel model : abonnements) {
-			this.entityManager.getTransaction().begin();
-			final Abonnement mergedAbonnement = this.entityManager.find(Abonnement.class, model.getAbonnementId());
+			entityManager.getTransaction().begin();
+			final Abonnement mergedAbonnement = entityManager.find(Abonnement.class, model.getAbonnementId());
 			mergedAbonnement.setPaye(true);
-			this.entityManager.merge(mergedAbonnement);
-			this.entityManager.getTransaction().commit();
+			entityManager.merge(mergedAbonnement);
+			entityManager.getTransaction().commit();
 			final AccountingModel accountingModel = new AccountingModel();
 			accountingModel.setAccountingDate(LocalDate.now());
 			accountingModel.setDescription("Abonnement de [" + model.getPerson().getFirstName() + " "
@@ -111,16 +115,19 @@ public class AbonnementService implements Serializable {
 			accountingModel.setType(AccountingType.ENTRY);
 			this.accountingService.addAccounting(accountingModel);
 		}
+		entityManager.close();
 	}
 
 	public void setAsDistributed(final List<MemberAbonnementModel> abonnements) {
+		final EntityManager entityManager = this.getEntityManager();
 		for (final MemberAbonnementModel model : abonnements) {
-			this.entityManager.getTransaction().begin();
-			final Abonnement mergedAbonnement = this.entityManager.find(Abonnement.class, model.getAbonnementId());
+			entityManager.getTransaction().begin();
+			final Abonnement mergedAbonnement = entityManager.find(Abonnement.class, model.getAbonnementId());
 			mergedAbonnement.setAbonnementStatus(AbonnementStatus.DISTRIBUTED);
-			this.entityManager.merge(mergedAbonnement);
-			this.entityManager.getTransaction().commit();
+			entityManager.merge(mergedAbonnement);
+			entityManager.getTransaction().commit();
 		}
+		entityManager.close();
 	}
 
 	public AbonnementsModel getAbonnementsPerSeason(final SeasonModel selectedSeason) {
@@ -196,9 +203,11 @@ public class AbonnementService implements Serializable {
 	}
 
 	public List<MemberAbonnementModel> getMemberAbonnements(final PersonModel personModel) {
-		final Personne person = this.entityManager.find(Personne.class, personModel.getPersonneId());
+		final EntityManager entityManager = this.getEntityManager();
+		final Personne person = entityManager.find(Personne.class, personModel.getPersonneId());
+		entityManager.close();
 		final List<Abonnement> abonnementList = this.abonnementDao.getMemberAbonnements(person);
-		// abonnementList.stream().forEach(a -> this.entityManager.refresh(a));
+		// abonnementList.stream().forEach(a -> entityManager.refresh(a));
 		return abonnementList.stream().filter(new Predicate<Abonnement>() {
 
 			@Override
@@ -209,8 +218,10 @@ public class AbonnementService implements Serializable {
 	}
 
 	public MemberAbonnementModel getMemberAbonnement(final MemberAbonnementModel model) {
-		final Abonnement foundAbonnement = this.entityManager.find(Abonnement.class, model.getAbonnementId());
-		this.entityManager.refresh(foundAbonnement);
+		final EntityManager entityManager = this.getEntityManager();
+		final Abonnement foundAbonnement = entityManager.find(Abonnement.class, model.getAbonnementId());
+		entityManager.refresh(foundAbonnement);
+		entityManager.close();
 		return MemberAbonnementModel.toModel(foundAbonnement);
 	}
 
@@ -253,25 +264,28 @@ public class AbonnementService implements Serializable {
 				break;
 			}
 		}
-
-		final Season season = this.entityManager.find(Season.class, seasonModel.getId());
-		final TypedQuery<AbonnementPrices> query = this.entityManager.createNamedQuery("findAbonnementPrice",
+		final EntityManager entityManager = this.getEntityManager();
+		final Season season = entityManager.find(Season.class, seasonModel.getId());
+		final TypedQuery<AbonnementPrices> query = entityManager.createNamedQuery("findAbonnementPrice",
 				AbonnementPrices.class);
 		query.setParameter("season", season);
 		query.setParameter("competitionType", competitionType);
 		query.setParameter("bloc", bloc);
 		query.setParameter("personType", personType);
 		final List<AbonnementPrices> resultList = query.getResultList();
+		entityManager.close();
 		return AbonnementPriceChampionshipModel.toModel(resultList.get(0));
 	}
 
 	public List<String> getBlocList(final SeasonModel seasonModel, final CompetitionType competitionType) {
 		final Season season = this.seasonDao.getSeasonById(seasonModel.getId());
-		final TypedQuery<String> query = this.entityManager.createNamedQuery("findBlocsPerSeason",
+		final EntityManager entityManager = this.getEntityManager();
+		final TypedQuery<String> query = entityManager.createNamedQuery("findBlocsPerSeason",
 				String.class);
 		query.setParameter("season", season);
 		query.setParameter("competitionType", competitionType);
 		final List<String> resultList = query.getResultList();
+		entityManager.close();
 		return resultList;
 	}
 
@@ -292,8 +306,9 @@ public class AbonnementService implements Serializable {
 
 	public MemberAbonnementModel updateAbonnement(final MemberAbonnementModel model) {
 		final PersonModel personModel = model.getPerson();
-		this.entityManager.getTransaction().begin();
-		final Abonnement foundAbonnement = this.entityManager.find(Abonnement.class, model.getAbonnementId());
+		final EntityManager entityManager = this.getEntityManager();
+		entityManager.getTransaction().begin();
+		final Abonnement foundAbonnement = entityManager.find(Abonnement.class, model.getAbonnementId());
 
 		final boolean oldPaid = foundAbonnement.getPaye();
 		final boolean newPaid = model.getPaye();
@@ -302,12 +317,12 @@ public class AbonnementService implements Serializable {
 		foundAbonnement.setAcompte(model.getAcompte());
 		foundAbonnement.setPlace(model.getPlace());
 		foundAbonnement.setPaye(model.getPaye());
-		final AbonnementPrices foundPrice = this.entityManager.find(AbonnementPrices.class, model.getAbonnementPrice()
+		final AbonnementPrices foundPrice = entityManager.find(AbonnementPrices.class, model.getAbonnementPrice()
 				.getId());
 		foundAbonnement.setAbonnementPrice(foundPrice);
 		foundAbonnement.setRang(model.getRang());
-		this.entityManager.merge(foundAbonnement);
-		this.entityManager.getTransaction().commit();
+		entityManager.merge(foundAbonnement);
+		entityManager.getTransaction().commit();
 		if (newPaid && !oldPaid) {
 			final AccountingModel accountingModel = new AccountingModel();
 			accountingModel.setAccountingDate(LocalDate.now());
@@ -331,6 +346,7 @@ public class AbonnementService implements Serializable {
 					- oldAcompte));
 			this.accountingService.addAccounting(accountingModel);
 		}
+		entityManager.close();
 		return MemberAbonnementModel.toModel(foundAbonnement);
 	}
 
@@ -345,9 +361,10 @@ public class AbonnementService implements Serializable {
 		entity.setSaison(season);
 		entity.setAbonnementPrice(price);
 		entity.setPersonne(person);
-		this.entityManager.getTransaction().begin();
-		this.entityManager.persist(entity);
-		this.entityManager.getTransaction().commit();
+		final EntityManager entityManager = this.getEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.persist(entity);
+		entityManager.getTransaction().commit();
 		if (model.getPaye() || model.getAcompte() > 0) {
 			final AccountingModel accountingModel = new AccountingModel();
 			accountingModel.setAccountingDate(LocalDate.now());
@@ -377,7 +394,12 @@ public class AbonnementService implements Serializable {
 			this.accountingService.addAccounting(accountingModel);
 
 		}
+		entityManager.close();
 		return MemberAbonnementModel.toModel(entity);
+	}
+
+	private EntityManager getEntityManager() {
+		return EntityManagerFactoryHelper.getFactory().createEntityManager();
 	}
 
 }

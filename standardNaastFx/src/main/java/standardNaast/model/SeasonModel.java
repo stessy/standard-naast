@@ -106,6 +106,7 @@ public class SeasonModel implements Comparable<SeasonModel> {
 		season.setDateFirstMatchChampionship(DateUtils.toDate(model.getFirstMatchDate()));
 		season.setEuropean(model.getEuropean());
 		season.setMontantCotisation(model.getCotisationAMount());
+		season.setId(model.getId());
 		return season;
 	}
 

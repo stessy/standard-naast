@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
 
 import standardNaast.model.SeasonModel;
-import standardNaast.observer.SubjectImpl;
+import standardNaast.observer.SeasonSubjectImpl;
 import standardNaast.service.SeasonService;
 import standardNaast.service.SeasonServiceImpl;
 import standardNaast.utils.AlertDialogUtils;
@@ -65,7 +65,7 @@ public class SeasonFormController {
 			else {
 				this.seasonService.updateSeason(this.updateSeasonModel());
 			}
-			SubjectImpl.getInstance().notifyObservers();
+			SeasonSubjectImpl.getInstance().notifyObservers();
 			this.dialogStage.close();
 		} else {
 			AlertDialogUtils.displayInvalidAlert(this.dialogStage, this.validationErrors);

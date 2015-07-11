@@ -14,13 +14,13 @@ import javafx.stage.Stage;
 import standardNaast.model.MemberCotisationsModel;
 import standardNaast.model.PersonModel;
 import standardNaast.model.SeasonModel;
-import standardNaast.observer.Observer;
-import standardNaast.observer.SubjectImpl;
+import standardNaast.observer.SeasonObserver;
+import standardNaast.observer.SeasonSubjectImpl;
 import standardNaast.service.CotisationsService;
 import standardNaast.utils.AlertDialogUtils;
 import standardNaast.view.member.overview.MemberCotisationsController;
 
-public class MemberCotisationFormController implements Observer {
+public class MemberCotisationFormController implements SeasonObserver {
 
 	private final List<String> validationErrors = new ArrayList<>();
 
@@ -45,8 +45,8 @@ public class MemberCotisationFormController implements Observer {
 
 	@FXML
 	private void initialize() {
-		SubjectImpl.getInstance().registerObserver(this);
-		final List<SeasonModel> seasons = SubjectImpl.getInstance().getSeasons();
+		SeasonSubjectImpl.getInstance().registerObserver(this);
+		final List<SeasonModel> seasons = SeasonSubjectImpl.getInstance().getSeasons();
 		this.update(seasons);
 		this.paymentDate.setValue(LocalDate.now());
 	}

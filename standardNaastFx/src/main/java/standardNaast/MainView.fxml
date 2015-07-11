@@ -38,6 +38,9 @@
           <Tab closable="false" text="Saisons" >
           <fx:include source = "view/season/SeasonOverview.fxml"/>
           </Tab>
+          <Tab closable="false" text="Déplacements" >
+          <fx:include source = "view/travels/TravelsOverview.fxml"/>
+          </Tab>
           <Tab closable="false" text="Cotisations" >
           <fx:include source = "view/cotisation/CotisationsOverview.fxml"/>
           </Tab>

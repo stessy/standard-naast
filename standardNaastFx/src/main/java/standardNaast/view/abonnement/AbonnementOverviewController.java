@@ -15,13 +15,13 @@ import standardNaast.model.AbonnementsModel;
 import standardNaast.model.MemberAbonnementModel;
 import standardNaast.model.PurchasableAbonnements;
 import standardNaast.model.SeasonModel;
-import standardNaast.observer.Observer;
-import standardNaast.observer.SubjectImpl;
+import standardNaast.observer.SeasonObserver;
+import standardNaast.observer.SeasonSubjectImpl;
 import standardNaast.service.AbonnementService;
 import standardNaast.utils.AlertDialogUtils;
 import standardNaast.utils.PrintCommandesPlaces;
 
-public class AbonnementOverviewController implements Observer {
+public class AbonnementOverviewController implements SeasonObserver {
 
 	private AbonnementService service = new AbonnementService();
 
@@ -111,8 +111,8 @@ public class AbonnementOverviewController implements Observer {
 
 	@FXML
 	private void initialize() {
-		SubjectImpl.getInstance().registerObserver(this);
-		final List<SeasonModel> seasons = SubjectImpl.getInstance().getSeasons();
+		SeasonSubjectImpl.getInstance().registerObserver(this);
+		final List<SeasonModel> seasons = SeasonSubjectImpl.getInstance().getSeasons();
 		this.update(seasons);
 		this.newAbonnementsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		this.unpaidAbonnementsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

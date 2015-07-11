@@ -8,7 +8,7 @@ import standardNaast.model.SeasonModel;
  * @author stessy
  *
  */
-public interface Observer {
+public interface MatchObserver {
 
 	void update(final List<SeasonModel> seasons);
 

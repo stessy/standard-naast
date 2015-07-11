@@ -41,4 +41,10 @@
 	<changeSet id="13" author="stessy">
 		<sql><![CDATA[alter table personnes_match rename to personne_match]]></sql>
 	</changeSet>
+	<changeSet id="14" author="stessy">
+		<sql><![CDATA[alter table match alter column saison_equipe_id set null]]></sql>
+	</changeSet>
+	<changeSet id="15" author="stessy">
+		<sql><![CDATA[alter table personne_match alter column prix_locomotion_id set null]]></sql>
+	</changeSet>
 </databaseChangeLog>

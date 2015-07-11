@@ -6,6 +6,7 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import standardNaast.constants.DateFormat;
 import standardNaast.entities.Match;
 import standardNaast.types.CompetitionType;
 import standardNaast.types.MatchType;
@@ -30,6 +31,14 @@ public class MatchModel {
 	private ObjectProperty<MatchType> matchType = new SimpleObjectProperty<>();
 
 	private ObjectProperty<PriceType> priceType = new SimpleObjectProperty<>();
+
+	public Long getId() {
+		return this.id.get();
+	}
+
+	public void setId(final Long id) {
+		this.id.set(id);
+	}
 
 	public TeamModel getOpponent() {
 		return this.opponent.get();
@@ -128,11 +137,13 @@ public class MatchModel {
 		model.setSeason(SeasonModel.of(entity.getSeason()));
 		model.setOpponent(TeamModel.toModel(entity.getOpponent()));
 		model.setMatchType(entity.getMatchType());
+		model.setId(entity.getMatchId());
 		return model;
 	}
 
 	public static Match toEntity(final MatchModel model) {
 		final Match match = new Match();
+		match.setMatchId(model.getId());
 		match.setDateMatch(DateUtils.toDate(model.getMatchDate()));
 		match.setMatchType(model.getMatchType());
 		match.setOpponent(TeamModel.toEntity(model.getOpponent()));
@@ -141,5 +152,11 @@ public class MatchModel {
 		match.setSeason(SeasonModel.of(model.getSeason()));
 		match.setTypeCompetition(model.getCompetitionType());
 		return match;
+	}
+
+	@Override
+	public String toString() {
+		return this.getOpponent().getTeam() + " ("
+				+ DateUtils.formatDate(DateUtils.toDate(this.matchDate.get()), DateFormat.DDSMMSYYYY) + ")";
 	}
 }

@@ -15,9 +15,6 @@ import com.standardnaast.persistence.EntityManagerFactoryHelper;
 
 public class TeamDAOImpl implements TeamDAO {
 
-	private EntityManager entityManager = EntityManagerFactoryHelper
-			.getFactory().createEntityManager();
-
 	@Override
 	public List<Team> getAllTeams() {
 		final CriteriaQuery<Team> queryAll = this.getEntityManager()
@@ -28,10 +25,13 @@ public class TeamDAOImpl implements TeamDAO {
 
 	@Override
 	public List<SeasonTeam> getTeamsPerSeason(final Season season) {
-		final TypedQuery<SeasonTeam> query = this.getEntityManager()
+		EntityManager entityManager = this.getEntityManager();
+		final TypedQuery<SeasonTeam> query = entityManager
 				.createNamedQuery("teamPerSeason", SeasonTeam.class);
 		query.setParameter("season", season);
-		return query.getResultList();
+		final List<SeasonTeam> resultList = query.getResultList();
+		entityManager.close();
+		return resultList;
 	}
 
 	public List<Team> getTeamsPerSeasonAndCompetitionType(final Season season,
@@ -68,17 +68,15 @@ public class TeamDAOImpl implements TeamDAO {
 		final SeasonTeam seasonTeam = new SeasonTeam();
 		seasonTeam.setOpponent(team);
 		seasonTeam.setSeason(season);
-		this.getEntityManager().getTransaction().begin();
-		this.getEntityManager().persist(seasonTeam);
-		this.getEntityManager().getTransaction().commit();
+		EntityManager entityManager = this.getEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.persist(seasonTeam);
+		entityManager.getTransaction().commit();
 	}
 
 	public EntityManager getEntityManager() {
-		return this.entityManager;
-	}
-
-	public void setEntityManager(final EntityManager entityManager) {
-		this.entityManager = entityManager;
+		return EntityManagerFactoryHelper
+				.getFactory().createEntityManager();
 	}
 
 }

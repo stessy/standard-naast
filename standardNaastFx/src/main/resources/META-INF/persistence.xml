@@ -18,7 +18,7 @@
 		<class>standardNaast.entities.Team</class>
 		<class>standardNaast.entities.Match</class>
 		<class>standardNaast.entities.PersonneCotisation</class>
-		<class>standardNaast.entities.PersonnesMatch</class>
+		<class>standardNaast.entities.PersonneTravel</class>
 		<class>standardNaast.entities.TravelPrice</class>
 		<class>standardNaast.entities.SeasonTeam</class>
 		<class>standardNaast.entities.PersonnesCotisationsId</class>

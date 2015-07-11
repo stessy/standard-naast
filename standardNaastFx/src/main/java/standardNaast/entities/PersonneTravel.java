@@ -11,8 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * The persistent class for the PERSONNES_MATCH database table.
@@ -21,7 +24,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PERSONNE_MATCH")
 @Access(AccessType.FIELD)
-public class PersonnesMatch implements Serializable {
+@NamedQueries({ @NamedQuery(name = "getMatchTravels", query = "select pt from PersonneTravel pt where pt.match = :match") })
+public class PersonneTravel implements Serializable {
 
 	/** The serialVersionUID. */
 	private static final long serialVersionUID = 228812753302395213L;
@@ -32,17 +36,20 @@ public class PersonnesMatch implements Serializable {
 	private Long id;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "PERSONNE_ID", referencedColumnName = "PERSONNE_ID", insertable = false, updatable = false)
+	@JoinColumn(name = "PERSONNE_ID", referencedColumnName = "PERSONNE_ID", updatable = false)
 	private Personne personne;
 
 	@ManyToOne
-	@JoinColumn(name = "MATCH_ID", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "MATCH_ID", nullable = false, updatable = false)
 	private Match match;
 
 	@Column(name = "CAR_TRAVEL_AMOUNT")
-	private int carTravelAmount;
+	private long carTravelAmount;
 
-	public PersonnesMatch() {
+	@Transient
+	private boolean paid;
+
+	public PersonneTravel() {
 	}
 
 	public Personne getPersonne() {
@@ -61,16 +68,28 @@ public class PersonnesMatch implements Serializable {
 		this.match = match;
 	}
 
-	public int getCarTravelAmount() {
+	public long getCarTravelAmount() {
 		return this.carTravelAmount;
 	}
 
-	public void setCarTravelAmount(final int carTravelAmount) {
+	public void setCarTravelAmount(final long carTravelAmount) {
 		this.carTravelAmount = carTravelAmount;
 	}
 
 	public Long getId() {
 		return this.id;
+	}
+
+	public boolean isPaid() {
+		return this.paid;
+	}
+
+	public void setPaid(final boolean paid) {
+		this.paid = paid;
+	}
+
+	public void setId(final Long id) {
+		this.id = id;
 	}
 
 }

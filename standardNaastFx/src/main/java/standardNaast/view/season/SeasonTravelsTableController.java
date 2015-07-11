@@ -71,7 +71,7 @@ public class SeasonTravelsTableController {
 
 	public void fillTable(final SeasonModel selectedSeason) {
 		this.travels.clear();
-		final List<TravelModel> travelsPerSeason = this.travelService.getTravelsPerSeason(selectedSeason);
+		final List<TravelModel> travelsPerSeason = this.travelService.getTravelsPricePerSeason(selectedSeason);
 		this.travels.addAll(travelsPerSeason);
 		this.travelsTable.setItems(this.travels);
 		this.bindProperties();

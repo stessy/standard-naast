@@ -16,10 +16,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import standardNaast.model.SeasonModel;
-import standardNaast.observer.Observer;
-import standardNaast.observer.SubjectImpl;
+import standardNaast.observer.SeasonObserver;
+import standardNaast.observer.SeasonSubjectImpl;
 
-public class SeasonOverviewController implements Observer {
+public class SeasonOverviewController implements SeasonObserver {
 
 	private final ObservableList<SeasonModel> seasonsList = FXCollections.observableArrayList();
 
@@ -36,6 +36,9 @@ public class SeasonOverviewController implements Observer {
 	private Parent seasonTeams;
 
 	@FXML
+	private Parent seasonMatchs;
+
+	@FXML
 	private SeasonInformationController seasonInformationController;
 
 	@FXML
@@ -46,6 +49,9 @@ public class SeasonOverviewController implements Observer {
 
 	@FXML
 	private TeamSeasonController seasonTeamsController;
+
+	@FXML
+	private SeasonMatchController seasonMatchsController;
 
 	@FXML
 	private ComboBox<SeasonModel> season;
@@ -62,11 +68,11 @@ public class SeasonOverviewController implements Observer {
 
 	@FXML
 	private void initialize() {
-		SubjectImpl.getInstance().registerObserver(this);
+		SeasonSubjectImpl.getInstance().registerObserver(this);
 		this.modifyButton.setDisable(true);
 		this.seasonListener = (ov, s1, s2) -> this.onSelectedSeason(ov.getValue());
 		this.season.valueProperty().addListener(this.seasonListener);
-		this.update(SubjectImpl.getInstance().getSeasons());
+		this.update(SeasonSubjectImpl.getInstance().getSeasons());
 	}
 
 	@Override
@@ -86,6 +92,7 @@ public class SeasonOverviewController implements Observer {
 		this.seasonTravelsController.fillTable(selectedSeason);
 		this.seasonAbonnementPricesController.buildCompetitionTypes(selectedSeason);
 		this.seasonTeamsController.onSelectedSeason(selectedSeason);
+		this.seasonMatchsController.onSelectedSeason(selectedSeason);
 	}
 
 	@FXML

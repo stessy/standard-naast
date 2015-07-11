@@ -36,6 +36,10 @@ public class Team implements Serializable, Comparable<Team> {
 		return this.equipeId;
 	}
 
+	public void setEquipeId(final long equipeId) {
+		this.equipeId = equipeId;
+	}
+
 	public String getNomEquipe() {
 		return this.nomEquipe;
 	}

@@ -34,5 +34,6 @@
             <fx:include fx:id="seasonTravels" source="SeasonTravels.fxml" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
             <fx:include fx:id="seasonAbonnementPrices" source="SeasonAbonnementPrices.fxml" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
             <fx:include fx:id="seasonTeams" source="SeasonTeams.fxml" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+            <fx:include fx:id="seasonMatchs" source="SeasonMatch.fxml" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
    </children>
 </GridPane>

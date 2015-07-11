@@ -30,4 +30,12 @@ public enum PersonTravelType {
 		return this.maxAge;
 	}
 
+	public PersonTravelType get(final int years) {
+		if (this.minAge <= years && years <= this.maxAge) {
+			return this;
+		} else {
+			return null;
+		}
+	}
+
 }

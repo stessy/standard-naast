@@ -13,11 +13,11 @@ import javafx.scene.control.TextField;
 import standardNaast.model.CotisationViewModel;
 import standardNaast.model.CotisationsOverviewModel;
 import standardNaast.model.SeasonModel;
-import standardNaast.observer.Observer;
-import standardNaast.observer.SubjectImpl;
+import standardNaast.observer.SeasonObserver;
+import standardNaast.observer.SeasonSubjectImpl;
 import standardNaast.service.CotisationsService;
 
-public class CotisationsOverviewController implements Observer {
+public class CotisationsOverviewController implements SeasonObserver {
 
 	private CotisationsService cotisationService = new CotisationsService();
 
@@ -91,8 +91,8 @@ public class CotisationsOverviewController implements Observer {
 
 	@FXML
 	private void initialize() {
-		SubjectImpl.getInstance().registerObserver(this);
-		final List<SeasonModel> seasons = SubjectImpl.getInstance().getSeasons();
+		SeasonSubjectImpl.getInstance().registerObserver(this);
+		final List<SeasonModel> seasons = SeasonSubjectImpl.getInstance().getSeasons();
 		this.update(seasons);
 	}
 

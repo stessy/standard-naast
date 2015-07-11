@@ -134,14 +134,14 @@ public class MemberAbonnementsController {
 				controller.setMember(this.memberModel);
 				controller.fillForm();
 				controller.setParentController(this);
-				final Stage benevolatDialog = new Stage();
-				benevolatDialog.setTitle("Benevolat");
-				benevolatDialog.initModality(Modality.APPLICATION_MODAL);
+				final Stage abonnementDialog = new Stage();
+				abonnementDialog.setTitle("Abonnement");
+				abonnementDialog.initModality(Modality.APPLICATION_MODAL);
 				final Scene scene = new Scene(pane);
-				benevolatDialog.setScene(scene);
-				controller.setStage(benevolatDialog);
+				abonnementDialog.setScene(scene);
+				controller.setStage(abonnementDialog);
 				controller.addAcompteListener();
-				benevolatDialog.show();
+				abonnementDialog.show();
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}

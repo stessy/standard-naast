@@ -5,6 +5,9 @@
 	<changeSet id="1" author="stessy">
 		<sql><![CDATA[create sequence team_seq start with 100 increment by 50]]></sql>
 	</changeSet>
+	<changeSet id="17" author="stessy">
+		<sql><![CDATA[alter sequence team_seq restart with 10000 increment by 50]]></sql>
+	</changeSet>
 	<changeSet id="2" author="stessy">
 		<sql><![CDATA[create sequence team_season_seq start with 2000 increment by 50]]></sql>
 	</changeSet>
