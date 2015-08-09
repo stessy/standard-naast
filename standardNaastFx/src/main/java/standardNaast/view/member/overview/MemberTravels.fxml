@@ -17,6 +17,8 @@
             <TextField fx:id="home" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="away" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="total" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Réduction" GridPane.rowIndex="4" />
+            <TextField fx:id="refund" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
          <columnConstraints>
             <ColumnConstraints />
@@ -24,6 +26,7 @@
          </columnConstraints>
          <rowConstraints>
             <RowConstraints />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" />

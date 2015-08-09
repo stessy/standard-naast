@@ -1,21 +1,16 @@
 package standardNaast.dao;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
-import standardNaast.entities.Match;
 import standardNaast.entities.Personne;
-import standardNaast.entities.PersonneTravel;
 import standardNaast.entities.Season;
+import standardNaast.types.CompetitionType;
 import standardNaast.types.Place;
 
 import com.standardnaast.persistence.EntityManagerFactoryHelper;
@@ -63,20 +58,13 @@ public class SeasonDAOImpl implements SeasonDAO {
 	}
 
 	private int getTravelsPerSeason(final Season season, final Personne member, final boolean away) {
-		final Place place = away ? Place.AWAY : Place.HOME;
-		final CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
-
-		final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-		final Root<PersonneTravel> root = cq.from(PersonneTravel.class);
-		final Join<PersonneTravel, Match> match = root.join("match");
-		cq.select(cb.count(root));
-		final List<Predicate> criteria = new ArrayList<Predicate>();
-		criteria.add(cb.equal(match.get("place"), place));
-		criteria.add(cb.equal(root.get("personne"), member));
-		criteria.add(cb.equal(match.get("season"), season));
-		cq.where(cb.and(criteria.toArray(new Predicate[0])));
-		final TypedQuery<Long> createQuery = this.getEntityManager().createQuery(cq);
-		return createQuery.getSingleResult().intValue();
+		final TypedQuery<Long> query = this.entityManager.createNamedQuery("getMemberTravelsPerSeason",
+				Long.class);
+		query.setParameter("season", season);
+		query.setParameter("person", member);
+		query.setParameter("competitionsType", Arrays.asList(CompetitionType.CHAMPIONSHIP, CompetitionType.PLAYOFFS));
+		query.setParameter("place", away ? Place.AWAY : Place.HOME);
+		return query.getSingleResult().intValue();
 	}
 
 	@Override

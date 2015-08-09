@@ -13,6 +13,7 @@ import standardNaast.observer.SeasonObserver;
 import standardNaast.observer.SeasonSubjectImpl;
 import standardNaast.service.SeasonService;
 import standardNaast.service.SeasonServiceImpl;
+import standardNaast.utils.RefundsUtils;
 
 public class MemberTravelsController implements SeasonObserver {
 
@@ -32,6 +33,9 @@ public class MemberTravelsController implements SeasonObserver {
 	@FXML
 	private TextField total;
 
+	@FXML
+	private TextField refund;
+
 	private long personneId;
 
 	@FXML
@@ -49,6 +53,9 @@ public class MemberTravelsController implements SeasonObserver {
 			this.home.setText(String.valueOf(travelsPerSeason.getHome()));
 			this.away.setText(String.valueOf(travelsPerSeason.getAway()));
 			this.total.setText(String.valueOf(travelsPerSeason.getHome() + travelsPerSeason.getAway()));
+			final int homeRefund = RefundsUtils.getRefund(travelsPerSeason.getHome());
+			final int awayRefund = RefundsUtils.getRefund(travelsPerSeason.getAway());
+			this.refund.setText(String.valueOf(homeRefund + awayRefund) + " €");
 		}
 
 	}

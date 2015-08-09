@@ -24,7 +24,9 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "PERSONNE_MATCH")
 @Access(AccessType.FIELD)
-@NamedQueries({ @NamedQuery(name = "getMatchTravels", query = "select pt from PersonneTravel pt where pt.match = :match") })
+@NamedQueries({
+		@NamedQuery(name = "getMatchTravels", query = "select pt from PersonneTravel pt where pt.match = :match"),
+		@NamedQuery(name = "getMemberTravelsPerSeason", query = "select count(pt) from PersonneTravel pt where pt.match.season = :season and pt.personne = :person and pt.match.place = :place and pt.match.typeCompetition IN :competitionsType") })
 public class PersonneTravel implements Serializable {
 
 	/** The serialVersionUID. */
