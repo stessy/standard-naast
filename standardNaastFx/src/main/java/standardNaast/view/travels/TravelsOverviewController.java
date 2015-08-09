@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.util.Callback;
 import standardNaast.model.MatchModel;
@@ -82,6 +83,9 @@ public class TravelsOverviewController implements SeasonObserver {
 	@FXML
 	private Button refreshButton;
 
+	@FXML
+	private TextField totalAmount;
+
 	private TravelsListChangeListener travelsChangeListListener;
 
 	public void initialize() {
@@ -148,6 +152,7 @@ public class TravelsOverviewController implements SeasonObserver {
 		final List<MatchTravelsModel> matchTravels = this.travelService.getMatchTravels(this.matchsBox
 				.getSelectionModel().getSelectedItem());
 		this.buildTable(matchTravels);
+		this.calculateTotalAmountTravels();
 	}
 
 	private void buildTable(final List<MatchTravelsModel> matchTravels) {
@@ -197,8 +202,19 @@ public class TravelsOverviewController implements SeasonObserver {
 				}
 			}
 
+			TravelsOverviewController.this.calculateTotalAmountTravels();
 		}
 
+	}
+
+	private void calculateTotalAmountTravels() {
+		Long totalAmounTravels = new Long(0);
+		for (final MatchTravelsModel matchTravelsModel : TravelsOverviewController.this.travelsList) {
+			if (matchTravelsModel.isPaid()) {
+				totalAmounTravels += matchTravelsModel.getAmount();
+			}
+		}
+		this.totalAmount.setText(String.valueOf(totalAmounTravels) + " €");
 	}
 
 	public void onRefresh() {

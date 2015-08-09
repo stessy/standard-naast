@@ -32,6 +32,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Saison" textFill="WHITE" />
@@ -43,6 +44,8 @@
             <ComboBox fx:id="placesBox" onAction="#onSelectedPlace" prefWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
             <ComboBox fx:id="matchsBox" onAction="#onSelectedMatch" prefWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
             <Button fx:id="refreshButton" disable="true" mnemonicParsing="false" onAction="#onRefresh" text="Rafraichir" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="Montant total" textFill="WHITE" GridPane.rowIndex="4" />
+            <TextField fx:id="totalAmount" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
    </top>
