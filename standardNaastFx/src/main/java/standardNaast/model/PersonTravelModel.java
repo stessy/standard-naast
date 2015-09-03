@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import standardNaast.entities.PersonneTravel;
 
-public class MatchTravelsModel {
+public class PersonTravelModel {
 
 	private LongProperty id = new SimpleLongProperty();
 
@@ -80,7 +80,7 @@ public class MatchTravelsModel {
 		return this.paid;
 	}
 
-	public static PersonneTravel toEntity(final MatchTravelsModel model) {
+	public static PersonneTravel toEntity(final PersonTravelModel model) {
 		final PersonneTravel entity = new PersonneTravel();
 		entity.setCarTravelAmount(model.getAmount());
 		entity.setMatch(MatchModel.toEntity(model.getMatch()));
@@ -90,8 +90,8 @@ public class MatchTravelsModel {
 		return entity;
 	}
 
-	public static MatchTravelsModel toModel(final PersonneTravel entity) {
-		final MatchTravelsModel model = new MatchTravelsModel();
+	public static PersonTravelModel toModel(final PersonneTravel entity) {
+		final PersonTravelModel model = new PersonTravelModel();
 		model.setAmount(entity.getCarTravelAmount());
 		model.setMatch(MatchModel.toModel(entity.getMatch()));
 		model.setPerson(PersonModel.toModel(entity.getPersonne()));

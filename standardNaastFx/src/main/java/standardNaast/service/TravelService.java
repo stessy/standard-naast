@@ -26,9 +26,10 @@ import standardNaast.entities.PersonneTravel;
 import standardNaast.entities.Season;
 import standardNaast.entities.TravelPrice;
 import standardNaast.model.MatchModel;
-import standardNaast.model.MatchTravelsModel;
 import standardNaast.model.MemberCotisationsModel;
 import standardNaast.model.PersonModel;
+import standardNaast.model.PersonTravelModel;
+import standardNaast.model.PersonsMatchTravel;
 import standardNaast.model.SeasonModel;
 import standardNaast.model.TravelModel;
 import standardNaast.types.PersonTravelType;
@@ -65,7 +66,7 @@ public class TravelService implements Serializable {
 		return travelsModels;
 	}
 
-	public List<MatchTravelsModel> getMatchTravels(final MatchModel matchModel) {
+	public PersonsMatchTravel getMatchTravels(final MatchModel matchModel) {
 		// Getting all travel prices for a season. This will be used to
 		// calculate the travel amount for each member.
 		final List<TravelModel> travelsPricePerSeason = this.getTravelsPricePerSeason(matchModel.getSeason());
@@ -73,45 +74,80 @@ public class TravelService implements Serializable {
 		final Set<PersonModel> allMembers = new HashSet<>(this.personneService.findAllPerson(false));
 		// Get match from match model
 		final Match match = this.matchDAO.getMatch(matchModel.getId());
+
 		// Get match travels that have already been paid
 		final List<PersonneTravel> matchTravels = this.travelDao.getMatchTravels(match);
-		final Set<MatchTravelsModel> paidTravelSet = matchTravels.stream().map(t -> MatchTravelsModel.toModel(t))
+
+		final Set<PersonTravelModel> membersWhoPaidForTravel = matchTravels.stream()
+				.filter(f -> f.getPersonne().getMemberNumber() < 10000).map(t -> PersonTravelModel.toModel(t))
 				.collect(Collectors.toSet());
-		paidTravelSet.stream().forEach(t -> t.setPaid(true));
+		membersWhoPaidForTravel.stream().forEach(t -> t.setPaid(true));
+
+		final Set<PersonTravelModel> nonMembersWhoPaidForTravel = matchTravels.stream()
+				.filter(f -> f.getPersonne().getMemberNumber() >= 10000).map(t -> PersonTravelModel.toModel(t))
+				.collect(Collectors.toSet());
+		nonMembersWhoPaidForTravel.stream().forEach(t -> t.setPaid(true));
+
 		// Get members who already paid the travel and subtract that list from
 		// all members. this way we know who not yet paid.
-		final Set<PersonModel> membersTravel = paidTravelSet.stream().map(t -> t.getPerson())
+		final Set<PersonModel> allMembersToCalculate = new HashSet<>(allMembers);
+		final Set<PersonModel> paidMembers = membersWhoPaidForTravel.stream().map(t -> t.getPerson())
 				.collect(Collectors.toSet());
-		allMembers.removeAll(membersTravel);
-		final Set<MatchTravelsModel> unpaidTravelSet = allMembers.stream()
+		allMembersToCalculate.removeAll(paidMembers);
+
+		final Set<PersonTravelModel> membersWhoNotPaidForTravel = allMembersToCalculate.stream()
 				.map(t -> this.buildMatchTravelModelForUnpaid(t, matchModel, travelsPricePerSeason))
 				.collect(Collectors.toSet());
-		unpaidTravelSet.addAll(paidTravelSet);
-		final List<MatchTravelsModel> unpaidTravelList = new ArrayList<>(unpaidTravelSet);
-		Collections.sort(unpaidTravelList, new Comparator<MatchTravelsModel>() {
+		// We have both list of members who paid or not yet paid. Time to create
+		// a unique list.
+		final List<PersonTravelModel> membersTravel = new ArrayList<>(membersWhoNotPaidForTravel);
+		membersTravel.addAll(membersWhoPaidForTravel);
+		Collections.sort(membersTravel, new Comparator<PersonTravelModel>() {
 
 			@Override
-			public int compare(final MatchTravelsModel o1, final MatchTravelsModel o2) {
+			public int compare(final PersonTravelModel o1, final PersonTravelModel o2) {
 				return o1.getPerson().getMemberNumber().compareTo(o2.getPerson().getMemberNumber());
 			}
 
 		});
-		return unpaidTravelList;
+
+		final Set<PersonModel> nonMembersWhoNotPaidForTravel = new HashSet<>(this.personneService.findAllPerson(true));
+		nonMembersWhoNotPaidForTravel.removeAll(allMembers);
+		final List<PersonModel> collect = nonMembersWhoPaidForTravel.stream().map(t -> t.getPerson())
+				.collect(Collectors.toList());
+		nonMembersWhoNotPaidForTravel.removeAll(collect);
+
+		return new PersonsMatchTravel(membersTravel, new ArrayList<>(nonMembersWhoPaidForTravel), new ArrayList<>(
+				nonMembersWhoNotPaidForTravel));
 	}
 
-	public MatchTravelsModel addMemberMatchTravel(final MatchTravelsModel model) {
-		final PersonneTravel entity = MatchTravelsModel.toEntity(model);
-		return MatchTravelsModel.toModel(this.travelDao.addMemberMatchTravel(entity));
+	public PersonTravelModel addMemberMatchTravel(final PersonTravelModel model) {
+		final PersonneTravel entity = PersonTravelModel.toEntity(model);
+		return PersonTravelModel.toModel(this.travelDao.addMemberMatchTravel(entity));
 	}
 
-	public void removeMemberMatchTravel(final MatchTravelsModel model) {
-		final PersonneTravel entity = MatchTravelsModel.toEntity(model);
+	public PersonTravelModel addNonMemberMatchTravel(final PersonModel selectedPerson,
+			final MatchModel selectedMatch, final SeasonModel selectedSeason) {
+		final List<TravelModel> travelsPricePerSeason = this.getTravelsPricePerSeason(selectedSeason);
+		final Long travelAmount = this.getMemberTravelPriceForMatch(selectedPerson, selectedMatch,
+				travelsPricePerSeason);
+		final PersonTravelModel model = new PersonTravelModel();
+		model.setAmount(travelAmount);
+		model.setMatch(selectedMatch);
+		model.setPerson(selectedPerson);
+		model.setPaid(true);
+		final PersonneTravel entity = PersonTravelModel.toEntity(model);
+		return PersonTravelModel.toModel(this.travelDao.addMemberMatchTravel(entity));
+	}
+
+	public void removeMemberMatchTravel(final PersonTravelModel model) {
+		final PersonneTravel entity = PersonTravelModel.toEntity(model);
 		this.travelDao.removeMemberMatchTravel(entity);
 	}
 
-	private MatchTravelsModel buildMatchTravelModelForUnpaid(final PersonModel t, final MatchModel matchModel,
+	private PersonTravelModel buildMatchTravelModelForUnpaid(final PersonModel t, final MatchModel matchModel,
 			final List<TravelModel> travelsPricePerSeason) {
-		final MatchTravelsModel model = new MatchTravelsModel();
+		final PersonTravelModel model = new PersonTravelModel();
 		model.setMatch(matchModel);
 		model.setPerson(t);
 		model.setPaid(false);
@@ -119,7 +155,7 @@ public class TravelService implements Serializable {
 		return model;
 	}
 
-	private Long getMemberTravelPriceForMatch(final PersonModel model, final MatchModel matchModel,
+	public Long getMemberTravelPriceForMatch(final PersonModel model, final MatchModel matchModel,
 			final List<TravelModel> travelsPricePerSeason) {
 		final LocalDate matchDate = matchModel.getMatchDate();
 		final LocalDate birthdate = model.getBirthdate();

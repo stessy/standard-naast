@@ -258,9 +258,6 @@ public class Personne implements Serializable, Comparable<Personne> {
 		return (memberNumber1 < memberNumber2 ? -1 : (memberNumber1 == memberNumber2 ? 0 : 1));
 	}
 
-	public Personne() {
-	}
-
 	public Collection<PersonneTravel> getPersonnesMatchCollection() {
 		return this.personnesMatchCollection;
 	}
@@ -275,5 +272,9 @@ public class Personne implements Serializable, Comparable<Personne> {
 
 	public void setCommandePlaceCollection(final Collection<CommandePlace> commandePlaceCollection) {
 		this.commandePlaceCollection = commandePlaceCollection;
+	}
+
+	public boolean isMember() {
+		return this.memberNumber < 1000;
 	}
 }

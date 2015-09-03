@@ -1,5 +1,6 @@
 package standardNaast.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -68,6 +69,27 @@ public class PersonDAOImpl implements PersonDAO {
 			query.setParameter("memberNumber", 10000);
 		}
 		return query.getResultList();
+	}
+
+	public List<Personne> getNonMembers() {
+		// final CriteriaBuilder cb =
+		// this.getEntityManager().getCriteriaBuilder();
+		// final CriteriaQuery<Personne> cq = cb.createQuery(Personne.class);
+		// final Root<Personne> personne = cq.from(Personne.class);
+		// cq.select(personne);
+		// if (!allPersons) {
+		// final ParameterExpression<Long> p = cb.parameter(Long.class,
+		// "memberNumber");
+		// final Path<Long> memberNumber = personne.get("memberNumber");
+		// cq.where(cb.lt(memberNumber, p));
+		// }
+		// final TypedQuery<Personne> query =
+		// this.getEntityManager().createQuery(cq);
+		// if (!allPersons) {
+		// query.setParameter("memberNumber", 10000);
+		// }
+		// return query.getResultList();
+		return new ArrayList<>();
 	}
 
 	public EntityManager getEntityManager() {

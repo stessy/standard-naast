@@ -292,4 +292,9 @@ public class PersonModel implements Comparable<PersonModel> {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return this.getName() + " " + this.getFirstName();
+	}
+
 }
