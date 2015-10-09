@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.GridPane?>
 
-
-<GridPane gridLinesVisible="true" hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="5.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.40" fx:controller="standardNaast.view.cotisation.CotisationsOverviewController">
+<GridPane hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.cotisation.CotisationsOverviewController">
    <children>
       <TitledPane alignment="CENTER" collapsible="false" text="Cotisations payées cartes membres envoyées" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
          <content>
@@ -42,7 +41,7 @@
                <bottom>
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <buttons>
-                      <Button mnemonicParsing="false" text="Cartes de membres envoyées" />
+                      <Button disable="true" mnemonicParsing="false" text="Cartes de membres envoyées" />
                     </buttons>
                   </ButtonBar>
                </bottom>
@@ -67,7 +66,7 @@
                <bottom>
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <buttons>
-                      <Button mnemonicParsing="false" text="Cotisation payée" />
+                      <Button disable="true" mnemonicParsing="false" text="Cotisation payée" />
                     </buttons>
                   </ButtonBar>
                </bottom>
@@ -84,19 +83,22 @@
             <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Saison" />
+            <Label text="Saison" textFill="WHITE" />
             <ComboBox fx:id="seasons" onAction="#onSelectedSeason" prefWidth="150.0" GridPane.columnIndex="1" />
-            <Label text="Payé" GridPane.columnIndex="2" />
-            <Label text="Non Payé" GridPane.columnIndex="4" />
-            <Label text="Total" GridPane.columnIndex="6" />
+            <Label text="Payé" textFill="WHITE" GridPane.columnIndex="2" />
+            <Label text="Non Payé" textFill="WHITE" GridPane.columnIndex="4" />
+            <Label text="Total" textFill="WHITE" GridPane.columnIndex="6" />
             <TextField fx:id="totalPaid" editable="false" GridPane.columnIndex="3" />
             <TextField fx:id="totalUnpaid" editable="false" GridPane.columnIndex="5" />
             <TextField fx:id="total" editable="false" GridPane.columnIndex="7" />
+            <Button fx:id="printButton" mnemonicParsing="false" onAction="#onPrintButton" text="Impression cotisations" GridPane.columnIndex="9" />
          </children>
       </GridPane>
    </children>

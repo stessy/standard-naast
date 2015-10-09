@@ -1,5 +1,6 @@
 package standardNaast.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import standardNaast.entities.Personne;
@@ -18,5 +19,7 @@ public interface SeasonDAO {
 	Season addSeason(Season season);
 
 	Season merge(Season season);
+
+	Season getSeasonForSpecificDate(Date date);
 
 }

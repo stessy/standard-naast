@@ -18,14 +18,17 @@ import standardNaast.utils.DbUtils;
 import standardNaast.view.member.overview.MembersOverview;
 
 public class Main extends Application {
+
+	public static Main main;
+
 	private static final Logger LOG = LogManager.getLogger(Application.class);
 
-	private Stage primaryStage;
+	private static Stage primaryStage;
 
 	private BorderPane rootLayout;
 
 	@Override
-	public void start(final Stage primaryStage) {
+	public void start(final Stage stage) {
 		Main.LOG.warn("Backing up database before continuing");
 		try {
 			Backup.execute("..\\database\\backup\\backup", "..\\database\\h2\\dbs", "standard_naast", false);
@@ -37,8 +40,9 @@ public class Main extends Application {
 		Main.LOG.warn("Starting Liquibase migration");
 		DbUtils.runLiquibase();
 		Main.LOG.warn("Starting Application");
-		this.primaryStage = primaryStage;
-		this.primaryStage.setTitle("Standard de Naast");
+		Main.primaryStage = stage;
+		stage.setTitle("Standard de Naast");
+		Main.main = this;
 		this.initRootLayout();
 		this.showMainView();
 		this.showMembersOverview();
@@ -56,8 +60,8 @@ public class Main extends Application {
 
 			// Show the scene containing the root layout.
 			final Scene scene = new Scene(this.rootLayout);
-			this.primaryStage.setScene(scene);
-			this.primaryStage.show();
+			Main.primaryStage.setScene(scene);
+			Main.primaryStage.show();
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -87,11 +91,15 @@ public class Main extends Application {
 	 * 
 	 * @return
 	 */
-	public Stage getPrimaryStage() {
-		return this.primaryStage;
+	public static Stage getPrimaryStage() {
+		return Main.primaryStage;
 	}
 
 	public static void main(final String[] args) {
 		Application.launch(args);
+	}
+
+	public static Application getCurrentApplication() {
+		return Main.main;
 	}
 }

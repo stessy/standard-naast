@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,6 +25,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "SAISON")
 @Access(AccessType.FIELD)
+@NamedQueries({ @NamedQuery(name = "getSeasonForDate", query = "select s from Season s where s.dateStart < :date and s.dateEnd > :date") })
 public class Season implements Serializable, Comparable<Season> {
 
 	@Id

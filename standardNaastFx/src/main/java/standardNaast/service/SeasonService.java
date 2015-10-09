@@ -18,4 +18,6 @@ public interface SeasonService {
 
 	SeasonModel updateSeason(SeasonModel model);
 
+	SeasonModel getCurrentSeason();
+
 }

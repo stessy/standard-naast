@@ -155,8 +155,8 @@ public class SeasonFormController {
 		if (this.model != null) {
 			this.cotisationAmount.setText(String.valueOf(this.model.getCotisationAMount()));
 			this.endDate.setValue(this.model.getEndDate());
-			this.european.setSelected(this.model.getEuropean());
-			this.notEuropean.setSelected(!this.model.getEuropean());
+			this.european.setSelected(this.model.isEuropean());
+			this.notEuropean.setSelected(!this.model.isEuropean());
 			this.firstMatchDate.setValue(this.model.getFirstMatchDate());
 			this.startDate.setValue(this.model.getStartDate());
 		}

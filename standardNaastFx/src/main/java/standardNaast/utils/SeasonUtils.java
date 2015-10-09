@@ -23,8 +23,8 @@ public class SeasonUtils {
 		final List<SeasonModel> subSeasonList = new ArrayList<>();
 		boolean passedOnce = false;
 		for (final SeasonModel season : seasonList) {
-			if (today.compareTo(season.getStartDate()) == 1) {
-				if (season.getEuropean()) {
+			if (today.compareTo(season.getStartDate()) > 0) {
+				if (season.isEuropean()) {
 					if (passedOnce) {
 						break;
 					} else {

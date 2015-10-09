@@ -2,11 +2,14 @@ package standardNaast.dao;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
@@ -82,6 +85,19 @@ public class SeasonDAOImpl implements SeasonDAO {
 		this.entityManager.persist(season);
 		this.entityManager.getTransaction().commit();
 		return season;
+	}
+
+	@Override
+	public Season getSeasonForSpecificDate(final Date date) {
+		final TypedQuery<Season> query = this.entityManager.createNamedQuery("getSeasonForDate",
+				Season.class);
+		query.setParameter("date", date);
+		final List<Season> resultList = query.getResultList();
+		if (CollectionUtils.isEmpty(resultList)) {
+			return null;
+		} else {
+			return resultList.get(0);
+		}
 	}
 
 	public static void main(final String args[]) {

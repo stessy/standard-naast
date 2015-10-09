@@ -27,7 +27,7 @@ public class SeasonInformationController {
 		this.startDate.setText(model.getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		this.endDate.setText(model.getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		this.firstMatchDate.setText(model.getFirstMatchDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-		this.european.setText(model.getEuropean() ? "OUI" : "NON");
+		this.european.setText(model.isEuropean() ? "OUI" : "NON");
 		this.cotisationAmount.setText(String.valueOf(model.getCotisationAMount()));
 	}
 

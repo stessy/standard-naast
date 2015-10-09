@@ -59,7 +59,7 @@ public class SeasonModel implements Comparable<SeasonModel> {
 		this.firstMatchDate.set(firstMatchDate);
 	}
 
-	public Boolean getEuropean() {
+	public Boolean isEuropean() {
 		return this.european.get();
 	}
 
@@ -104,7 +104,7 @@ public class SeasonModel implements Comparable<SeasonModel> {
 		season.setDateEnd(DateUtils.toDate(model.getEndDate()));
 		season.setDateStart(DateUtils.toDate(model.getStartDate()));
 		season.setDateFirstMatchChampionship(DateUtils.toDate(model.getFirstMatchDate()));
-		season.setEuropean(model.getEuropean());
+		season.setEuropean(model.isEuropean());
 		season.setMontantCotisation(model.getCotisationAMount());
 		season.setId(model.getId());
 		return season;
@@ -125,7 +125,7 @@ public class SeasonModel implements Comparable<SeasonModel> {
 		season.setDateEnd(DateUtils.toDate(model.getEndDate()));
 		season.setDateStart(DateUtils.toDate(model.getStartDate()));
 		season.setDateFirstMatchChampionship(DateUtils.toDate(model.getFirstMatchDate()));
-		season.setEuropean(model.getEuropean());
+		season.setEuropean(model.isEuropean());
 		season.setMontantCotisation(model.getCotisationAMount());
 		return season;
 	}

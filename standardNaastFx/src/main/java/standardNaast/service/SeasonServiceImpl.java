@@ -4,6 +4,7 @@
 package standardNaast.service;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ import standardNaast.entities.Personne;
 import standardNaast.entities.Season;
 import standardNaast.model.MemberSeasonTravels;
 import standardNaast.model.SeasonModel;
+import standardNaast.utils.DateUtils;
 
 /**
  * @author stessy
@@ -65,6 +67,12 @@ public class SeasonServiceImpl implements SeasonService, Serializable {
 		final Season matchedSeason = this.saisonDAO.getSeasonById(model.getId());
 		SeasonModel.toSeason(model, matchedSeason);
 		return SeasonModel.of(this.saisonDAO.merge(matchedSeason));
+	}
+
+	@Override
+	public SeasonModel getCurrentSeason() {
+		final LocalDate now = LocalDate.now();
+		return SeasonModel.of(this.saisonDAO.getSeasonForSpecificDate(DateUtils.toDate(now)));
 	}
 
 }
