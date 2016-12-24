@@ -71,13 +71,13 @@
                   <Label text="Total mensuel sorties" textFill="#d0cdcd" GridPane.columnIndex="2" />
                   <Label text="Tota annuel sorties" textFill="#d0cdcd" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <TextField fx:id="monthlyEntries" editable="false" GridPane.columnIndex="1" />
-                  <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="yearlyEntries" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="monthlyExits" editable="false" GridPane.columnIndex="3" />
-                  <TextField editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="yearlyExits" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Label text="Différence" textFill="#d0cdcd" GridPane.columnIndex="4" />
                   <Label text="Différence" textFill="#d0cdcd" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                   <TextField fx:id="monthlyDifference" editable="false" GridPane.columnIndex="5" />
-                  <TextField editable="false" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                  <TextField fx:id="yearlyDifference" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <GridPane GridPane.columnIndex="2" GridPane.rowSpan="2147483647">

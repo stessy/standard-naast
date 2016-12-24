@@ -32,7 +32,7 @@ import standardNaast.types.AccountingType;
 
 public class AccountingTableController {
 
-	private ObservableList<AccountingModel> accountings = FXCollections.observableArrayList();
+	private ObservableList<AccountingModel> monthlyAccountings = FXCollections.observableArrayList();
 
 	private ObservableList<MonthComboBox> monthList = FXCollections.observableArrayList();
 
@@ -77,6 +77,15 @@ public class AccountingTableController {
 	private TextField monthlyDifference;
 
 	@FXML
+	private TextField yearlyEntries;
+
+	@FXML
+	private TextField yearlyExits;
+
+	@FXML
+	private TextField yearlyDifference;
+
+	@FXML
 	private Button refresh;
 
 	private AccountingModel model;
@@ -88,6 +97,7 @@ public class AccountingTableController {
 		this.filterTable();
 		this.bindProperties();
 		this.addTableEvent();
+		this.calculateYearlyAmounts();
 	}
 
 	private void addTableEvent() {
@@ -108,6 +118,7 @@ public class AccountingTableController {
 		final List<Month> asList = Arrays.asList(values);
 		final List<MonthComboBox> collect = asList.stream().map(m -> new MonthComboBox(m)).collect(Collectors.toList());
 		final MonthComboBox currentMonth = collect.stream().filter(new Predicate<MonthComboBox>() {
+
 			@Override
 			public boolean test(final MonthComboBox t) {
 				final LocalDate date = LocalDate.now();
@@ -135,9 +146,9 @@ public class AccountingTableController {
 	private void buildTableData(final int month, final int year) {
 		final List<AccountingModel> accountingsWithinMonth = this.service.getAccountingsWithinMonth(
 				month, year);
-		this.accountings.clear();
-		this.accountings.addAll(accountingsWithinMonth);
-		this.table.setItems(this.accountings);
+		this.monthlyAccountings.clear();
+		this.monthlyAccountings.addAll(accountingsWithinMonth);
+		this.table.setItems(this.monthlyAccountings);
 	}
 
 	private void bindProperties() {
@@ -150,13 +161,14 @@ public class AccountingTableController {
 	@FXML
 	private void onSelectedMonth() {
 		this.filterTable();
-		// this.calculateAmounts();
+		this.calculateMonthlyAmounts();
 	}
 
 	@FXML
 	private void onSelectedYear() {
 		this.filterTable();
-		// this.calculateAmounts();
+		this.calculateMonthlyAmounts();
+		this.calculateYearlyAmounts();
 	}
 
 	private void filterTable() {
@@ -166,6 +178,7 @@ public class AccountingTableController {
 	}
 
 	class MonthComboBox {
+
 		private Month month;
 
 		public MonthComboBox(final Month month) {
@@ -183,6 +196,7 @@ public class AccountingTableController {
 	}
 
 	class YearComboBox {
+
 		private Year year;
 
 		public YearComboBox(final Year year) {
@@ -254,30 +268,78 @@ public class AccountingTableController {
 		this.filterTable();
 	}
 
-	private void calculateAmounts() {
-		final ObservableList<AccountingModel> accountings = this.accountings;
-		if (!accountings.isEmpty()) {
-			final BigDecimal entries = accountings.stream().filter(new Predicate<AccountingModel>() {
-				@Override
-				public boolean test(final AccountingModel t) {
-					return t.getType() == AccountingType.ENTRY;
-				}
-			}).map(am -> am.getMontant() != null ? am.getMontant() : BigDecimal.ZERO).reduce((x, y) -> x.add(y)).get();
-			final BigDecimal exits = accountings.stream().filter(new Predicate<AccountingModel>() {
-				@Override
-				public boolean test(final AccountingModel t) {
-					return t.getType() == AccountingType.EXIT;
-				}
-			}).map(am -> am.getMontant()).reduce((x, y) -> x.add(y)).get();
+	private void calculateMonthlyAmounts() {
+		final ObservableList<AccountingModel> accountings = this.monthlyAccountings;
+		final Amounts amounts = this.calculateAmounts(accountings);
+		this.monthlyEntries.setText(amounts.entries.toString());
+		this.monthlyExits.setText(amounts.exits.toString());
+		this.monthlyDifference.setText(amounts.difference.toString());
+	}
 
-			this.monthlyEntries.setText(entries.toString());
-			this.monthlyExits.setText(exits.toString());
-			this.monthlyDifference.setText(entries.subtract(exits).toString());
+	private void calculateYearlyAmounts() {
+		final List<AccountingModel> accountingsWithinYear = this.service.getAccountingsWithinYear(this.year
+				.getSelectionModel().getSelectedItem().getYear().getValue());
+		final Amounts amounts = this.calculateAmounts(accountingsWithinYear);
+		this.yearlyEntries.setText(amounts.entries.toString());
+		this.yearlyExits.setText(amounts.exits.toString());
+		this.yearlyDifference.setText(amounts.difference.toString());
+	}
+
+	private Amounts calculateAmounts(final List<AccountingModel> accountings) {
+		final Amounts amounts;
+		if (!accountings.isEmpty()) {
+			final BigDecimal entries = accountings
+					.stream()
+					.filter(new Predicate<AccountingModel>() {
+
+						@Override
+						public boolean test(final AccountingModel t) {
+							return t.getType() == AccountingType.ENTRY;
+						}
+					})
+					.map(am -> am.getMontant() != null ? am.getMontant() : BigDecimal.ZERO)
+					.reduce((x, y) -> x.add(y))
+					.orElse(BigDecimal.ZERO);
+			final BigDecimal exits = accountings
+					.stream()
+					.filter(new
+							Predicate<AccountingModel>() {
+
+								@Override
+								public boolean test(final AccountingModel t) {
+									return t.getType() == AccountingType.EXIT;
+								}
+							})
+					.map(am -> am.getMontant() != null ? am.getMontant() : BigDecimal.ZERO)
+					.reduce((x, y) -> x.add(y))
+					.orElse(BigDecimal.ZERO);
+
+			amounts = new Amounts(entries, exits);
+		} else {
+			amounts = new Amounts(BigDecimal.ZERO, BigDecimal.ZERO);
 		}
+
+		return amounts;
 	}
 
 	@FXML
 	private void onRefresh() {
 		this.filterTable();
+	}
+
+	private class Amounts {
+
+		private final BigDecimal entries;
+
+		private final BigDecimal exits;
+
+		private final BigDecimal difference;
+
+		private Amounts(final BigDecimal entries, final BigDecimal exits) {
+			this.entries = entries;
+			this.exits = exits;
+			this.difference = entries.subtract(exits);
+		}
+
 	}
 }

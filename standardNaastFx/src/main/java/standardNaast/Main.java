@@ -1,19 +1,23 @@
 package standardNaast;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.Properties;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.h2.store.fs.FileUtils;
+import org.h2.tools.Script;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.h2.tools.Backup;
-
+import standardNaast.constants.DateFormat;
+import standardNaast.utils.DateUtils;
 import standardNaast.utils.DbUtils;
 import standardNaast.view.member.overview.MembersOverview;
 
@@ -29,14 +33,6 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) {
-		Main.LOG.warn("Backing up database before continuing");
-		try {
-			Backup.execute("..\\database\\backup\\backup", "..\\database\\h2\\dbs", "standard_naast", false);
-		} catch (final SQLException e) {
-			Main.LOG.error("The database could not be backed up due to : ", e);
-			Platform.exit();
-		}
-		Main.LOG.warn("Database backed up");
 		Main.LOG.warn("Starting Liquibase migration");
 		DbUtils.runLiquibase();
 		Main.LOG.warn("Starting Application");
@@ -46,6 +42,28 @@ public class Main extends Application {
 		this.initRootLayout();
 		this.showMainView();
 		this.showMembersOverview();
+	}
+
+	@Override
+	public void stop() {
+		final Properties props = new Properties();
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream("init.properties");
+			props.load(fis);
+			final String databaseFrom = props.getProperty("urlCopy") + props.getProperty("database");
+			final String databaseTo = props.getProperty("urlBackup") + "backup_"
+					+ DateUtils.formatDate(new Date(), DateFormat.YYYYMMDDHHMMSS);
+			System.out.println("Database from: " + databaseFrom);
+			System.out.println("Database to: " + databaseTo);
+			FileUtils.moveTo(databaseFrom, databaseTo);
+			final String url = "jdbc:h2:mem:standard_naast";
+			Script.execute(url, "sa",
+					null,
+					databaseFrom);
+		} catch (final IOException | SQLException e) {
+			Main.LOG.error("The database could not be backed up on exit due to : ", e);
+		}
 	}
 
 	/**

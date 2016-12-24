@@ -3,6 +3,7 @@
  */
 package standardNaast.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,6 +62,21 @@ public class PersonneServiceImpl implements PersonneService {
 	@Override
 	public Long getMaxMemberNumber() {
 		return this.personneDAO.getMaxMemberNumber();
+	}
+
+	@Override
+	public void deletePerson(final long id) {
+		final Personne person = this.personneDAO.getPerson(id);
+		person.setMemberNumber(20000);
+		this.personneDAO.updatePerson(person);
+		final List<Personne> allPersons = this.personneDAO.getAllPersons(false);
+		Collections.sort(allPersons);
+		int memberNumber = 1;
+		for (final Personne personne : allPersons) {
+			personne.setMemberNumber(memberNumber++);
+			this.personneDAO.updatePerson(personne);
+		}
+
 	}
 
 }

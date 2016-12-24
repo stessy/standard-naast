@@ -19,6 +19,7 @@ import standardNaast.model.SeasonModel;
 import standardNaast.observer.SeasonObserver;
 import standardNaast.observer.SeasonSubjectImpl;
 import standardNaast.service.CotisationsService;
+import standardNaast.utils.AlertDialogUtils;
 import standardNaast.utils.TableauCotisations;
 
 public class CotisationsOverviewController implements SeasonObserver {
@@ -114,64 +115,66 @@ public class CotisationsOverviewController implements SeasonObserver {
 	private void onSelectedSeason() {
 		final CotisationViewModel paiedCotisationsPerSeason = this.cotisationService
 				.getPaiedCotisationsPerSeason(this.seasons.getSelectionModel().getSelectedItem());
-		this.paidCotisationsMemberCardNotSentList.clear();
-		this.paidCotisationsMemberCardNotSentList.addAll(paiedCotisationsPerSeason
-				.getPaidCotisationsMemberCardNotSent());
-		this.paidCotisationsMemberCardNotSentTable.setItems(this.paidCotisationsMemberCardNotSentList);
+		this.buildPaidCotisationsMemberCardNotSent(paiedCotisationsPerSeason);
 		this.bindPaidNotSentProperties();
-		this.paidCotisationsMemberCardSentList.clear();
-		this.paidCotisationsMemberCardSentList.addAll(paiedCotisationsPerSeason
-				.getPaidCotisationsMemberCardSent());
-		this.paidCotisationsMemberCardNotSentTable.setItems(this.paidCotisationsMemberCardSentList);
+		this.buildPaidCotisationsMemberCardSent(paiedCotisationsPerSeason);
 		this.bindPaidSentProperties();
-		this.unpaiedCotisationsList.clear();
-		this.unpaiedCotisationsList.addAll(paiedCotisationsPerSeason
-				.getPaidCotisationsMemberCardSent());
-		this.unpaidCotisationsTable.setItems(this.unpaiedCotisationsList);
+		this.buildUnpaid(paiedCotisationsPerSeason);
 		this.bindUnpaid();
 		this.totalPaid.setText(String.valueOf(paiedCotisationsPerSeason.getTotalPaidCotisations()));
 		this.totalUnpaid.setText(String.valueOf(paiedCotisationsPerSeason.getTotalUnpaidCotisations()));
 		this.total.setText(String.valueOf(paiedCotisationsPerSeason.getTotalAmountPaid()) + " €");
 	}
 
+	private void buildUnpaid(final CotisationViewModel paiedCotisationsPerSeason) {
+		this.unpaiedCotisationsList.clear();
+		this.unpaiedCotisationsList.addAll(paiedCotisationsPerSeason.getUnpaidCotisationsModel());
+		this.unpaidCotisationsTable.setItems(this.unpaiedCotisationsList);
+	}
+
+	private void buildPaidCotisationsMemberCardSent(final CotisationViewModel paiedCotisationsPerSeason) {
+		this.paidCotisationsMemberCardSentList.clear();
+		this.paidCotisationsMemberCardSentList.addAll(paiedCotisationsPerSeason
+				.getPaidCotisationsMemberCardSent());
+		this.paidCotisationsMemberCardSentTable.setItems(this.paidCotisationsMemberCardSentList);
+	}
+
+	private void buildPaidCotisationsMemberCardNotSent(final CotisationViewModel paiedCotisationsPerSeason) {
+		this.paidCotisationsMemberCardNotSentList.clear();
+		this.paidCotisationsMemberCardNotSentList.addAll(paiedCotisationsPerSeason
+				.getPaidCotisationsMemberCardNotSent());
+		this.paidCotisationsMemberCardNotSentTable.setItems(this.paidCotisationsMemberCardNotSentList);
+	}
+
 	private void bindPaidSentProperties() {
-		this.paidCotisationsMemberCardSentDate.setCellValueFactory(cellData -> cellData.getValue()
-				.paymentDateProperty());
-		this.paidCotisationsMemberCardSentFirstName.setCellValueFactory(cellData
-				-> cellData.getValue()
-						.memberProperty().get().firstNameProperty());
-		this.paidCotisationsMemberCardSentMemberNumber.setCellValueFactory(cellData
-				-> cellData.getValue()
-						.memberProperty().get().memberNumberProperty().asObject());
-		this.paidCotisationsMemberCardSentName.setCellValueFactory(cellData
-				-> cellData.getValue().memberProperty()
-						.get().nameProperty());
+		this.paidCotisationsMemberCardSentDate
+				.setCellValueFactory(cellData -> cellData.getValue().paymentDateProperty());
+		this.paidCotisationsMemberCardSentFirstName.setCellValueFactory(cellData -> cellData.getValue()
+				.memberProperty().get().firstNameProperty());
+		this.paidCotisationsMemberCardSentMemberNumber.setCellValueFactory(cellData -> cellData.getValue()
+				.memberProperty().get().memberNumberProperty().asObject());
+		this.paidCotisationsMemberCardSentName.setCellValueFactory(cellData -> cellData.getValue().memberProperty()
+				.get().nameProperty());
 	}
 
 	private void bindPaidNotSentProperties() {
 		this.paidCotisationsMemberCardNotSentDate.setCellValueFactory(cellData -> cellData.getValue()
 				.paymentDateProperty());
-		this.paidCotisationsMemberCardNotSentFirstName.setCellValueFactory(cellData
-				-> cellData.getValue()
-						.memberProperty().get().firstNameProperty());
-		this.paidCotisationsMemberCardNotSentMemberNumber.setCellValueFactory(cellData
-				-> cellData.getValue()
-						.memberProperty().get().memberNumberProperty().asObject());
-		this.paidCotisationsMemberCardNotSentName.setCellValueFactory(cellData
-				-> cellData.getValue().memberProperty()
-						.get().nameProperty());
+		this.paidCotisationsMemberCardNotSentFirstName.setCellValueFactory(cellData -> cellData.getValue()
+				.memberProperty().get().firstNameProperty());
+		this.paidCotisationsMemberCardNotSentMemberNumber.setCellValueFactory(cellData -> cellData.getValue()
+				.memberProperty().get().memberNumberProperty().asObject());
+		this.paidCotisationsMemberCardNotSentName.setCellValueFactory(cellData -> cellData.getValue().memberProperty()
+				.get().nameProperty());
 	}
 
 	private void bindUnpaid() {
-		this.unpaidCotisationsFirstName.setCellValueFactory(cellData ->
-				cellData.getValue().memberProperty().get()
-						.firstNameProperty());
-		this.unpaidCotisationsMemberNumber.setCellValueFactory(cellData ->
-				cellData.getValue().memberProperty().get()
-						.memberNumberProperty().asObject());
-		this.unpaidCotisationsName.setCellValueFactory(cellData ->
-				cellData.getValue().memberProperty().get()
-						.nameProperty());
+		this.unpaidCotisationsFirstName.setCellValueFactory(cellData -> cellData.getValue().memberProperty().get()
+				.firstNameProperty());
+		this.unpaidCotisationsMemberNumber.setCellValueFactory(cellData -> cellData.getValue().memberProperty().get()
+				.memberNumberProperty().asObject());
+		this.unpaidCotisationsName.setCellValueFactory(cellData -> cellData.getValue().memberProperty().get()
+				.nameProperty());
 	}
 
 	public void onPrintButton() {
@@ -179,5 +182,18 @@ public class CotisationsOverviewController implements SeasonObserver {
 		final String pdfPath = cotisations.creationTableau();
 		final HostServices hostServices = Main.main.getHostServices();
 		hostServices.showDocument(pdfPath);
+	}
+
+	public void onMemberCardDelivered() {
+		final ObservableList<CotisationsOverviewModel> selectedItems = this.paidCotisationsMemberCardNotSentTable
+				.getSelectionModel()
+				.getSelectedItems();
+		if (selectedItems.isEmpty()) {
+			AlertDialogUtils.displayErrorAlert(null, "Aucun membre sélectionné");
+		} else {
+			this.cotisationService.setMemberCardAsSent(selectedItems,
+					this.seasons.getSelectionModel().getSelectedItem());
+			this.onSelectedSeason();
+		}
 	}
 }

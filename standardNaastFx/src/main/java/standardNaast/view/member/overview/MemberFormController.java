@@ -5,10 +5,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -16,9 +22,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import org.apache.commons.lang3.StringUtils;
-
 import standardNaast.model.PersonModel;
 import standardNaast.service.PersonneService;
 import standardNaast.service.PersonneServiceImpl;
@@ -79,6 +82,9 @@ public class MemberFormController {
 	@FXML
 	private Button updateButton;
 
+	@FXML
+	private Button deleteButton;
+
 	private PersonModel model;
 
 	private final List<String> validationErrors = new ArrayList<>();
@@ -89,6 +95,7 @@ public class MemberFormController {
 		this.model = model;
 		this.addButton.setDisable(false);
 		this.updateButton.setDisable(false);
+		this.deleteButton.setDisable(false);
 		this.memberNumberLabel.setText(String.valueOf(model.getMemberNumber()));
 		this.firstNameLabel.setText(model.getFirstName());
 		this.nameLabel.setText(model.getName());
@@ -191,5 +198,23 @@ public class MemberFormController {
 
 	public void setParentController(final MembersOverviewController parentController) {
 		this.parentController = parentController;
+	}
+
+	public void onDelete() {
+		final ButtonType oui = new ButtonType("Oui", ButtonData.YES);
+		final ButtonType non = new ButtonType("Non", ButtonData.NO);
+		final ButtonType annuler = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
+		final String memberFirstName = this.model.getFirstName();
+		final String memberLastName = this.model.getName();
+		final Alert alert = new Alert(AlertType.CONFIRMATION,
+				"Souhaitez-vous effacer le membre " + memberFirstName + " " + memberLastName + " ?",
+				oui, non, annuler);
+		alert.showAndWait();
+		if (alert.getResult() == oui) {
+			final Long personneId = this.model.getPersonneId();
+			this.personneService.deletePerson(personneId);
+			this.parentController.onAddedMember(this.model);
+			AlertDialogUtils.displaySuccessALert("Membre " + memberFirstName + " " + memberLastName + " effacé");
+		}
 	}
 }

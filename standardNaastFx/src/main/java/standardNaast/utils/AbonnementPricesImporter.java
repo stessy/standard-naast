@@ -21,7 +21,7 @@ public class AbonnementPricesImporter {
 
 	private final AbonnementService abonnementService = new AbonnementService();
 
-	public void importAbonnementsPrices(final String pathFileToImport, final SeasonModel season,
+	public boolean importAbonnementsPrices(final String pathFileToImport, final SeasonModel season,
 			final CompetitionType competitionType) {
 		try {
 			final FileInputStream file = new FileInputStream(new File(pathFileToImport));
@@ -64,7 +64,8 @@ public class AbonnementPricesImporter {
 				final double studentPriceValue = this.getCellValue(studentCell, evaluator);
 
 				for (final String bloc : blocValue) {
-					BlocAbonnementPrices price = new BlocAbonnementPrices(bloc.trim(), fullPriceValue, PersonType.ADULT);
+					BlocAbonnementPrices price = new BlocAbonnementPrices(bloc.trim(), fullPriceValue,
+							PersonType.ADULT);
 					prices.add(price);
 					price = new BlocAbonnementPrices(bloc.trim(), pensionedPriceValue, PersonType.PENSIONED);
 					prices.add(price);
@@ -81,8 +82,10 @@ public class AbonnementPricesImporter {
 			}
 			file.close();
 			workbook.close();
+			return true;
 		} catch (final Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 

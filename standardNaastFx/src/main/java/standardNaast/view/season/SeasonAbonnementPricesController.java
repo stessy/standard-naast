@@ -16,6 +16,7 @@ import standardNaast.model.SeasonModel;
 import standardNaast.service.PricesService;
 import standardNaast.types.CompetitionType;
 import standardNaast.utils.AbonnementPricesImporter;
+import standardNaast.utils.AlertDialogUtils;
 
 public class SeasonAbonnementPricesController {
 
@@ -93,15 +94,27 @@ public class SeasonAbonnementPricesController {
 
 	@FXML
 	private void onOpen() {
-		final FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Resource File");
-		fileChooser.getExtensionFilters().addAll(
-				new ExtensionFilter("All Files", "*.*"));
-		final File selectedFile = fileChooser.showOpenDialog(null);
-		if (selectedFile != null) {
-			final AbonnementPricesImporter importer = new AbonnementPricesImporter();
-			importer.importAbonnementsPrices(selectedFile.getAbsolutePath(), this.selectedSeason,
-					CompetitionType.CHAMPIONSHIP);
+		if (this.selectedSeason == null) {
+			AlertDialogUtils.displayErrorAlert(null, "Saison non sélectionnée");
+		} else {
+			final FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Open Resource File");
+			fileChooser.getExtensionFilters().addAll(
+					new ExtensionFilter("All Files", "*.*"));
+			final File selectedFile = fileChooser.showOpenDialog(null);
+			if (selectedFile != null) {
+				final AbonnementPricesImporter importer = new AbonnementPricesImporter();
+				final boolean success = importer.importAbonnementsPrices(selectedFile.getAbsolutePath(),
+						this.selectedSeason,
+						CompetitionType.CHAMPIONSHIP);
+				if (success) {
+					AlertDialogUtils.displaySuccessALert("Prix des abonnements importés");
+					this.buildCompetitionTypes(this.selectedSeason);
+					this.competitions.getSelectionModel().select(CompetitionType.CHAMPIONSHIP);
+				} else {
+					AlertDialogUtils.displayErrorAlert(null, "Prix des abonnements non importés");
+				}
+			}
 		}
 	}
 

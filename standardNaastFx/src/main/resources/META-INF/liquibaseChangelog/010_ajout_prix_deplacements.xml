@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet id="1" author="stessy" failOnError="false">
+		<sql><![CDATA[INSERT INTO PUBLIC.TRAVEL_PRICE(ID, MONTANT, TYPE_PERSONNE, PLACE, MEMBRE, SEASON_ID) VALUES
+		(NEXTVAL('TRAVEL_PRICE_SEQ'),9.00, 'MINOR', 'HOME', 1, '2016-2017'),
+		(NEXTVAL('TRAVEL_PRICE_SEQ'),12.00, 'MINOR', 'AWAY', 1, '2016-2017'),
+		(NEXTVAL('TRAVEL_PRICE_SEQ'),11.00, 'MINOR', 'HOME', 0, '2016-2017'),
+		(NEXTVAL('TRAVEL_PRICE_SEQ'),14.00, 'MINOR', 'AWAY', 0, '2016-2017'),
+		(NEXTVAL('TRAVEL_PRICE_SEQ'),11.00, 'MAJOR', 'HOME', 1, '2016-2017'),
+		(NEXTVAL('TRAVEL_PRICE_SEQ'),12.00, 'MAJOR', 'AWAY', 1, '2016-2017'),
+		(NEXTVAL('TRAVEL_PRICE_SEQ'),13.00, 'MAJOR', 'HOME', 0, '2016-2017'),
+		(NEXTVAL('TRAVEL_PRICE_SEQ'),14.00, 'MAJOR', 'AWAY', 0, '2016-2017');
+		]]></sql>
+	</changeSet>
+</databaseChangeLog>

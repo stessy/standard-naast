@@ -25,4 +25,6 @@ public interface PersonneService {
 
 	Long getMaxMemberNumber();
 
+	void deletePerson(long id);
+
 }

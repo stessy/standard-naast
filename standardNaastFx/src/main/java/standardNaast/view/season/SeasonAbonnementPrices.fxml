@@ -34,7 +34,7 @@
                      <children>
                         <Label alignment="TOP_LEFT" text="Type compétition" />
                         <ComboBox fx:id="competitions" onAction="#onSelectedCompetitionType" prefWidth="150.0" />
-                        <Button disable="true" mnemonicParsing="false" onAction="#onOpen" text="Importer les prix des abonnements" />
+                        <Button disable="false" mnemonicParsing="false" onAction="#onOpen" text="Importer les prix des abonnements" />
                      </children>
                      <VBox.margin>
                         <Insets bottom="5.0" />
