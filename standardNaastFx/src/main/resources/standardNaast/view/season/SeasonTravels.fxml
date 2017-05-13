@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<TitledPane alignment="CENTER" collapsible="false" text="Déplacements" xmlns="http://javafx.com/javafx/8.0.40"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.season.SeasonTravelsTableController">
+    <BorderPane>
+        <center>
+            <TableView fx:id="travelsTable" prefHeight="200.0" prefWidth="176.0" BorderPane.alignment="CENTER">
+                <columns>
+                    <TableColumn fx:id="amount" prefWidth="75.0" text="Montant"/>
+                    <TableColumn fx:id="category" prefWidth="75.0" text="Catégorie"/>
+                    <TableColumn fx:id="place" prefWidth="75.0" text="Lieu"/>
+                    <TableColumn fx:id="member" prefWidth="75.0" text="Membre"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+        </center>
+        <bottom>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <buttons>
+                    <Button fx:id="add" mnemonicParsing="false" onAction="#onAdd" text="Ajouter"/>
+                    <Button fx:id="modify" disable="true" mnemonicParsing="false" onAction="#onModify" text="Modifer"/>
+                    <Button fx:id="delete" disable="true" mnemonicParsing="false" onAction="#onDelete" text="Effacer"/>
+                </buttons>
+            </ButtonBar>
+        </bottom>
+    </BorderPane>
+</TitledPane>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<TitledPane alignment="CENTER" animated="false" collapsible="false" text="Abonnements du membre"
+            xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="standardNaast.view.member.overview.MemberAbonnementsController">
+    <BorderPane>
+        <center>
+            <TableView fx:id="abonnementsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <columns>
+                    <TableColumn fx:id="saison" prefWidth="75.0" text="Saison"/>
+                    <TableColumn fx:id="bloc" prefWidth="75.0" text="Bloc"/>
+                    <TableColumn fx:id="rang" prefWidth="75.0" text="Rang"/>
+                    <TableColumn fx:id="place" prefWidth="75.0" text="Place"/>
+                    <TableColumn fx:id="reduction" prefWidth="75.0" text="Réduction"/>
+                    <TableColumn fx:id="acompte" prefWidth="75.0" text="Acompte"/>
+                    <TableColumn fx:id="paye" prefWidth="75.0" text="Payé"/>
+                    <TableColumn fx:id="status" prefWidth="75.0" text="Statut"/>
+                </columns>
+            </TableView>
+        </center>
+        <bottom>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <buttons>
+                    <Button fx:id="addButton" disable="true" mnemonicParsing="false" onAction="#onAdd"
+                            text="Ajouter"/>
+                    <Button fx:id="updateButton" disable="true" mnemonicParsing="false" onAction="#onUpdate"
+                            text="Modifier"/>
+                </buttons>
+            </ButtonBar>
+        </bottom>
+    </BorderPane>
+</TitledPane>

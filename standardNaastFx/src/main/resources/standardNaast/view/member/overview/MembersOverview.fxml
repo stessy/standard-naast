@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<VBox prefHeight="768.0" prefWidth="1024.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.40"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.member.overview.MembersOverviewController">
+    <fx:include fx:id="membersTable" source="MembersTable.fxml" VBox.vgrow="ALWAYS"/>
+    <HBox prefHeight="232.0" prefWidth="1024.0" spacing="5.0">
+        <fx:include fx:id="memberForm" source="MemberForm.fxml" HBox.hgrow="ALWAYS"/>
+        <fx:include fx:id="memberTravels" source="MemberTravels.fxml" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox prefHeight="200.0" prefWidth="1024.0" spacing="5.0" VBox.vgrow="ALWAYS">
+        <fx:include fx:id="memberAbonnements" source="MemberAbonnements.fxml" HBox.hgrow="ALWAYS"/>
+        <fx:include fx:id="memberCotisations" source="MemberCotisations.fxml" HBox.hgrow="ALWAYS"/>
+        <fx:include fx:id="memberBenevolats" source="MemberBenevolats.fxml" HBox.hgrow="ALWAYS"/>
+    </HBox>
+</VBox>
