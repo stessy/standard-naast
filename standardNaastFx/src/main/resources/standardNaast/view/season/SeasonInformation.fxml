@@ -1,55 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.GridPane?>
-
-<TitledPane alignment="CENTER" collapsible="false" contentDisplay="CENTER" text="Saison" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.season.SeasonInformationController">
-   <content>
-      <GridPane hgap="5.0">
-         <children>
-            <Label text="Date début" />
-            <Label fx:id="startDate" GridPane.columnIndex="1">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <Label text="Date fin" GridPane.columnIndex="2" />
-            <Label fx:id="endDate" GridPane.columnIndex="3">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <Label prefHeight="17.0" prefWidth="114.0" text="Date premier match" GridPane.columnIndex="4" />
-            <Label fx:id="firstMatchDate" GridPane.columnIndex="5"><font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Label>
-            <Label text="Européen" GridPane.columnIndex="6" />
-            <Label fx:id="european" GridPane.columnIndex="7"><font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Label>
-            <Label text="Montant cotisation" GridPane.columnIndex="8" />
-            <Label fx:id="cotisationAmount" GridPane.columnIndex="9"><font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Label>
-         </children>
-         <columnConstraints>
-            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" />
-            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints />
-         </rowConstraints>
-      </GridPane>
-   </content>
+<?import javafx.scene.text.*?>
+<TitledPane alignment="CENTER" collapsible="false" contentDisplay="CENTER" text="Saison"
+            xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="standardNaast.view.season.SeasonInformationController">
+    <GridPane hgap="5.0">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS"/>
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints/>
+        </rowConstraints>
+        <Label text="Date début"/>
+        <Label fx:id="startDate" GridPane.columnIndex="1">
+            <font>
+                <Font name="System Bold" size="12.0"/>
+            </font>
+        </Label>
+        <Label text="Date fin" GridPane.columnIndex="2"/>
+        <Label fx:id="endDate" GridPane.columnIndex="3">
+            <font>
+                <Font name="System Bold" size="12.0"/>
+            </font>
+        </Label>
+        <Label prefHeight="17.0" prefWidth="114.0" text="Date premier match" GridPane.columnIndex="4"/>
+        <Label fx:id="firstMatchDate" GridPane.columnIndex="5">
+            <font>
+                <Font name="System Bold" size="12.0"/>
+            </font>
+        </Label>
+        <Label text="Européen" GridPane.columnIndex="6"/>
+        <Label fx:id="european" GridPane.columnIndex="7">
+            <font>
+                <Font name="System Bold" size="12.0"/>
+            </font>
+        </Label>
+        <Label text="Montant cotisation" GridPane.columnIndex="8"/>
+        <Label fx:id="cotisationAmount" GridPane.columnIndex="9">
+            <font>
+                <Font name="System Bold" size="12.0"/>
+            </font>
+        </Label>
+    </GridPane>
 </TitledPane>

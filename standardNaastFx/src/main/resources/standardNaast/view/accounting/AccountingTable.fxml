@@ -1,102 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.BorderPane?>
-
-<BorderPane prefHeight="797.0" prefWidth="1391.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.accounting.AccountingTableController">
-   <center>
-      <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn fx:id="date" prefWidth="75.0" text="Date" />
-          <TableColumn fx:id="type" prefWidth="75.0" text="Type" />
-            <TableColumn fx:id="description" prefWidth="75.0" text="Description" />
-            <TableColumn fx:id="montant" prefWidth="75.0" text="Montant" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-   </center>
-   <top>
-      <GridPane maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="450.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-        </rowConstraints>
-         <children>
+<BorderPane prefHeight="797.0" prefWidth="1391.0" xmlns="http://javafx.com/javafx/8.0.40"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="standardNaast.view.accounting.AccountingTableController">
+    <center>
+        <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn fx:id="date" prefWidth="75.0" text="Date"/>
+                <TableColumn fx:id="type" prefWidth="75.0" text="Type"/>
+                <TableColumn fx:id="description" prefWidth="75.0" text="Description"/>
+                <TableColumn fx:id="montant" prefWidth="75.0" text="Montant"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+    </center>
+    <top>
+        <GridPane maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="450.0"/>
+                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
+            </rowConstraints>
+            <BorderPane.margin>
+                <Insets bottom="5.0" top="5.0"/>
+            </BorderPane.margin>
             <GridPane hgap="5.0" GridPane.rowSpan="2147483647">
-              <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label text="Mois" textFill="#d0cdcd" GridPane.columnIndex="1" />
-                  <ComboBox fx:id="month" onAction="#onSelectedMonth" prefWidth="150.0" GridPane.columnIndex="2" />
-                  <Label text="Année" textFill="#d0cdcd" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <ComboBox fx:id="year" onAction="#onSelectedYear" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <CheckBox mnemonicParsing="false" text="Année en cours" textFill="#d0cdcd" GridPane.columnIndex="3" GridPane.rowSpan="2147483647" />
-                  <Button fx:id="refresh" mnemonicParsing="false" onAction="#onRefresh" text="Rafraichir" GridPane.rowSpan="2147483647" />
-               </children>
+                <columnConstraints>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <Label text="Mois" textFill="#d0cdcd" GridPane.columnIndex="1"/>
+                <ComboBox fx:id="month" onAction="#onSelectedMonth" prefWidth="150.0" GridPane.columnIndex="2"/>
+                <Label text="Année" textFill="#d0cdcd" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <ComboBox fx:id="year" onAction="#onSelectedYear" prefWidth="150.0" GridPane.columnIndex="2"
+                          GridPane.rowIndex="1"/>
+                <CheckBox mnemonicParsing="false" text="Année en cours" textFill="#d0cdcd"
+                          GridPane.columnIndex="3" GridPane.rowSpan="2147483647"/>
+                <Button fx:id="refresh" mnemonicParsing="false" onAction="#onRefresh" text="Rafraichir"
+                        GridPane.rowSpan="2147483647"/>
             </GridPane>
             <GridPane hgap="5.0" vgap="5.0" GridPane.columnIndex="1" GridPane.rowSpan="2147483647">
-              <columnConstraints>
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label text="Total mensuel entrées" textFill="#d0cdcd" />
-                  <Label text="Total annuel entrées" textFill="#d0cdcd" GridPane.rowIndex="1" />
-                  <Label text="Total mensuel sorties" textFill="#d0cdcd" GridPane.columnIndex="2" />
-                  <Label text="Tota annuel sorties" textFill="#d0cdcd" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <TextField fx:id="monthlyEntries" editable="false" GridPane.columnIndex="1" />
-                  <TextField fx:id="yearlyEntries" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="monthlyExits" editable="false" GridPane.columnIndex="3" />
-                  <TextField fx:id="yearlyExits" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <Label text="Différence" textFill="#d0cdcd" GridPane.columnIndex="4" />
-                  <Label text="Différence" textFill="#d0cdcd" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                  <TextField fx:id="monthlyDifference" editable="false" GridPane.columnIndex="5" />
-                  <TextField fx:id="yearlyDifference" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-               </children>
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <Label text="Total mensuel entrées" textFill="#d0cdcd"/>
+                <Label text="Total annuel entrées" textFill="#d0cdcd" GridPane.rowIndex="1"/>
+                <Label text="Total mensuel sorties" textFill="#d0cdcd" GridPane.columnIndex="2"/>
+                <Label text="Tota annuel sorties" textFill="#d0cdcd" GridPane.columnIndex="2"
+                       GridPane.rowIndex="1"/>
+                <TextField fx:id="monthlyEntries" editable="false" GridPane.columnIndex="1"/>
+                <TextField fx:id="yearlyEntries" editable="false" GridPane.columnIndex="1"
+                           GridPane.rowIndex="1"/>
+                <TextField fx:id="monthlyExits" editable="false" GridPane.columnIndex="3"/>
+                <TextField fx:id="yearlyExits" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                <Label text="Différence" textFill="#d0cdcd" GridPane.columnIndex="4"/>
+                <Label text="Différence" textFill="#d0cdcd" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+                <TextField fx:id="monthlyDifference" editable="false" GridPane.columnIndex="5"/>
+                <TextField fx:id="yearlyDifference" editable="false" GridPane.columnIndex="5"
+                           GridPane.rowIndex="1"/>
             </GridPane>
             <GridPane GridPane.columnIndex="2" GridPane.rowSpan="2147483647">
-              <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button fx:id="updateButton" mnemonicParsing="false" onAction="#onUpdate" text="Modifier" />
-                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAdd" text="Ajouter" GridPane.rowIndex="1" />
-               </children>
+                <columnConstraints>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <Button fx:id="updateButton" mnemonicParsing="false" onAction="#onUpdate" text="Modifier"/>
+                <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAdd" text="Ajouter"
+                        GridPane.rowIndex="1"/>
             </GridPane>
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="5.0" top="5.0" />
-         </BorderPane.margin>
-      </GridPane>
-   </top>
+        </GridPane>
+    </top>
 </BorderPane>
