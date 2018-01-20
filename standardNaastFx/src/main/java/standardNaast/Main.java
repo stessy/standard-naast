@@ -50,8 +50,8 @@ public class Main extends Application {
         FileInputStream fis;
         FileOutputStream fos;
         try {
-            fis = new FileInputStream("init.properties");
-            props.load(fis);
+            fis = new FileInputStream("init.xml");
+            props.loadFromXML(fis);
             final String databaseFrom = props.getProperty("urlCopy") + props.getProperty("database");
             String databaseBackupName = "backup_" + DateUtils.formatDate(new Date(), DateFormat.YYYYMMDDHHMMSS);
             final String databaseTo = props.getProperty("urlBackup") + databaseBackupName;
@@ -63,9 +63,9 @@ public class Main extends Application {
                     null,
                     databaseFrom);
             FileUtils.moveTo(databaseFrom, databaseTo);
-            fos = new FileOutputStream("init.properties");
+            fos = new FileOutputStream("init.xml");
             props.setProperty("database", databaseBackupName);
-            props.store(fos, "");
+            props.storeToXML(fos, "");
             fos.close();
         } catch (final IOException | SQLException e) {
             Main.LOG.error("The database could not be backed up on exit due to : ", e);
