@@ -1,28 +1,27 @@
 package standardNaast.utils;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import standardNaast.model.SeasonModel;
+import standardNaast.service.AbonnementService;
+import standardNaast.types.CompetitionType;
+import standardNaast.types.PersonType;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import standardNaast.model.SeasonModel;
-import standardNaast.service.AbonnementService;
-import standardNaast.types.CompetitionType;
-import standardNaast.types.PersonType;
-
 public class AbonnementPricesImporter {
 
 	private final AbonnementService abonnementService = new AbonnementService();
 
 	public boolean importAbonnementsPrices(final String pathFileToImport, final SeasonModel season,
-			final CompetitionType competitionType) {
+										   final CompetitionType competitionType) {
 		try {
 			final FileInputStream file = new FileInputStream(new File(pathFileToImport));
 
@@ -92,14 +91,6 @@ public class AbonnementPricesImporter {
 	private double getCellValue(final Cell cell, final FormulaEvaluator evaluator) {
 		double value;
 		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_NUMERIC:
-			value = cell.getNumericCellValue();
-			break;
-		case Cell.CELL_TYPE_STRING:
-			value = Double.valueOf(cell.getStringCellValue());
-			break;
-		case Cell.CELL_TYPE_FORMULA:
-			switch (evaluator.evaluateInCell(cell).getCellType()) {
 			case Cell.CELL_TYPE_NUMERIC:
 				value = cell.getNumericCellValue();
 				break;
@@ -107,16 +98,24 @@ public class AbonnementPricesImporter {
 				value = Double.valueOf(cell.getStringCellValue());
 				break;
 			case Cell.CELL_TYPE_FORMULA:
-				// Not again
-				break;
-			}
-		case Cell.CELL_TYPE_BLANK:
-			throw new UnsupportedOperationException("Cell of type [CELL_TYPE_BLANK] not supported");
-		case Cell.CELL_TYPE_BOOLEAN:
-			throw new UnsupportedOperationException("Cell value [" + cell.getBooleanCellValue()
-					+ "] of type [CELL_TYPE_BOOLEAN] not supported");
-		default:
-			throw new UnsupportedOperationException("Cell of type [" + cell.getCellType() + "] not supported");
+				switch (evaluator.evaluateInCell(cell).getCellType()) {
+					case Cell.CELL_TYPE_NUMERIC:
+						value = cell.getNumericCellValue();
+						break;
+					case Cell.CELL_TYPE_STRING:
+						value = Double.valueOf(cell.getStringCellValue());
+						break;
+					case Cell.CELL_TYPE_FORMULA:
+						// Not again
+						break;
+				}
+			case Cell.CELL_TYPE_BLANK:
+				throw new UnsupportedOperationException("Cell of type [CELL_TYPE_BLANK] not supported");
+			case Cell.CELL_TYPE_BOOLEAN:
+				throw new UnsupportedOperationException("Cell value [" + cell.getBooleanCellValue()
+						+ "] of type [CELL_TYPE_BOOLEAN] not supported");
+			default:
+				throw new UnsupportedOperationException("Cell of type [" + cell.getCellType() + "] not supported");
 		}
 		return value;
 	}

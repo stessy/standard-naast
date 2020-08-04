@@ -2,8 +2,8 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment/>
-<entry key="url">C:\\tmp\\database\\back\\;C:\\tmp\\database\\backup\\</entry>
+<entry key="url">C:\\tmp\\database\\backup\\</entry>
 <entry key="urlCopy">C:\\tmp\\database\\backup\\</entry>
-<entry key="database">backup_20180203152032</entry>
 <entry key="urlBackup">C:\\tmp\\database\\backup\\</entry>
+<entry key="database">backup_20200804114210</entry>
 </properties>

@@ -5,8 +5,7 @@
     <include file="META-INF/liquibaseChangelog/001_standard_naast.xml"/>
     <include file="META-INF/liquibaseChangelog/002_abonnement_migration.xml"/>
     <include file="META-INF/liquibaseChangelog/003_travel_migration.xml"/>
-    <include
-            file="META-INF/liquibaseChangelog/004_personne_cotisation_migration.xml"/>
+    <include file="META-INF/liquibaseChangelog/004_personne_cotisation_migration.xml"/>
     <include file="META-INF/liquibaseChangelog/005_accounting.xml"/>
     <include file="META-INF/liquibaseChangelog/006_migration_2.xml"/>
     <include file="META-INF/liquibaseChangelog/007_personne_cotisation_sequence.xml"/>
@@ -14,4 +13,5 @@
     <include file="META-INF/liquibaseChangelog/009_team.xml"/>
     <include file="META-INF/liquibaseChangelog/010_ajout_prix_deplacements.xml"/>
     <include file="META-INF/liquibaseChangelog/011_ajout_red_card.xml"/>
+    <include file="META-INF/liquibaseChangelog/012_person_travel_type_resize.xml"/>
 </databaseChangeLog>
