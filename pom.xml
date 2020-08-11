@@ -9,7 +9,7 @@
   <name>standardNaast</name>
   <modules>
     <module>standardNaast-web</module>
-    <module>standardNaast-angular</module>
+    <module>standardNaastFx</module>
   </modules>
   <properties>
     <cargo.version>1.4.8</cargo.version>
