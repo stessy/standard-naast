@@ -17,3 +17,4 @@ standardnaast-backend/target/
 .idea/
 *.iml
 
+/data/
