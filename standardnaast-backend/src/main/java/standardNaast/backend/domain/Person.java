@@ -184,4 +184,8 @@ public class Person implements Serializable {
     public void setRedCard(Boolean redCard) {
         this.redCard = redCard;
     }
+
+    public boolean isMember() {
+        return this.memberNumber != null && this.memberNumber < 10000;
+    }
 }
