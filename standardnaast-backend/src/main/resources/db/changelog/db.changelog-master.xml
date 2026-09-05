@@ -10,4 +10,17 @@
                  stripComments="true"/>
     </changeSet>
 
+    <include file="liquibaseChangelog/001_standard_naast.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/002_abonnement_migration.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/003_travel_migration.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/004_personne_cotisation_migration.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/005_accounting.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/006_migration_2.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/007_personne_cotisation_sequence.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/008_match.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/009_team.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/010_ajout_prix_deplacements.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/011_ajout_red_card.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/012_person_travel_type_resize.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

@@ -11,5 +11,8 @@
 /standardNaastWebServices
 /standardNaastAngular
 /database
+target/
+*.class
+standardnaast-backend/target/
 
 

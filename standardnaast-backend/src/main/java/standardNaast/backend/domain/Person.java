@@ -64,4 +64,124 @@ public class Person implements Serializable {
 
     @Column(name = "RED_CARD")
     private Boolean redCard;
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFirstname() {
+        return this.firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPostalCode() {
+        return this.postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public LocalDate getBirthdate() {
+        return this.birthdate;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobilePhone() {
+        return this.mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public LocalDate getPassportValidity() {
+        return this.passportValidity;
+    }
+
+    public void setPassportValidity(LocalDate passportValidity) {
+        this.passportValidity = passportValidity;
+    }
+
+    public String getIdentityCardNumber() {
+        return this.identityCardNumber;
+    }
+
+    public void setIdentityCardNumber(String identityCardNumber) {
+        this.identityCardNumber = identityCardNumber;
+    }
+
+    public Long getMemberNumber() {
+        return this.memberNumber;
+    }
+
+    public void setMemberNumber(Long memberNumber) {
+        this.memberNumber = memberNumber;
+    }
+
+    public Boolean getStudent() {
+        return this.student;
+    }
+
+    public void setStudent(Boolean student) {
+        this.student = student;
+    }
+
+    public Boolean getRedCard() {
+        return this.redCard;
+    }
+
+    public void setRedCard(Boolean redCard) {
+        this.redCard = redCard;
+    }
 }
