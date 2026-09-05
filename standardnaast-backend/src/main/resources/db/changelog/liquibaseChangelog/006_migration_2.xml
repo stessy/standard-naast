@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet id="1" author="stessy">
+		<sql><![CDATA[update personnes set etudiant = 0 where etudiant is null]]></sql>
+	</changeSet>
+	<changeSet id="2" author="stessy">
+		<sql><![CDATA[update abonnement set prices_id = (select id from prices where type_competition = 'CHAMPIONSHIP' and price_type='ABONNEMENT' and abonnement.bloc_value = prices.bloc and abonnement.saison = prices.saison_id and type_personne = 'LESS_THAN_TWELVE')]]></sql>
+	</changeSet>
+	<changeSet id="3" author="stessy">
+		<sql><![CDATA[update abonnement set prices_id = (select id from prices where type_competition = 'CHAMPIONSHIP' and price_type='ABONNEMENT' and abonnement.bloc_value = prices.bloc and prices.saison_id = '2014-2015' and type_personne = 'LESS_THAN_TWELVE') where prices_id is null]]></sql>
+	</changeSet>
+	<changeSet id="4" author="stessy">
+		<sql><![CDATA[alter sequence personne_cotisation_seq increment by 1000]]></sql>
+	</changeSet>
+	<changeSet id="5" author="stessy">
+		<sql><![CDATA[SELECT personne_cotisation_seq.nextval AS id FROM dual;]]></sql>
+	</changeSet>
+	<changeSet id="6" author="stessy">
+		<sql><![CDATA[alter sequence personne_cotisation_seq increment by 1]]></sql>
+	</changeSet>
+</databaseChangeLog>

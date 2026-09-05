@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet id="1" author="stessy">
+		<sql><![CDATA[create table accounting (id numeric, accounting_date date, description varchar(256), TYPE varchar(5))]]></sql>
+	</changeSet>
+	<changeSet id="2" author="stessy">
+		<sql><![CDATA[  alter table accounting alter column id set not null]]></sql>
+	</changeSet>
+	<changeSet id="3" author="stessy">
+		<sql><![CDATA[  alter table accounting add constraint accounting_pk primary key (id)]]></sql>
+	</changeSet>
+	<changeSet id="4" author="stessy">
+		<sql><![CDATA[  create sequence accounting_seq start with 100 increment by 1]]></sql>
+	</changeSet>
+	<changeSet id="5" author="stessy">
+		<sql><![CDATA[  alter table accounting add amount decimal ]]></sql>
+	</changeSet>
+	<changeSet id="6" author="stessy">
+		<sql><![CDATA[  create sequence abonnement_seq start with 1000000 increment by 1 ]]></sql>
+	</changeSet>
+	<changeSet id="7" author="stessy">
+		<sql><![CDATA[  alter table abonnement alter column bloc_value set null ]]></sql>
+	</changeSet>
+	<changeSet id="8" author="stessy">
+		<sql><![CDATA[  alter table abonnement alter column bloc_id set null ]]></sql>
+	</changeSet>
+</databaseChangeLog>

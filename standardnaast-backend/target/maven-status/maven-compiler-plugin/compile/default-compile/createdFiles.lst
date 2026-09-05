@@ -1,0 +1,4 @@
+standardNaast/backend/exception/ResourceNotFoundException.class
+standardNaast/backend/StandardNaastApplication.class
+standardNaast/backend/exception/GlobalExceptionHandler.class
+standardNaast/backend/config/SecurityConfig.class

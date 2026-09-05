@@ -8,8 +8,8 @@
   <packaging>pom</packaging>
   <name>standardNaast</name>
   <modules>
-    <module>standardNaast-web</module>
     <module>standardNaastFx</module>
+    <module>standardnaast-backend</module>
   </modules>
   <properties>
     <cargo.version>1.4.8</cargo.version>
