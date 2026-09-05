@@ -30,6 +30,12 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET:standardNaastJwtSecretKeyForApplicationMustBeAtLeast256BitsLong!}
+    expiration: 86400000
+    refresh-expiration: 604800000
+
 logging:
   level:
     root: INFO

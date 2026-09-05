@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: standardnaast-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: standardnaast
+      POSTGRES_USER: standardnaast
+      POSTGRES_PASSWORD: standardnaast_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: standardnaast-backend/Dockerfile
+    container_name: standardnaast-backend
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/standardnaast
+      SPRING_DATASOURCE_USERNAME: standardnaast
+      SPRING_DATASOURCE_PASSWORD: standardnaast_password
+      APP_JWT_SECRET: yourSuperSecretKeyForProductionMustBeAtLeast256BitsLongAndSecure
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

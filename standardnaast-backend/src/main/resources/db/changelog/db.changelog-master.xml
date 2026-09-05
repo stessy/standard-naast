@@ -22,5 +22,6 @@
     <include file="liquibaseChangelog/010_ajout_prix_deplacements.xml" relativeToChangelogFile="true"/>
     <include file="liquibaseChangelog/011_ajout_red_card.xml" relativeToChangelogFile="true"/>
     <include file="liquibaseChangelog/012_person_travel_type_resize.xml" relativeToChangelogFile="true"/>
+    <include file="liquibaseChangelog/013_users_and_roles.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
