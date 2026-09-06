@@ -19,3 +19,7 @@ standardnaast-backend/target/
 
 /data/
 /standardnaast-ng/node_modules/
+/standardnaast-ng/node/
+/standardnaast-backend/data/
+/standardnaast-ng/.angular/
+/standardnaast-ng/dist/

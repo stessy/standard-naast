@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MemberService } from '../../core/services/member.service';
 import { Member, MemberCreateUpdate } from '../../core/models/member.model';
@@ -25,7 +26,8 @@ import { Member, MemberCreateUpdate } from '../../core/models/member.model';
     InputTextModule,
     DialogModule,
     CheckboxModule,
-    TagModule
+    TagModule,
+    TooltipModule
   ],
   template: `
     <div class="members-page flex flex-column gap-4">
@@ -70,7 +72,7 @@ import { Member, MemberCreateUpdate } from '../../core/models/member.model';
           [totalRecords]="totalElements"
           [loading]="loading"
           [rowsPerPageOptions]="[10, 20, 50]"
-          styleClass="p-datatable-striped"
+          styleClass="p-datatable-sm p-datatable-striped"
           responsiveLayout="stack">
           <ng-template pTemplate="header">
             <tr>
@@ -99,26 +101,25 @@ import { Member, MemberCreateUpdate } from '../../core/models/member.model';
                 }
               </td>
               <td class="text-center">
-                <span class="p-column-title">Actions :</span>
-                <div class="flex justify-content-center gap-2">
+                <div class="flex justify-content-center gap-1">
                   <button
                     pButton
                     icon="pi pi-eye"
-                    class="p-button-rounded p-button-text p-button-info"
+                    class="p-button-rounded p-button-text p-button-sm p-button-info"
                     [routerLink]="['/members', member.id]"
                     pTooltip="Voir la fiche">
                   </button>
                   <button
                     pButton
                     icon="pi pi-pencil"
-                    class="p-button-rounded p-button-text p-button-warning"
+                    class="p-button-rounded p-button-text p-button-sm p-button-warning"
                     (click)="openEditMemberDialog(member)"
                     pTooltip="Modifier">
                   </button>
                   <button
                     pButton
                     icon="pi pi-trash"
-                    class="p-button-rounded p-button-text p-button-danger"
+                    class="p-button-rounded p-button-text p-button-sm p-button-danger"
                     (click)="confirmDeleteMember(member)"
                     pTooltip="Supprimer">
                   </button>
@@ -209,7 +210,16 @@ import { Member, MemberCreateUpdate } from '../../core/models/member.model';
         </form>
       </p-dialog>
     </div>
-  `
+  `,
+  styles: [`
+    :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+      padding: 0.35rem 0.65rem;
+      vertical-align: middle;
+    }
+    :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+      padding: 0.5rem 0.65rem;
+    }
+  `]
 })
 export class MemberListComponent implements OnInit {
   private memberService = inject(MemberService);
