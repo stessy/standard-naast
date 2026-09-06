@@ -27,7 +27,7 @@ public class MemberController {
     @Operation(summary = "Lister et rechercher les membres avec pagination")
     public ResponseEntity<Page<MemberDto>> getMembers(
             @RequestParam(required = false) final String search,
-            @PageableDefault(size = 20, sort = "name", direction = Sort.Direction.ASC) final Pageable pageable) {
+            @PageableDefault(size = 20, sort = "memberNumber", direction = Sort.Direction.ASC) final Pageable pageable) {
         return ResponseEntity.ok(this.memberService.getMembers(search, pageable));
     }
 

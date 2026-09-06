@@ -72,6 +72,9 @@ import { Member, MemberCreateUpdate } from '../../core/models/member.model';
           [totalRecords]="totalElements"
           [loading]="loading"
           [rowsPerPageOptions]="[10, 20, 50]"
+          sortField="memberNumber"
+          [sortOrder]="1"
+          [defaultSortOrder]="1"
           styleClass="p-datatable-sm p-datatable-striped"
           responsiveLayout="stack">
           <ng-template pTemplate="header">
@@ -231,7 +234,7 @@ export class MemberListComponent implements OnInit {
   totalElements = 0;
   pageSize = 20;
   currentPage = 0;
-  currentSort = 'name,asc';
+  currentSort = 'memberNumber,asc';
   searchTerm = '';
   loading = false;
   saving = false;

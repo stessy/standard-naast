@@ -13,7 +13,7 @@ export class MemberService {
 
   constructor(private http: HttpClient) {}
 
-  getMembers(search?: string, page = 0, size = 20, sort = 'name,asc'): Observable<Page<Member>> {
+  getMembers(search?: string, page = 0, size = 20, sort = 'memberNumber,asc'): Observable<Page<Member>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
