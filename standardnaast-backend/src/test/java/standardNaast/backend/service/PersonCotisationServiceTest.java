@@ -96,7 +96,7 @@ class PersonCotisationServiceTest {
 
         assertThatThrownBy(() -> personCotisationService.registerMemberCotisation(dto))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Cotisation déjà existante");
+                .hasMessageContaining("existe déjà");
     }
 
     @Test

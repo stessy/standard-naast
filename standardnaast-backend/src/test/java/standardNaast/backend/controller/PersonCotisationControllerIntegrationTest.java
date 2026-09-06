@@ -44,12 +44,13 @@ class PersonCotisationControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(personCotisationController)
-                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-                .setControllerAdvice(new GlobalExceptionHandler())
-                .build();
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
+        mockMvc = MockMvcBuilders.standaloneSetup(personCotisationController)
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
     }
 
     @Test

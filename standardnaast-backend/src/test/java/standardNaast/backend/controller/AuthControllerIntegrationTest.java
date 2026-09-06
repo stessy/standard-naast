@@ -43,8 +43,10 @@ class AuthControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         this.objectMapper = new ObjectMapper();
+        this.objectMapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.authController)
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 

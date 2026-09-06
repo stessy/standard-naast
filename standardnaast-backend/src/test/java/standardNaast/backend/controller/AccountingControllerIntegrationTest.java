@@ -54,6 +54,7 @@ class AccountingControllerIntegrationTest {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.accountingController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
@@ -69,7 +70,7 @@ class AccountingControllerIntegrationTest {
     @Test
     void searchAccountings_shouldReturnPagedResults() throws Exception {
         when(this.accountingService.searchAccountings(isNull(), isNull(), isNull(), isNull(), any()))
-                .thenReturn(new PageImpl<>(List.of(this.sampleDto)));
+                .thenReturn(new PageImpl<>(List.of(this.sampleDto), org.springframework.data.domain.PageRequest.of(0, 20), 1));
 
         this.mockMvc.perform(get("/api/accountings")
                         .contentType(MediaType.APPLICATION_JSON))

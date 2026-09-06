@@ -18,3 +18,4 @@ standardnaast-backend/target/
 *.iml
 
 /data/
+/standardnaast-ng/node_modules/

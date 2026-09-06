@@ -47,9 +47,11 @@ class TravelPriceControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         this.objectMapper = new ObjectMapper();
+        this.objectMapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.travelPriceController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
@@ -66,7 +68,7 @@ class TravelPriceControllerIntegrationTest {
     @Test
     void getAllTravelPrices_shouldReturnPagedPrices() throws Exception {
         when(this.travelPriceService.getAllTravelPrices(isNull(), isNull(), isNull(), any()))
-                .thenReturn(new PageImpl<>(List.of(this.sampleDto)));
+                .thenReturn(new PageImpl<>(List.of(this.sampleDto), org.springframework.data.domain.PageRequest.of(0, 20), 1));
 
         this.mockMvc.perform(get("/api/travel-prices")
                         .contentType(MediaType.APPLICATION_JSON))

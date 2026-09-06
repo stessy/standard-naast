@@ -51,6 +51,7 @@ class MemberControllerIntegrationTest {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.memberController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
@@ -75,7 +76,7 @@ class MemberControllerIntegrationTest {
 
     @Test
     void getMembers_shouldReturnPagedMembers() throws Exception {
-        when(this.memberService.getMembers(isNull(), any())).thenReturn(new PageImpl<>(List.of(this.sampleMemberDto)));
+        when(this.memberService.getMembers(isNull(), any())).thenReturn(new PageImpl<>(List.of(this.sampleMemberDto), org.springframework.data.domain.PageRequest.of(0, 20), 1));
 
         this.mockMvc.perform(get("/api/members")
                         .contentType(MediaType.APPLICATION_JSON))

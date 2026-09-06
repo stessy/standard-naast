@@ -54,6 +54,7 @@ class MatchControllerIntegrationTest {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.matchController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
@@ -73,7 +74,7 @@ class MatchControllerIntegrationTest {
     @Test
     void getMatches_shouldReturnPagedMatches() throws Exception {
         when(this.matchService.getMatches(isNull(), isNull(), isNull(), any()))
-                .thenReturn(new PageImpl<>(List.of(this.sampleMatchDto)));
+                .thenReturn(new PageImpl<>(List.of(this.sampleMatchDto), org.springframework.data.domain.PageRequest.of(0, 20), 1));
 
         this.mockMvc.perform(get("/api/matches")
                         .contentType(MediaType.APPLICATION_JSON))

@@ -44,9 +44,11 @@ class TeamControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         this.objectMapper = new ObjectMapper();
+        this.objectMapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.teamController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
@@ -55,7 +57,7 @@ class TeamControllerIntegrationTest {
 
     @Test
     void getTeams_shouldReturnPagedTeams() throws Exception {
-        when(this.teamService.getTeams(isNull(), any())).thenReturn(new PageImpl<>(List.of(this.sampleTeamDto)));
+        when(this.teamService.getTeams(isNull(), any())).thenReturn(new PageImpl<>(List.of(this.sampleTeamDto), org.springframework.data.domain.PageRequest.of(0, 20), 1));
 
         this.mockMvc.perform(get("/api/teams")
                         .contentType(MediaType.APPLICATION_JSON))

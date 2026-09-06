@@ -52,6 +52,7 @@ class TravelControllerIntegrationTest {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.travelController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
@@ -75,7 +76,7 @@ class TravelControllerIntegrationTest {
     @Test
     void searchTravels_shouldReturnPagedTravels() throws Exception {
         when(this.travelService.searchTravels(isNull(), isNull(), isNull(), any()))
-                .thenReturn(new PageImpl<>(List.of(this.sampleTravelDto)));
+                .thenReturn(new PageImpl<>(List.of(this.sampleTravelDto), org.springframework.data.domain.PageRequest.of(0, 20), 1));
 
         this.mockMvc.perform(get("/api/travels")
                         .contentType(MediaType.APPLICATION_JSON))

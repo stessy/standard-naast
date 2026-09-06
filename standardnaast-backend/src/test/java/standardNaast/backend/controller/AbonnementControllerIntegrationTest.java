@@ -55,6 +55,7 @@ class AbonnementControllerIntegrationTest {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.abonnementController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
@@ -89,7 +90,7 @@ class AbonnementControllerIntegrationTest {
     @Test
     void getAbonnements_shouldReturnPagedAbonnements() throws Exception {
         when(this.abonnementService.getAbonnements(eq("2024-2025"), any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(this.sampleAbonnementDto)));
+                .thenReturn(new PageImpl<>(List.of(this.sampleAbonnementDto), org.springframework.data.domain.PageRequest.of(0, 20), 1));
 
         this.mockMvc.perform(get("/api/abonnements")
                         .param("seasonId", "2024-2025")

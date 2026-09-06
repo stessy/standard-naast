@@ -50,6 +50,7 @@ class SeasonControllerIntegrationTest {
         this.objectMapper.registerModule(new JavaTimeModule());
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.seasonController)
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 

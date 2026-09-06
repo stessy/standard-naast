@@ -10,6 +10,7 @@
   <modules>
     <module>standardNaastFx</module>
     <module>standardnaast-backend</module>
+    <module>standardnaast-ng</module>
   </modules>
   <properties>
     <cargo.version>1.4.8</cargo.version>

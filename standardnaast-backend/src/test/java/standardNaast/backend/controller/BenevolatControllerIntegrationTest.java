@@ -53,6 +53,7 @@ class BenevolatControllerIntegrationTest {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.benevolatController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
@@ -71,7 +72,7 @@ class BenevolatControllerIntegrationTest {
     @Test
     void searchBenevolats_shouldReturnPagedResults() throws Exception {
         when(this.benevolatService.searchBenevolats(isNull(), isNull(), isNull(), any()))
-                .thenReturn(new PageImpl<>(List.of(this.sampleDto)));
+                .thenReturn(new PageImpl<>(List.of(this.sampleDto), org.springframework.data.domain.PageRequest.of(0, 20), 1));
 
         this.mockMvc.perform(get("/api/benevolats")
                         .contentType(MediaType.APPLICATION_JSON))
