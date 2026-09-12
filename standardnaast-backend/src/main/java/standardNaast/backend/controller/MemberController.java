@@ -31,10 +31,10 @@ public class MemberController {
         return ResponseEntity.ok(this.memberService.getMembers(search, pageable));
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Obtenir les détails d'un membre par son ID")
-    public ResponseEntity<MemberDto> getMemberById(@PathVariable final Long id) {
-        return ResponseEntity.ok(this.memberService.getMemberById(id));
+    @GetMapping("/next-number")
+    @Operation(summary = "Obtenir le prochain numéro de membre disponible")
+    public ResponseEntity<Long> getNextMemberNumber() {
+        return ResponseEntity.ok(this.memberService.getNextMemberNumber());
     }
 
     @GetMapping("/by-number/{memberNumber}")
@@ -43,6 +43,12 @@ public class MemberController {
         return this.memberService.getMemberByMemberNumber(memberNumber)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Obtenir les détails d'un membre par son ID")
+    public ResponseEntity<MemberDto> getMemberById(@PathVariable final Long id) {
+        return ResponseEntity.ok(this.memberService.getMemberById(id));
     }
 
     @PostMapping
@@ -65,11 +71,5 @@ public class MemberController {
     @Operation(summary = "Supprimer un membre")
     public void deleteMember(@PathVariable final Long id) {
         this.memberService.deleteMember(id);
-    }
-
-    @GetMapping("/next-number")
-    @Operation(summary = "Obtenir le prochain numéro de membre disponible")
-    public ResponseEntity<Long> getNextMemberNumber() {
-        return ResponseEntity.ok(this.memberService.getNextMemberNumber());
     }
 }

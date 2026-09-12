@@ -61,6 +61,7 @@ import { Benevolat } from '../../core/models/benevolat.model';
         </div>
         <button
           pButton
+          type="button"
           label="Nouveau Membre"
           icon="pi pi-user-plus"
           class="p-button-danger p-button-sm font-bold white-space-nowrap align-self-start sm:align-self-center"
@@ -117,6 +118,7 @@ import { Benevolat } from '../../core/models/benevolat.model';
                 <div class="flex justify-content-center gap-1" (click)="$event.stopPropagation()">
                   <button
                     pButton
+                    type="button"
                     icon="pi pi-pencil"
                     class="p-button-rounded p-button-text p-button-sm p-button-warning"
                     (click)="openEditMemberDialog(member)"
@@ -124,6 +126,7 @@ import { Benevolat } from '../../core/models/benevolat.model';
                   </button>
                   <button
                     pButton
+                    type="button"
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-text p-button-sm p-button-danger"
                     (click)="confirmDeleteMember(member)"
@@ -330,11 +333,12 @@ import { Benevolat } from '../../core/models/benevolat.model';
 
       <!-- Member Create / Edit Dialog (Popup) -->
       <p-dialog
-        [(visible)]="memberDialog"
+        [(visible)]="dialogVisible"
         [header]="isEditMode ? 'Modifier le membre' : 'Nouveau membre'"
         [modal]="true"
-        [style]="{ width: '600px' }"
-        styleClass="p-fluid">
+        [closable]="true"
+        [dismissableMask]="true"
+        [style]="{ width: '600px' }">
         <form [formGroup]="memberForm" (ngSubmit)="saveMember()" class="flex flex-column gap-3 mt-2">
           <div class="grid">
             <div class="col-12 md:col-6 flex flex-column gap-2">
@@ -390,7 +394,7 @@ import { Benevolat } from '../../core/models/benevolat.model';
           </div>
 
           <div class="flex justify-content-end gap-2 mt-4">
-            <button pButton type="button" label="Annuler" icon="pi pi-times" [text]="true" (click)="memberDialog = false"></button>
+            <button pButton type="button" label="Annuler" icon="pi pi-times" [text]="true" (click)="dialogVisible = false"></button>
             <button pButton type="submit" label="Enregistrer" icon="pi pi-check" class="p-button-danger font-bold" [loading]="saving"></button>
           </div>
         </form>
@@ -473,7 +477,13 @@ export class MemberListComponent implements OnInit {
   loading = false;
   saving = false;
 
-  memberDialog = false;
+  dialogVisible = false;
+  get memberDialog(): boolean {
+    return this.dialogVisible;
+  }
+  set memberDialog(val: boolean) {
+    this.dialogVisible = val;
+  }
   isEditMode = false;
   selectedMemberId: number | null = null;
 
@@ -573,6 +583,14 @@ export class MemberListComponent implements OnInit {
     });
   }
 
+  openNewDialog(): void {
+    this.openNewMemberDialog();
+  }
+
+  openEditDialog(member: Member): void {
+    this.openEditMemberDialog(member);
+  }
+
   openNewMemberDialog(): void {
     this.isEditMode = false;
     this.selectedMemberId = null;
@@ -589,32 +607,49 @@ export class MemberListComponent implements OnInit {
       redCard: false
     });
 
+    this.dialogVisible = true;
+
     this.memberService.getNextMemberNumber().subscribe({
       next: (nextNum) => {
-        this.memberForm.patchValue({ memberNumber: nextNum });
-      }
+        if (!this.isEditMode) {
+          this.memberForm.patchValue({ memberNumber: nextNum });
+        }
+      },
+      error: () => {}
     });
-
-    this.memberDialog = true;
   }
 
   openEditMemberDialog(member: Member): void {
+    if (!member) return;
     this.isEditMode = true;
     this.selectedMemberId = member.id;
     this.selectMember(member);
+    let birthdate = '';
+    if (member.birthdate) {
+      if (typeof member.birthdate === 'string') {
+        birthdate = member.birthdate.substring(0, 10);
+      } else if (Array.isArray(member.birthdate) && (member.birthdate as any[]).length >= 3) {
+        const y = String(member.birthdate[0]).padStart(4, '0');
+        const m = String(member.birthdate[1]).padStart(2, '0');
+        const d = String(member.birthdate[2]).padStart(2, '0');
+        birthdate = `${y}-${m}-${d}`;
+      } else if ((member.birthdate as any) instanceof Date) {
+        birthdate = (member.birthdate as any).toISOString().substring(0, 10);
+      }
+    }
     this.memberForm.patchValue({
-      name: member.name,
-      firstname: member.firstname,
-      email: member.email,
-      mobilePhone: member.mobilePhone,
-      address: member.address,
-      postalCode: member.postalCode,
-      city: member.city,
-      birthdate: member.birthdate,
-      memberNumber: member.memberNumber,
-      redCard: member.redCard
+      name: member.name || '',
+      firstname: member.firstname || '',
+      email: member.email || '',
+      mobilePhone: member.mobilePhone || '',
+      address: member.address || '',
+      postalCode: member.postalCode || '',
+      city: member.city || '',
+      birthdate: birthdate,
+      memberNumber: member.memberNumber != null ? member.memberNumber : null,
+      redCard: !!member.redCard
     });
-    this.memberDialog = true;
+    this.dialogVisible = true;
   }
 
   saveMember(): void {
@@ -629,7 +664,7 @@ export class MemberListComponent implements OnInit {
       this.memberService.updateMember(this.selectedMemberId, formValue).subscribe({
         next: (updatedMember) => {
           this.saving = false;
-          this.memberDialog = false;
+          this.dialogVisible = false;
           this.selectMember(updatedMember);
           this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Membre modifié avec succès' });
           this.loadMembers({ first: this.currentPage * this.pageSize, rows: this.pageSize });
@@ -643,7 +678,7 @@ export class MemberListComponent implements OnInit {
       this.memberService.createMember(formValue).subscribe({
         next: (newMember) => {
           this.saving = false;
-          this.memberDialog = false;
+          this.dialogVisible = false;
           this.selectMember(newMember);
           this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Nouveau membre créé avec succès' });
           this.loadMembers({ first: 0, rows: this.pageSize });

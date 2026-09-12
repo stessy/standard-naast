@@ -212,4 +212,14 @@ class MemberControllerIntegrationTest {
 
         verify(this.memberService).deleteMember(1L);
     }
+
+    @Test
+    void getNextMemberNumber_shouldReturnNextNumber() throws Exception {
+        when(this.memberService.getNextMemberNumber()).thenReturn(105L);
+
+        this.mockMvc.perform(get("/api/members/next-number")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("105"));
+    }
 }
