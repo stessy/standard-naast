@@ -82,8 +82,6 @@ import { Benevolat } from '../../core/models/benevolat.model';
                   <div class="mt-1">
                     @if (member.redCard) {
                       <p-tag severity="danger" value="Carte Rouge"></p-tag>
-                    } @else if (member.student) {
-                      <p-tag severity="info" value="Étudiant"></p-tag>
                     } @else {
                       <p-tag severity="success" value="Membre actif"></p-tag>
                     }

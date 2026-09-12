@@ -109,8 +109,6 @@ import { Benevolat } from '../../core/models/benevolat.model';
               <td>
                 @if (member.redCard) {
                   <p-tag severity="danger" value="Carte Rouge"></p-tag>
-                } @else if (member.student) {
-                  <p-tag severity="info" value="Étudiant"></p-tag>
                 } @else {
                   <p-tag severity="success" value="Actif"></p-tag>
                 }
@@ -159,8 +157,6 @@ import { Benevolat } from '../../core/models/benevolat.model';
               }
               @if (selectedMember.redCard) {
                 <p-tag severity="danger" value="Carte Rouge"></p-tag>
-              } @else if (selectedMember.student) {
-                <p-tag severity="info" value="Étudiant"></p-tag>
               } @else {
                 <p-tag severity="success" value="Membre actif"></p-tag>
               }
@@ -193,10 +189,6 @@ import { Benevolat } from '../../core/models/benevolat.model';
                 <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
                   <span class="text-500 text-xs font-semibold uppercase">Téléphone GSM</span>
                   <span class="text-900 font-medium">{{ selectedMember.mobilePhone || '-' }}</span>
-                </div>
-                <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
-                  <span class="text-500 text-xs font-semibold uppercase">Téléphone Fixe</span>
-                  <span class="text-900 font-medium">{{ selectedMember.phone || '-' }}</span>
                 </div>
                 <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
                   <span class="text-500 text-xs font-semibold uppercase">Email</span>
@@ -345,22 +337,15 @@ import { Benevolat } from '../../core/models/benevolat.model';
           </div>
 
           <div class="grid">
-            <div class="col-12 md:col-6 flex flex-column gap-2">
+            <div class="col-12 md:col-4 flex flex-column gap-2">
               <label for="email" class="font-semibold text-sm">Email</label>
               <input id="email" type="email" pInputText formControlName="email" />
             </div>
-            <div class="col-12 md:col-6 flex flex-column gap-2">
+            <div class="col-12 md:col-4 flex flex-column gap-2">
               <label for="mobilePhone" class="font-semibold text-sm">Téléphone GSM</label>
               <input id="mobilePhone" type="text" pInputText formControlName="mobilePhone" />
             </div>
-          </div>
-
-          <div class="grid">
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label for="phone" class="font-semibold text-sm">Téléphone Fixe</label>
-              <input id="phone" type="text" pInputText formControlName="phone" />
-            </div>
-            <div class="col-12 md:col-6 flex flex-column gap-2">
+            <div class="col-12 md:col-4 flex flex-column gap-2">
               <label for="birthdate" class="font-semibold text-sm">Date de naissance</label>
               <input id="birthdate" type="date" pInputText formControlName="birthdate" />
             </div>
@@ -387,10 +372,6 @@ import { Benevolat } from '../../core/models/benevolat.model';
           </div>
 
           <div class="flex gap-4 mt-2">
-            <div class="flex align-items-center gap-2">
-              <p-checkbox formControlName="student" [binary]="true" inputId="student"></p-checkbox>
-              <label for="student" class="text-sm font-medium">Étudiant</label>
-            </div>
             <div class="flex align-items-center gap-2">
               <p-checkbox formControlName="redCard" [binary]="true" inputId="redCard"></p-checkbox>
               <label for="redCard" class="text-sm font-medium text-red-600">Carte Rouge</label>
@@ -490,13 +471,11 @@ export class MemberListComponent implements OnInit {
     firstname: ['', Validators.required],
     email: [''],
     mobilePhone: [''],
-    phone: [''],
     address: [''],
     postalCode: [''],
     city: [''],
     birthdate: [''],
     memberNumber: [null],
-    student: [false],
     redCard: [false]
   });
 
@@ -591,13 +570,11 @@ export class MemberListComponent implements OnInit {
       firstname: '',
       email: '',
       mobilePhone: '',
-      phone: '',
       address: '',
       postalCode: '',
       city: '',
       birthdate: '',
       memberNumber: null,
-      student: false,
       redCard: false
     });
 
@@ -619,13 +596,11 @@ export class MemberListComponent implements OnInit {
       firstname: member.firstname,
       email: member.email,
       mobilePhone: member.mobilePhone,
-      phone: member.phone,
       address: member.address,
       postalCode: member.postalCode,
       city: member.city,
       birthdate: member.birthdate,
       memberNumber: member.memberNumber,
-      student: member.student,
       redCard: member.redCard
     });
     this.memberDialog = true;
