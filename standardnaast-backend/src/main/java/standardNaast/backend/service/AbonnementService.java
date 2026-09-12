@@ -12,6 +12,8 @@ public interface AbonnementService {
 
     Page<AbonnementDto> getAbonnements(String seasonId, Pageable pageable);
 
+    Page<AbonnementDto> getAbonnements(String seasonId, Long memberId, Pageable pageable);
+
     List<AbonnementDto> getAbonnementsBySeason(String seasonId);
 
     List<AbonnementDto> getAbonnementsByMember(Long memberId);

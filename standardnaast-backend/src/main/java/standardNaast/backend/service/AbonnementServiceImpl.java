@@ -47,8 +47,21 @@ public class AbonnementServiceImpl implements AbonnementService {
     @Override
     @Transactional(readOnly = true)
     public Page<AbonnementDto> getAbonnements(String seasonId, Pageable pageable) {
-        if (seasonId != null && !seasonId.isBlank()) {
+        return getAbonnements(seasonId, null, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AbonnementDto> getAbonnements(String seasonId, Long memberId, Pageable pageable) {
+        boolean hasSeason = seasonId != null && !seasonId.isBlank();
+        boolean hasMember = memberId != null;
+
+        if (hasSeason && hasMember) {
+            return abonnementRepository.findBySeason_IdAndPersonne_Id(seasonId, memberId, pageable).map(abonnementMapper::toDto);
+        } else if (hasSeason) {
             return abonnementRepository.findBySeason_Id(seasonId, pageable).map(abonnementMapper::toDto);
+        } else if (hasMember) {
+            return abonnementRepository.findByPersonne_Id(memberId, pageable).map(abonnementMapper::toDto);
         }
         return abonnementRepository.findAll(pageable).map(abonnementMapper::toDto);
     }

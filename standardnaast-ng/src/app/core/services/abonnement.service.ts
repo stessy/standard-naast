@@ -26,6 +26,10 @@ export class AbonnementService {
     return this.http.get<Page<Abonnement>>(this.apiUrl, { params });
   }
 
+  getAbonnementsByMember(memberId: number): Observable<Abonnement[]> {
+    return this.http.get<Abonnement[]>(`${this.apiUrl}/member/${memberId}`);
+  }
+
   getAbonnementById(id: number): Observable<Abonnement> {
     return this.http.get<Abonnement>(`${this.apiUrl}/${id}`);
   }

@@ -89,7 +89,7 @@ class AbonnementControllerIntegrationTest {
 
     @Test
     void getAbonnements_shouldReturnPagedAbonnements() throws Exception {
-        when(this.abonnementService.getAbonnements(eq("2024-2025"), any(Pageable.class)))
+        when(this.abonnementService.getAbonnements(eq("2024-2025"), isNull(), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of(this.sampleAbonnementDto), org.springframework.data.domain.PageRequest.of(0, 20), 1));
 
         this.mockMvc.perform(get("/api/abonnements")
@@ -98,6 +98,18 @@ class AbonnementControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].id", is(1)))
                 .andExpect(jsonPath("$.content[0].personFirstName", is("Eden")));
+    }
+
+    @Test
+    void getAbonnementsByMember_shouldReturnList() throws Exception {
+        when(this.abonnementService.getAbonnementsByMember(100L))
+                .thenReturn(List.of(this.sampleAbonnementDto));
+
+        this.mockMvc.perform(get("/api/abonnements/member/{memberId}", 100L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].personFirstName", is("Eden")));
     }
 
     @Test

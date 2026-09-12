@@ -29,15 +29,19 @@ export interface Abonnement {
   abonnementPrice?: AbonnementPrice;
   rang?: string;
   place?: string;
-  montantPaye: number;
+  acompte?: number;
+  montantPaye?: number;
   paye: boolean;
   reduction: number;
   seasonId: string;
-  memberId: number;
+  personId?: number;
+  memberId?: number;
   personFirstName?: string;
   personName?: string;
   personMemberNumber?: number;
-  status: AbonnementStatus;
+  memberNumber?: number;
+  abonnementStatus?: AbonnementStatus;
+  status?: AbonnementStatus;
   bloc?: string;
 }
 

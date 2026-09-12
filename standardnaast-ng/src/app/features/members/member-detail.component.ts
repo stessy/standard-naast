@@ -123,6 +123,7 @@ import { Benevolat } from '../../core/models/benevolat.model';
                 <tr>
                   <th>Saison</th>
                   <th>Bloc</th>
+                  <th>Rang</th>
                   <th>Place</th>
                   <th>Montant Payé</th>
                   <th>Statut</th>
@@ -132,15 +133,16 @@ import { Benevolat } from '../../core/models/benevolat.model';
                 <tr>
                   <td><span class="font-bold">{{ abo.seasonId }}</span></td>
                   <td>{{ abo.bloc || '-' }}</td>
+                  <td>{{ abo.rang || '-' }}</td>
                   <td>{{ abo.place || '-' }}</td>
-                  <td>{{ abo.montantPaye | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
+                  <td>{{ (abo.acompte != null ? abo.acompte : abo.montantPaye) | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
                   <td>
-                    <p-tag [value]="abo.status"></p-tag>
+                    <p-tag [value]="abo.abonnementStatus || abo.status"></p-tag>
                   </td>
                 </tr>
               </ng-template>
               <ng-template pTemplate="emptymessage">
-                <tr><td colspan="5" class="text-center p-3 text-500">Aucun abonnement enregistré.</td></tr>
+                <tr><td colspan="6" class="text-center p-3 text-500">Aucun abonnement enregistré.</td></tr>
               </ng-template>
             </p-table>
           </p-tabPanel>
@@ -225,8 +227,8 @@ export class MemberDetailComponent implements OnInit {
       next: (data) => this.cotisations = data
     });
 
-    this.abonnementService.getAbonnements(undefined, id).subscribe({
-      next: (page) => this.abonnements = page.content
+    this.abonnementService.getAbonnementsByMember(id).subscribe({
+      next: (data) => this.abonnements = data
     });
 
     this.travelService.getTravelsByPerson(id).subscribe({

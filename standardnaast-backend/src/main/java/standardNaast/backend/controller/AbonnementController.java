@@ -38,12 +38,13 @@ public class AbonnementController {
     }
 
     @GetMapping
-    @Operation(summary = "Get abonnements with pagination and optional season filter")
+    @Operation(summary = "Get abonnements with pagination and optional season or member filter")
     public ResponseEntity<Page<AbonnementDto>> getAbonnements(
             @RequestParam(required = false) String seasonId,
+            @RequestParam(required = false) Long memberId,
             @PageableDefault(size = 20) Pageable pageable
     ) {
-        return ResponseEntity.ok(abonnementService.getAbonnements(seasonId, pageable));
+        return ResponseEntity.ok(abonnementService.getAbonnements(seasonId, memberId, pageable));
     }
 
     @GetMapping("/season/{seasonId}")

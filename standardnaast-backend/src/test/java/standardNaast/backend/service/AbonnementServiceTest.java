@@ -118,6 +118,32 @@ class AbonnementServiceTest {
     }
 
     @Test
+    void getAbonnements_withMember_shouldReturnPagedAbonnements() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Abonnement> page = new PageImpl<>(List.of(this.sampleAbonnement));
+        when(this.abonnementRepository.findByPersonne_Id(100L, pageable)).thenReturn(page);
+
+        Page<AbonnementDto> result = this.abonnementService.getAbonnements(null, 100L, pageable);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().getFirst().personFirstName()).isEqualTo("Eden");
+    }
+
+    @Test
+    void getAbonnements_withSeasonAndMember_shouldReturnPagedAbonnements() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Abonnement> page = new PageImpl<>(List.of(this.sampleAbonnement));
+        when(this.abonnementRepository.findBySeason_IdAndPersonne_Id("2024-2025", 100L, pageable)).thenReturn(page);
+
+        Page<AbonnementDto> result = this.abonnementService.getAbonnements("2024-2025", 100L, pageable);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().getFirst().personFirstName()).isEqualTo("Eden");
+    }
+
+    @Test
     void getAbonnementsBySeason_shouldReturnList() {
         when(this.abonnementRepository.findBySeason_Id("2024-2025")).thenReturn(List.of(this.sampleAbonnement));
 

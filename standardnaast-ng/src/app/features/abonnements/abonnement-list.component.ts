@@ -65,15 +65,15 @@ import { Member } from '../../core/models/member.model';
           </ng-template>
           <ng-template pTemplate="body" let-abo>
             <tr>
-              <td><span class="font-bold text-red-700">{{ abo.personMemberNumber || '-' }}</span></td>
+              <td><span class="font-bold text-red-700">{{ abo.memberNumber || abo.personMemberNumber || '-' }}</span></td>
               <td><span class="font-semibold">{{ abo.personFirstName }} {{ abo.personName }}</span></td>
-              <td>{{ abo.bloc || '-' }} / {{ abo.rang || '-' }} / {{ abo.place || '-' }}</td>
-              <td>{{ abo.montantPaye | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
+              <td>{{ (abo.bloc || abo.abonnementPrice?.bloc || '-') }} / {{ abo.rang || '-' }} / {{ abo.place || '-' }}</td>
+              <td>{{ (abo.acompte != null ? abo.acompte : abo.montantPaye) | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
               <td>
                 <p-tag [severity]="abo.paye ? 'success' : 'danger'" [value]="abo.paye ? 'Oui' : 'Non'"></p-tag>
               </td>
               <td>
-                <p-tag [severity]="getStatusSeverity(abo.status)" [value]="abo.status"></p-tag>
+                <p-tag [severity]="getStatusSeverity(abo.abonnementStatus || abo.status)" [value]="abo.abonnementStatus || abo.status"></p-tag>
               </td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-2">
