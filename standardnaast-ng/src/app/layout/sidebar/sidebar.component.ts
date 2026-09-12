@@ -83,9 +83,6 @@ export class SidebarComponent {
   ];
 
   financeNavItems: NavItem[] = [
-    { label: 'Cotisations', icon: 'pi pi-credit-card', route: '/cotisations' },
-    { label: 'Déplacements', icon: 'pi pi-car', route: '/travels' },
-    { label: 'Bénévolat', icon: 'pi pi-heart', route: '/benevolats' },
-    { label: 'Comptabilité', icon: 'pi pi-book', route: '/accounting' }
+    { label: 'Cotisations', icon: 'pi pi-credit-card', route: '/cotisations' }
   ];
 }

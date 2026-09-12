@@ -8,7 +8,6 @@ import { SeasonService } from '../../core/services/season.service';
 import { MemberService } from '../../core/services/member.service';
 import { MatchService } from '../../core/services/match.service';
 import { CotisationService } from '../../core/services/cotisation.service';
-import { AccountingService } from '../../core/services/accounting.service';
 import { Match } from '../../core/models/match.model';
 
 @Component({
@@ -40,7 +39,7 @@ import { Match } from '../../core/models/match.model';
       <!-- KPI Metrics Cards -->
       <div class="grid">
         <!-- Members Count -->
-        <div class="col-12 sm:col-6 lg:col-3">
+        <div class="col-12 sm:col-6 lg:col-4">
           <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1 flex flex-column justify-content-between h-full">
             <div class="flex justify-content-between mb-3">
               <div>
@@ -56,7 +55,7 @@ import { Match } from '../../core/models/match.model';
         </div>
 
         <!-- Next Match -->
-        <div class="col-12 sm:col-6 lg:col-3">
+        <div class="col-12 sm:col-6 lg:col-4">
           <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1 flex flex-column justify-content-between h-full">
             <div class="flex justify-content-between mb-3">
               <div>
@@ -75,7 +74,7 @@ import { Match } from '../../core/models/match.model';
         </div>
 
         <!-- Cotisations overview -->
-        <div class="col-12 sm:col-6 lg:col-3">
+        <div class="col-12 sm:col-6 lg:col-4">
           <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1 flex flex-column justify-content-between h-full">
             <div class="flex justify-content-between mb-3">
               <div>
@@ -90,24 +89,6 @@ import { Match } from '../../core/models/match.model';
             <a routerLink="/cotisations" class="text-sm text-green-600 font-semibold no-underline hover:underline">Gestion des cotisations &rarr;</a>
           </div>
         </div>
-
-        <!-- Balance overview -->
-        <div class="col-12 sm:col-6 lg:col-3">
-          <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1 flex flex-column justify-content-between h-full">
-            <div class="flex justify-content-between mb-3">
-              <div>
-                <span class="block text-500 font-medium mb-2">Solde Comptable</span>
-                <div class="text-900 font-bold text-3xl" [class.text-green-600]="accountingBalance >= 0" [class.text-red-600]="accountingBalance < 0">
-                  {{ accountingBalance | currency:'EUR':'symbol':'1.2-2':'fr' }}
-                </div>
-              </div>
-              <div class="flex align-items-center justify-content-center bg-purple-100 border-round" style="width: 2.75rem; height: 2.75rem">
-                <i class="pi pi-wallet text-purple-600 text-xl"></i>
-              </div>
-            </div>
-            <a routerLink="/accounting" class="text-sm text-purple-600 font-semibold no-underline hover:underline">Journal comptable &rarr;</a>
-          </div>
-        </div>
       </div>
 
       <!-- Quick Actions Grid -->
@@ -115,9 +96,7 @@ import { Match } from '../../core/models/match.model';
         <h2 class="text-lg font-bold text-900 mb-3">Accès Rapides</h2>
         <div class="flex flex-wrap gap-3">
           <button pButton label="Nouveau Membre" icon="pi pi-user-plus" class="p-button-outlined p-button-danger" routerLink="/members"></button>
-          <button pButton label="Planifier un Voyage" icon="pi pi-car" class="p-button-outlined p-button-secondary" routerLink="/travels"></button>
           <button pButton label="Gérer les Abonnements" icon="pi pi-ticket" class="p-button-outlined p-button-secondary" routerLink="/abonnements"></button>
-          <button pButton label="Nouvelle Écriture Comptable" icon="pi pi-plus" class="p-button-outlined p-button-secondary" routerLink="/accounting"></button>
         </div>
       </div>
     </div>
@@ -128,13 +107,11 @@ export class DashboardComponent implements OnInit {
   memberService = inject(MemberService);
   matchService = inject(MatchService);
   cotisationService = inject(CotisationService);
-  accountingService = inject(AccountingService);
 
   totalMembers = 0;
   nextMatch: Match | null = null;
   paidCotisations = 0;
   unpaidCotisations = 0;
-  accountingBalance = 0;
 
   ngOnInit(): void {
     this.loadStats();
@@ -144,11 +121,6 @@ export class DashboardComponent implements OnInit {
     // Member count
     this.memberService.getMembers(undefined, 0, 1).subscribe({
       next: (page) => this.totalMembers = page.totalElements
-    });
-
-    // Accounting summary
-    this.accountingService.getSummary().subscribe({
-      next: (summary) => this.accountingBalance = summary.balance
     });
 
     // Season data

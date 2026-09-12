@@ -43,18 +43,6 @@ export const routes: Routes = [
       {
         path: 'cotisations',
         loadComponent: () => import('./features/cotisations/cotisation-list.component').then(m => m.CotisationListComponent)
-      },
-      {
-        path: 'travels',
-        loadComponent: () => import('./features/travels/travel-list.component').then(m => m.TravelListComponent)
-      },
-      {
-        path: 'accounting',
-        loadComponent: () => import('./features/accounting/accounting-list.component').then(m => m.AccountingListComponent)
-      },
-      {
-        path: 'benevolats',
-        loadComponent: () => import('./features/benevolats/benevolat-list.component').then(m => m.BenevolatListComponent)
       }
     ]
   },

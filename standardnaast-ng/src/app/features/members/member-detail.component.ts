@@ -9,13 +9,9 @@ import { TagModule } from 'primeng/tag';
 import { MemberService } from '../../core/services/member.service';
 import { CotisationService } from '../../core/services/cotisation.service';
 import { AbonnementService } from '../../core/services/abonnement.service';
-import { TravelService } from '../../core/services/travel.service';
-import { BenevolatService } from '../../core/services/benevolat.service';
 import { Member } from '../../core/models/member.model';
 import { PersonCotisation } from '../../core/models/cotisation.model';
 import { Abonnement } from '../../core/models/abonnement.model';
-import { PersonTravel } from '../../core/models/travel.model';
-import { Benevolat } from '../../core/models/benevolat.model';
 
 @Component({
   selector: 'app-member-detail',
@@ -54,8 +50,6 @@ import { Benevolat } from '../../core/models/benevolat.model';
             <p-tab value="0"><i class="pi pi-user mr-2"></i>Identité</p-tab>
             <p-tab value="1"><i class="pi pi-credit-card mr-2"></i>Cotisations</p-tab>
             <p-tab value="2"><i class="pi pi-ticket mr-2"></i>Abonnements</p-tab>
-            <p-tab value="3"><i class="pi pi-car mr-2"></i>Déplacements</p-tab>
-            <p-tab value="4"><i class="pi pi-heart mr-2"></i>Bénévolat</p-tab>
           </p-tablist>
           <p-tabpanels>
             <!-- Identity Tab -->
@@ -154,52 +148,6 @@ import { Benevolat } from '../../core/models/benevolat.model';
                 </ng-template>
               </p-table>
             </p-tabpanel>
-
-            <!-- Travels Tab -->
-            <p-tabpanel value="3">
-              <p-table [value]="travels" responsiveLayout="stack" styleClass="p-datatable-sm">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Match / Adversaire</th>
-                    <th>Date</th>
-                    <th>Montant payé</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-tr>
-                  <tr>
-                    <td><span class="font-semibold">{{ tr.opponentName }}</span></td>
-                    <td>{{ tr.dateMatch | date:'dd/MM/yyyy' }}</td>
-                    <td>{{ tr.amountPaid | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                  <tr><td colspan="3" class="text-center p-3 text-500">Aucun déplacement enregistré.</td></tr>
-                </ng-template>
-              </p-table>
-            </p-tabpanel>
-
-            <!-- Benevolat Tab -->
-            <p-tabpanel value="4">
-              <p-table [value]="benevolats" responsiveLayout="stack" styleClass="p-datatable-sm">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Date</th>
-                    <th>Prestation</th>
-                    <th>Montant</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-b>
-                  <tr>
-                    <td>{{ b.date | date:'dd/MM/yyyy' }}</td>
-                    <td>{{ b.typeBenevolat }}</td>
-                    <td>{{ b.amount | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                  <tr><td colspan="3" class="text-center p-3 text-500">Aucune prestation de bénévolat.</td></tr>
-                </ng-template>
-              </p-table>
-            </p-tabpanel>
           </p-tabpanels>
         </p-tabs>
       </div>
@@ -211,14 +159,10 @@ export class MemberDetailComponent implements OnInit {
   private memberService = inject(MemberService);
   private cotisationService = inject(CotisationService);
   private abonnementService = inject(AbonnementService);
-  private travelService = inject(TravelService);
-  private benevolatService = inject(BenevolatService);
 
   member: Member | null = null;
   cotisations: PersonCotisation[] = [];
   abonnements: Abonnement[] = [];
-  travels: PersonTravel[] = [];
-  benevolats: Benevolat[] = [];
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -238,14 +182,6 @@ export class MemberDetailComponent implements OnInit {
 
     this.abonnementService.getAbonnementsByMember(id).subscribe({
       next: (data) => this.abonnements = data
-    });
-
-    this.travelService.getTravelsByPerson(id).subscribe({
-      next: (data) => this.travels = data
-    });
-
-    this.benevolatService.getBenevolatsByPerson(id).subscribe({
-      next: (data) => this.benevolats = data
     });
   }
 }
