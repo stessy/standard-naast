@@ -223,6 +223,10 @@ export class MemberDetailComponent implements OnInit {
       next: (data) => this.member = data
     });
 
+    this.cotisationService.getCotisationsByMember(id).subscribe({
+      next: (data) => this.cotisations = data
+    });
+
     this.abonnementService.getAbonnements(undefined, id).subscribe({
       next: (page) => this.abonnements = page.content
     });

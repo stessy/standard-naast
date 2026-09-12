@@ -34,6 +34,10 @@ export class CotisationService {
   }
 
   // Member Cotisations
+  getCotisationsByMember(memberId: number): Observable<PersonCotisation[]> {
+    return this.http.get<PersonCotisation[]>(`${this.memberCotisationsApiUrl}/member/${memberId}`);
+  }
+
   getSeasonOverview(seasonId: string): Observable<CotisationsSeasonOverview> {
     return this.http.get<CotisationsSeasonOverview>(`${this.memberCotisationsApiUrl}/overview/${seasonId}`);
   }
