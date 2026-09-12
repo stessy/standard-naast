@@ -21,17 +21,17 @@ import { Team, TeamCreateUpdate } from '../../core/models/team.model';
     DialogModule
   ],
   template: `
-    <div class="teams-page flex flex-column gap-4">
-      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-3 bg-white p-4 border-round-xl border-1 border-200 shadow-1">
+    <div class="teams-page flex flex-column gap-2">
+      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
         <div>
-          <h1 class="text-2xl font-bold text-900 m-0">Gestion des Équipes</h1>
-          <p class="text-500 m-0 mt-1">Liste des clubs et équipes adverses</p>
+          <h1 class="text-xl font-bold text-900 m-0">Gestion des Équipes</h1>
+          <p class="text-500 text-xs m-0 mt-1">Liste des clubs et équipes adverses</p>
         </div>
-        <button pButton label="Nouvelle Équipe" icon="pi pi-plus" class="p-button-danger font-bold" (click)="openNewDialog()"></button>
+        <button pButton label="Nouvelle Équipe" icon="pi pi-plus" class="p-button-danger p-button-sm font-bold" (click)="openNewDialog()"></button>
       </div>
 
-      <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
-        <p-table [value]="teams" [loading]="loading" responsiveLayout="stack" styleClass="p-datatable-striped">
+      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
+        <p-table [value]="teams" [loading]="loading" responsiveLayout="stack" styleClass="p-datatable-sm p-datatable-striped">
           <ng-template pTemplate="header">
             <tr>
               <th style="width: 15%">ID</th>
@@ -45,8 +45,8 @@ import { Team, TeamCreateUpdate } from '../../core/models/team.model';
               <td><span class="font-bold text-900">{{ team.name }}</span></td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-2">
-                  <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-warning" (click)="openEditDialog(team)"></button>
-                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="confirmDelete(team)"></button>
+                  <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm p-button-warning" (click)="openEditDialog(team)"></button>
+                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm p-button-danger" (click)="confirmDelete(team)"></button>
                 </div>
               </td>
             </tr>

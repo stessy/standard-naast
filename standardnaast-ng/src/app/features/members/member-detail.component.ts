@@ -30,25 +30,25 @@ import { Benevolat } from '../../core/models/benevolat.model';
     TagModule
   ],
   template: `
-    <div class="member-detail-page flex flex-column gap-4" *ngIf="member">
+    <div class="member-detail-page flex flex-column gap-2" *ngIf="member">
       <!-- Top Bar -->
-      <div class="flex justify-content-between align-items-center bg-white p-4 border-round-xl border-1 border-200 shadow-1">
+      <div class="flex justify-content-between align-items-center bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
         <div class="flex align-items-center gap-3">
-          <button pButton icon="pi pi-arrow-left" [text]="true" routerLink="/members" class="p-button-rounded"></button>
+          <button pButton icon="pi pi-arrow-left" [text]="true" routerLink="/members" class="p-button-rounded p-button-sm"></button>
           <div>
             <div class="flex align-items-center gap-2">
-              <h1 class="text-2xl font-bold text-900 m-0">{{ member.firstname }} {{ member.name }}</h1>
+              <h1 class="text-xl font-bold text-900 m-0">{{ member.firstname }} {{ member.name }}</h1>
               @if (member.memberNumber) {
                 <span class="bg-red-100 text-red-800 font-bold px-2 py-1 border-round text-sm">N° {{ member.memberNumber }}</span>
               }
             </div>
-            <span class="text-500 text-sm">{{ member.email || 'Pas d\\'adresse email' }}</span>
+            <span class="text-500 text-xs">{{ member.email || 'Pas d\\'adresse email' }}</span>
           </div>
         </div>
       </div>
 
       <!-- Member Tabs -->
-      <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
+      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
         <p-tabView>
           <!-- Identity Tab -->
           <p-tabPanel header="Identité" leftIcon="pi pi-user">

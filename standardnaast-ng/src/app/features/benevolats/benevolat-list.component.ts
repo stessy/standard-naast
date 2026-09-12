@@ -27,16 +27,16 @@ import { Member } from '../../core/models/member.model';
     DialogModule
   ],
   template: `
-    <div class="benevolats-page flex flex-column gap-4">
-      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-3 bg-white p-4 border-round-xl border-1 border-200 shadow-1">
+    <div class="benevolats-page flex flex-column gap-2">
+      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
         <div>
-          <h1 class="text-2xl font-bold text-900 m-0">Gestion du Bénévolat</h1>
-          <p class="text-500 m-0 mt-1">Prestations et dédommagements des bénévoles</p>
+          <h1 class="text-xl font-bold text-900 m-0">Gestion du Bénévolat</h1>
+          <p class="text-500 text-xs m-0 mt-1">Prestations et dédommagements des bénévoles</p>
         </div>
-        <button pButton label="Nouvelle Prestation" icon="pi pi-plus" class="p-button-danger font-bold" (click)="openNewDialog()"></button>
+        <button pButton label="Nouvelle Prestation" icon="pi pi-plus" class="p-button-danger p-button-sm font-bold" (click)="openNewDialog()"></button>
       </div>
 
-      <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
+      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
         <p-table
           [value]="benevolats"
           [lazy]="true"
@@ -46,7 +46,7 @@ import { Member } from '../../core/models/member.model';
           [totalRecords]="totalElements"
           [loading]="loading"
           responsiveLayout="stack"
-          styleClass="p-datatable-striped">
+          styleClass="p-datatable-sm p-datatable-striped">
           <ng-template pTemplate="header">
             <tr>
               <th>Date</th>
@@ -64,14 +64,14 @@ import { Member } from '../../core/models/member.model';
               <td><span class="font-semibold text-green-700">{{ b.amount | currency:'EUR':'symbol':'1.2-2':'fr' }}</span></td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-2">
-                  <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-warning" (click)="openEditDialog(b)"></button>
-                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="confirmDelete(b)"></button>
+                  <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm p-button-warning" (click)="openEditDialog(b)"></button>
+                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm p-button-danger" (click)="confirmDelete(b)"></button>
                 </div>
               </td>
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
-            <tr><td colspan="5" class="text-center p-4 text-500">Aucune prestation de bénévolat enregistrée.</td></tr>
+            <tr><td colspan="5" class="text-center p-3 text-500">Aucune prestation de bénévolat enregistrée.</td></tr>
           </ng-template>
         </p-table>
       </div>

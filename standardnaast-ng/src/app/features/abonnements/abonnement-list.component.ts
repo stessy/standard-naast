@@ -32,16 +32,16 @@ import { Member } from '../../core/models/member.model';
     TagModule
   ],
   template: `
-    <div class="abonnements-page flex flex-column gap-4">
-      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-3 bg-white p-4 border-round-xl border-1 border-200 shadow-1">
+    <div class="abonnements-page flex flex-column gap-2">
+      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
         <div>
-          <h1 class="text-2xl font-bold text-900 m-0">Gestion des Abonnements</h1>
-          <p class="text-500 m-0 mt-1">Suivi des commandes, réceptions et distributions d'abonnements</p>
+          <h1 class="text-xl font-bold text-900 m-0">Gestion des Abonnements</h1>
+          <p class="text-500 text-xs m-0 mt-1">Suivi des commandes, réceptions et distributions d'abonnements</p>
         </div>
-        <button pButton label="Nouvel Abonnement" icon="pi pi-plus" class="p-button-danger font-bold" (click)="openNewDialog()"></button>
+        <button pButton label="Nouvel Abonnement" icon="pi pi-plus" class="p-button-danger p-button-sm font-bold" (click)="openNewDialog()"></button>
       </div>
 
-      <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
+      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
         <p-table
           [value]="abonnements"
           [lazy]="true"
@@ -51,7 +51,7 @@ import { Member } from '../../core/models/member.model';
           [totalRecords]="totalElements"
           [loading]="loading"
           responsiveLayout="stack"
-          styleClass="p-datatable-striped">
+          styleClass="p-datatable-sm p-datatable-striped">
           <ng-template pTemplate="header">
             <tr>
               <th>N° Membre</th>
@@ -77,8 +77,8 @@ import { Member } from '../../core/models/member.model';
               </td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-2">
-                  <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-warning" (click)="openEditDialog(abo)"></button>
-                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="confirmDelete(abo)"></button>
+                  <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm p-button-warning" (click)="openEditDialog(abo)"></button>
+                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm p-button-danger" (click)="confirmDelete(abo)"></button>
                 </div>
               </td>
             </tr>

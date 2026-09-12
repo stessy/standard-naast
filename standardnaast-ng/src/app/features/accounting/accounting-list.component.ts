@@ -27,40 +27,40 @@ import { Accounting, AccountingCreateUpdate, AccountingType, AccountingSummary }
     TagModule
   ],
   template: `
-    <div class="accounting-page flex flex-column gap-4">
-      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-3 bg-white p-4 border-round-xl border-1 border-200 shadow-1">
+    <div class="accounting-page flex flex-column gap-2">
+      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
         <div>
-          <h1 class="text-2xl font-bold text-900 m-0">Comptabilité & Trésorerie</h1>
-          <p class="text-500 m-0 mt-1">Livre des recettes et dépenses de l'association</p>
+          <h1 class="text-xl font-bold text-900 m-0">Comptabilité & Trésorerie</h1>
+          <p class="text-500 text-xs m-0 mt-1">Livre des recettes et dépenses de l'association</p>
         </div>
-        <button pButton label="Nouvelle Écriture" icon="pi pi-plus" class="p-button-danger font-bold" (click)="openNewDialog()"></button>
+        <button pButton label="Nouvelle Écriture" icon="pi pi-plus" class="p-button-danger p-button-sm font-bold" (click)="openNewDialog()"></button>
       </div>
 
       <!-- KPI Summary Cards -->
       <div class="grid" *ngIf="summary">
         <div class="col-12 sm:col-4">
-          <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-green-600">Total Recettes</span>
-            <div class="text-green-600 font-bold text-3xl mt-2">{{ summary.totalEntries | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
+          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
+            <span class="text-500 font-medium text-green-600 text-sm">Total Recettes</span>
+            <div class="text-green-600 font-bold text-2xl mt-1">{{ summary.totalEntries | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
           </div>
         </div>
         <div class="col-12 sm:col-4">
-          <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-red-600">Total Dépenses</span>
-            <div class="text-red-600 font-bold text-3xl mt-2">{{ summary.totalExits | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
+          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
+            <span class="text-500 font-medium text-red-600 text-sm">Total Dépenses</span>
+            <div class="text-red-600 font-bold text-2xl mt-1">{{ summary.totalExits | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
           </div>
         </div>
         <div class="col-12 sm:col-4">
-          <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium">Solde Net</span>
-            <div class="text-900 font-bold text-3xl mt-2" [class.text-green-600]="summary.balance >= 0" [class.text-red-600]="summary.balance < 0">
+          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
+            <span class="text-500 font-medium text-sm">Solde Net</span>
+            <div class="text-900 font-bold text-2xl mt-1" [class.text-green-600]="summary.balance >= 0" [class.text-red-600]="summary.balance < 0">
               {{ summary.balance | currency:'EUR':'symbol':'1.2-2':'fr' }}
             </div>
           </div>
         </div>
       </div>
 
-      <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
+      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
         <p-table
           [value]="accountings"
           [lazy]="true"
@@ -70,7 +70,7 @@ import { Accounting, AccountingCreateUpdate, AccountingType, AccountingSummary }
           [totalRecords]="totalElements"
           [loading]="loading"
           responsiveLayout="stack"
-          styleClass="p-datatable-striped">
+          styleClass="p-datatable-sm p-datatable-striped">
           <ng-template pTemplate="header">
             <tr>
               <th>Date</th>
@@ -94,14 +94,14 @@ import { Accounting, AccountingCreateUpdate, AccountingType, AccountingSummary }
               </td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-2">
-                  <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-warning" (click)="openEditDialog(acc)"></button>
-                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="confirmDelete(acc)"></button>
+                  <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm p-button-warning" (click)="openEditDialog(acc)"></button>
+                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm p-button-danger" (click)="confirmDelete(acc)"></button>
                 </div>
               </td>
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
-            <tr><td colspan="5" class="text-center p-4 text-500">Aucune écriture comptable trouvée.</td></tr>
+            <tr><td colspan="5" class="text-center p-3 text-500">Aucune écriture comptable trouvée.</td></tr>
           </ng-template>
         </p-table>
       </div>

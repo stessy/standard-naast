@@ -32,47 +32,47 @@ import { Member } from '../../core/models/member.model';
     CardModule
   ],
   template: `
-    <div class="cotisations-page flex flex-column gap-4">
-      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-3 bg-white p-4 border-round-xl border-1 border-200 shadow-1">
+    <div class="cotisations-page flex flex-column gap-2">
+      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
         <div>
-          <h1 class="text-2xl font-bold text-900 m-0">Gestion des Cotisations</h1>
-          <p class="text-500 m-0 mt-1">Suivi des cotisations annuelles, paiements et expéditions des cartes</p>
+          <h1 class="text-xl font-bold text-900 m-0">Gestion des Cotisations</h1>
+          <p class="text-500 text-xs m-0 mt-1">Suivi des cotisations annuelles, paiements et expéditions des cartes</p>
         </div>
         <div class="flex gap-2">
-          <button pButton label="Marquer cartes envoyées" icon="pi pi-send" class="p-button-outlined p-button-success font-bold" (click)="bulkMarkSent()" [disabled]="!selectedCotisations.length"></button>
-          <button pButton label="Enregistrer Cotisation" icon="pi pi-plus" class="p-button-danger font-bold" (click)="openNewDialog()"></button>
+          <button pButton label="Marquer cartes envoyées" icon="pi pi-send" class="p-button-outlined p-button-success p-button-sm font-bold" (click)="bulkMarkSent()" [disabled]="!selectedCotisations.length"></button>
+          <button pButton label="Enregistrer Cotisation" icon="pi pi-plus" class="p-button-danger p-button-sm font-bold" (click)="openNewDialog()"></button>
         </div>
       </div>
 
       <!-- KPI Summary Cards -->
       <div class="grid" *ngIf="overview">
         <div class="col-12 sm:col-4">
-          <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium">Total Membres</span>
-            <div class="text-900 font-bold text-3xl mt-2">{{ overview.totalMembers }}</div>
+          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
+            <span class="text-500 font-medium text-sm">Total Membres</span>
+            <div class="text-900 font-bold text-2xl mt-1">{{ overview.totalMembers }}</div>
           </div>
         </div>
         <div class="col-12 sm:col-4">
-          <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-green-600">Cotisations Payées</span>
-            <div class="text-green-600 font-bold text-3xl mt-2">{{ overview.totalPaid }}</div>
+          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
+            <span class="text-500 font-medium text-green-600 text-sm">Cotisations Payées</span>
+            <div class="text-green-600 font-bold text-2xl mt-1">{{ overview.totalPaid }}</div>
           </div>
         </div>
         <div class="col-12 sm:col-4">
-          <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-red-600">En Attente de Paiement</span>
-            <div class="text-red-600 font-bold text-3xl mt-2">{{ overview.totalUnpaid }}</div>
+          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
+            <span class="text-500 font-medium text-red-600 text-sm">En Attente de Paiement</span>
+            <div class="text-red-600 font-bold text-2xl mt-1">{{ overview.totalUnpaid }}</div>
           </div>
         </div>
       </div>
 
-      <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
+      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
         <p-table
           [value]="allPaidCotisations"
           [(selection)]="selectedCotisations"
           [loading]="loading"
           responsiveLayout="stack"
-          styleClass="p-datatable-striped">
+          styleClass="p-datatable-sm p-datatable-striped">
           <ng-template pTemplate="header">
             <tr>
               <th style="width: 4rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
@@ -94,13 +94,13 @@ import { Member } from '../../core/models/member.model';
               </td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-2">
-                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="confirmDelete(cot)"></button>
+                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm p-button-danger" (click)="confirmDelete(cot)"></button>
                 </div>
               </td>
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
-            <tr><td colspan="6" class="text-center p-4 text-500">Aucune cotisation enregistrée pour cette saison.</td></tr>
+            <tr><td colspan="6" class="text-center p-3 text-500">Aucune cotisation enregistrée pour cette saison.</td></tr>
           </ng-template>
         </p-table>
       </div>
