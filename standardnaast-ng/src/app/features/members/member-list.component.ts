@@ -30,38 +30,36 @@ import { Member, MemberCreateUpdate } from '../../core/models/member.model';
     TooltipModule
   ],
   template: `
-    <div class="members-page flex flex-column gap-4">
-      <!-- Header Bar -->
-      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-3 bg-white p-4 border-round-xl border-1 border-200 shadow-1">
-        <div>
-          <h1 class="text-2xl font-bold text-900 m-0">Gestion des Membres</h1>
-          <p class="text-500 m-0 mt-1">Consultez, recherchez et gérez les supporters du club</p>
-        </div>
-        <button
-          pButton
-          label="Nouveau Membre"
-          icon="pi pi-user-plus"
-          class="p-button-danger font-bold"
-          (click)="openNewMemberDialog()">
-        </button>
-      </div>
-
-      <!-- Main Table Card -->
-      <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1">
-        <!-- Search input -->
-        <div class="flex justify-content-between align-items-center mb-3">
+    <div class="members-page flex flex-column gap-2">
+      <!-- Header Bar with Filter below Title -->
+      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
+        <div class="flex flex-column gap-2 w-full sm:w-auto">
+          <div class="flex align-items-center gap-2">
+            <h1 class="text-xl font-bold text-900 m-0">Gestion des Membres</h1>
+            <span class="text-500 text-xs">({{ totalElements }} membres)</span>
+          </div>
           <span class="p-input-icon-left w-full sm:w-20rem">
             <i class="pi pi-search"></i>
             <input
               pInputText
               type="text"
               placeholder="Rechercher par nom, prénom..."
-              class="w-full"
+              class="p-inputtext-sm w-full"
               [(ngModel)]="searchTerm"
               (input)="onSearch()" />
           </span>
         </div>
+        <button
+          pButton
+          label="Nouveau Membre"
+          icon="pi pi-user-plus"
+          class="p-button-danger p-button-sm font-bold white-space-nowrap align-self-start sm:align-self-center"
+          (click)="openNewMemberDialog()">
+        </button>
+      </div>
 
+      <!-- Main Table Card -->
+      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
         <!-- PrimeNG Table -->
         <p-table
           [value]="members"
@@ -89,12 +87,11 @@ import { Member, MemberCreateUpdate } from '../../core/models/member.model';
           </ng-template>
           <ng-template pTemplate="body" let-member>
             <tr>
-              <td><span class="p-column-title">N° :</span><span class="font-bold text-red-700">{{ member.memberNumber || '-' }}</span></td>
-              <td><span class="p-column-title">Nom :</span><span class="font-semibold">{{ member.name }}</span></td>
-              <td><span class="p-column-title">Prénom :</span>{{ member.firstname }}</td>
-              <td><span class="p-column-title">Ville :</span>{{ member.city || '-' }}</td>
+              <td><span class="font-bold text-red-700">{{ member.memberNumber || '-' }}</span></td>
+              <td><span class="font-semibold">{{ member.name }}</span></td>
+              <td>{{ member.firstname }}</td>
+              <td>{{ member.city || '-' }}</td>
               <td>
-                <span class="p-column-title">Statut :</span>
                 @if (member.redCard) {
                   <p-tag severity="danger" value="Carte Rouge"></p-tag>
                 } @else if (member.student) {
@@ -132,7 +129,7 @@ import { Member, MemberCreateUpdate } from '../../core/models/member.model';
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="6" class="text-center p-4 text-500">Aucun membre trouvé.</td>
+              <td colspan="6" class="text-center p-3 text-500">Aucun membre trouvé.</td>
             </tr>
           </ng-template>
         </p-table>
@@ -215,12 +212,55 @@ import { Member, MemberCreateUpdate } from '../../core/models/member.model';
     </div>
   `,
   styles: [`
-    :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
-      padding: 0.35rem 0.65rem;
-      vertical-align: middle;
+    :host {
+      --p-datatable-body-cell-padding: 0.2rem 0.5rem;
+      --p-datatable-header-cell-padding: 0.3rem 0.5rem;
+      --p-paginator-padding: 0.25rem 0.5rem;
     }
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td,
+    :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+      padding: 0.2rem 0.5rem !important;
+      vertical-align: middle;
+      font-size: 0.875rem;
+      line-height: 1.25;
+    }
+    :host ::ng-deep .p-datatable .p-datatable-thead > tr > th,
     :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
-      padding: 0.5rem 0.65rem;
+      padding: 0.3rem 0.5rem !important;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    :host ::ng-deep .p-datatable .p-button.p-button-sm {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+      padding: 0 !important;
+    }
+    :host ::ng-deep .p-datatable .p-button.p-button-sm .p-button-icon {
+      font-size: 0.8rem;
+    }
+    :host ::ng-deep .p-datatable .p-tag {
+      font-size: 0.7rem !important;
+      padding: 0.1rem 0.35rem !important;
+      min-height: 0;
+      line-height: 1;
+    }
+    :host ::ng-deep .p-paginator {
+      padding: 0.25rem 0.5rem !important;
+    }
+    :host ::ng-deep .p-paginator .p-paginator-page,
+    :host ::ng-deep .p-paginator .p-paginator-next,
+    :host ::ng-deep .p-paginator .p-paginator-last,
+    :host ::ng-deep .p-paginator .p-paginator-first,
+    :host ::ng-deep .p-paginator .p-paginator-prev {
+      min-width: 1.75rem !important;
+      height: 1.75rem !important;
+      font-size: 0.85rem;
+      padding: 0 !important;
+      margin: 0 0.1rem;
+    }
+    :host ::ng-deep .p-paginator .p-dropdown {
+      height: 1.75rem !important;
+      font-size: 0.85rem;
     }
   `]
 })
