@@ -9,7 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { TabViewModule } from 'primeng/tabview';
+import { TabsModule } from 'primeng/tabs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MemberService } from '../../core/services/member.service';
 import { CotisationService } from '../../core/services/cotisation.service';
@@ -37,7 +37,7 @@ import { Benevolat } from '../../core/models/benevolat.model';
     CheckboxModule,
     TagModule,
     TooltipModule,
-    TabViewModule
+    TabsModule
   ],
   template: `
     <div class="members-page flex flex-column gap-2">
@@ -173,144 +173,153 @@ import { Benevolat } from '../../core/models/benevolat.model';
             </div>
           </div>
 
-          <!-- TabView for Member Details -->
-          <p-tabView>
-            <!-- Identity Tab -->
-            <p-tabPanel header="Identité" leftIcon="pi pi-user">
-              <div class="grid text-sm p-2">
-                <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
-                  <span class="text-500 text-xs font-semibold uppercase">Nom & Prénom</span>
-                  <span class="text-900 font-medium">{{ selectedMember.firstname }} {{ selectedMember.name }}</span>
+          <!-- Tabs for Member Details -->
+          <p-tabs value="0">
+            <p-tablist>
+              <p-tab value="0"><i class="pi pi-user mr-2"></i>Identité</p-tab>
+              <p-tab value="1"><i class="pi pi-credit-card mr-2"></i>Cotisations</p-tab>
+              <p-tab value="2"><i class="pi pi-ticket mr-2"></i>Abonnements</p-tab>
+              <p-tab value="3"><i class="pi pi-car mr-2"></i>Déplacements</p-tab>
+              <p-tab value="4"><i class="pi pi-heart mr-2"></i>Bénévolat</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+              <!-- Identity Tab -->
+              <p-tabpanel value="0">
+                <div class="grid text-sm p-2">
+                  <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
+                    <span class="text-500 text-xs font-semibold uppercase">Nom & Prénom</span>
+                    <span class="text-900 font-medium">{{ selectedMember.firstname }} {{ selectedMember.name }}</span>
+                  </div>
+                  <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
+                    <span class="text-500 text-xs font-semibold uppercase">Date de naissance</span>
+                    <span class="text-900 font-medium">{{ selectedMember.birthdate ? (selectedMember.birthdate | date:'dd/MM/yyyy') : '-' }}</span>
+                  </div>
+                  <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
+                    <span class="text-500 text-xs font-semibold uppercase">Téléphone GSM</span>
+                    <span class="text-900 font-medium">{{ selectedMember.mobilePhone || '-' }}</span>
+                  </div>
+                  <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
+                    <span class="text-500 text-xs font-semibold uppercase">Email</span>
+                    <span class="text-900 font-medium">{{ selectedMember.email || '-' }}</span>
+                  </div>
+                  <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
+                    <span class="text-500 text-xs font-semibold uppercase">Adresse</span>
+                    <span class="text-900 font-medium">{{ selectedMember.address || '-' }}</span>
+                  </div>
+                  <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
+                    <span class="text-500 text-xs font-semibold uppercase">Code Postal & Ville</span>
+                    <span class="text-900 font-medium">{{ selectedMember.postalCode || '' }} {{ selectedMember.city || '-' }}</span>
+                  </div>
+                  <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
+                    <span class="text-500 text-xs font-semibold uppercase">Numéro de Membre</span>
+                    <span class="text-900 font-medium">{{ selectedMember.memberNumber || '-' }}</span>
+                  </div>
                 </div>
-                <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
-                  <span class="text-500 text-xs font-semibold uppercase">Date de naissance</span>
-                  <span class="text-900 font-medium">{{ selectedMember.birthdate ? (selectedMember.birthdate | date:'dd/MM/yyyy') : '-' }}</span>
-                </div>
-                <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
-                  <span class="text-500 text-xs font-semibold uppercase">Téléphone GSM</span>
-                  <span class="text-900 font-medium">{{ selectedMember.mobilePhone || '-' }}</span>
-                </div>
-                <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
-                  <span class="text-500 text-xs font-semibold uppercase">Email</span>
-                  <span class="text-900 font-medium">{{ selectedMember.email || '-' }}</span>
-                </div>
-                <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
-                  <span class="text-500 text-xs font-semibold uppercase">Adresse</span>
-                  <span class="text-900 font-medium">{{ selectedMember.address || '-' }}</span>
-                </div>
-                <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
-                  <span class="text-500 text-xs font-semibold uppercase">Code Postal & Ville</span>
-                  <span class="text-900 font-medium">{{ selectedMember.postalCode || '' }} {{ selectedMember.city || '-' }}</span>
-                </div>
-                <div class="col-12 sm:col-6 lg:col-3 flex flex-column gap-1">
-                  <span class="text-500 text-xs font-semibold uppercase">Numéro de Membre</span>
-                  <span class="text-900 font-medium">{{ selectedMember.memberNumber || '-' }}</span>
-                </div>
-              </div>
-            </p-tabPanel>
+              </p-tabpanel>
 
-            <!-- Cotisations Tab -->
-            <p-tabPanel header="Cotisations" leftIcon="pi pi-credit-card">
-              <p-table [value]="selectedMemberCotisations" responsiveLayout="stack" styleClass="p-datatable-sm">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Saison</th>
-                    <th>Date de paiement</th>
-                    <th>Carte envoyée</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-cot>
-                  <tr>
-                    <td><span class="font-bold">{{ cot.seasonId }}</span></td>
-                    <td>{{ cot.datePaiement ? (cot.datePaiement | date:'dd/MM/yyyy') : 'Non payé' }}</td>
-                    <td>
-                      <p-tag [severity]="cot.carteMembreEnvoyee ? 'success' : 'warning'" [value]="cot.carteMembreEnvoyee ? 'Oui' : 'Non'"></p-tag>
-                    </td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                  <tr><td colspan="3" class="text-center p-3 text-500">Aucune cotisation enregistrée.</td></tr>
-                </ng-template>
-              </p-table>
-            </p-tabPanel>
+              <!-- Cotisations Tab -->
+              <p-tabpanel value="1">
+                <p-table [value]="selectedMemberCotisations" responsiveLayout="stack" styleClass="p-datatable-sm">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Saison</th>
+                      <th>Date de paiement</th>
+                      <th>Carte envoyée</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-cot>
+                    <tr>
+                      <td><span class="font-bold">{{ cot.seasonId }}</span></td>
+                      <td>{{ cot.datePaiement ? (cot.datePaiement | date:'dd/MM/yyyy') : 'Non payé' }}</td>
+                      <td>
+                        <p-tag [severity]="cot.carteMembreEnvoyee ? 'success' : 'warning'" [value]="cot.carteMembreEnvoyee ? 'Oui' : 'Non'"></p-tag>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr><td colspan="3" class="text-center p-3 text-500">Aucune cotisation enregistrée.</td></tr>
+                  </ng-template>
+                </p-table>
+              </p-tabpanel>
 
-            <!-- Abonnements Tab -->
-            <p-tabPanel header="Abonnements" leftIcon="pi pi-ticket">
-              <p-table [value]="selectedMemberAbonnements" responsiveLayout="stack" styleClass="p-datatable-sm">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Saison</th>
-                    <th>Bloc</th>
-                    <th>Rang</th>
-                    <th>Place</th>
-                    <th>Montant Payé</th>
-                    <th>Statut</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-abo>
-                  <tr>
-                    <td><span class="font-bold">{{ abo.seasonId }}</span></td>
-                    <td>{{ abo.bloc || '-' }}</td>
-                    <td>{{ abo.rang || '-' }}</td>
-                    <td>{{ abo.place || '-' }}</td>
-                    <td>{{ (abo.acompte != null ? abo.acompte : abo.montantPaye) | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
-                    <td>
-                      <p-tag [value]="abo.abonnementStatus || abo.status"></p-tag>
-                    </td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                  <tr><td colspan="6" class="text-center p-3 text-500">Aucun abonnement enregistré.</td></tr>
-                </ng-template>
-              </p-table>
-            </p-tabPanel>
+              <!-- Abonnements Tab -->
+              <p-tabpanel value="2">
+                <p-table [value]="selectedMemberAbonnements" responsiveLayout="stack" styleClass="p-datatable-sm">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Saison</th>
+                      <th>Bloc</th>
+                      <th>Rang</th>
+                      <th>Place</th>
+                      <th>Montant Payé</th>
+                      <th>Statut</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-abo>
+                    <tr>
+                      <td><span class="font-bold">{{ abo.seasonId }}</span></td>
+                      <td>{{ abo.bloc || '-' }}</td>
+                      <td>{{ abo.rang || '-' }}</td>
+                      <td>{{ abo.place || '-' }}</td>
+                      <td>{{ (abo.acompte != null ? abo.acompte : abo.montantPaye) | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
+                      <td>
+                        <p-tag [value]="abo.abonnementStatus || abo.status"></p-tag>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr><td colspan="6" class="text-center p-3 text-500">Aucun abonnement enregistré.</td></tr>
+                  </ng-template>
+                </p-table>
+              </p-tabpanel>
 
-            <!-- Travels Tab -->
-            <p-tabPanel header="Déplacements" leftIcon="pi pi-car">
-              <p-table [value]="selectedMemberTravels" responsiveLayout="stack" styleClass="p-datatable-sm">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Match / Adversaire</th>
-                    <th>Date</th>
-                    <th>Montant payé</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-tr>
-                  <tr>
-                    <td><span class="font-semibold">{{ tr.opponentName }}</span></td>
-                    <td>{{ tr.dateMatch | date:'dd/MM/yyyy' }}</td>
-                    <td>{{ tr.amountPaid | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                  <tr><td colspan="3" class="text-center p-3 text-500">Aucun déplacement enregistré.</td></tr>
-                </ng-template>
-              </p-table>
-            </p-tabPanel>
+              <!-- Travels Tab -->
+              <p-tabpanel value="3">
+                <p-table [value]="selectedMemberTravels" responsiveLayout="stack" styleClass="p-datatable-sm">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Match / Adversaire</th>
+                      <th>Date</th>
+                      <th>Montant payé</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-tr>
+                    <tr>
+                      <td><span class="font-semibold">{{ tr.opponentName }}</span></td>
+                      <td>{{ tr.dateMatch | date:'dd/MM/yyyy' }}</td>
+                      <td>{{ tr.amountPaid | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr><td colspan="3" class="text-center p-3 text-500">Aucun déplacement enregistré.</td></tr>
+                  </ng-template>
+                </p-table>
+              </p-tabpanel>
 
-            <!-- Benevolat Tab -->
-            <p-tabPanel header="Bénévolat" leftIcon="pi pi-heart">
-              <p-table [value]="selectedMemberBenevolats" responsiveLayout="stack" styleClass="p-datatable-sm">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Date</th>
-                    <th>Prestation</th>
-                    <th>Montant</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-b>
-                  <tr>
-                    <td>{{ b.date | date:'dd/MM/yyyy' }}</td>
-                    <td>{{ b.typeBenevolat }}</td>
-                    <td>{{ b.amount | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                  <tr><td colspan="3" class="text-center p-3 text-500">Aucune prestation de bénévolat.</td></tr>
-                </ng-template>
-              </p-table>
-            </p-tabPanel>
-          </p-tabView>
+              <!-- Benevolat Tab -->
+              <p-tabpanel value="4">
+                <p-table [value]="selectedMemberBenevolats" responsiveLayout="stack" styleClass="p-datatable-sm">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Date</th>
+                      <th>Prestation</th>
+                      <th>Montant</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-b>
+                    <tr>
+                      <td>{{ b.date | date:'dd/MM/yyyy' }}</td>
+                      <td>{{ b.typeBenevolat }}</td>
+                      <td>{{ b.amount | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr><td colspan="3" class="text-center p-3 text-500">Aucune prestation de bénévolat.</td></tr>
+                  </ng-template>
+                </p-table>
+              </p-tabpanel>
+            </p-tabpanels>
+          </p-tabs>
         </div>
       } @else {
         <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1 text-center text-500 text-sm">
