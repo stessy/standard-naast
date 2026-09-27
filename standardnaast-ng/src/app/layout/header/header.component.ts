@@ -23,9 +23,9 @@ import { SeasonService } from '../../core/services/season.service';
       <div class="header-container flex align-items-center justify-content-between px-4 py-2">
         <!-- Logo & Title -->
         <div class="flex align-items-center gap-3">
-          <button pButton icon="pi pi-bars" [text]="true" class="text-red-700 p-button-rounded lg:hidden" (click)="toggleSidebar()"></button>
-          <a routerLink="/" class="flex align-items-center gap-2 no-underline text-red-700">
-            <i class="pi pi-shield text-2xl text-red-600"></i>
+          <button pButton icon="pi pi-bars" [text]="true" class="text-white p-button-rounded lg:hidden" (click)="toggleSidebar()"></button>
+          <a routerLink="/" class="flex align-items-center gap-2 no-underline text-white">
+            <i class="pi pi-shield text-2xl text-yellow-400"></i>
             <span class="font-bold text-xl tracking-wide uppercase hidden sm:inline">Standard de Naast</span>
           </a>
         </div>
@@ -38,12 +38,12 @@ import { SeasonService } from '../../core/services/season.service';
         <!-- User Profile -->
         <div class="flex align-items-center gap-3">
           @if (authService.currentUser(); as user) {
-            <div class="flex align-items-center gap-2 pl-2 border-left-1 border-red-300">
-              <span class="font-medium text-sm text-red-700 hidden sm:inline">{{ user.firstname }} {{ user.lastname }}</span>
+            <div class="flex align-items-center gap-2 pl-2 border-left-1 border-red-600">
+              <span class="font-medium text-sm text-white hidden sm:inline">{{ user.firstname }} {{ user.lastname }}</span>
               <button
                 pButton
                 icon="pi pi-user"
-                class="p-button-rounded p-button-text text-red-700 hover:bg-red-200"
+                class="p-button-rounded p-button-text text-white hover:bg-red-800"
                 (click)="userMenu.toggle($event)">
               </button>
               <p-menu #userMenu [model]="userMenuItems" [popup]="true"></p-menu>
@@ -58,8 +58,8 @@ import { SeasonService } from '../../core/services/season.service';
       position: sticky;
       top: 0;
       z-index: 1000;
-      background-color: #fee2e2;
-      border-bottom: 1px solid #fecaca;
+      background-color: #b91c1c;
+      border-bottom: 1px solid #991b1b;
     }
     .header-container {
       min-height: 56px;
