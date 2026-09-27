@@ -85,68 +85,52 @@ import { Season } from '../../core/models/season.model';
         </div>
 
         <!-- Formulaire Modifiable -->
-        <form [formGroup]="memberForm" (ngSubmit)="saveMember()" class="flex flex-column gap-3">
+        <form [formGroup]="memberForm" (ngSubmit)="saveMember()" class="flex flex-column gap-2">
           <!-- Row 1: Nom, Prénom, N° de membre -->
-          <div class="grid">
-            <div class="col-12 md:col-4 flex flex-column gap-1">
+          <div class="grid -mt-1 -mb-1">
+            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
               <label for="detail_name" class="font-semibold text-xs text-700">Nom *</label>
               <input id="detail_name" type="text" pInputText formControlName="name" class="p-inputtext-sm w-full" />
             </div>
-            <div class="col-12 md:col-4 flex flex-column gap-1">
+            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
               <label for="detail_firstname" class="font-semibold text-xs text-700">Prénom *</label>
               <input id="detail_firstname" type="text" pInputText formControlName="firstname" class="p-inputtext-sm w-full" />
             </div>
-            <div class="col-12 md:col-4 flex flex-column gap-1">
+            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
               <label for="detail_memberNumber" class="font-semibold text-xs text-700">N° de membre</label>
-              <input id="detail_memberNumber" type="number" pInputText formControlName="memberNumber" class="p-inputtext-sm w-full" />
+              <input id="detail_memberNumber" type="number" pInputText formControlName="memberNumber" [readonly]="true" class="p-inputtext-sm w-full surface-100 text-600 font-semibold cursor-not-allowed" />
             </div>
           </div>
 
           <!-- Row 2: Adresse, Code postal, Ville -->
-          <div class="grid">
-            <div class="col-12 md:col-6 flex flex-column gap-1">
+          <div class="grid -mt-1 -mb-1">
+            <div class="col-12 md:col-6 py-1 flex flex-column gap-1">
               <label for="detail_address" class="font-semibold text-xs text-700">Adresse</label>
               <input id="detail_address" type="text" pInputText formControlName="address" class="p-inputtext-sm w-full" />
             </div>
-            <div class="col-12 md:col-3 flex flex-column gap-1">
+            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
               <label for="detail_postalCode" class="font-semibold text-xs text-700">Code postal</label>
               <input id="detail_postalCode" type="text" pInputText formControlName="postalCode" class="p-inputtext-sm w-full" />
             </div>
-            <div class="col-12 md:col-3 flex flex-column gap-1">
+            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
               <label for="detail_city" class="font-semibold text-xs text-700">Ville</label>
               <input id="detail_city" type="text" pInputText formControlName="city" class="p-inputtext-sm w-full" />
             </div>
           </div>
 
-          <!-- Row 3: Email, GSM, Téléphone -->
-          <div class="grid">
-            <div class="col-12 md:col-4 flex flex-column gap-1">
+          <!-- Row 3: Email, GSM, Date de naissance -->
+          <div class="grid -mt-1 -mb-1">
+            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
               <label for="detail_email" class="font-semibold text-xs text-700">Email</label>
               <input id="detail_email" type="email" pInputText formControlName="email" class="p-inputtext-sm w-full" />
             </div>
-            <div class="col-12 md:col-4 flex flex-column gap-1">
+            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
               <label for="detail_mobilePhone" class="font-semibold text-xs text-700">GSM</label>
               <input id="detail_mobilePhone" type="text" pInputText formControlName="mobilePhone" class="p-inputtext-sm w-full" />
             </div>
-            <div class="col-12 md:col-4 flex flex-column gap-1">
-              <label for="detail_phone" class="font-semibold text-xs text-700">Téléphone</label>
-              <input id="detail_phone" type="text" pInputText formControlName="phone" class="p-inputtext-sm w-full" />
-            </div>
-          </div>
-
-          <!-- Row 4: Date de naissance, Étudiant, Red Card -->
-          <div class="grid align-items-center">
-            <div class="col-12 md:col-4 flex flex-column gap-1">
+            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
               <label for="detail_birthdate" class="font-semibold text-xs text-700">Date de naissance</label>
               <input id="detail_birthdate" type="date" pInputText formControlName="birthdate" class="p-inputtext-sm w-full" />
-            </div>
-            <div class="col-12 md:col-4 flex align-items-center gap-2 pt-2 md:pt-4">
-              <p-checkbox formControlName="student" [binary]="true" inputId="detail_student"></p-checkbox>
-              <label for="detail_student" class="text-sm font-medium">Étudiant</label>
-            </div>
-            <div class="col-12 md:col-4 flex align-items-center gap-2 pt-2 md:pt-4">
-              <p-checkbox formControlName="redCard" [binary]="true" inputId="detail_redCard"></p-checkbox>
-              <label for="detail_redCard" class="text-sm font-medium text-red-600">Carte Rouge</label>
             </div>
           </div>
         </form>
@@ -530,7 +514,13 @@ export class MemberDetailComponent implements OnInit {
     }
 
     this.savingMember = true;
-    const formValue: MemberCreateUpdate = this.memberForm.value;
+    const formValue: MemberCreateUpdate = {
+      ...this.memberForm.getRawValue(),
+      memberNumber: this.member.memberNumber,
+      phone: this.member.phone,
+      student: this.member.student ?? false,
+      redCard: this.member.redCard ?? false
+    };
 
     this.memberService.updateMember(this.member.id, formValue).subscribe({
       next: (updatedMember) => {

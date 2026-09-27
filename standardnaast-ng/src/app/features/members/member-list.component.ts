@@ -178,68 +178,52 @@ import { Season } from '../../core/models/season.model';
           </div>
 
           <!-- Formulaire Modifiable -->
-          <form [formGroup]="memberForm" (ngSubmit)="saveSelectedMember()" class="flex flex-column gap-3">
+          <form [formGroup]="memberForm" (ngSubmit)="saveSelectedMember()" class="flex flex-column gap-2">
             <!-- Row 1: Nom, Prénom, N° de membre -->
-            <div class="grid">
-              <div class="col-12 md:col-4 flex flex-column gap-1">
+            <div class="grid -mt-1 -mb-1">
+              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
                 <label for="name" class="font-semibold text-xs text-700">Nom *</label>
                 <input id="name" type="text" pInputText formControlName="name" class="p-inputtext-sm w-full" />
               </div>
-              <div class="col-12 md:col-4 flex flex-column gap-1">
+              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
                 <label for="firstname" class="font-semibold text-xs text-700">Prénom *</label>
                 <input id="firstname" type="text" pInputText formControlName="firstname" class="p-inputtext-sm w-full" />
               </div>
-              <div class="col-12 md:col-4 flex flex-column gap-1">
+              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
                 <label for="memberNumber" class="font-semibold text-xs text-700">N° de membre</label>
-                <input id="memberNumber" type="number" pInputText formControlName="memberNumber" class="p-inputtext-sm w-full" />
+                <input id="memberNumber" type="number" pInputText formControlName="memberNumber" [readonly]="true" class="p-inputtext-sm w-full surface-100 text-600 font-semibold cursor-not-allowed" />
               </div>
             </div>
 
             <!-- Row 2: Adresse, Code postal, Ville -->
-            <div class="grid">
-              <div class="col-12 md:col-6 flex flex-column gap-1">
+            <div class="grid -mt-1 -mb-1">
+              <div class="col-12 md:col-6 py-1 flex flex-column gap-1">
                 <label for="address" class="font-semibold text-xs text-700">Adresse</label>
                 <input id="address" type="text" pInputText formControlName="address" class="p-inputtext-sm w-full" />
               </div>
-              <div class="col-12 md:col-3 flex flex-column gap-1">
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
                 <label for="postalCode" class="font-semibold text-xs text-700">Code postal</label>
                 <input id="postalCode" type="text" pInputText formControlName="postalCode" class="p-inputtext-sm w-full" />
               </div>
-              <div class="col-12 md:col-3 flex flex-column gap-1">
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
                 <label for="city" class="font-semibold text-xs text-700">Ville</label>
                 <input id="city" type="text" pInputText formControlName="city" class="p-inputtext-sm w-full" />
               </div>
             </div>
 
-            <!-- Row 3: Email, GSM, Téléphone -->
-            <div class="grid">
-              <div class="col-12 md:col-4 flex flex-column gap-1">
+            <!-- Row 3: Email, GSM, Date de naissance -->
+            <div class="grid -mt-1 -mb-1">
+              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
                 <label for="email" class="font-semibold text-xs text-700">Email</label>
                 <input id="email" type="email" pInputText formControlName="email" class="p-inputtext-sm w-full" />
               </div>
-              <div class="col-12 md:col-4 flex flex-column gap-1">
+              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
                 <label for="mobilePhone" class="font-semibold text-xs text-700">GSM</label>
                 <input id="mobilePhone" type="text" pInputText formControlName="mobilePhone" class="p-inputtext-sm w-full" />
               </div>
-              <div class="col-12 md:col-4 flex flex-column gap-1">
-                <label for="phone" class="font-semibold text-xs text-700">Téléphone</label>
-                <input id="phone" type="text" pInputText formControlName="phone" class="p-inputtext-sm w-full" />
-              </div>
-            </div>
-
-            <!-- Row 4: Date de naissance, Étudiant, Red Card -->
-            <div class="grid align-items-center">
-              <div class="col-12 md:col-4 flex flex-column gap-1">
+              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
                 <label for="birthdate" class="font-semibold text-xs text-700">Date de naissance</label>
                 <input id="birthdate" type="date" pInputText formControlName="birthdate" class="p-inputtext-sm w-full" />
-              </div>
-              <div class="col-12 md:col-4 flex align-items-center gap-2 pt-2 md:pt-4">
-                <p-checkbox formControlName="student" [binary]="true" inputId="student"></p-checkbox>
-                <label for="student" class="text-sm font-medium">Étudiant</label>
-              </div>
-              <div class="col-12 md:col-4 flex align-items-center gap-2 pt-2 md:pt-4">
-                <p-checkbox formControlName="redCard" [binary]="true" inputId="redCard"></p-checkbox>
-                <label for="redCard" class="text-sm font-medium text-red-600">Carte Rouge</label>
               </div>
             </div>
           </form>
@@ -423,8 +407,8 @@ import { Season } from '../../core/models/season.model';
               <input id="new_birthdate" type="date" pInputText formControlName="birthdate" />
             </div>
             <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label for="new_phone" class="font-semibold text-sm">Téléphone fixe</label>
-              <input id="new_phone" type="text" pInputText formControlName="phone" />
+              <label for="new_memberNumber" class="font-semibold text-sm">N° de Membre</label>
+              <input id="new_memberNumber" type="number" pInputText formControlName="memberNumber" />
             </div>
           </div>
 
@@ -434,28 +418,13 @@ import { Season } from '../../core/models/season.model';
           </div>
 
           <div class="grid">
-            <div class="col-12 md:col-4 flex flex-column gap-2">
+            <div class="col-12 md:col-6 flex flex-column gap-2">
               <label for="new_postalCode" class="font-semibold text-sm">Code Postal</label>
               <input id="new_postalCode" type="text" pInputText formControlName="postalCode" />
             </div>
-            <div class="col-12 md:col-4 flex flex-column gap-2">
+            <div class="col-12 md:col-6 flex flex-column gap-2">
               <label for="new_city" class="font-semibold text-sm">Ville</label>
               <input id="new_city" type="text" pInputText formControlName="city" />
-            </div>
-            <div class="col-12 md:col-4 flex flex-column gap-2">
-              <label for="new_memberNumber" class="font-semibold text-sm">N° de Membre</label>
-              <input id="new_memberNumber" type="number" pInputText formControlName="memberNumber" />
-            </div>
-          </div>
-
-          <div class="flex gap-4 mt-2">
-            <div class="flex align-items-center gap-2">
-              <p-checkbox formControlName="student" [binary]="true" inputId="new_student"></p-checkbox>
-              <label for="new_student" class="text-sm font-medium">Étudiant</label>
-            </div>
-            <div class="flex align-items-center gap-2">
-              <p-checkbox formControlName="redCard" [binary]="true" inputId="new_redCard"></p-checkbox>
-              <label for="new_redCard" class="text-sm font-medium text-red-600">Carte Rouge</label>
             </div>
           </div>
 
@@ -817,7 +786,13 @@ export class MemberListComponent implements OnInit {
     }
 
     this.savingMember = true;
-    const formValue: MemberCreateUpdate = this.memberForm.value;
+    const formValue: MemberCreateUpdate = {
+      ...this.memberForm.getRawValue(),
+      memberNumber: this.selectedMember.memberNumber,
+      phone: this.selectedMember.phone,
+      student: this.selectedMember.student ?? false,
+      redCard: this.selectedMember.redCard ?? false
+    };
 
     this.memberService.updateMember(this.selectedMember.id, formValue).subscribe({
       next: (updatedMember) => {
