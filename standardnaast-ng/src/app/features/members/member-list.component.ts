@@ -6,6 +6,8 @@ import { TableModule, TableLazyLoadEvent, TableRowSelectEvent } from 'primeng/ta
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -33,6 +35,8 @@ import { Season } from '../../core/models/season.model';
     ButtonModule,
     InputTextModule,
     InputNumberModule,
+    IconFieldModule,
+    InputIconModule,
     DropdownModule,
     DialogModule,
     CheckboxModule,
@@ -41,36 +45,35 @@ import { Season } from '../../core/models/season.model';
   ],
   template: `
     <div class="members-page flex flex-column gap-3">
-      <!-- Header Bar with Title, Search & Add Member Button -->
-      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
-        <div class="flex flex-column gap-2 w-full sm:w-auto">
-          <div class="flex align-items-center gap-2">
-            <h1 class="text-xl font-bold text-900 m-0">Gestion des Membres</h1>
-            <span class="text-500 text-xs">({{ totalElements }} membres)</span>
+      <!-- Main Members Table Card with Header Toolbar -->
+      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1 flex flex-column gap-2">
+        <div class="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center gap-2 pb-1">
+          <div class="flex flex-row align-items-center gap-3 flex-wrap">
+            <div class="flex align-items-center gap-2">
+              <h1 class="text-xl font-bold text-900 m-0">Gestion des Membres</h1>
+              <span class="text-500 text-xs">({{ totalElements }} membres)</span>
+            </div>
+            <p-iconfield iconPosition="left" class="w-18rem max-w-full">
+              <p-inputicon class="pi pi-search"></p-inputicon>
+              <input
+                pInputText
+                type="text"
+                placeholder="Rechercher par nom, prénom..."
+                class="p-inputtext-sm w-full"
+                [(ngModel)]="searchTerm"
+                (input)="onSearch()" />
+            </p-iconfield>
           </div>
-          <span class="p-input-icon-left w-full sm:w-20rem">
-            <i class="pi pi-search"></i>
-            <input
-              pInputText
-              type="text"
-              placeholder="Rechercher par nom, prénom..."
-              class="p-inputtext-sm w-full"
-              [(ngModel)]="searchTerm"
-              (input)="onSearch()" />
-          </span>
+          <button
+            pButton
+            type="button"
+            label="Nouveau Membre"
+            icon="pi pi-user-plus"
+            class="p-button-danger p-button-sm font-bold white-space-nowrap"
+            (click)="openNewMemberDialog()">
+          </button>
         </div>
-        <button
-          pButton
-          type="button"
-          label="Nouveau Membre"
-          icon="pi pi-user-plus"
-          class="p-button-danger p-button-sm font-bold white-space-nowrap align-self-start sm:align-self-center"
-          (click)="openNewMemberDialog()">
-        </button>
-      </div>
 
-      <!-- Main Members Table Card -->
-      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
         <p-table
           [value]="members"
           [lazy]="true"
