@@ -104,7 +104,11 @@ import { Season } from '../../core/models/season.model';
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-member>
-            <tr [pSelectableRow]="member" class="cursor-pointer" (click)="selectMember(member)">
+            <tr
+              [pSelectableRow]="member"
+              class="cursor-pointer"
+              [class.selected-member-row]="selectedMember?.id === member.id"
+              (click)="selectMember(member)">
               <td><span class="font-bold text-red-700">{{ member.memberNumber || '-' }}</span></td>
               <td><span class="font-semibold">{{ member.name }}</span></td>
               <td>{{ member.firstname }}</td>
@@ -565,9 +569,20 @@ import { Season } from '../../core/models/season.model';
     :host ::ng-deep .p-datatable .p-datatable-tbody > tr {
       transition: background-color 0.15s;
     }
-    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight {
-      background: #fee2e2 !important;
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight > td,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-datatable-row-selected,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-datatable-row-selected > td,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.selected-member-row,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.selected-member-row > td {
+      background-color: #fee2e2 !important;
       color: #991b1b !important;
+    }
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight:hover,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight:hover > td,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.selected-member-row:hover,
+    :host ::ng-deep .p-datatable .p-datatable-tbody > tr.selected-member-row:hover > td {
+      background-color: #fecaca !important;
     }
     :host ::ng-deep .p-datatable-sm .p-button.p-button-sm.p-button-rounded {
       width: 1.5rem !important;
