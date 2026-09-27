@@ -69,11 +69,14 @@ import { Member } from '../../core/models/member.model';
           [rows]="pageSize"
           [totalRecords]="totalElements"
           [loading]="loading"
+          sortField="memberNumber"
+          [sortOrder]="1"
+          [defaultSortOrder]="1"
           responsiveLayout="stack"
           styleClass="p-datatable-sm p-datatable-striped">
           <ng-template pTemplate="header">
             <tr>
-              <th>N° Membre</th>
+              <th pSortableColumn="memberNumber">N° Membre <p-sortIcon field="memberNumber"></p-sortIcon></th>
               <th>Membre</th>
               <th>Saison</th>
               <th>Bloc / Rang / Place</th>
@@ -278,7 +281,15 @@ export class AbonnementListComponent implements OnInit {
     const size = event.rows || this.pageSize;
     const seasonToFilter = this.selectedSeasonId || undefined;
 
-    this.abonnementService.getAbonnements(seasonToFilter, undefined, undefined, page, size).subscribe({
+    let sort = 'personne.memberNumber,asc';
+    if (event.sortField) {
+      const field = Array.isArray(event.sortField) ? event.sortField[0] : event.sortField;
+      const order = event.sortOrder === -1 ? 'desc' : 'asc';
+      const backendField = field === 'memberNumber' ? 'personne.memberNumber' : field;
+      sort = `${backendField},${order}`;
+    }
+
+    this.abonnementService.getAbonnements(seasonToFilter, undefined, undefined, page, size, sort).subscribe({
       next: (res) => {
         this.abonnements = res.content;
         this.totalElements = res.totalElements;

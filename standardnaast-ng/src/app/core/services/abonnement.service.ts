@@ -14,7 +14,7 @@ export class AbonnementService {
 
   constructor(private http: HttpClient) {}
 
-  getAbonnements(seasonId?: string, memberId?: number, status?: AbonnementStatus, page = 0, size = 20): Observable<Page<Abonnement>> {
+  getAbonnements(seasonId?: string, memberId?: number, status?: AbonnementStatus, page = 0, size = 20, sort = 'personne.memberNumber,asc'): Observable<Page<Abonnement>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
@@ -22,6 +22,7 @@ export class AbonnementService {
     if (seasonId) params = params.set('seasonId', seasonId);
     if (memberId) params = params.set('memberId', memberId.toString());
     if (status) params = params.set('status', status);
+    if (sort) params = params.set('sort', sort);
 
     return this.http.get<Page<Abonnement>>(this.apiUrl, { params });
   }

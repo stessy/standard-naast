@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class AbonnementController {
     public ResponseEntity<Page<AbonnementDto>> getAbonnements(
             @RequestParam(required = false) String seasonId,
             @RequestParam(required = false) Long memberId,
-            @PageableDefault(size = 20) Pageable pageable
+            @PageableDefault(size = 20, sort = "personne.memberNumber", direction = Sort.Direction.ASC) Pageable pageable
     ) {
         return ResponseEntity.ok(abonnementService.getAbonnements(seasonId, memberId, pageable));
     }
