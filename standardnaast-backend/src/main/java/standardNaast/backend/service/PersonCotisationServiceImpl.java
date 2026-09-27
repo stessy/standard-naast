@@ -33,15 +33,18 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
     private final PersonRepository personRepository;
     private final SeasonRepository seasonRepository;
     private final PersonCotisationMapper personCotisationMapper;
+    private final MemberService memberService;
 
     public PersonCotisationServiceImpl(PersonCotisationRepository personCotisationRepository,
                                       PersonRepository personRepository,
                                       SeasonRepository seasonRepository,
-                                      PersonCotisationMapper personCotisationMapper) {
+                                      PersonCotisationMapper personCotisationMapper,
+                                      MemberService memberService) {
         this.personCotisationRepository = personCotisationRepository;
         this.personRepository = personRepository;
         this.seasonRepository = seasonRepository;
         this.personCotisationMapper = personCotisationMapper;
+        this.memberService = memberService;
     }
 
     @Override
@@ -70,6 +73,7 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
                 .build();
 
         PersonCotisation saved = personCotisationRepository.save(entity);
+        memberService.updateMemberNumberOnCotisationAdded(member.getId());
         return personCotisationMapper.toDto(saved);
     }
 

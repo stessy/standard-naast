@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import standardNaast.backend.domain.Person;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,6 +18,8 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Query("SELECT MAX(p.memberNumber) FROM Person p WHERE p.memberNumber < 10000")
     Optional<Long> findMaxMemberNumber();
+
+    List<Person> findByMemberNumberLessThanOrderByMemberNumberAsc(Long threshold);
 
     @Query("SELECT p FROM Person p WHERE " +
            "(:query IS NULL OR :query = '' OR " +

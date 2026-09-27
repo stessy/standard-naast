@@ -40,6 +40,9 @@ class PersonCotisationServiceTest {
     @Mock
     private SeasonRepository seasonRepository;
 
+    @Mock
+    private MemberService memberService;
+
     private PersonCotisationMapper personCotisationMapper = Mappers.getMapper(PersonCotisationMapper.class);
 
     private PersonCotisationService personCotisationService;
@@ -50,7 +53,8 @@ class PersonCotisationServiceTest {
                 personCotisationRepository,
                 personRepository,
                 seasonRepository,
-                personCotisationMapper
+                personCotisationMapper,
+                memberService
         );
     }
 

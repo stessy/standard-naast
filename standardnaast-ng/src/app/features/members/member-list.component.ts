@@ -408,15 +408,9 @@ import { Season } from '../../core/models/season.model';
             </div>
           </div>
 
-          <div class="grid">
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label for="new_birthdate" class="font-semibold text-sm">Date de naissance</label>
-              <input id="new_birthdate" type="date" pInputText formControlName="birthdate" />
-            </div>
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label for="new_memberNumber" class="font-semibold text-sm">N° de Membre</label>
-              <input id="new_memberNumber" type="number" pInputText formControlName="memberNumber" />
-            </div>
+          <div class="flex flex-column gap-2">
+            <label for="new_birthdate" class="font-semibold text-sm">Date de naissance</label>
+            <input id="new_birthdate" type="date" pInputText formControlName="birthdate" />
           </div>
 
           <div class="flex flex-column gap-2">
@@ -679,7 +673,7 @@ export class MemberListComponent implements OnInit {
     postalCode: [''],
     city: [''],
     birthdate: [''],
-    memberNumber: [null],
+    memberNumber: [10000],
     redCard: [false],
     student: [false]
   });
@@ -873,42 +867,21 @@ export class MemberListComponent implements OnInit {
   }
 
   openNewMemberDialog(): void {
-    this.memberService.getNextMemberNumber().subscribe({
-      next: (nextNum) => {
-        this.newMemberForm.reset({
-          name: '',
-          firstname: '',
-          email: '',
-          phone: '',
-          mobilePhone: '',
-          address: '',
-          postalCode: '',
-          city: '',
-          birthdate: '',
-          memberNumber: nextNum,
-          redCard: false,
-          student: false
-        });
-        this.newMemberDialogVisible = true;
-      },
-      error: () => {
-        this.newMemberForm.reset({
-          name: '',
-          firstname: '',
-          email: '',
-          phone: '',
-          mobilePhone: '',
-          address: '',
-          postalCode: '',
-          city: '',
-          birthdate: '',
-          memberNumber: null,
-          redCard: false,
-          student: false
-        });
-        this.newMemberDialogVisible = true;
-      }
+    this.newMemberForm.reset({
+      name: '',
+      firstname: '',
+      email: '',
+      phone: '',
+      mobilePhone: '',
+      address: '',
+      postalCode: '',
+      city: '',
+      birthdate: '',
+      memberNumber: 10000,
+      redCard: false,
+      student: false
     });
+    this.newMemberDialogVisible = true;
   }
 
   saveNewMember(): void {
@@ -1108,7 +1081,14 @@ export class MemberListComponent implements OnInit {
         });
         if (this.selectedMember) {
           this.loadMemberDetailsData(this.selectedMember.id);
+          this.memberService.getMemberById(this.selectedMember.id).subscribe({
+            next: (updatedMember) => {
+              this.selectedMember = updatedMember;
+              this.populateMemberForm(updatedMember);
+            }
+          });
         }
+        this.loadMembers({ first: this.currentPage * this.pageSize, rows: this.pageSize });
       },
       error: () => {
         this.savingCotisation = false;

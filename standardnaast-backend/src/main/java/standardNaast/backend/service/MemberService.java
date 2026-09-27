@@ -22,4 +22,8 @@ public interface MemberService {
     void deleteMember(Long id);
 
     Long getNextMemberNumber();
+
+    void updateMemberNumberOnCotisationAdded(Long memberId);
+
+    void reorderActiveMemberNumbers();
 }

@@ -13,6 +13,8 @@ import standardNaast.backend.exception.ResourceNotFoundException;
 import standardNaast.backend.mapper.MemberMapper;
 import standardNaast.backend.repository.PersonRepository;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -53,8 +55,8 @@ public class MemberServiceImpl implements MemberService {
     public MemberDto createMember(final MemberCreateUpdateDto dto) {
         log.info("Creating new member with name='{}' and firstname='{}'", dto.name(), dto.firstname());
         final Person person = this.memberMapper.toEntity(dto);
-        if (person.getMemberNumber() == null || person.getMemberNumber() == 0) {
-            person.setMemberNumber(this.getNextMemberNumber());
+        if (person.getMemberNumber() == null || person.getMemberNumber() == 0 || person.getMemberNumber() < 10000) {
+            person.setMemberNumber(10000L);
         }
         final Person savedPerson = this.personRepository.save(person);
         return this.memberMapper.toDto(savedPerson);
@@ -76,15 +78,44 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void deleteMember(final Long id) {
         log.info("Deleting member with id={}", id);
-        if (!this.personRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Membre non trouvé avec l'id : " + id);
-        }
-        this.personRepository.deleteById(id);
+        final Person person = this.personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Membre non trouvé avec l'id : " + id));
+        person.setMemberNumber(10000L);
+        this.personRepository.save(person);
+        this.reorderActiveMemberNumbers();
     }
 
     @Override
     public Long getNextMemberNumber() {
         final Long max = this.personRepository.findMaxMemberNumber().orElse(0L);
         return max + 1;
+    }
+
+    @Override
+    @Transactional
+    public void updateMemberNumberOnCotisationAdded(final Long memberId) {
+        log.info("Updating member number on cotisation added for memberId={}", memberId);
+        final Person person = this.personRepository.findById(memberId)
+                .orElseThrow(() -> new ResourceNotFoundException("Membre non trouvé avec l'id : " + memberId));
+        if (person.getMemberNumber() == null || person.getMemberNumber() >= 10000L) {
+            final Long maxMemberNumber = this.personRepository.findMaxMemberNumber().orElse(0L);
+            person.setMemberNumber(maxMemberNumber + 1);
+            this.personRepository.save(person);
+        }
+        this.reorderActiveMemberNumbers();
+    }
+
+    @Override
+    @Transactional
+    public void reorderActiveMemberNumbers() {
+        final List<Person> activeMembers = this.personRepository.findByMemberNumberLessThanOrderByMemberNumberAsc(10000L);
+        long counter = 1L;
+        for (final Person p : activeMembers) {
+            if (!Objects.equals(p.getMemberNumber(), counter)) {
+                p.setMemberNumber(counter);
+                this.personRepository.save(p);
+            }
+            counter++;
+        }
     }
 }

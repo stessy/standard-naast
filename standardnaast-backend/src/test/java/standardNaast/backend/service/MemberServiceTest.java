@@ -130,24 +130,46 @@ class MemberServiceTest {
 
         assertThat(created).isNotNull();
         assertThat(created.name()).isEqualTo("Dupont");
+        assertThat(created.memberNumber()).isEqualTo(10000L);
         verify(this.personRepository).save(any(Person.class));
     }
 
     @Test
-    void deleteMember_whenExists_shouldDelete() {
-        when(this.personRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(this.personRepository).deleteById(1L);
+    void deleteMember_whenExists_shouldSoftDeleteAndReorder() {
+        Person member1 = Person.builder().id(1L).memberNumber(10L).name("Dupont").build();
+        Person member2 = Person.builder().id(2L).memberNumber(11L).name("Martin").build();
+
+        when(this.personRepository.findById(1L)).thenReturn(Optional.of(member1));
+        when(this.personRepository.findByMemberNumberLessThanOrderByMemberNumberAsc(10000L))
+                .thenReturn(List.of(member2));
 
         this.memberService.deleteMember(1L);
 
-        verify(this.personRepository).deleteById(1L);
+        assertThat(member1.getMemberNumber()).isEqualTo(10000L);
+        assertThat(member2.getMemberNumber()).isEqualTo(1L);
+        verify(this.personRepository).save(member1);
+        verify(this.personRepository).save(member2);
     }
 
     @Test
     void deleteMember_whenNotFound_shouldThrowException() {
-        when(this.personRepository.existsById(999L)).thenReturn(false);
+        when(this.personRepository.findById(999L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> this.memberService.deleteMember(999L))
                 .isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    void updateMemberNumberOnCotisationAdded_whenMemberNumberIs10000_shouldAssignNextAndReorder() {
+        Person member = Person.builder().id(5L).memberNumber(10000L).name("New").build();
+        when(this.personRepository.findById(5L)).thenReturn(Optional.of(member));
+        when(this.personRepository.findMaxMemberNumber()).thenReturn(Optional.of(50L));
+        when(this.personRepository.findByMemberNumberLessThanOrderByMemberNumberAsc(10000L))
+                .thenReturn(List.of(member));
+
+        this.memberService.updateMemberNumberOnCotisationAdded(5L);
+
+        assertThat(member.getMemberNumber()).isEqualTo(1L);
+        verify(this.personRepository, atLeastOnce()).save(member);
     }
 }
