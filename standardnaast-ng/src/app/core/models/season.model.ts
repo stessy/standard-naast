@@ -1,17 +1,17 @@
 export interface Season {
   id: string; // e.g. "2024-2025"
-  dateDebut?: string;
-  dateFin?: string;
-  dateFinValiditeAbonnements?: string;
+  dateStart?: string;
+  dateEnd?: string;
+  dateFirstMatchChampionship?: string;
   european: boolean;
-  cotisationAbonnementEquipeMontant?: number;
+  montantCotisation?: number;
 }
 
 export interface SeasonCreateUpdate {
-  id: string;
-  dateDebut?: string;
-  dateFin?: string;
-  dateFinValiditeAbonnements?: string;
+  id?: string;
+  dateStart: string;
+  dateEnd: string;
+  dateFirstMatchChampionship?: string;
   european: boolean;
-  cotisationAbonnementEquipeMontant?: number;
+  montantCotisation?: number;
 }

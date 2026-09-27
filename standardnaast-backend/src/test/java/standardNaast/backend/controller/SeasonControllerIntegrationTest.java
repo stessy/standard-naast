@@ -126,6 +126,27 @@ class SeasonControllerIntegrationTest {
     }
 
     @Test
+    void createSeason_whenDuplicate_shouldReturnBadRequest() throws Exception {
+        final SeasonCreateUpdateDto createDto = new SeasonCreateUpdateDto(
+                "2024-2025",
+                LocalDate.of(2024, 7, 1),
+                LocalDate.of(2025, 6, 30),
+                LocalDate.of(2024, 7, 28),
+                true,
+                BigDecimal.valueOf(15.00)
+        );
+
+        when(this.seasonService.createSeason(any(SeasonCreateUpdateDto.class)))
+                .thenThrow(new IllegalArgumentException("Une saison avec l'identifiant 2024-2025 existe déjà."));
+
+        this.mockMvc.perform(post("/api/seasons")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(createDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail", is("Une saison avec l'identifiant 2024-2025 existe déjà.")));
+    }
+
+    @Test
     void updateSeason_shouldReturnUpdated() throws Exception {
         final SeasonCreateUpdateDto updateDto = new SeasonCreateUpdateDto(
                 "2024-2025",

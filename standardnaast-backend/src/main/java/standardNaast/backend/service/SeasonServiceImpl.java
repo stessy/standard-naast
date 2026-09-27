@@ -59,8 +59,19 @@ public class SeasonServiceImpl implements SeasonService {
     @Override
     @Transactional
     public SeasonDto createSeason(final SeasonCreateUpdateDto dto) {
-        log.info("Creating season with id={}", dto.id());
+        if (dto.dateStart() == null || dto.dateEnd() == null) {
+            throw new IllegalArgumentException("Les dates de début et de fin sont obligatoires.");
+        }
+        if (dto.dateStart().isAfter(dto.dateEnd())) {
+            throw new IllegalArgumentException("La date de début doit être antérieure à la date de fin.");
+        }
+        final String generatedId = dto.dateStart().getYear() + "-" + dto.dateEnd().getYear();
+        log.info("Creating season with id={}", generatedId);
+        if (this.seasonRepository.existsById(generatedId)) {
+            throw new IllegalArgumentException("Une saison avec l'identifiant " + generatedId + " existe déjà.");
+        }
         final Season season = this.seasonMapper.toEntity(dto);
+        season.setId(generatedId);
         final Season saved = this.seasonRepository.save(season);
         return this.seasonMapper.toDto(saved);
     }
@@ -71,7 +82,11 @@ public class SeasonServiceImpl implements SeasonService {
         log.info("Updating season with id={}", id);
         final Season season = this.seasonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Saison non trouvée avec l'id : " + id));
+        if (dto.dateStart() != null && dto.dateEnd() != null && dto.dateStart().isAfter(dto.dateEnd())) {
+            throw new IllegalArgumentException("La date de début doit être antérieure à la date de fin.");
+        }
         this.seasonMapper.updateEntityFromDto(dto, season);
+        season.setId(id);
         final Season updated = this.seasonRepository.save(season);
         return this.seasonMapper.toDto(updated);
     }

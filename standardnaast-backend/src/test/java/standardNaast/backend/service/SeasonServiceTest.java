@@ -109,6 +109,7 @@ class SeasonServiceTest {
 
     @Test
     void createSeason_shouldSaveAndReturnDto() {
+        when(this.seasonRepository.existsById("2024-2025")).thenReturn(false);
         when(this.seasonRepository.save(any(Season.class))).thenReturn(this.sampleSeason);
 
         final SeasonDto created = this.seasonService.createSeason(this.sampleDto);
@@ -116,6 +117,69 @@ class SeasonServiceTest {
         assertThat(created).isNotNull();
         assertThat(created.id()).isEqualTo("2024-2025");
         verify(this.seasonRepository).save(any(Season.class));
+    }
+
+    @Test
+    void createSeason_whenSeasonAlreadyExists_shouldThrowIllegalArgumentException() {
+        when(this.seasonRepository.existsById("2024-2025")).thenReturn(true);
+
+        assertThatThrownBy(() -> this.seasonService.createSeason(this.sampleDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("2024-2025");
+
+        verify(this.seasonRepository, never()).save(any(Season.class));
+    }
+
+    @Test
+    void createSeason_whenDateStartAfterDateEnd_shouldThrowIllegalArgumentException() {
+        final SeasonCreateUpdateDto invalidDto = new SeasonCreateUpdateDto(
+                null,
+                LocalDate.of(2025, 7, 1),
+                LocalDate.of(2024, 6, 30),
+                null,
+                false,
+                BigDecimal.valueOf(10.00)
+        );
+
+        assertThatThrownBy(() -> this.seasonService.createSeason(invalidDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("antérieure");
+
+        verify(this.seasonRepository, never()).save(any(Season.class));
+    }
+
+    @Test
+    void createSeason_whenDatesNull_shouldThrowIllegalArgumentException() {
+        final SeasonCreateUpdateDto invalidDto = new SeasonCreateUpdateDto(
+                null,
+                null,
+                null,
+                null,
+                false,
+                BigDecimal.valueOf(10.00)
+        );
+
+        assertThatThrownBy(() -> this.seasonService.createSeason(invalidDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("obligatoires");
+    }
+
+    @Test
+    void updateSeason_whenDateStartAfterDateEnd_shouldThrowIllegalArgumentException() {
+        when(this.seasonRepository.findById("2024-2025")).thenReturn(Optional.of(this.sampleSeason));
+
+        final SeasonCreateUpdateDto invalidDto = new SeasonCreateUpdateDto(
+                "2024-2025",
+                LocalDate.of(2025, 7, 1),
+                LocalDate.of(2024, 6, 30),
+                null,
+                false,
+                BigDecimal.valueOf(10.00)
+        );
+
+        assertThatThrownBy(() -> this.seasonService.updateSeason("2024-2025", invalidDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("antérieure");
     }
 
     @Test

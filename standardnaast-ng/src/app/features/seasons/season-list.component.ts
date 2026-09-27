@@ -51,12 +51,12 @@ import { Season, SeasonCreateUpdate } from '../../core/models/season.model';
           <ng-template pTemplate="body" let-season>
             <tr>
               <td><span class="font-bold text-red-700 text-base">{{ season.id }}</span></td>
-              <td>{{ season.dateDebut ? (season.dateDebut | date:'dd/MM/yyyy') : '-' }}</td>
-              <td>{{ season.dateFin ? (season.dateFin | date:'dd/MM/yyyy') : '-' }}</td>
+              <td>{{ season.dateStart ? (season.dateStart | date:'dd/MM/yyyy') : '-' }}</td>
+              <td>{{ season.dateEnd ? (season.dateEnd | date:'dd/MM/yyyy') : '-' }}</td>
               <td>
                 <p-tag [severity]="season.european ? 'success' : 'secondary'" [value]="season.european ? 'Oui' : 'Non'"></p-tag>
               </td>
-              <td>{{ season.cotisationAbonnementEquipeMontant ? (season.cotisationAbonnementEquipeMontant | currency:'EUR':'symbol':'1.2-2':'fr') : '-' }}</td>
+              <td>{{ season.montantCotisation != null ? (season.montantCotisation | currency:'EUR':'symbol':'1.2-2':'fr') : '-' }}</td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-2">
                   <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm p-button-warning" (click)="openEditDialog(season)"></button>
@@ -72,19 +72,32 @@ import { Season, SeasonCreateUpdate } from '../../core/models/season.model';
       <p-dialog [(visible)]="dialogVisible" [header]="isEditMode ? 'Modifier la saison' : 'Nouvelle saison'" [modal]="true" [style]="{ width: '500px' }">
         <form [formGroup]="form" (ngSubmit)="saveSeason()" class="flex flex-column gap-3 mt-2">
           <div class="flex flex-column gap-2">
-            <label for="id" class="font-semibold text-sm">Identifiant (Ex: 2024-2025) *</label>
-            <input id="id" type="text" pInputText formControlName="id" [readonly]="isEditMode" />
+            <label for="id" class="font-semibold text-sm">Identifiant (généré automatiquement)</label>
+            <input id="id" type="text" pInputText formControlName="id" [readonly]="true" placeholder="ex: 2024-2025" />
           </div>
 
           <div class="grid">
             <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label for="dateDebut" class="font-semibold text-sm">Date de début</label>
-              <input id="dateDebut" type="date" pInputText formControlName="dateDebut" />
+              <label for="dateStart" class="font-semibold text-sm">Date de début *</label>
+              <input id="dateStart" type="date" pInputText formControlName="dateStart" />
             </div>
             <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label for="dateFin" class="font-semibold text-sm">Date de fin</label>
-              <input id="dateFin" type="date" pInputText formControlName="dateFin" />
+              <label for="dateEnd" class="font-semibold text-sm">Date de fin *</label>
+              <input id="dateEnd" type="date" pInputText formControlName="dateEnd" />
             </div>
+          </div>
+
+          <div class="flex flex-column gap-2">
+            <label for="montantCotisation" class="font-semibold text-sm">Montant de la cotisation (€)</label>
+            <p-inputNumber
+              inputId="montantCotisation"
+              formControlName="montantCotisation"
+              mode="currency"
+              currency="EUR"
+              locale="fr-FR"
+              [min]="0"
+              placeholder="ex: 15,00 €">
+            </p-inputNumber>
           </div>
 
           <div class="flex align-items-center gap-2 mt-2">
@@ -94,7 +107,7 @@ import { Season, SeasonCreateUpdate } from '../../core/models/season.model';
 
           <div class="flex justify-content-end gap-2 mt-4">
             <button pButton type="button" label="Annuler" icon="pi pi-times" [text]="true" (click)="dialogVisible = false"></button>
-            <button pButton type="submit" label="Enregistrer" icon="pi pi-check" class="p-button-danger font-bold"></button>
+            <button pButton type="submit" label="Enregistrer" icon="pi pi-check" class="p-button-danger font-bold" [disabled]="form.invalid"></button>
           </div>
         </form>
       </p-dialog>
@@ -113,15 +126,30 @@ export class SeasonListComponent implements OnInit {
   isEditMode = false;
 
   form: FormGroup = this.fb.group({
-    id: ['', Validators.required],
-    dateDebut: [''],
-    dateFin: [''],
+    id: [''],
+    dateStart: ['', Validators.required],
+    dateEnd: ['', Validators.required],
     european: [false],
-    cotisationAbonnementEquipeMontant: [null]
+    montantCotisation: [null]
   });
 
   ngOnInit(): void {
     this.loadSeasons();
+    this.form.get('dateStart')?.valueChanges.subscribe(() => this.updateCalculatedId());
+    this.form.get('dateEnd')?.valueChanges.subscribe(() => this.updateCalculatedId());
+  }
+
+  private updateCalculatedId(): void {
+    if (this.isEditMode) return;
+    const start = this.form.get('dateStart')?.value;
+    const end = this.form.get('dateEnd')?.value;
+    if (start && end) {
+      const yearStart = start.split('-')[0];
+      const yearEnd = end.split('-')[0];
+      if (yearStart && yearEnd) {
+        this.form.patchValue({ id: `${yearStart}-${yearEnd}` }, { emitEvent: false });
+      }
+    }
   }
 
   loadSeasons(): void {
@@ -137,7 +165,7 @@ export class SeasonListComponent implements OnInit {
 
   openNewDialog(): void {
     this.isEditMode = false;
-    this.form.reset({ european: false });
+    this.form.reset({ european: false, montantCotisation: null, id: '' });
     this.dialogVisible = true;
   }
 
@@ -145,10 +173,10 @@ export class SeasonListComponent implements OnInit {
     this.isEditMode = true;
     this.form.patchValue({
       id: season.id,
-      dateDebut: season.dateDebut,
-      dateFin: season.dateFin,
+      dateStart: season.dateStart,
+      dateEnd: season.dateEnd,
       european: season.european,
-      cotisationAbonnementEquipeMontant: season.cotisationAbonnementEquipeMontant
+      montantCotisation: season.montantCotisation
     });
     this.dialogVisible = true;
   }
@@ -157,20 +185,47 @@ export class SeasonListComponent implements OnInit {
     if (this.form.invalid) return;
     const val = this.form.value as SeasonCreateUpdate;
 
-    if (this.isEditMode) {
-      this.seasonService.updateSeason(val.id, val).subscribe({
-        next: () => {
-          this.dialogVisible = false;
-          this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Saison modifiée' });
-          this.loadSeasons();
-        }
-      });
-    } else {
+    if (!this.isEditMode) {
+      if (val.dateStart && val.dateEnd) {
+        const yearStart = val.dateStart.split('-')[0];
+        const yearEnd = val.dateEnd.split('-')[0];
+        val.id = `${yearStart}-${yearEnd}`;
+      }
+      if (this.seasons.some(s => s.id === val.id)) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: `Une saison avec l'identifiant ${val.id} existe déjà.`
+        });
+        return;
+      }
       this.seasonService.createSeason(val).subscribe({
         next: () => {
           this.dialogVisible = false;
           this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Saison créée' });
           this.loadSeasons();
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: err?.error?.detail || err?.error?.message || 'Erreur lors de la création de la saison'
+          });
+        }
+      });
+    } else {
+      this.seasonService.updateSeason(val.id!, val).subscribe({
+        next: () => {
+          this.dialogVisible = false;
+          this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Saison modifiée' });
+          this.loadSeasons();
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: err?.error?.detail || err?.error?.message || 'Erreur lors de la modification de la saison'
+          });
         }
       });
     }
@@ -185,6 +240,13 @@ export class SeasonListComponent implements OnInit {
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Supprimé', detail: 'Saison supprimée' });
             this.loadSeasons();
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: err?.error?.detail || err?.error?.message || 'Erreur lors de la suppression de la saison'
+            });
           }
         });
       }
