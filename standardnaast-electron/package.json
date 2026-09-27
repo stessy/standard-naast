@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
+    "migrate:h2": "node scripts/migrate-h2.js",
     "build:prepare": "node scripts/prepare-resources.js",
     "dist": "electron-builder",
     "dist:mac": "electron-builder --mac dmg --arm64",

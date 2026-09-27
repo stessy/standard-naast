@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron');
 const path = require('path');
 const { spawn, execSync } = require('child_process');
 const http = require('http');
@@ -41,6 +41,8 @@ const pgBinDir = isPackaged
 
 const pgDataDir = path.join(app.getPath('userData'), 'postgres_data');
 const backupsDir = path.join(app.getPath('userData'), 'backups');
+const migrationStatusFile = path.join(app.getPath('userData'), 'migration_h2_status.json');
+
 const initdbExecutable = process.platform === 'win32' ? path.join(pgBinDir, 'initdb.exe') : path.join(pgBinDir, 'initdb');
 const pgCtlExecutable = process.platform === 'win32' ? path.join(pgBinDir, 'pg_ctl.exe') : path.join(pgBinDir, 'pg_ctl');
 const createdbExecutable = process.platform === 'win32' ? path.join(pgBinDir, 'createdb.exe') : path.join(pgBinDir, 'createdb');
@@ -135,7 +137,161 @@ async function startPostgreSQL() {
   }
 }
 
-// 2. Démarrage du Backend Spring Boot
+// 2. Exécution de la Migration H2 -> PostgreSQL
+function executeH2Migration(h2FilePath) {
+  return new Promise((resolve, reject) => {
+    updateSplashStatus(`Migration des données H2 vers PostgreSQL...`);
+    const javaCmd = fs.existsSync(javaExecutable) ? javaExecutable : 'java';
+
+    if (!fs.existsSync(jarFile)) {
+      return reject(new Error(`Fichier JAR backend introuvable : ${jarFile}`));
+    }
+
+    console.log(`[Migration H2]: Lancement de la migration pour ${h2FilePath}`);
+    const args = [
+      '-jar',
+      jarFile,
+      `--migrate-from-h2=${h2FilePath}`,
+      `--pg-url=jdbc:postgresql://localhost:${PG_PORT}/standardnaast`,
+      '--pg-user=standardnaast',
+      '--pg-password=standardnaast_password'
+    ];
+
+    const proc = spawn(javaCmd, args, { windowsHide: true });
+
+    proc.stdout.on('data', (data) => {
+      const text = data.toString();
+      console.log(`[Migration Output]: ${text}`);
+      const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+      for (const line of lines) {
+        if (line.includes('[MIGRATION]')) {
+          updateSplashStatus(line.replace('[MIGRATION]', '').trim());
+        }
+      }
+    });
+
+    proc.stderr.on('data', (data) => {
+      console.error(`[Migration ERROR]: ${data.toString()}`);
+    });
+
+    proc.on('close', (code) => {
+      if (code === 0) {
+        console.log('[Migration H2]: Migration terminée avec succès.');
+        try {
+          fs.writeFileSync(migrationStatusFile, JSON.stringify({
+            migrated: true,
+            date: new Date().toISOString(),
+            sourceH2File: h2FilePath
+          }, null, 2));
+        } catch (err) {
+          console.warn('Impossible de sauvegarder le fichier de statut de migration:', err);
+        }
+        resolve();
+      } else {
+        reject(new Error(`Échec de la migration H2 (code d'erreur ${code})`));
+      }
+    });
+  });
+}
+
+// Vérification et proposition de migration lors du premier démarrage
+async function checkAndPerformInitialH2Migration() {
+  // Vérifier si un argument en ligne de commande force la migration
+  const migrateArg = process.argv.find(arg => arg.startsWith('--migrate-from-h2=') || arg.startsWith('--h2='));
+  if (migrateArg) {
+    const customH2Path = migrateArg.split('=')[1];
+    if (customH2Path && fs.existsSync(customH2Path)) {
+      await executeH2Migration(customH2Path);
+      return;
+    }
+  }
+
+  // Si la migration a déjà été effectuée ou refusée, ignorer
+  if (fs.existsSync(migrationStatusFile)) {
+    return;
+  }
+
+  // Recherche d'une base H2 existante dans les répertoires usuels
+  const potentialH2Paths = [
+    path.join(__dirname, '..', 'data', 'standardnaast.mv.db'),
+    path.join(process.cwd(), 'data', 'standardnaast.mv.db'),
+    path.join(app.getPath('userData'), 'standardnaast.mv.db'),
+    path.join(app.getPath('home'), '.standardnaast', 'standardnaast.mv.db'),
+    path.join(app.getPath('documents'), 'standardnaast.mv.db')
+  ];
+
+  let detectedH2File = null;
+  for (const candidate of potentialH2Paths) {
+    if (fs.existsSync(candidate)) {
+      detectedH2File = candidate;
+      break;
+    }
+  }
+
+  // Proposer à l'utilisateur de migrer les données
+  let buttons = ['Parcourir pour sélectionner une base H2...', 'Démarrer avec une base vierge'];
+  let defaultId = 0;
+  let message = "C'est la première fois que vous lancez Standard de Naast.\n\nSouhaitez-vous migrer vos données depuis une ancienne base de données H2 (.mv.db) vers PostgreSQL ?";
+
+  if (detectedH2File) {
+    buttons = ['Migrer la base H2 détectée', 'Choisir un autre fichier...', 'Base vierge'];
+    message = `Une ancienne base H2 a été détectée :\n${detectedH2File}\n\nSouhaitez-vous migrer ces données vers PostgreSQL ?`;
+  }
+
+  const choice = dialog.showMessageBoxSync({
+    type: 'question',
+    buttons: buttons,
+    defaultId: defaultId,
+    cancelId: buttons.length - 1,
+    title: 'Migration des données - Premier lancement',
+    message: 'Initialisation de la base de données',
+    detail: message
+  });
+
+  let selectedH2File = null;
+
+  if (detectedH2File && choice === 0) {
+    selectedH2File = detectedH2File;
+  } else if ((detectedH2File && choice === 1) || (!detectedH2File && choice === 0)) {
+    const fileSelection = dialog.showOpenDialogSync({
+      title: 'Sélectionner la base de données H2 (.mv.db)',
+      properties: ['openFile'],
+      filters: [
+        { name: 'Base de données H2 (*.mv.db, *.db)', extensions: ['mv.db', 'db'] },
+        { name: 'Tous les fichiers', extensions: ['*'] }
+      ]
+    });
+
+    if (fileSelection && fileSelection.length > 0) {
+      selectedH2File = fileSelection[0];
+    }
+  }
+
+  if (selectedH2File) {
+    try {
+      await executeH2Migration(selectedH2File);
+      dialog.showMessageBoxSync({
+        type: 'info',
+        title: 'Migration réussie',
+        message: 'Migration terminée avec succès',
+        detail: 'Toutes les données de la base H2 ont été importées dans PostgreSQL avec succès.'
+      });
+    } catch (err) {
+      dialog.showErrorBox('Erreur de migration', `La migration a échoué :\n${err.message}\nL'application continuera avec le schéma actuel.`);
+    }
+  } else {
+    // L'utilisateur a choisi une base vierge ou a annulé
+    try {
+      fs.writeFileSync(migrationStatusFile, JSON.stringify({
+        migrated: false,
+        skipped: true,
+        date: new Date().toISOString()
+      }, null, 2));
+    } catch (e) {}
+  }
+}
+
+// 3. Démarrage du Backend Spring Boot
 function startSpringBoot() {
   return new Promise((resolve, reject) => {
     updateSplashStatus('Démarrage du serveur backend Spring Boot...');
@@ -212,7 +368,102 @@ function startSpringBoot() {
   });
 }
 
-// 3. Création des fenêtres
+// 4. Création des fenêtres et Menus
+function buildApplicationMenu() {
+  const isMac = process.platform === 'darwin';
+  const template = [
+    ...(isMac ? [{
+      label: app.name,
+      submenu: [
+        { role: 'about', label: 'À propos de Standard de Naast' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide', label: 'Masquer Standard de Naast' },
+        { role: 'hideOthers', label: 'Masquer les autres' },
+        { role: 'unhide', label: 'Tout afficher' },
+        { type: 'separator' },
+        { role: 'quit', label: 'Quitter Standard de Naast' }
+      ]
+    }] : []),
+    {
+      label: 'Fichier',
+      submenu: [
+        isMac ? { role: 'close', label: 'Fermer la fenêtre' } : { role: 'quit', label: 'Quitter' }
+      ]
+    },
+    {
+      label: 'Édition',
+      submenu: [
+        { role: 'undo', label: 'Annuler' },
+        { role: 'redo', label: 'Rétablir' },
+        { type: 'separator' },
+        { role: 'cut', label: 'Couper' },
+        { role: 'copy', label: 'Copier' },
+        { role: 'paste', label: 'Coller' },
+        { role: 'selectAll', label: 'Tout sélectionner' }
+      ]
+    },
+    {
+      label: 'Outils',
+      submenu: [
+        {
+          label: 'Effectuer une sauvegarde manuelle...',
+          click: () => {
+            backupDatabase();
+            dialog.showMessageBoxSync({
+              type: 'info',
+              title: 'Sauvegarde',
+              message: 'Sauvegarde effectuée avec succès',
+              detail: `Le fichier de sauvegarde a été enregistré dans le dossier : ${backupsDir}`
+            });
+          }
+        },
+        {
+          label: 'Migrer des données depuis une base H2...',
+          click: async () => {
+            const fileSelection = dialog.showOpenDialogSync({
+              title: 'Sélectionner le fichier H2 (.mv.db)',
+              properties: ['openFile'],
+              filters: [{ name: 'Base H2 (*.mv.db, *.db)', extensions: ['mv.db', 'db'] }]
+            });
+            if (fileSelection && fileSelection.length > 0) {
+              try {
+                await executeH2Migration(fileSelection[0]);
+                dialog.showMessageBoxSync({
+                  type: 'info',
+                  title: 'Migration réussie',
+                  message: 'Migration terminée',
+                  detail: 'Les données H2 ont été migrées vers PostgreSQL. Veuillez redémarrer pour recharger les données.'
+                });
+              } catch (e) {
+                dialog.showErrorBox('Erreur de migration', e.message);
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      label: 'Affichage',
+      submenu: [
+        { role: 'reload', label: 'Actualiser' },
+        { role: 'forceReload', label: 'Actualisation forcée' },
+        { role: 'toggleDevTools', label: 'Outils de développement' },
+        { type: 'separator' },
+        { role: 'resetZoom', label: 'Taille réelle' },
+        { role: 'zoomIn', label: 'Zoom avant' },
+        { role: 'zoomOut', label: 'Zoom arrière' },
+        { type: 'separator' },
+        { role: 'togglefullscreen', label: 'Plein écran' }
+      ]
+    }
+  ];
+
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+}
+
 function createSplashWindow() {
   splashWindow = new BrowserWindow({
     width: 480,
@@ -245,6 +496,8 @@ function createMainWindow() {
     }
   });
 
+  buildApplicationMenu();
+
   // Chargement de l'application (servie par Spring Boot ou packagée dans ui/)
   const uiLocalPath = path.join(__dirname, 'ui', 'browser', 'index.html');
   if (fs.existsSync(uiLocalPath)) {
@@ -267,7 +520,7 @@ function createMainWindow() {
   });
 }
 
-// 4. Sauvegarde de la base de données
+// 5. Sauvegarde de la base de données
 function backupDatabase() {
   try {
     if (!fs.existsSync(backupsDir)) {
@@ -324,7 +577,7 @@ function cleanOldBackups(maxKeep = 15) {
   }
 }
 
-// 5. Arrêt des services
+// 6. Arrêt des services
 function stopServices() {
   isQuitting = true;
   console.log('Arrêt des sous-processus...');
@@ -364,6 +617,7 @@ app.on('ready', async () => {
 
   try {
     await startPostgreSQL();
+    await checkAndPerformInitialH2Migration();
     await startSpringBoot();
     updateSplashStatus('Ouverture de Standard de Naast...');
     createMainWindow();
