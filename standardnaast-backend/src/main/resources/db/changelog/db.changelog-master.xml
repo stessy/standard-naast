@@ -3,6 +3,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
+    <!-- 1. Initial complete schema (tables & sequences) -->
     <changeSet id="000-initial-schema" author="standardnaast">
         <sqlFile path="liquibaseChangelog/000_initial_schema.sql"
                  relativeToChangelogFile="true"
@@ -10,18 +11,24 @@
                  stripComments="true"/>
     </changeSet>
 
-    <include file="liquibaseChangelog/001_standard_naast.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/002_abonnement_migration.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/003_travel_migration.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/004_personne_cotisation_migration.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/005_accounting.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/006_migration_2.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/007_personne_cotisation_sequence.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/008_match.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/009_team.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/010_ajout_prix_deplacements.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/011_ajout_red_card.xml" relativeToChangelogFile="true"/>
-    <include file="liquibaseChangelog/012_person_travel_type_resize.xml" relativeToChangelogFile="true"/>
+    <!-- 2. Security and Users -->
     <include file="liquibaseChangelog/013_users_and_roles.xml" relativeToChangelogFile="true"/>
+
+    <!--&lt;!&ndash; 3. Initial / Migrated Data from H2 (executed once on fresh installation) &ndash;&gt;
+    <changeSet id="099-initial-data" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="PERSONNES"/>
+        </preConditions>
+        <sqlFile path="liquibaseChangelog/099_initial_data.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    &lt;!&ndash; 4. Foreign Key Constraints &ndash;&gt;
+    <include file="liquibaseChangelog/014_foreign_keys.xml" relativeToChangelogFile="true"/>
+
+    &lt;!&ndash; 5. PostgreSQL Sequence Synchronization &ndash;&gt;
+    <include file="liquibaseChangelog/015_sync_sequences.xml" relativeToChangelogFile="true"/>-->
 
 </databaseChangeLog>

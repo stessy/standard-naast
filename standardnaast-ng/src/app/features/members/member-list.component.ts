@@ -216,7 +216,15 @@ import { Abonnement } from '../../core/models/abonnement.model';
 
               <!-- Cotisations Tab -->
               <p-tabpanel value="1">
-                <p-table [value]="selectedMemberCotisations" responsiveLayout="stack" styleClass="p-datatable-sm">
+                <p-table
+                  [value]="selectedMemberCotisations"
+                  [scrollable]="true"
+                  scrollHeight="250px"
+                  [paginator]="true"
+                  [rows]="5"
+                  [rowsPerPageOptions]="[5, 10, 20]"
+                  responsiveLayout="stack"
+                  styleClass="p-datatable-sm">
                   <ng-template pTemplate="header">
                     <tr>
                       <th>Saison</th>
@@ -241,7 +249,15 @@ import { Abonnement } from '../../core/models/abonnement.model';
 
               <!-- Abonnements Tab -->
               <p-tabpanel value="2">
-                <p-table [value]="selectedMemberAbonnements" responsiveLayout="stack" styleClass="p-datatable-sm">
+                <p-table
+                  [value]="selectedMemberAbonnements"
+                  [scrollable]="true"
+                  scrollHeight="250px"
+                  [paginator]="true"
+                  [rows]="5"
+                  [rowsPerPageOptions]="[5, 10, 20]"
+                  responsiveLayout="stack"
+                  styleClass="p-datatable-sm">
                   <ng-template pTemplate="header">
                     <tr>
                       <th>Saison</th>

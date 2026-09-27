@@ -1,0 +1,96 @@
+{
+  "name": "standardnaast-desktop",
+  "version": "1.0.0",
+  "description": "Application Desktop Standard de Naast (Spring Boot + Angular + PostgreSQL)",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "build:prepare": "node scripts/prepare-resources.js",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac dmg --arm64",
+    "dist:mac:universal": "electron-builder --mac dmg --universal",
+    "dist:win": "electron-builder --win nsis --x64",
+    "dist:all": "npm run build:prepare && electron-builder -mw"
+  },
+  "devDependencies": {
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "be.standardnaast.desktop",
+    "productName": "Standard de Naast",
+    "copyright": "Copyright © 2026 Standard de Naast",
+    "directories": {
+      "output": "dist-package"
+    },
+    "files": [
+      "main.js",
+      "splash.html",
+      "ui/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/backend",
+        "to": "backend",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/jre/${os}-${arch}",
+        "to": "jre",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/postgres/${os}-${arch}",
+        "to": "postgres",
+        "filter": ["**/*"]
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.sports",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64", "x64"]
+        }
+      ],
+      "darkModeSupport": true,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Standard de Naast",
+      "uninstallDisplayName": "Standard de Naast"
+    }
+  }
+}

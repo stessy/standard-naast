@@ -1,0 +1,160 @@
+[WARN ] 2026-09-20 09:22:28.569 [JavaFX Application Thread] Application - Starting Liquibase migration
+[WARN ] 2026-09-20 09:26:12.543 [JavaFX Application Thread] Application - Starting Liquibase migration
+[WARN ] 2026-09-20 09:29:28.477 [JavaFX Application Thread] Application - Starting Liquibase migration
+[WARN ] 2026-09-20 09:30:33.671 [JavaFX Application Thread] Application - Starting Liquibase migration
+[WARN ] 2026-09-20 09:33:39.555 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:33:39.555 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:34:19.127 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:34:19.127 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:35:18.174 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:35:18.174 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:35:46.863 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:35:46.863 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:37:03.451 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:37:03.451 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:38:41.703 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:38:41.703 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:38:50.703 [JavaFX Application Thread] Main - Starting Application
+[WARN ] 2026-09-20 09:38:50.703 [JavaFX Application Thread] Main - Starting Application
+[DEBUG] 2026-09-20 09:38:50.763 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.763 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.781 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:38:50.781 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:38:50.813 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.813 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.832 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.832 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.836 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.836 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.867 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.867 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.876 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.876 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.876 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:50.876 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.340 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.340 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.341 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:38:51.341 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:38:51.346 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.346 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.351 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.351 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.360 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.360 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.366 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.366 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.366 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.366 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.392 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.392 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.393 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:38:51.393 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:38:51.395 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.395 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.399 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:38:51.399 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:40:06.962 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:40:06.962 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[WARN ] 2026-09-20 09:42:22.429 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:42:22.429 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:42:28.136 [JavaFX Application Thread] Main - Starting Application
+[WARN ] 2026-09-20 09:42:28.136 [JavaFX Application Thread] Main - Starting Application
+[DEBUG] 2026-09-20 09:42:28.202 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.202 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.222 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:42:28.222 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:42:28.259 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.259 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.279 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.279 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.283 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.283 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.314 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.314 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.324 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.324 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.324 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.324 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.749 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.749 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.750 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:42:28.750 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:42:28.755 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.755 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.760 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.760 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.768 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.768 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.773 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.773 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.773 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.773 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.799 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.799 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.800 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:42:28.800 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:42:28.802 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.802 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.806 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:28.806 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:42:43.147 [JavaFX Application Thread] TeamService - Entering getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:43.147 [JavaFX Application Thread] TeamService - Entering getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:43.149 [JavaFX Application Thread] TeamService - Exiting getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:43.149 [JavaFX Application Thread] TeamService - Exiting getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:45.105 [JavaFX Application Thread] TeamService - Entering getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:45.105 [JavaFX Application Thread] TeamService - Entering getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:45.105 [JavaFX Application Thread] TeamService - Exiting getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:45.105 [JavaFX Application Thread] TeamService - Exiting getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:47.781 [JavaFX Application Thread] TeamService - Entering getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:47.781 [JavaFX Application Thread] TeamService - Entering getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:47.782 [JavaFX Application Thread] TeamService - Exiting getTeamsPerSeason
+[DEBUG] 2026-09-20 09:42:47.782 [JavaFX Application Thread] TeamService - Exiting getTeamsPerSeason
+[DEBUG] 2026-09-20 09:43:20.032 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:43:20.032 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:44:57.412 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:44:57.412 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:45:19.958 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:45:19.958 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[WARN ] 2026-09-20 09:48:50.397 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:48:50.397 [JavaFX Application Thread] Main - Starting Liquibase migration
+[WARN ] 2026-09-20 09:48:56.076 [JavaFX Application Thread] Main - Starting Application
+[WARN ] 2026-09-20 09:48:56.076 [JavaFX Application Thread] Main - Starting Application
+[DEBUG] 2026-09-20 09:48:56.139 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.139 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.156 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:48:56.156 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:48:56.188 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.188 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.205 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.205 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.209 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.209 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.236 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.236 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.246 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.246 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.246 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.246 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.675 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.675 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.676 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:48:56.676 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:48:56.681 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.681 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.686 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.686 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.696 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.696 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.702 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.702 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.702 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.702 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.729 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.729 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.730 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:48:56.730 [JavaFX Application Thread] PersonneServiceImpl - Getting list of personnes
+[DEBUG] 2026-09-20 09:48:56.732 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.732 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.737 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-20 09:48:56.737 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService

@@ -26,23 +26,17 @@ import com.standardnaast.persistence.EntityManagerFactoryHelper;
  */
 public class DbUtils {
 
-	private static final EntityManager entityManager = EntityManagerFactoryHelper.getFactory().createEntityManager();
-
 	private static final String CHANGELOG = "META-INF/changelog.xml";
 
 	/**
-	 * Run liquibase with given connection. This is static public in order to be
-	 * callable from InitializeTestData.
-	 * 
-	 * @param connection
-	 *            the connection
-	 * @param changelog
-	 *            the changelog referencing the child changelog folder
+	 * Run liquibase migrations.
 	 */
 	public static void runLiquibase() {
+		EntityManager entityManager = null;
 		try {
-			DbUtils.entityManager.getTransaction().begin();
-			final Connection connection = DbUtils.entityManager.unwrap(Connection.class);
+			entityManager = EntityManagerFactoryHelper.getFactory().createEntityManager();
+			entityManager.getTransaction().begin();
+			final Connection connection = entityManager.unwrap(Connection.class);
 			final Database database = new H2Database();
 			final JdbcConnection jdbcConnection = new JdbcConnection(connection);
 			database.setConnection(jdbcConnection);
@@ -66,9 +60,21 @@ public class DbUtils {
 			// run the changelogs
 			final Liquibase liquibase = new Liquibase(DbUtils.CHANGELOG, resourceAccessor, database);
 			liquibase.update("");
-			DbUtils.entityManager.getTransaction().commit();
+			entityManager.getTransaction().commit();
 		} catch (final LiquibaseException liquibaseException) {
+			if (entityManager != null && entityManager.getTransaction().isActive()) {
+				entityManager.getTransaction().rollback();
+			}
 			throw new TechnicalException(liquibaseException);
+		} catch (final Exception e) {
+			if (entityManager != null && entityManager.getTransaction().isActive()) {
+				entityManager.getTransaction().rollback();
+			}
+			throw new TechnicalException(e);
+		} finally {
+			if (entityManager != null && entityManager.isOpen()) {
+				entityManager.close();
+			}
 		}
 	}
 }

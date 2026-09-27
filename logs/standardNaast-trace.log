@@ -1,0 +1,6 @@
+[DEBUG] 2026-09-27 07:41:41.736 [JavaFX Application Thread] TeamService - Entering getTeamsPerSeason
+[DEBUG] 2026-09-27 07:41:41.736 [JavaFX Application Thread] TeamService - Entering getTeamsPerSeason
+[DEBUG] 2026-09-27 07:41:41.743 [JavaFX Application Thread] TeamService - Exiting getTeamsPerSeason
+[DEBUG] 2026-09-27 07:41:41.743 [JavaFX Application Thread] TeamService - Exiting getTeamsPerSeason
+[DEBUG] 2026-09-27 07:41:47.662 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService
+[DEBUG] 2026-09-27 07:41:47.662 [JavaFX Application Thread] PersonneServiceImpl - Instanciating PersonneService

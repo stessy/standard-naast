@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="014-1-fk-saison-equipe" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_SAISON_EQUIPE_SAISON"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="SAISON_EQUIPE" baseColumnNames="SAISON_ID"
+                                 referencedTableName="SAISON" referencedColumnNames="SAISON_ID"
+                                 constraintName="FK_SAISON_EQUIPE_SAISON"/>
+        <addForeignKeyConstraint baseTableName="SAISON_EQUIPE" baseColumnNames="EQUIPE_ID"
+                                 referencedTableName="EQUIPE" referencedColumnNames="EQUIPE_ID"
+                                 constraintName="FK_SAISON_EQUIPE_EQUIPE"/>
+    </changeSet>
+
+    <changeSet id="014-2-fk-prices" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_PRICES_SAISON"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="PRICES" baseColumnNames="SAISON_ID"
+                                 referencedTableName="SAISON" referencedColumnNames="SAISON_ID"
+                                 constraintName="FK_PRICES_SAISON"/>
+    </changeSet>
+
+    <changeSet id="014-3-fk-travel-price" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_TRAVEL_PRICE_SAISON"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="TRAVEL_PRICE" baseColumnNames="SEASON_ID"
+                                 referencedTableName="SAISON" referencedColumnNames="SAISON_ID"
+                                 constraintName="FK_TRAVEL_PRICE_SAISON"/>
+    </changeSet>
+
+    <changeSet id="014-4-fk-benevolat" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_BENEVOLAT_PERSON"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="BENEVOLAT" baseColumnNames="PERSONNE_ID"
+                                 referencedTableName="PERSONNES" referencedColumnNames="PERSONNE_ID"
+                                 constraintName="FK_BENEVOLAT_PERSON"/>
+    </changeSet>
+
+    <changeSet id="014-5-fk-personnes-cotisations" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_PERSONNES_COTISATIONS_PERSON"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="PERSONNES_COTISATIONS" baseColumnNames="PERSONNE_ID"
+                                 referencedTableName="PERSONNES" referencedColumnNames="PERSONNE_ID"
+                                 constraintName="FK_PERSONNES_COTISATIONS_PERSON"/>
+        <addForeignKeyConstraint baseTableName="PERSONNES_COTISATIONS" baseColumnNames="SEASON_ID"
+                                 referencedTableName="SAISON" referencedColumnNames="SAISON_ID"
+                                 constraintName="FK_PERSONNES_COTISATIONS_SEASON"/>
+    </changeSet>
+
+    <changeSet id="014-6-fk-match" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_MATCH_SAISON"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="MATCH" baseColumnNames="SAISON_ID"
+                                 referencedTableName="SAISON" referencedColumnNames="SAISON_ID"
+                                 constraintName="FK_MATCH_SAISON"/>
+        <addForeignKeyConstraint baseTableName="MATCH" baseColumnNames="OPPONENT"
+                                 referencedTableName="EQUIPE" referencedColumnNames="EQUIPE_ID"
+                                 constraintName="FK_MATCH_EQUIPE"/>
+        <addForeignKeyConstraint baseTableName="MATCH" baseColumnNames="SAISON_EQUIPE_ID"
+                                 referencedTableName="SAISON_EQUIPE" referencedColumnNames="SAISON_EQUIPE_ID"
+                                 constraintName="FK_MATCH_SAISON_EQUIPE"/>
+    </changeSet>
+
+    <changeSet id="014-7-fk-personne-match" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_PERSONNE_MATCH_PERSON"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="PERSONNE_MATCH" baseColumnNames="PERSONNE_ID"
+                                 referencedTableName="PERSONNES" referencedColumnNames="PERSONNE_ID"
+                                 constraintName="FK_PERSONNE_MATCH_PERSON"/>
+        <addForeignKeyConstraint baseTableName="PERSONNE_MATCH" baseColumnNames="MATCH_ID"
+                                 referencedTableName="MATCH" referencedColumnNames="MATCH_ID"
+                                 constraintName="FK_PERSONNE_MATCH_MATCH"/>
+    </changeSet>
+
+    <changeSet id="014-8-fk-abonnement" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_ABONNEMENT_PERSON"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="ABONNEMENT" baseColumnNames="PERSONNE_ID"
+                                 referencedTableName="PERSONNES" referencedColumnNames="PERSONNE_ID"
+                                 constraintName="FK_ABONNEMENT_PERSON"/>
+        <addForeignKeyConstraint baseTableName="ABONNEMENT" baseColumnNames="SAISON"
+                                 referencedTableName="SAISON" referencedColumnNames="SAISON_ID"
+                                 constraintName="FK_ABONNEMENT_SAISON"/>
+        <addForeignKeyConstraint baseTableName="ABONNEMENT" baseColumnNames="PRICES_ID"
+                                 referencedTableName="PRICES" referencedColumnNames="ID"
+                                 constraintName="FK_ABONNEMENT_PRICES"/>
+    </changeSet>
+
+</databaseChangeLog>

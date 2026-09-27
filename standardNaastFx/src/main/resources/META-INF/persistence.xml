@@ -29,11 +29,10 @@
 			<property name="eclipselink.weaving" value="false" />
 			<property name="eclipselink.target-server" value="None" />
 			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
-<!-- 			<property name="javax.persistence.jdbc.url" -->
-<!-- 				value="jdbc:h2:file:D:/Google Drive/Standard_Naast/prod/database/h2/dbs/standard_naast" /> -->
 			<property name="javax.persistence.jdbc.url"
-				value="jdbc:h2:file:../database/h2/dbs/standard_naast" />
+				value="jdbc:h2:file:./data/standardnaast;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;NON_KEYWORDS=VALUE" />
 			<property name="javax.persistence.jdbc.user" value="sa" />
+			<property name="javax.persistence.jdbc.password" value="standard" />
 			<property name="eclipselink.ddl-generation.output-mode"
 				value="database" />
 			<property name="javax.persistence.validation.mode" value="NONE" />

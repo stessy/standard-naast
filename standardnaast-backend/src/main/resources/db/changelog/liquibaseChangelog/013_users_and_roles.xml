@@ -4,10 +4,20 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="013-1-user-seq" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="USER_SEQ"/>
+            </not>
+        </preConditions>
         <createSequence sequenceName="USER_SEQ" startValue="1000" incrementBy="1"/>
     </changeSet>
 
     <changeSet id="013-2-create-app-users" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="APP_USERS"/>
+            </not>
+        </preConditions>
         <createTable tableName="APP_USERS">
             <column name="USER_ID" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
@@ -27,7 +37,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="PERSONNE_ID" type="BIGINT">
-                <constraints foreignKeyName="FK_APP_USERS_PERSON" references="PERSONNE(PERSONNE_ID)"/>
+                <constraints foreignKeyName="FK_APP_USERS_PERSON" references="PERSONNES(PERSONNE_ID)"/>
             </column>
             <column name="CREATED_AT" type="TIMESTAMP"/>
             <column name="UPDATED_AT" type="TIMESTAMP"/>
@@ -35,6 +45,11 @@
     </changeSet>
 
     <changeSet id="013-3-create-app-user-roles" author="standardnaast">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="APP_USER_ROLES"/>
+            </not>
+        </preConditions>
         <createTable tableName="APP_USER_ROLES">
             <column name="USER_ID" type="BIGINT">
                 <constraints nullable="false" foreignKeyName="FK_USER_ROLES_USER" references="APP_USERS(USER_ID)"/>

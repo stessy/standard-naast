@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-    <entry key="url">C:\\tmp\\database\\backup\\</entry>
-    <entry key="urlCopy">C:\tmp\database\backup\</entry>
-    <entry key="urlBackup">C:\\tmp\\database\\backup\\</entry>
-    <entry key="database">backup_20200726172901</entry>
+    <entry key="url">./data/;../data/</entry>
+    <entry key="urlCopy">./data/</entry>
+    <entry key="urlBackup">./data/</entry>
+    <entry key="database">standardnaast</entry>
+    <entry key="user">sa</entry>
+    <entry key="password">standard</entry>
 </properties>

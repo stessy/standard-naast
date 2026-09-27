@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="015-1-sync-sequences-postgres" author="standardnaast" dbms="postgresql">
+        <sql>
+            SELECT setval('abonnement_seq', COALESCE((SELECT MAX(abonnement_id) FROM abonnement), 1) + 1);
+            SELECT setval('accounting_seq', COALESCE((SELECT MAX(id) FROM accounting), 1) + 1);
+            SELECT setval('benevolat_seq', COALESCE((SELECT MAX(benevolat_id) FROM benevolat), 1) + 1);
+            SELECT setval('match_seq', COALESCE((SELECT MAX(match_id) FROM match), 1) + 1);
+            SELECT setval('person_seq', COALESCE((SELECT MAX(personne_id) FROM personnes), 1) + 1);
+            SELECT setval('personne_cotisation_seq', COALESCE((SELECT MAX(id) FROM personnes_cotisations), 1) + 1);
+            SELECT setval('personne_match_seq', COALESCE((SELECT MAX(id) FROM personne_match), 1) + 1);
+            SELECT setval('prices_seq', COALESCE((SELECT MAX(id) FROM prices), 1) + 1);
+            SELECT setval('team_season_seq', COALESCE((SELECT MAX(saison_equipe_id) FROM saison_equipe), 1) + 1);
+            SELECT setval('team_seq', COALESCE((SELECT MAX(equipe_id) FROM equipe), 1) + 1);
+            SELECT setval('travel_price_seq', COALESCE((SELECT MAX(id) FROM travel_price), 1) + 1);
+            SELECT setval('user_seq', COALESCE((SELECT MAX(user_id) FROM app_users), 1000) + 1);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
