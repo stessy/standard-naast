@@ -96,7 +96,7 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
         if (!seasonRepository.existsById(seasonId)) {
             throw new ResourceNotFoundException("Saison non trouvée avec l'identifiant : " + seasonId);
         }
-        return personCotisationRepository.findBySeasonId(seasonId).stream()
+        return personCotisationRepository.findBySeasonIdOrderByPerson_MemberNumberAsc(seasonId).stream()
                 .map(personCotisationMapper::toDto)
                 .toList();
     }

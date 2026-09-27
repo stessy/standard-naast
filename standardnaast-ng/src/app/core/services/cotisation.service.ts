@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Cotisation, CotisationsSeasonOverview, PersonCotisation } from '../models/cotisation.model';
+import { Page } from '../models/page.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,19 @@ export class CotisationService {
   }
 
   // Member Cotisations
+  getMemberCotisations(seasonId?: string, memberId?: number, cardSent?: boolean, page = 0, size = 20, sort = 'person.memberNumber,asc'): Observable<Page<PersonCotisation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (sort) params = params.set('sort', sort);
+    if (seasonId) params = params.set('seasonId', seasonId);
+    if (memberId != null) params = params.set('memberId', memberId.toString());
+    if (cardSent != null) params = params.set('cardSent', cardSent.toString());
+
+    return this.http.get<Page<PersonCotisation>>(this.memberCotisationsApiUrl, { params });
+  }
+
   getCotisationsByMember(memberId: number): Observable<PersonCotisation[]> {
     return this.http.get<PersonCotisation[]>(`${this.memberCotisationsApiUrl}/member/${memberId}`);
   }

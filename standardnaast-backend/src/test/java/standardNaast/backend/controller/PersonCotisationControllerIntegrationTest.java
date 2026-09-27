@@ -135,6 +135,24 @@ class PersonCotisationControllerIntegrationTest {
     }
 
     @Test
+    void shouldSearchCotisations() throws Exception {
+        PersonCotisationDto output = new PersonCotisationDto(
+                1001L, 10L, 42L, "Alice", "Martin", "2024-2025", LocalDate.of(2024, 9, 1), false
+        );
+        org.springframework.data.domain.Page<PersonCotisationDto> page =
+                new org.springframework.data.domain.PageImpl<>(List.of(output), org.springframework.data.domain.PageRequest.of(0, 20), 1);
+        when(personCotisationService.searchCotisations(any(), any(), any(), any(org.springframework.data.domain.Pageable.class))).thenReturn(page);
+
+        mockMvc.perform(get("/api/member-cotisations")
+                        .param("seasonId", "2024-2025")
+                        .param("memberId", "10")
+                        .param("cardSent", "false"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].memberNumber").value(42));
+    }
+
+    @Test
     void shouldBulkUpdateMemberCardSent() throws Exception {
         MemberCardSentBulkUpdateDto input = new MemberCardSentBulkUpdateDto(List.of(1001L, 1002L), true);
         doNothing().when(personCotisationService).bulkUpdateMemberCardSent(any(MemberCardSentBulkUpdateDto.class));

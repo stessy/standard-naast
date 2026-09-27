@@ -118,7 +118,16 @@ import { Member } from '../../core/models/member.model';
           <div class="grid">
             <div class="col-12 md:col-6 flex flex-column gap-2">
               <label class="font-semibold text-sm">Membre *</label>
-              <p-dropdown [options]="members" optionLabel="name" optionValue="id" formControlName="personId" [filter]="true" placeholder="Choisir un membre"></p-dropdown>
+              <p-dropdown
+                [options]="members"
+                optionLabel="displayName"
+                optionValue="id"
+                formControlName="personId"
+                [filter]="true"
+                filterBy="name,firstname,displayName"
+                placeholder="Choisir un membre"
+                [style]="{ width: '100%' }">
+              </p-dropdown>
             </div>
             <div class="col-12 md:col-6 flex flex-column gap-2">
               <label class="font-semibold text-sm">Saison *</label>
@@ -197,7 +206,7 @@ export class AbonnementListComponent implements OnInit {
   private fb = inject(FormBuilder);
 
   abonnements: Abonnement[] = [];
-  members: Member[] = [];
+  members: (Member & { displayName?: string })[] = [];
   seasons: Season[] = [];
   selectedSeasonId: string | null = null;
   prices: AbonnementPrice[] = [];
@@ -245,7 +254,12 @@ export class AbonnementListComponent implements OnInit {
     });
 
     this.memberService.getMembers(undefined, 0, 1000).subscribe({
-      next: (res) => this.members = res.content
+      next: (res) => {
+        this.members = res.content.map(m => ({
+          ...m,
+          displayName: `${m.name} ${m.firstname}`.trim()
+        }));
+      }
     });
   }
 

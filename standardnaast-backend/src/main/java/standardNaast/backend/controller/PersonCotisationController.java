@@ -68,7 +68,7 @@ public class PersonCotisationController {
             @RequestParam(required = false) Long memberId,
             @Parameter(description = "Member card sent status filter")
             @RequestParam(required = false) Boolean cardSent,
-            @ParameterObject @PageableDefault(size = 20, sort = "datePaiement", direction = Sort.Direction.DESC) Pageable pageable) {
+            @ParameterObject @PageableDefault(size = 20, sort = "person.memberNumber", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(personCotisationService.searchCotisations(seasonId, memberId, cardSent, pageable));
     }
 
