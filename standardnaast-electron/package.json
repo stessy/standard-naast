@@ -7,6 +7,10 @@
   "scripts": {
     "start": "electron .",
     "migrate:h2": "node scripts/migrate-h2.js",
+    "download:binaries": "node scripts/download-binaries.js",
+    "download:binaries:all": "node scripts/download-binaries.js --all",
+    "download:binaries:mac": "node scripts/download-binaries.js --platform=darwin-arm64",
+    "download:binaries:win": "node scripts/download-binaries.js --platform=win32-x64",
     "build:prepare": "node scripts/prepare-resources.js",
     "dist": "electron-builder",
     "dist:mac": "electron-builder --mac dmg --arm64",
@@ -15,8 +19,8 @@
     "dist:all": "npm run build:prepare && electron-builder -mw"
   },
   "devDependencies": {
-    "electron": "^34.2.0",
-    "electron-builder": "^25.1.8"
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3"
   },
   "build": {
     "appId": "be.standardnaast.desktop",
@@ -34,17 +38,23 @@
       {
         "from": "resources/backend",
         "to": "backend",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       },
       {
         "from": "resources/jre/${os}-${arch}",
         "to": "jre",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       },
       {
         "from": "resources/postgres/${os}-${arch}",
         "to": "postgres",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       }
     ],
     "mac": {
@@ -52,7 +62,10 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["arm64", "x64"]
+          "arch": [
+            "arm64",
+            "x64"
+          ]
         }
       ],
       "darkModeSupport": true,
@@ -81,7 +94,9 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ]
     },
@@ -93,5 +108,9 @@
       "shortcutName": "Standard de Naast",
       "uninstallDisplayName": "Standard de Naast"
     }
+  },
+  "allowScripts": {
+    "electron@34.5.8": true,
+    "electron-winstaller@5.4.0": true
   }
 }

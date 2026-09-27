@@ -69,13 +69,14 @@ async function main() {
     console.warn(`Attention : Le JAR ${backendTargetJar} n'a pas été trouvé.`);
   }
 
-  // Structure des dossiers JRE et PostgreSQL
-  log('5. Vérification des répertoires JRE et PostgreSQL');
-  const targets = ['darwin-arm64', 'darwin-x64', 'win32-x64'];
-  targets.forEach((target) => {
-    ensureDir(path.join(electronDir, 'resources', 'jre', target));
-    ensureDir(path.join(electronDir, 'resources', 'postgres', target));
-  });
+  // Téléchargement et vérification des binaires JRE et PostgreSQL
+  log('5. Vérification et téléchargement automatique des binaires JRE et PostgreSQL');
+  try {
+    const downloadScript = path.join(__dirname, 'download-binaries.js');
+    run(`node "${downloadScript}"`, electronDir);
+  } catch (e) {
+    console.warn('Erreur lors du téléchargement automatique des binaires :', e.message);
+  }
 
   console.log('\nPrêt pour le packaging !');
   console.log('Structure des répertoires resources/ :');

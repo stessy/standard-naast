@@ -1,0 +1,42 @@
+{
+  "jre": {
+    "version": "21",
+    "distribution": "corretto",
+    "targets": {
+      "darwin-arm64": {
+        "url": "https://corretto.aws/downloads/latest/amazon-corretto-21-aarch64-macos-jdk.tar.gz",
+        "format": "tar.gz",
+        "subDir": "Contents/Home"
+      },
+      "darwin-x64": {
+        "url": "https://corretto.aws/downloads/latest/amazon-corretto-21-x64-macos-jdk.tar.gz",
+        "format": "tar.gz",
+        "subDir": "Contents/Home"
+      },
+      "win32-x64": {
+        "url": "https://corretto.aws/downloads/latest/amazon-corretto-21-x64-windows-jdk.zip",
+        "format": "zip"
+      }
+    }
+  },
+  "postgres": {
+    "version": "17",
+    "targets": {
+      "darwin-arm64": {
+        "url": "https://github.com/PostgresApp/PostgresApp/releases/download/v2.9.6/Postgres-2.9.6-17.dmg",
+        "format": "dmg",
+        "dmgAppPath": "Postgres.app/Contents/Versions/17"
+      },
+      "darwin-x64": {
+        "url": "https://github.com/PostgresApp/PostgresApp/releases/download/v2.9.6/Postgres-2.9.6-17.dmg",
+        "format": "dmg",
+        "dmgAppPath": "Postgres.app/Contents/Versions/17"
+      },
+      "win32-x64": {
+        "url": "https://get.enterprisedb.com/postgresql/postgresql-16.8-1-windows-x64-binaries.zip",
+        "format": "zip",
+        "subDir": "pgsql"
+      }
+    }
+  }
+}

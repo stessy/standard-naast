@@ -35,21 +35,44 @@ standardnaast-electron/
 
 ---
 
-## 2. Préparation des binaires JRE et PostgreSQL
+## 2. Téléchargement automatique & configuration des binaires
 
-Pour que l'installeur contienne tout le nécessaire :
+Les binaires (JRE Java et PostgreSQL) sont configurés dans `binaries-config.json` et peuvent être téléchargés automatiquement sans intervention manuelle.
 
-### A. JRE Java (OpenJDK / Eclipse Temurin / Azul Zulu)
-1. Télécharger les archives JRE (sans installateur) pour Java 25 (ou 21 LTS) :
-   - **macOS ARM64** : `.tar.gz` (ex: `OpenJDK25U-jre_aarch64_mac_hotspot.tar.gz`)
-   - **Windows x64** : `.zip` (ex: `OpenJDK25U-jre_x64_windows_hotspot.zip`)
-2. Extraire le contenu dans `resources/jre/<plateforme>/` (le dossier `bin/` doit se trouver dans `resources/jre/<plateforme>/bin`).
+### A. Fichier de configuration (`binaries-config.json`)
+Vous pouvez personnaliser les versions et URLs sources pour chaque OS/architecture :
+```json
+{
+  "jre": {
+    "version": "21",
+    "targets": { ... }
+  },
+  "postgres": {
+    "version": "17",
+    "targets": { ... }
+  }
+}
+```
 
-### B. PostgreSQL Binaires Portables
-1. Télécharger les binaires portables de PostgreSQL (ex: PostgreSQL 16/17) :
-   - **Windows** : Télécharger les binaires ZIP depuis EnterpriseDB (`postgresql-16.x-windows-x64-binaries.zip`).
-   - **macOS** : Binaires statiques PostgreSQL (ou extraits de Postgres.app / Homebrew).
-2. Extraire dans `resources/postgres/<plateforme>/` de sorte que `bin/initdb`, `bin/pg_ctl`, `bin/createdb` et `bin/pg_dump` soient présents.
+### B. Commandes de téléchargement
+- **Pour votre OS actuel (ex: macOS Apple Silicon) :**
+  ```bash
+  npm run download:binaries
+  ```
+- **Pour toutes les plateformes (macOS ARM64, macOS x64, Windows x64) :**
+  ```bash
+  npm run download:binaries:all
+  ```
+- **Pour Windows uniquement :**
+  ```bash
+  npm run download:binaries:win
+  ```
+- **Pour forcer un re-téléchargement :**
+  ```bash
+  node scripts/download-binaries.js --force
+  ```
+
+*(Note : La commande `npm run build:prepare` vérifie et télécharge également automatiquement les binaires manquants).*
 
 ---
 
