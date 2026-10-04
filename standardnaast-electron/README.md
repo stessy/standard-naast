@@ -76,33 +76,49 @@ Vous pouvez personnaliser les versions et URLs sources pour chaque OS/architectu
 
 ---
 
-## 3. Commandes de Build et Génération
+## 3. Commandes de Build et Génération automatisée
 
-### Étape 1 : Installation des dépendances Electron
+### Option 1 : Script tout-en-un à la racine du projet (Recommandé)
+
+Un script d'automatisation complet compile le backend Spring Boot (Maven), le frontend Angular, télécharge les binaires (JRE + PostgreSQL) et assemble le package Electron :
+
+* **Sur macOS / Linux :**
+  ```bash
+  # Build automatique pour votre machine courante :
+  ./build-desktop.sh
+
+  # Ou pour une cible spécifique :
+  ./build-desktop.sh mac             # DMG macOS Apple Silicon (ARM64)
+  ./build-desktop.sh mac-universal   # DMG macOS Universel (ARM64 + Intel x64)
+  ./build-desktop.sh win             # EXE Windows (NSIS x64)
+  ./build-desktop.sh all             # Tous les installateurs (macOS + Windows)
+  ```
+
+* **Sur Windows :**
+  ```cmd
+  build-desktop.bat win
+  ```
+
+---
+
+### Option 2 : Commandes directes dans `standardnaast-electron`
+
+Chaque commande `dist` ou `build` intègre désormais automatiquement toutes les étapes préalables de compilation et de packaging :
+
 ```bash
 cd standardnaast-electron
-npm install
-```
 
-### Étape 2 : Préparation des ressources (Angular + Spring Boot)
-Ce script compile Angular et Spring Boot, puis copie automatiquement les livrables dans `resources/` et `ui/` :
-```bash
-npm run build:prepare
-```
-
-### Étape 3 : Génération des installeurs
-
-#### Pour macOS Apple Silicon (.dmg) :
-```bash
+# Pour macOS (.dmg) :
 npm run dist:mac
-```
-> Le fichier `.dmg` est généré dans `standardnaast-electron/dist-package/`.
 
-#### Pour Windows (.exe avec assistant d'installation NSIS) :
-```bash
+# Pour Windows (.exe) :
 npm run dist:win
+
+# Pour toutes les plateformes :
+npm run dist:all
 ```
-> Le fichier `Standard de Naast Setup 1.0.0.exe` est généré dans `standardnaast-electron/dist-package/`.
+
+> Les installeurs finaux (`.dmg` ou `.exe`) sont générés dans le dossier `standardnaast-electron/dist-package/`.
 
 ---
 
