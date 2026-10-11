@@ -77,8 +77,6 @@ export class SidebarComponent {
     { label: 'Tableau de bord', icon: 'pi pi-home', route: '/' },
     { label: 'Membres', icon: 'pi pi-users', route: '/members' },
     { label: 'Saisons', icon: 'pi pi-calendar', route: '/seasons' },
-    { label: 'Équipes', icon: 'pi pi-shield', route: '/teams' },
-    { label: 'Matchs', icon: 'pi pi-calendar-times', route: '/matches' },
     { label: 'Abonnements', icon: 'pi pi-ticket', route: '/abonnements' }
   ];
 
