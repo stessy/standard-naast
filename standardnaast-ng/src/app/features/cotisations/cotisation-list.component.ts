@@ -35,9 +35,9 @@ import { Member } from '../../core/models/member.model';
     TooltipModule
   ],
   template: `
-    <div class="cotisations-container flex flex-column gap-2 p-2">
+    <div class="cotisations-container flex flex-column gap-2">
       <!-- Top Red Header Bar -->
-      <div class="top-red-bar flex flex-wrap align-items-center justify-content-between px-3 py-2 border-round shadow-2">
+      <div class="top-red-bar flex-shrink-0 flex flex-wrap align-items-center justify-content-between px-3 py-2 border-round shadow-2 gap-2">
         <div class="flex flex-wrap align-items-center gap-3">
           <!-- Saison Selector -->
           <div class="flex align-items-center gap-2">
@@ -50,7 +50,7 @@ import { Member } from '../../core/models/member.model';
               (onChange)="onSeasonFilterChange($event.value)"
               placeholder="Choisir..."
               styleClass="p-inputtext-sm season-dropdown"
-              [style]="{ 'min-width': '140px' }">
+              [style]="{ 'min-width': '130px' }">
             </p-dropdown>
           </div>
 
@@ -89,16 +89,36 @@ import { Member } from '../../core/models/member.model';
               class="p-inputtext-sm stat-input-wide font-bold"
             />
           </div>
+
+          <!-- Filtre Membre -->
+          <div class="flex align-items-center gap-2">
+            <span class="p-input-icon-left p-input-icon-right">
+              <i class="pi pi-search text-500"></i>
+              <input
+                type="text"
+                pInputText
+                [(ngModel)]="searchTerm"
+                placeholder="Filtrer membre (nom, prénom)..."
+                class="p-inputtext-sm search-member-input"
+              />
+              <i
+                *ngIf="searchTerm"
+                class="pi pi-times cursor-pointer text-500"
+                (click)="clearSearch()"
+                pTooltip="Effacer le filtre">
+              </i>
+            </span>
+          </div>
         </div>
 
         <!-- Top Action Buttons -->
-        <div class="flex align-items-center gap-2 mt-2 sm:mt-0">
+        <div class="flex align-items-center gap-2">
           <button
             pButton
             type="button"
             label="Impression cotisations"
             icon="pi pi-print"
-            class="p-button-secondary p-button-sm font-bold bg-white text-900 border-none shadow-1 hover:surface-200"
+            class="p-button-outlined p-button-sm text-white border-1 border-white hover:bg-white hover:text-red-900 font-bold"
             (click)="onPrintCotisations()"
             pTooltip="Imprimer le tableau des cotisations"
             tooltipPosition="bottom">
@@ -106,150 +126,170 @@ import { Member } from '../../core/models/member.model';
           <button
             pButton
             type="button"
+            label="Ajouter cotisation"
             icon="pi pi-plus"
+            class="p-button-outlined p-button-sm text-white border-1 border-white hover:bg-white hover:text-red-900 font-bold"
             pTooltip="Enregistrer une cotisation manuellement"
             tooltipPosition="bottom"
-            class="p-button-secondary p-button-sm bg-white text-900 border-none shadow-1 hover:surface-200"
             (click)="openNewDialog()">
           </button>
         </div>
       </div>
 
-      <!-- Top Table: Cotisations payées cartes membres envoyées -->
-      <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden">
-        <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300">
-          Cotisations payées cartes membres envoyées
+      <!-- Top Section (50% vertical space): Cotisations payées cartes membres envoyées -->
+      <div class="top-table-container flex-1 flex flex-column min-h-0">
+        <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
+          <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300 flex-shrink-0">
+            Cotisations payées cartes membres envoyées
+          </div>
+          <p-table
+            [value]="filteredPaidCardSent"
+            [loading]="loading"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 20, 50]"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="{first} - {last} sur {totalRecords}"
+            [scrollable]="true"
+            scrollHeight="flex"
+            styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines h-full flex flex-column">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 20%">Numéro membre</th>
+                <th style="width: 30%">Nom</th>
+                <th style="width: 25%">Prénom</th>
+                <th style="width: 25%">Date paiement</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cot>
+              <tr>
+                <td>{{ cot.memberNumber }}</td>
+                <td>{{ cot.name }}</td>
+                <td>{{ cot.firstName }}</td>
+                <td>{{ cot.paymentDate }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="4" class="text-center p-3 text-500">Aucune cotisation trouvée</td>
+              </tr>
+            </ng-template>
+          </p-table>
         </div>
-        <p-table
-          [value]="overview?.paidCardSent || []"
-          [loading]="loading"
-          [scrollable]="true"
-          scrollHeight="18vh"
-          styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines compact-table">
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="width: 20%">Numéro membre</th>
-              <th style="width: 30%">Nom</th>
-              <th style="width: 25%">Prénom</th>
-              <th style="width: 25%">Date paiement</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-cot>
-            <tr>
-              <td>{{ cot.memberNumber }}</td>
-              <td>{{ cot.name }}</td>
-              <td>{{ cot.firstName }}</td>
-              <td>{{ cot.paymentDate }}</td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="4" class="text-center p-3 text-500">No content in table</td>
-            </tr>
-          </ng-template>
-        </p-table>
       </div>
 
-      <!-- Bottom Two Tables (Split 50% / 50%) -->
-      <div class="bottom-tables-grid grid m-0">
-        <!-- Bottom Left: Cotisations payées cartes membres non envoyées -->
-        <div class="col-12 md:col-6 p-0 pr-0 md:pr-1">
-          <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
-            <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300">
-              Cotisations payées cartes membres non envoyées
-            </div>
-            <p-table
-              [value]="overview?.paidCardNotSent || []"
-              [(selection)]="selectedPaidNotSent"
-              dataKey="cotisationId"
-              [loading]="loading"
-              [scrollable]="true"
-              scrollHeight="22vh"
-              styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines compact-table">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
-                  <th style="width: 20%">Numéro membre</th>
-                  <th style="width: 30%">Nom</th>
-                  <th style="width: 25%">Prénom</th>
-                  <th style="width: 25%">Date paiement</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-cot>
-                <tr [pSelectableRow]="cot">
-                  <td><p-tableCheckbox [value]="cot"></p-tableCheckbox></td>
-                  <td>{{ cot.memberNumber }}</td>
-                  <td>{{ cot.name }}</td>
-                  <td>{{ cot.firstName }}</td>
-                  <td>{{ cot.paymentDate }}</td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="5" class="text-center p-3 text-500">No content in table</td>
-                </tr>
-              </ng-template>
-            </p-table>
-            <!-- Bottom Action for Left Table -->
-            <div class="flex justify-content-end p-2 bg-50 border-top-1 border-200">
-              <button
-                pButton
-                type="button"
-                label="Cartes de membres envoyées"
-                class="p-button-secondary p-button-sm border-1 border-300"
-                [disabled]="!selectedPaidNotSent.length"
-                (click)="onMarkCardsSent()">
-              </button>
+      <!-- Bottom Section (50% vertical space, split horizontally in 2) -->
+      <div class="bottom-tables-container flex-1 flex min-h-0">
+        <div class="grid m-0 w-full h-full p-0">
+          <!-- Bottom Left: Cotisations payées cartes membres non envoyées -->
+          <div class="col-12 md:col-6 p-0 pr-0 md:pr-1 h-full flex flex-column min-h-0">
+            <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
+              <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300 flex-shrink-0">
+                Cotisations payées cartes membres non envoyées
+              </div>
+              <p-table
+                [value]="filteredPaidCardNotSent"
+                [(selection)]="selectedPaidNotSent"
+                dataKey="cotisationId"
+                [loading]="loading"
+                [paginator]="true"
+                [rows]="10"
+                [rowsPerPageOptions]="[10, 20, 50]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="{first} - {last} sur {totalRecords}"
+                [scrollable]="true"
+                scrollHeight="flex"
+                styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines h-full flex flex-column">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                    <th style="width: 20%">Numéro membre</th>
+                    <th style="width: 30%">Nom</th>
+                    <th style="width: 25%">Prénom</th>
+                    <th style="width: 25%">Date paiement</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-cot>
+                  <tr [pSelectableRow]="cot">
+                    <td><p-tableCheckbox [value]="cot"></p-tableCheckbox></td>
+                    <td>{{ cot.memberNumber }}</td>
+                    <td>{{ cot.name }}</td>
+                    <td>{{ cot.firstName }}</td>
+                    <td>{{ cot.paymentDate }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="5" class="text-center p-3 text-500">Aucune cotisation trouvée</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <!-- Bottom Action for Left Table -->
+              <div class="flex justify-content-end p-2 bg-50 border-top-1 border-200 flex-shrink-0">
+                <button
+                  pButton
+                  type="button"
+                  label="Cartes de membres envoyées"
+                  class="p-button-secondary p-button-sm border-1 border-300"
+                  [disabled]="!selectedPaidNotSent.length"
+                  (click)="onMarkCardsSent()">
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Bottom Right: Cotisations non payées -->
-        <div class="col-12 md:col-6 p-0 pl-0 md:pl-1 mt-2 md:mt-0">
-          <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
-            <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300">
-              Cotisations non payées
-            </div>
-            <p-table
-              [value]="overview?.unpaidMembers || []"
-              [(selection)]="selectedUnpaid"
-              dataKey="memberId"
-              [loading]="loading"
-              [scrollable]="true"
-              scrollHeight="22vh"
-              styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines compact-table">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
-                  <th style="width: 25%">Numéro membre</th>
-                  <th style="width: 40%">Nom</th>
-                  <th style="width: 35%">Prénom</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-cot>
-                <tr [pSelectableRow]="cot">
-                  <td><p-tableCheckbox [value]="cot"></p-tableCheckbox></td>
-                  <td>{{ cot.memberNumber }}</td>
-                  <td>{{ cot.name }}</td>
-                  <td>{{ cot.firstName }}</td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="4" class="text-center p-3 text-500">No content in table</td>
-                </tr>
-              </ng-template>
-            </p-table>
-            <!-- Bottom Action for Right Table -->
-            <div class="flex justify-content-end p-2 bg-50 border-top-1 border-200">
-              <button
-                pButton
-                type="button"
-                label="Cotisation payée"
-                class="p-button-secondary p-button-sm border-1 border-300"
-                [disabled]="!selectedUnpaid.length"
-                (click)="onMarkCotisationPaid()">
-              </button>
+          <!-- Bottom Right: Cotisations non payées -->
+          <div class="col-12 md:col-6 p-0 pl-0 md:pl-1 mt-2 md:mt-0 h-full flex flex-column min-h-0">
+            <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
+              <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300 flex-shrink-0">
+                Cotisations non payées
+              </div>
+              <p-table
+                [value]="filteredUnpaidMembers"
+                [(selection)]="selectedUnpaid"
+                dataKey="memberId"
+                [loading]="loading"
+                [paginator]="true"
+                [rows]="10"
+                [rowsPerPageOptions]="[10, 20, 50]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="{first} - {last} sur {totalRecords}"
+                [scrollable]="true"
+                scrollHeight="flex"
+                styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines h-full flex flex-column">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                    <th style="width: 25%">Numéro membre</th>
+                    <th style="width: 40%">Nom</th>
+                    <th style="width: 35%">Prénom</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-cot>
+                  <tr [pSelectableRow]="cot">
+                    <td><p-tableCheckbox [value]="cot"></p-tableCheckbox></td>
+                    <td>{{ cot.memberNumber }}</td>
+                    <td>{{ cot.name }}</td>
+                    <td>{{ cot.firstName }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="4" class="text-center p-3 text-500">Aucun membre trouvé</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <!-- Bottom Action for Right Table -->
+              <div class="flex justify-content-end p-2 bg-50 border-top-1 border-200 flex-shrink-0">
+                <button
+                  pButton
+                  type="button"
+                  label="Cotisation payée"
+                  class="p-button-secondary p-button-sm border-1 border-300"
+                  [disabled]="!selectedUnpaid.length"
+                  (click)="onMarkCotisationPaid()">
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -304,10 +344,10 @@ import { Member } from '../../core/models/member.model';
   `,
   styles: [`
     .cotisations-container {
-      height: calc(100vh - 75px);
-      max-height: calc(100vh - 75px);
+      height: 100%;
+      min-height: 550px;
       box-sizing: border-box;
-      overflow-y: hidden;
+      overflow: hidden;
     }
 
     .top-red-bar {
@@ -334,6 +374,18 @@ import { Member } from '../../core/models/member.model';
       cursor: default;
     }
 
+    .search-member-input {
+      width: 220px;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+
+    .top-table-container,
+    .bottom-tables-container {
+      flex: 1 1 0;
+      min-height: 200px;
+    }
+
     .table-section {
       background: #ffffff;
       border: 1px solid #ced4da;
@@ -346,23 +398,82 @@ import { Member } from '../../core/models/member.model';
       border-bottom: 1px solid #cccccc;
     }
 
-    :host ::ng-deep .compact-table .p-datatable-thead > tr > th {
-      background: #f8f9fa;
-      color: #495057;
-      padding: 0.4rem 0.5rem;
-      font-size: 0.85rem;
-      border-color: #dee2e6;
+    :host ::ng-deep .table-section p-table {
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
 
-    :host ::ng-deep .compact-table .p-datatable-tbody > tr > td {
+    :host ::ng-deep .table-section .p-datatable {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      flex: 1 1 0;
+      min-height: 0;
+    }
+
+    :host ::ng-deep .table-section .p-datatable-wrapper {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    :host ::ng-deep .table-section .p-datatable-table {
+      width: 100%;
+    }
+
+    :host ::ng-deep .table-section .p-datatable-thead > tr > th {
+      background: #f8f9fa;
+      color: #495057;
       padding: 0.35rem 0.5rem;
       font-size: 0.85rem;
       border-color: #dee2e6;
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
 
-    .bottom-tables-grid {
-      flex: 1 1 auto;
-      min-height: 0;
+    :host ::ng-deep .table-section .p-datatable-tbody > tr > td {
+      padding: 0.3rem 0.5rem;
+      font-size: 0.85rem;
+      border-color: #dee2e6;
+    }
+
+    :host ::ng-deep .table-section .p-paginator {
+      padding: 0.15rem 0.5rem;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      border-top: 1px solid #dee2e6;
+    }
+
+    :host ::ng-deep .table-section .p-paginator .p-paginator-pages .p-paginator-page,
+    :host ::ng-deep .table-section .p-paginator .p-paginator-first,
+    :host ::ng-deep .table-section .p-paginator .p-paginator-prev,
+    :host ::ng-deep .table-section .p-paginator .p-paginator-next,
+    :host ::ng-deep .table-section .p-paginator .p-paginator-last {
+      min-width: 24px;
+      height: 24px;
+      font-size: 0.8rem;
+      padding: 0;
+      margin: 0 1px;
+    }
+
+    :host ::ng-deep .table-section .p-paginator .p-paginator-current {
+      font-size: 0.8rem;
+      padding: 0 0.5rem;
+    }
+
+    :host ::ng-deep .table-section .p-paginator .p-dropdown {
+      height: 24px;
+      font-size: 0.8rem;
+    }
+
+    :host ::ng-deep .table-section .p-paginator .p-dropdown .p-dropdown-label {
+      padding: 0.05rem 0.35rem;
+      font-size: 0.8rem;
+      line-height: 20px;
     }
   `]
 })
@@ -378,6 +489,8 @@ export class CotisationListComponent implements OnInit {
   selectedPaidNotSent: MemberCotisationItem[] = [];
   selectedUnpaid: MemberCotisationItem[] = [];
 
+  searchTerm = '';
+
   members: (Member & { displayName?: string })[] = [];
   seasons: Season[] = [];
   selectedSeasonId: string | null = null;
@@ -390,6 +503,43 @@ export class CotisationListComponent implements OnInit {
     datePaiement: [''],
     carteMembreEnvoyee: [false]
   });
+
+  clearSearch(): void {
+    this.searchTerm = '';
+  }
+
+  filterList(list: MemberCotisationItem[] | undefined): MemberCotisationItem[] {
+    if (!list) return [];
+    if (!this.searchTerm || !this.searchTerm.trim()) return list;
+    const term = this.searchTerm.trim().toLowerCase();
+    return list.filter(item => {
+      const name = (item.name || '').toLowerCase();
+      const firstName = (item.firstName || '').toLowerCase();
+      const fullName = `${firstName} ${name}`.trim();
+      const reverseName = `${name} ${firstName}`.trim();
+      const memberNumber = item.memberNumber != null ? item.memberNumber.toString() : '';
+
+      return (
+        name.includes(term) ||
+        firstName.includes(term) ||
+        fullName.includes(term) ||
+        reverseName.includes(term) ||
+        memberNumber.includes(term)
+      );
+    });
+  }
+
+  get filteredPaidCardSent(): MemberCotisationItem[] {
+    return this.filterList(this.overview?.paidCardSent);
+  }
+
+  get filteredPaidCardNotSent(): MemberCotisationItem[] {
+    return this.filterList(this.overview?.paidCardNotSent);
+  }
+
+  get filteredUnpaidMembers(): MemberCotisationItem[] {
+    return this.filterList(this.overview?.unpaidMembers);
+  }
 
   get formattedTotalAmount(): string {
     if (this.overview?.totalAmount != null) {
