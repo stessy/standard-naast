@@ -70,7 +70,8 @@ class MemberControllerIntegrationTest {
                 null,
                 28L,
                 false,
-                false
+                false,
+                "ROBO-123"
         );
     }
 
@@ -123,7 +124,8 @@ class MemberControllerIntegrationTest {
                 null,
                 27L,
                 false,
-                false
+                false,
+                "ROBO-456"
         );
 
         final MemberDto createdDto = new MemberDto(
@@ -141,7 +143,8 @@ class MemberControllerIntegrationTest {
                 null,
                 27L,
                 false,
-                false
+                false,
+                "ROBO-456"
         );
 
         when(this.memberService.createMember(any(MemberCreateUpdateDto.class))).thenReturn(createdDto);
@@ -153,7 +156,8 @@ class MemberControllerIntegrationTest {
                 .andExpect(jsonPath("$.id", is(2)))
                 .andExpect(jsonPath("$.name", is("Fellaini")))
                 .andExpect(jsonPath("$.firstname", is("Marouane")))
-                .andExpect(jsonPath("$.memberNumber", is(27)));
+                .andExpect(jsonPath("$.memberNumber", is(27)))
+                .andExpect(jsonPath("$.roboticketId", is("ROBO-456")));
     }
 
     @Test
@@ -172,7 +176,8 @@ class MemberControllerIntegrationTest {
                 null,
                 28L,
                 false,
-                false
+                false,
+                "ROBO-789"
         );
 
         final MemberDto updatedMember = new MemberDto(
@@ -190,7 +195,8 @@ class MemberControllerIntegrationTest {
                 null,
                 28L,
                 false,
-                false
+                false,
+                "ROBO-789"
         );
 
         when(this.memberService.updateMember(eq(1L), any(MemberCreateUpdateDto.class))).thenReturn(updatedMember);

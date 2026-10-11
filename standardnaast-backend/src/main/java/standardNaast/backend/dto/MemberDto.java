@@ -17,5 +17,6 @@ public record MemberDto(
         String identityCardNumber,
         Long memberNumber,
         Boolean student,
-        Boolean redCard
+        Boolean redCard,
+        String roboticketId
 ) {}

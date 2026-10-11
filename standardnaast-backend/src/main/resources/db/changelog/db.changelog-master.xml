@@ -14,6 +14,9 @@
     <!-- 2. Security and Users -->
     <include file="liquibaseChangelog/013_users_and_roles.xml" relativeToChangelogFile="true"/>
 
+    <!-- 3. Add Roboticket ID to Personnes -->
+    <include file="liquibaseChangelog/016_add_roboticket_id.xml" relativeToChangelogFile="true"/>
+
     <!--&lt;!&ndash; 3. Initial / Migrated Data from H2 (executed once on fresh installation) &ndash;&gt;
     <changeSet id="099-initial-data" author="standardnaast">
         <preConditions onFail="MARK_RAN">

@@ -95,12 +95,11 @@ import { Season } from '../../core/models/season.model';
           responsiveLayout="stack">
           <ng-template pTemplate="header">
             <tr>
-              <th pSortableColumn="memberNumber" style="width: 10%">N° <p-sortIcon field="memberNumber"></p-sortIcon></th>
-              <th pSortableColumn="name" style="width: 25%">Nom <p-sortIcon field="name"></p-sortIcon></th>
-              <th pSortableColumn="firstname" style="width: 25%">Prénom <p-sortIcon field="firstname"></p-sortIcon></th>
-              <th style="width: 15%">Ville</th>
-              <th style="width: 15%">Statut</th>
-              <th style="width: 10%" class="text-center">Actions</th>
+              <th pSortableColumn="memberNumber" style="width: 12%">N° <p-sortIcon field="memberNumber"></p-sortIcon></th>
+              <th pSortableColumn="name" style="width: 28%">Nom <p-sortIcon field="name"></p-sortIcon></th>
+              <th pSortableColumn="firstname" style="width: 28%">Prénom <p-sortIcon field="firstname"></p-sortIcon></th>
+              <th style="width: 20%">Ville</th>
+              <th style="width: 12%" class="text-center">Actions</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-member>
@@ -113,13 +112,6 @@ import { Season } from '../../core/models/season.model';
               <td><span class="font-semibold">{{ member.name }}</span></td>
               <td>{{ member.firstname }}</td>
               <td>{{ member.city || '-' }}</td>
-              <td>
-                @if (member.redCard) {
-                  <p-tag severity="danger" value="Carte Rouge"></p-tag>
-                } @else {
-                  <p-tag severity="success" value="Actif"></p-tag>
-                }
-              </td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-1" (click)="$event.stopPropagation()">
                   <button
@@ -136,7 +128,7 @@ import { Season } from '../../core/models/season.model';
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="6" class="text-center p-3 text-500">Aucun membre trouvé.</td>
+              <td colspan="5" class="text-center p-3 text-500">Aucun membre trouvé.</td>
             </tr>
           </ng-template>
         </p-table>
@@ -218,19 +210,23 @@ import { Season } from '../../core/models/season.model';
               </div>
             </div>
 
-            <!-- Row 3: Email, GSM, Date de naissance -->
+            <!-- Row 3: Email, GSM, Date de naissance, Roboticket ID -->
             <div class="grid -mt-1 -mb-1">
-              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
                 <label for="email" class="font-semibold text-xs text-700">Email</label>
                 <input id="email" type="email" pInputText formControlName="email" class="p-inputtext-sm w-full" />
               </div>
-              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
                 <label for="mobilePhone" class="font-semibold text-xs text-700">GSM</label>
                 <input id="mobilePhone" type="text" pInputText formControlName="mobilePhone" class="p-inputtext-sm w-full" />
               </div>
-              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
                 <label for="birthdate" class="font-semibold text-xs text-700">Date de naissance</label>
                 <input id="birthdate" type="date" pInputText formControlName="birthdate" class="p-inputtext-sm w-full" />
+              </div>
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
+                <label for="roboticketId" class="font-semibold text-xs text-700">Roboticket ID</label>
+                <input id="roboticketId" type="text" pInputText formControlName="roboticketId" class="p-inputtext-sm w-full" />
               </div>
             </div>
           </form>
@@ -412,9 +408,15 @@ import { Season } from '../../core/models/season.model';
             </div>
           </div>
 
-          <div class="flex flex-column gap-2">
-            <label for="new_birthdate" class="font-semibold text-sm">Date de naissance</label>
-            <input id="new_birthdate" type="date" pInputText formControlName="birthdate" />
+          <div class="grid">
+            <div class="col-12 md:col-6 flex flex-column gap-2">
+              <label for="new_birthdate" class="font-semibold text-sm">Date de naissance</label>
+              <input id="new_birthdate" type="date" pInputText formControlName="birthdate" />
+            </div>
+            <div class="col-12 md:col-6 flex flex-column gap-2">
+              <label for="new_roboticketId" class="font-semibold text-sm">Roboticket ID</label>
+              <input id="new_roboticketId" type="text" pInputText formControlName="roboticketId" />
+            </div>
           </div>
 
           <div class="flex flex-column gap-2">
@@ -663,7 +665,8 @@ export class MemberListComponent implements OnInit {
     birthdate: [''],
     memberNumber: [null],
     redCard: [false],
-    student: [false]
+    student: [false],
+    roboticketId: ['']
   });
 
   // Formulaire pour la création d'un nouveau membre (popup)
@@ -679,7 +682,8 @@ export class MemberListComponent implements OnInit {
     birthdate: [''],
     memberNumber: [10000],
     redCard: [false],
-    student: [false]
+    student: [false],
+    roboticketId: ['']
   });
 
   // Formulaire pour l'ajout d'un abonnement (popup)
@@ -779,7 +783,8 @@ export class MemberListComponent implements OnInit {
       birthdate: member.birthdate ? member.birthdate.substring(0, 10) : '',
       memberNumber: member.memberNumber ?? null,
       redCard: !!member.redCard,
-      student: !!member.student
+      student: !!member.student,
+      roboticketId: member.roboticketId || ''
     });
   }
 
@@ -883,7 +888,8 @@ export class MemberListComponent implements OnInit {
       birthdate: '',
       memberNumber: 10000,
       redCard: false,
-      student: false
+      student: false,
+      roboticketId: ''
     });
     this.newMemberDialogVisible = true;
   }

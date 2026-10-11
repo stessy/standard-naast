@@ -118,19 +118,23 @@ import { Season } from '../../core/models/season.model';
             </div>
           </div>
 
-          <!-- Row 3: Email, GSM, Date de naissance -->
+          <!-- Row 3: Email, GSM, Date de naissance, Roboticket ID -->
           <div class="grid -mt-1 -mb-1">
-            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
+            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
               <label for="detail_email" class="font-semibold text-xs text-700">Email</label>
               <input id="detail_email" type="email" pInputText formControlName="email" class="p-inputtext-sm w-full" />
             </div>
-            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
+            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
               <label for="detail_mobilePhone" class="font-semibold text-xs text-700">GSM</label>
               <input id="detail_mobilePhone" type="text" pInputText formControlName="mobilePhone" class="p-inputtext-sm w-full" />
             </div>
-            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
+            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
               <label for="detail_birthdate" class="font-semibold text-xs text-700">Date de naissance</label>
               <input id="detail_birthdate" type="date" pInputText formControlName="birthdate" class="p-inputtext-sm w-full" />
+            </div>
+            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
+              <label for="detail_roboticketId" class="font-semibold text-xs text-700">Roboticket ID</label>
+              <input id="detail_roboticketId" type="text" pInputText formControlName="roboticketId" class="p-inputtext-sm w-full" />
             </div>
           </div>
         </form>
@@ -447,7 +451,8 @@ export class MemberDetailComponent implements OnInit {
     birthdate: [''],
     memberNumber: [null],
     redCard: [false],
-    student: [false]
+    student: [false],
+    roboticketId: ['']
   });
 
   abonnementForm: FormGroup = this.fb.group({
@@ -495,7 +500,8 @@ export class MemberDetailComponent implements OnInit {
           birthdate: data.birthdate ? data.birthdate.substring(0, 10) : '',
           memberNumber: data.memberNumber ?? null,
           redCard: !!data.redCard,
-          student: !!data.student
+          student: !!data.student,
+          roboticketId: data.roboticketId || ''
         });
       }
     });

@@ -44,5 +44,8 @@ public record MemberCreateUpdateDto(
 
         Boolean student,
 
-        Boolean redCard
+        Boolean redCard,
+
+        @Size(max = 50, message = "Le Roboticket ID ne doit pas dépasser 50 caractères")
+        String roboticketId
 ) {}

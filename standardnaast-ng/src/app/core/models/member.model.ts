@@ -14,6 +14,7 @@ export interface Member {
   memberNumber?: number;
   student: boolean;
   redCard: boolean;
+  roboticketId?: string;
 }
 
 export interface MemberCreateUpdate {
@@ -31,4 +32,5 @@ export interface MemberCreateUpdate {
   memberNumber?: number;
   student: boolean;
   redCard: boolean;
+  roboticketId?: string;
 }

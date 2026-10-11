@@ -65,6 +65,9 @@ public class Person implements Serializable {
     @Column(name = "RED_CARD")
     private Boolean redCard;
 
+    @Column(name = "ROBOTICKET_ID", length = 50)
+    private String roboticketId;
+
     public Long getId() {
         return this.id;
     }
@@ -183,6 +186,14 @@ public class Person implements Serializable {
 
     public void setRedCard(Boolean redCard) {
         this.redCard = redCard;
+    }
+
+    public String getRoboticketId() {
+        return this.roboticketId;
+    }
+
+    public void setRoboticketId(String roboticketId) {
+        this.roboticketId = roboticketId;
     }
 
     public boolean isMember() {

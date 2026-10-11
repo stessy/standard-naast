@@ -54,6 +54,7 @@ class MemberServiceTest {
                 .city("Naast")
                 .postalCode("7191")
                 .birthdate(LocalDate.of(1990, 5, 15))
+                .roboticketId("ROBO-12345")
                 .build();
 
         this.sampleDto = new MemberCreateUpdateDto(
@@ -70,7 +71,8 @@ class MemberServiceTest {
                 null,
                 42L,
                 false,
-                false
+                false,
+                "ROBO-12345"
         );
     }
 
