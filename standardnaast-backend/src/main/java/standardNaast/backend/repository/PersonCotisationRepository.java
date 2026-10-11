@@ -16,6 +16,8 @@ public interface PersonCotisationRepository extends JpaRepository<PersonCotisati
 
     List<PersonCotisation> findByPersonId(Long personId);
 
+    List<PersonCotisation> findByPersonIdOrderBySeason_DateStartDesc(Long personId);
+
     List<PersonCotisation> findBySeasonId(String seasonId);
 
     List<PersonCotisation> findBySeasonIdOrderByPerson_MemberNumberAsc(String seasonId);

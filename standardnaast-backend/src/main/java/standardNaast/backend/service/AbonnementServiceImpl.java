@@ -75,7 +75,7 @@ public class AbonnementServiceImpl implements AbonnementService {
     @Override
     @Transactional(readOnly = true)
     public List<AbonnementDto> getAbonnementsByMember(Long memberId) {
-        return abonnementMapper.toDtoList(abonnementRepository.findByPersonne_Id(memberId));
+        return abonnementMapper.toDtoList(abonnementRepository.findByPersonne_IdOrderBySeason_DateStartDesc(memberId));
     }
 
     @Override

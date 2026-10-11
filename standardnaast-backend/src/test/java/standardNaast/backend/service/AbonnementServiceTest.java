@@ -155,7 +155,7 @@ class AbonnementServiceTest {
 
     @Test
     void getAbonnementsByMember_shouldReturnList() {
-        when(this.abonnementRepository.findByPersonne_Id(100L)).thenReturn(List.of(this.sampleAbonnement));
+        when(this.abonnementRepository.findByPersonne_IdOrderBySeason_DateStartDesc(100L)).thenReturn(List.of(this.sampleAbonnement));
 
         List<AbonnementDto> result = this.abonnementService.getAbonnementsByMember(100L);
 

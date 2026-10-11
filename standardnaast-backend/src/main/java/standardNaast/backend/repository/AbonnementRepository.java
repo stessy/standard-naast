@@ -28,6 +28,8 @@ public interface AbonnementRepository extends JpaRepository<Abonnement, Long> {
 
     List<Abonnement> findByPersonne_Id(Long personId);
 
+    List<Abonnement> findByPersonne_IdOrderBySeason_DateStartDesc(Long personId);
+
     Page<Abonnement> findByPersonne_Id(Long personId, Pageable pageable);
 
     Page<Abonnement> findBySeason_IdAndPersonne_Id(String seasonId, Long personId, Pageable pageable);

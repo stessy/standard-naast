@@ -258,6 +258,8 @@ import { Season } from '../../core/models/season.model';
 
               <p-table
                 [value]="selectedMemberAbonnements"
+                sortField="seasonId"
+                [sortOrder]="-1"
                 [scrollable]="true"
                 scrollHeight="220px"
                 [paginator]="true"
@@ -267,7 +269,7 @@ import { Season } from '../../core/models/season.model';
                 styleClass="p-datatable-sm p-datatable-striped">
                 <ng-template pTemplate="header">
                   <tr>
-                    <th>Saison</th>
+                    <th pSortableColumn="seasonId">Saison <p-sortIcon field="seasonId"></p-sortIcon></th>
                     <th>Bloc</th>
                     <th>Rang</th>
                     <th>Place</th>
@@ -327,6 +329,8 @@ import { Season } from '../../core/models/season.model';
 
               <p-table
                 [value]="selectedMemberCotisations"
+                sortField="seasonId"
+                [sortOrder]="-1"
                 [scrollable]="true"
                 scrollHeight="220px"
                 [paginator]="true"
@@ -336,7 +340,7 @@ import { Season } from '../../core/models/season.model';
                 styleClass="p-datatable-sm p-datatable-striped">
                 <ng-template pTemplate="header">
                   <tr>
-                    <th>Saison</th>
+                    <th pSortableColumn="seasonId">Saison <p-sortIcon field="seasonId"></p-sortIcon></th>
                     <th>Date Paiement</th>
                     <th>Carte envoyée</th>
                     <th class="text-center" style="width: 3rem"></th>
@@ -781,12 +785,12 @@ export class MemberListComponent implements OnInit {
 
   loadMemberDetailsData(id: number): void {
     this.cotisationService.getCotisationsByMember(id).subscribe({
-      next: (data) => (this.selectedMemberCotisations = data),
+      next: (data) => (this.selectedMemberCotisations = (data || []).sort((a, b) => (b.seasonId || '').localeCompare(a.seasonId || ''))),
       error: () => (this.selectedMemberCotisations = [])
     });
 
     this.abonnementService.getAbonnementsByMember(id).subscribe({
-      next: (data) => (this.selectedMemberAbonnements = data),
+      next: (data) => (this.selectedMemberAbonnements = (data || []).sort((a, b) => (b.seasonId || '').localeCompare(a.seasonId || ''))),
       error: () => (this.selectedMemberAbonnements = [])
     });
   }

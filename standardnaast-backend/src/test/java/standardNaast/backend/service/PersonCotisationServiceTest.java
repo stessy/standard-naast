@@ -161,6 +161,21 @@ class PersonCotisationServiceTest {
     }
 
     @Test
+    void shouldGetCotisationsByMember() {
+        Person member = Person.builder().id(10L).build();
+        Season season = Season.builder().id("2024-2025").build();
+        PersonCotisation cot = PersonCotisation.builder().id(101L).person(member).season(season).build();
+
+        when(personRepository.existsById(10L)).thenReturn(true);
+        when(personCotisationRepository.findByPersonIdOrderBySeason_DateStartDesc(10L)).thenReturn(List.of(cot));
+
+        List<PersonCotisationDto> result = personCotisationService.getCotisationsByMember(10L);
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).seasonId()).isEqualTo("2024-2025");
+    }
+
+    @Test
     void shouldBulkUpdateMemberCardSent() {
         PersonCotisation cot1 = PersonCotisation.builder().id(101L).carteMembreEnvoyee(false).build();
         PersonCotisation cot2 = PersonCotisation.builder().id(102L).carteMembreEnvoyee(false).build();

@@ -89,7 +89,7 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
         if (!personRepository.existsById(memberId)) {
             throw new ResourceNotFoundException("Membre non trouvé avec l'identifiant : " + memberId);
         }
-        return personCotisationRepository.findByPersonId(memberId).stream()
+        return personCotisationRepository.findByPersonIdOrderBySeason_DateStartDesc(memberId).stream()
                 .map(personCotisationMapper::toDto)
                 .toList();
     }
