@@ -6,9 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { SeasonService } from '../../core/services/season.service';
 import { MemberService } from '../../core/services/member.service';
-import { MatchService } from '../../core/services/match.service';
 import { CotisationService } from '../../core/services/cotisation.service';
-import { Match } from '../../core/models/match.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,7 +37,7 @@ import { Match } from '../../core/models/match.model';
       <!-- KPI Metrics Cards -->
       <div class="grid">
         <!-- Members Count -->
-        <div class="col-12 sm:col-6 lg:col-4">
+        <div class="col-12 md:col-6">
           <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1 flex flex-column justify-content-between h-full">
             <div class="flex justify-content-between mb-3">
               <div>
@@ -54,27 +52,8 @@ import { Match } from '../../core/models/match.model';
           </div>
         </div>
 
-        <!-- Next Match -->
-        <div class="col-12 sm:col-6 lg:col-4">
-          <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1 flex flex-column justify-content-between h-full">
-            <div class="flex justify-content-between mb-3">
-              <div>
-                <span class="block text-500 font-medium mb-2">Prochain Match</span>
-                <div class="text-900 font-bold text-xl">{{ nextMatch ? nextMatch.opponentName : 'Aucun match' }}</div>
-                @if (nextMatch) {
-                  <span class="text-xs text-500 font-medium">{{ nextMatch.dateMatch | date:'dd/MM/yyyy HH:mm' }} ({{ nextMatch.place === 'HOME' ? 'Domicile' : 'Extérieur' }})</span>
-                }
-              </div>
-              <div class="flex align-items-center justify-content-center bg-red-100 border-round" style="width: 2.75rem; height: 2.75rem">
-                <i class="pi pi-calendar-times text-red-600 text-xl"></i>
-              </div>
-            </div>
-            <a routerLink="/matches" class="text-sm text-red-600 font-semibold no-underline hover:underline">Calendrier complet &rarr;</a>
-          </div>
-        </div>
-
         <!-- Cotisations overview -->
-        <div class="col-12 sm:col-6 lg:col-4">
+        <div class="col-12 md:col-6">
           <div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1 flex flex-column justify-content-between h-full">
             <div class="flex justify-content-between mb-3">
               <div>
@@ -105,11 +84,9 @@ import { Match } from '../../core/models/match.model';
 export class DashboardComponent implements OnInit {
   seasonService = inject(SeasonService);
   memberService = inject(MemberService);
-  matchService = inject(MatchService);
   cotisationService = inject(CotisationService);
 
   totalMembers = 0;
-  nextMatch: Match | null = null;
   paidCotisations = 0;
   unpaidCotisations = 0;
 
@@ -118,28 +95,41 @@ export class DashboardComponent implements OnInit {
   }
 
   loadStats(): void {
-    // Member count
-    this.memberService.getMembers(undefined, 0, 1).subscribe({
-      next: (page) => this.totalMembers = page.totalElements
+    // Calcul des membres actifs (numéro de membre < 1000)
+    this.memberService.getActiveMemberCount().subscribe({
+      next: (count) => this.totalMembers = count
     });
 
     // Season data
     const currentSeason = this.seasonService.selectedSeason();
     if (currentSeason) {
-      this.cotisationService.getSeasonOverview(currentSeason.id).subscribe({
-        next: (ov) => {
-          this.paidCotisations = ov.totalPaid;
-          this.unpaidCotisations = ov.totalUnpaid;
-        }
-      });
-
-      this.matchService.getMatchesBySeason(currentSeason.id).subscribe({
-        next: (matches) => {
-          if (matches && matches.length > 0) {
-            this.nextMatch = matches[0];
+      this.loadCotisationOverview(currentSeason.id);
+    } else {
+      this.seasonService.getCurrentSeason().subscribe({
+        next: (season) => {
+          if (season) {
+            this.loadCotisationOverview(season.id);
           }
+        },
+        error: () => {
+          this.seasonService.getAllSeasons().subscribe({
+            next: (seasons) => {
+              if (seasons.length > 0) {
+                this.loadCotisationOverview(seasons[0].id);
+              }
+            }
+          });
         }
       });
     }
+  }
+
+  private loadCotisationOverview(seasonId: string): void {
+    this.cotisationService.getSeasonOverview(seasonId).subscribe({
+      next: (ov) => {
+        this.paidCotisations = ov.totalPaid;
+        this.unpaidCotisations = ov.totalUnpaid;
+      }
+    });
   }
 }

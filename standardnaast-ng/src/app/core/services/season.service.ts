@@ -28,7 +28,7 @@ export class SeasonService {
   getCurrentSeason(): Observable<Season> {
     return this.http.get<Season>(`${this.apiUrl}/current`).pipe(
       tap(season => {
-        if (!this.selectedSeasonSignal() && season) {
+        if (season) {
           this.setSelectedSeason(season);
         }
       })

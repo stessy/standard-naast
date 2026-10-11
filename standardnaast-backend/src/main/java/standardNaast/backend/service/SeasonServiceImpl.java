@@ -52,8 +52,11 @@ public class SeasonServiceImpl implements SeasonService {
     @Override
     public Optional<SeasonDto> getCurrentSeason() {
         log.debug("Fetching current season for today");
-        return this.seasonRepository.findSeasonForDate(LocalDate.now())
-                .map(this.seasonMapper::toDto);
+        Optional<Season> season = this.seasonRepository.findSeasonForDate(LocalDate.now());
+        if (season.isEmpty()) {
+            season = this.seasonRepository.findAllByOrderByDateStartDesc().stream().findFirst();
+        }
+        return season.map(this.seasonMapper::toDto);
     }
 
     @Override

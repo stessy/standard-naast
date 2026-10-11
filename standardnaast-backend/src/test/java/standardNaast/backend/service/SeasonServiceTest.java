@@ -108,6 +108,29 @@ class SeasonServiceTest {
     }
 
     @Test
+    void getCurrentSeason_whenFoundByDate_shouldReturnSeason() {
+        when(this.seasonRepository.findSeasonForDate(any(LocalDate.class))).thenReturn(Optional.of(this.sampleSeason));
+
+        final Optional<SeasonDto> result = this.seasonService.getCurrentSeason();
+
+        assertThat(result).isPresent();
+        assertThat(result.get().id()).isEqualTo("2024-2025");
+        verify(this.seasonRepository).findSeasonForDate(any(LocalDate.class));
+    }
+
+    @Test
+    void getCurrentSeason_whenNotFoundByDate_shouldFallbackToLatestSeason() {
+        when(this.seasonRepository.findSeasonForDate(any(LocalDate.class))).thenReturn(Optional.empty());
+        when(this.seasonRepository.findAllByOrderByDateStartDesc()).thenReturn(List.of(this.sampleSeason));
+
+        final Optional<SeasonDto> result = this.seasonService.getCurrentSeason();
+
+        assertThat(result).isPresent();
+        assertThat(result.get().id()).isEqualTo("2024-2025");
+        verify(this.seasonRepository).findAllByOrderByDateStartDesc();
+    }
+
+    @Test
     void createSeason_shouldSaveAndReturnDto() {
         when(this.seasonRepository.existsById("2024-2025")).thenReturn(false);
         when(this.seasonRepository.save(any(Season.class))).thenReturn(this.sampleSeason);

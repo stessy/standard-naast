@@ -37,6 +37,12 @@ public class MemberController {
         return ResponseEntity.ok(this.memberService.getNextMemberNumber());
     }
 
+    @GetMapping("/active-count")
+    @Operation(summary = "Obtenir le nombre de membres actifs (numéro de membre < 1000)")
+    public ResponseEntity<Long> getActiveMemberCount() {
+        return ResponseEntity.ok(this.memberService.countActiveMembers());
+    }
+
     @GetMapping("/by-number/{memberNumber}")
     @Operation(summary = "Obtenir un membre par son numéro de membre")
     public ResponseEntity<MemberDto> getMemberByMemberNumber(@PathVariable final Long memberNumber) {
@@ -45,7 +51,7 @@ public class MemberController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     @Operation(summary = "Obtenir les détails d'un membre par son ID")
     public ResponseEntity<MemberDto> getMemberById(@PathVariable final Long id) {
         return ResponseEntity.ok(this.memberService.getMemberById(id));
@@ -58,7 +64,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id:\\d+}")
     @Operation(summary = "Mettre à jour les informations d'un membre")
     public ResponseEntity<MemberDto> updateMember(
             @PathVariable final Long id,
@@ -66,7 +72,7 @@ public class MemberController {
         return ResponseEntity.ok(this.memberService.updateMember(id, dto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:\\d+}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Supprimer un membre")
     public void deleteMember(@PathVariable final Long id) {

@@ -174,4 +174,14 @@ class MemberServiceTest {
         assertThat(member.getMemberNumber()).isEqualTo(1L);
         verify(this.personRepository, atLeastOnce()).save(member);
     }
+
+    @Test
+    void countActiveMembers_shouldReturnCountOfMembersWithNumberLessThan1000() {
+        when(this.personRepository.countByMemberNumberLessThan(1000L)).thenReturn(42L);
+
+        final long count = this.memberService.countActiveMembers();
+
+        assertThat(count).isEqualTo(42L);
+        verify(this.personRepository).countByMemberNumberLessThan(1000L);
+    }
 }

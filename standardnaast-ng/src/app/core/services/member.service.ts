@@ -45,4 +45,8 @@ export class MemberService {
   getNextMemberNumber(): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/next-number`);
   }
+
+  getActiveMemberCount(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/active-count`);
+  }
 }

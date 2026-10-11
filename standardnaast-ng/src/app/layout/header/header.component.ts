@@ -79,9 +79,9 @@ export class HeaderComponent implements OnInit {
   userMenuItems: MenuItem[] = [];
 
   ngOnInit(): void {
-    if (!this.seasonService.selectedSeason()) {
-      this.seasonService.getCurrentSeason().subscribe({
-        error: () => {
+    this.seasonService.getCurrentSeason().subscribe({
+      error: () => {
+        if (!this.seasonService.selectedSeason()) {
           this.seasonService.getAllSeasons().subscribe({
             next: (seasons) => {
               if (seasons.length > 0) {
@@ -90,8 +90,8 @@ export class HeaderComponent implements OnInit {
             }
           });
         }
-      });
-    }
+      }
+    });
     this.initUserMenu();
   }
 

@@ -86,6 +86,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public long countActiveMembers() {
+        log.debug("Counting active members (memberNumber < 1000)");
+        return this.personRepository.countByMemberNumberLessThan(1000L);
+    }
+
+    @Override
     public Long getNextMemberNumber() {
         final Long max = this.personRepository.findMaxMemberNumber().orElse(0L);
         return max + 1;

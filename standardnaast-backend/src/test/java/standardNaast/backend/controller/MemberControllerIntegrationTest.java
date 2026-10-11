@@ -228,4 +228,14 @@ class MemberControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("105"));
     }
+
+    @Test
+    void getActiveMemberCount_shouldReturnActiveCount() throws Exception {
+        when(this.memberService.countActiveMembers()).thenReturn(42L);
+
+        this.mockMvc.perform(get("/api/members/active-count")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("42"));
+    }
 }

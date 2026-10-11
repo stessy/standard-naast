@@ -21,6 +21,8 @@ public interface MemberService {
 
     void deleteMember(Long id);
 
+    long countActiveMembers();
+
     Long getNextMemberNumber();
 
     void updateMemberNumberOnCotisationAdded(Long memberId);

@@ -16,6 +16,8 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     Optional<Person> findByMemberNumber(Long memberNumber);
 
+    long countByMemberNumberLessThan(Long threshold);
+
     @Query("SELECT MAX(p.memberNumber) FROM Person p WHERE p.memberNumber < 10000")
     Optional<Long> findMaxMemberNumber();
 
