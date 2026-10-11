@@ -36,12 +36,12 @@ import { Member } from '../../core/models/member.model';
   ],
   template: `
     <div class="cotisations-container flex flex-column gap-2">
-      <!-- Top Red Header Bar -->
-      <div class="top-red-bar flex-shrink-0 flex flex-wrap align-items-center justify-content-between px-3 py-2 border-round shadow-2 gap-2">
+      <!-- Top Header Card -->
+      <div class="surface-card px-3 py-2 border-round-xl border-1 border-200 shadow-1 flex-shrink-0 flex flex-wrap align-items-center justify-content-between gap-3">
         <div class="flex flex-wrap align-items-center gap-3">
           <!-- Saison Selector -->
           <div class="flex align-items-center gap-2">
-            <span class="text-white font-bold text-sm">Saison</span>
+            <label class="font-semibold text-sm text-700 white-space-nowrap">Saison :</label>
             <p-dropdown
               [options]="seasons"
               optionLabel="id"
@@ -49,45 +49,33 @@ import { Member } from '../../core/models/member.model';
               [(ngModel)]="selectedSeasonId"
               (onChange)="onSeasonFilterChange($event.value)"
               placeholder="Choisir..."
-              styleClass="p-inputtext-sm season-dropdown"
+              styleClass="p-inputtext-sm"
               [style]="{ 'min-width': '130px' }">
             </p-dropdown>
           </div>
 
           <!-- Payé -->
           <div class="flex align-items-center gap-2">
-            <span class="text-white font-bold text-sm">Payé</span>
-            <input
-              type="text"
-              pInputText
-              [value]="overview?.totalPaid ?? 0"
-              readonly
-              class="p-inputtext-sm stat-input font-bold"
-            />
+            <span class="font-semibold text-sm text-700">Payé :</span>
+            <span class="font-bold text-green-700 bg-green-50 px-2 py-1 border-round border-1 border-green-200 text-sm">
+              {{ overview?.totalPaid ?? 0 }}
+            </span>
           </div>
 
           <!-- Non Payé -->
           <div class="flex align-items-center gap-2">
-            <span class="text-white font-bold text-sm">Non Payé</span>
-            <input
-              type="text"
-              pInputText
-              [value]="overview?.totalUnpaid ?? 0"
-              readonly
-              class="p-inputtext-sm stat-input font-bold"
-            />
+            <span class="font-semibold text-sm text-700">Non Payé :</span>
+            <span class="font-bold text-red-700 bg-red-50 px-2 py-1 border-round border-1 border-red-200 text-sm">
+              {{ overview?.totalUnpaid ?? 0 }}
+            </span>
           </div>
 
           <!-- Total -->
           <div class="flex align-items-center gap-2">
-            <span class="text-white font-bold text-sm">Total</span>
-            <input
-              type="text"
-              pInputText
-              [value]="formattedTotalAmount"
-              readonly
-              class="p-inputtext-sm stat-input-wide font-bold"
-            />
+            <span class="font-semibold text-sm text-700">Total :</span>
+            <span class="font-bold text-900 bg-gray-100 px-2 py-1 border-round border-1 border-200 text-sm">
+              {{ formattedTotalAmount }}
+            </span>
           </div>
 
           <!-- Filtre Membre -->
@@ -99,7 +87,8 @@ import { Member } from '../../core/models/member.model';
                 pInputText
                 [(ngModel)]="searchTerm"
                 placeholder="Filtrer membre (nom, prénom)..."
-                class="p-inputtext-sm search-member-input"
+                class="p-inputtext-sm"
+                style="width: 210px"
               />
               <i
                 *ngIf="searchTerm"
@@ -118,7 +107,7 @@ import { Member } from '../../core/models/member.model';
             type="button"
             label="Impression cotisations"
             icon="pi pi-print"
-            class="p-button-outlined p-button-sm text-white border-1 border-white hover:bg-white hover:text-red-900 font-bold"
+            class="p-button-outlined p-button-secondary p-button-sm font-semibold"
             (click)="onPrintCotisations()"
             pTooltip="Imprimer le tableau des cotisations"
             tooltipPosition="bottom">
@@ -128,7 +117,7 @@ import { Member } from '../../core/models/member.model';
             type="button"
             label="Ajouter cotisation"
             icon="pi pi-plus"
-            class="p-button-outlined p-button-sm text-white border-1 border-white hover:bg-white hover:text-red-900 font-bold"
+            class="p-button-danger p-button-sm font-bold"
             pTooltip="Enregistrer une cotisation manuellement"
             tooltipPosition="bottom"
             (click)="openNewDialog()">
@@ -138,8 +127,8 @@ import { Member } from '../../core/models/member.model';
 
       <!-- Top Section (50% vertical space): Cotisations payées cartes membres envoyées -->
       <div class="top-table-container flex-1 flex flex-column min-h-0">
-        <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
-          <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300 flex-shrink-0">
+        <div class="table-section flex flex-column surface-card border-round-xl border-1 border-200 shadow-1 overflow-hidden h-full">
+          <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-200 flex-shrink-0">
             Cotisations payées cartes membres envoyées
           </div>
           <p-table
@@ -183,8 +172,8 @@ import { Member } from '../../core/models/member.model';
         <div class="grid m-0 w-full h-full p-0">
           <!-- Bottom Left: Cotisations payées cartes membres non envoyées -->
           <div class="col-12 md:col-6 p-0 pr-0 md:pr-1 h-full flex flex-column min-h-0">
-            <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
-              <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300 flex-shrink-0">
+            <div class="table-section flex flex-column surface-card border-round-xl border-1 border-200 shadow-1 overflow-hidden h-full">
+              <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-200 flex-shrink-0">
                 Cotisations payées cartes membres non envoyées
               </div>
               <p-table
@@ -240,8 +229,8 @@ import { Member } from '../../core/models/member.model';
 
           <!-- Bottom Right: Cotisations non payées -->
           <div class="col-12 md:col-6 p-0 pl-0 md:pl-1 mt-2 md:mt-0 h-full flex flex-column min-h-0">
-            <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
-              <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300 flex-shrink-0">
+            <div class="table-section flex flex-column surface-card border-round-xl border-1 border-200 shadow-1 overflow-hidden h-full">
+              <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-200 flex-shrink-0">
                 Cotisations non payées
               </div>
               <p-table
@@ -350,36 +339,6 @@ import { Member } from '../../core/models/member.model';
       overflow: hidden;
     }
 
-    .top-red-bar {
-      background-color: #8B0000;
-      color: #ffffff;
-      min-height: 48px;
-    }
-
-    .stat-input {
-      width: 70px;
-      text-align: center;
-      background-color: #ffffff !important;
-      color: #000000 !important;
-      opacity: 1 !important;
-      cursor: default;
-    }
-
-    .stat-input-wide {
-      width: 100px;
-      text-align: center;
-      background-color: #ffffff !important;
-      color: #000000 !important;
-      opacity: 1 !important;
-      cursor: default;
-    }
-
-    .search-member-input {
-      width: 220px;
-      background-color: #ffffff !important;
-      color: #000000 !important;
-    }
-
     .top-table-container,
     .bottom-tables-container {
       flex: 1 1 0;
@@ -388,14 +347,12 @@ import { Member } from '../../core/models/member.model';
 
     .table-section {
       background: #ffffff;
-      border: 1px solid #ced4da;
     }
 
     .table-header-title {
-      background: linear-gradient(to bottom, #f2f2f2, #e0e0e0);
-      color: #333333;
-      font-size: 0.9rem;
-      border-bottom: 1px solid #cccccc;
+      background: #f8f9fa;
+      color: #374151;
+      font-size: 0.875rem;
     }
 
     :host ::ng-deep .table-section p-table {
