@@ -54,8 +54,8 @@ public class TableauCotisations extends PdfPageEventHelper {
 	}
 
 	public String creationTableau() {
-		final Document pdfDocument = new Document(PageSize.A4.rotate(), -30F,
-				-30F, 10F, 10F);
+		final Document pdfDocument = new Document(PageSize.A4.rotate(), 10F,
+				10F, 10F, 10F);
 		FileOutputStream fo = null;
 		File pdfFile = null;
 		String pdfPath = null;
@@ -125,7 +125,7 @@ public class TableauCotisations extends PdfPageEventHelper {
 			pdfDocument.add(mainTable);
 			pdfDocument.close();
 			JOptionPane.showMessageDialog(null, "Le fichier des cotisations "
-					+ TableauCotisations.YEAR + " a été généré.");
+					+ TableauCotisations.YEAR + " a ï¿½tï¿½ gï¿½nï¿½rï¿½.");
 		} catch (final Exception fnfe) {
 			fnfe.printStackTrace();
 		}
@@ -212,9 +212,9 @@ public class TableauCotisations extends PdfPageEventHelper {
 		final Season latestSeason = seasonList.get(0);
 		seasonCalendar.setTime(latestSeason.getDateEnd());
 		final int seasonYear = seasonCalendar.get(Calendar.YEAR);
-		// Si l'année de la date d'aujourd'hui et égale Ã  l'année de la
+		// Si l'annï¿½e de la date d'aujourd'hui et ï¿½gale Ã  l'annï¿½e de la
 		// premiÃ¨re saison de la liste, qui correspond Ã  la
-		// derniÃ¨re saison en cours, alors les compteurs sont remis Ã  zéro.
+		// derniÃ¨re saison en cours, alors les compteurs sont remis Ã  zï¿½ro.
 		if (todayYear == seasonYear) {
 			for (final Personne member : personList) {
 				final PersonneCotisationModel personneCotisation = new PersonneCotisationModel();
@@ -226,7 +226,7 @@ public class TableauCotisations extends PdfPageEventHelper {
 				member.getPersonnesCotisations();
 				for (final PersonneCotisation memberCotisation : memberCotisationList) {
 					if (memberCotisation.getCotisation().getAnneeCotisation() == todayYear) {
-						// La cotisation a été payée
+						// La cotisation a ï¿½tï¿½ payï¿½e
 						personneCotisation.setPaied("P");
 						personneCotisation.setBonus(1);
 						final Date paymentDate = memberCotisation

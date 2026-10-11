@@ -154,7 +154,7 @@ public class CotisationPdfReportServiceImpl implements CotisationPdfReportServic
     }
 
     private byte[] buildPdfDocument(String seasonId, List<PersonCotisationRow> rows) {
-        Document pdfDocument = new Document(PageSize.A4.rotate(), -30F, -30F, 10F, 10F);
+        Document pdfDocument = new Document(PageSize.A4.rotate(), 10F, 10F, 10F, 10F);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         try {

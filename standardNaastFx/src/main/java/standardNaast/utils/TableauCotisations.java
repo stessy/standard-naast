@@ -49,7 +49,7 @@ public class TableauCotisations {
 	}
 
 	public String creationTableau() {
-		final Document pdfDocument = new Document(PageSize.A4.rotate(), -30F, -30F, 10F, 10F);
+		final Document pdfDocument = new Document(PageSize.A4.rotate(), 10F, 10F, 10F, 10F);
 		FileOutputStream fo = null;
 		File pdfFile = null;
 		String pdfPath = null;

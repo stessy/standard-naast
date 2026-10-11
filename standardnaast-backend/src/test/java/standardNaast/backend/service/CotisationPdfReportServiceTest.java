@@ -1,5 +1,7 @@
 package standardNaast.backend.service;
 
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,7 @@ import standardNaast.backend.repository.PersonCotisationRepository;
 import standardNaast.backend.repository.PersonRepository;
 import standardNaast.backend.repository.SeasonRepository;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -52,7 +55,7 @@ class CotisationPdfReportServiceTest {
     }
 
     @Test
-    void shouldGenerateCotisationsPdfForSpecificSeason() {
+    void shouldGenerateCotisationsPdfForSpecificSeason() throws IOException {
         Season season2024 = Season.builder()
                 .id("2024-2025")
                 .dateStart(LocalDate.of(2024, 7, 1))
@@ -91,6 +94,16 @@ class CotisationPdfReportServiceTest {
         // Check standard PDF file header (%PDF-)
         String header = new String(pdfBytes, 0, Math.min(pdfBytes.length, 5));
         assertThat(header).startsWith("%PDF");
+
+        PdfReader reader = new PdfReader(pdfBytes);
+        assertThat(reader.getNumberOfPages()).isGreaterThanOrEqualTo(1);
+        String text = PdfTextExtractor.getTextFromPage(reader, 1);
+        assertThat(text).contains("Cotisations Saison 2024-2025");
+        assertThat(text).contains("Witsel Axel");
+        assertThat(text).contains("Fellaini Marouane");
+        assertThat(text).contains("10");
+        assertThat(text).contains("28");
+        reader.close();
     }
 
     @Test
