@@ -9,6 +9,8 @@ import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { forkJoin } from 'rxjs';
 import { CotisationService } from '../../core/services/cotisation.service';
@@ -32,7 +34,9 @@ import { Member } from '../../core/models/member.model';
     DialogModule,
     CheckboxModule,
     TagModule,
-    TooltipModule
+    TooltipModule,
+    IconFieldModule,
+    InputIconModule
   ],
   template: `
     <div class="cotisations-container flex flex-column gap-2">
@@ -55,48 +59,44 @@ import { Member } from '../../core/models/member.model';
           </div>
 
           <!-- Payé -->
-          <div class="flex align-items-center gap-2">
-            <span class="font-semibold text-sm text-700">Payé :</span>
-            <span class="font-bold text-green-700 bg-green-50 px-2 py-1 border-round border-1 border-green-200 text-sm">
+          <div class="flex align-items-baseline gap-1">
+            <span class="font-medium text-sm text-600">Payé :</span>
+            <span class="font-bold text-green-600 text-base">
               {{ overview?.totalPaid ?? 0 }}
             </span>
           </div>
 
           <!-- Non Payé -->
-          <div class="flex align-items-center gap-2">
-            <span class="font-semibold text-sm text-700">Non Payé :</span>
-            <span class="font-bold text-red-700 bg-red-50 px-2 py-1 border-round border-1 border-red-200 text-sm">
+          <div class="flex align-items-baseline gap-1">
+            <span class="font-medium text-sm text-600">Non Payé :</span>
+            <span class="font-bold text-red-600 text-base">
               {{ overview?.totalUnpaid ?? 0 }}
             </span>
           </div>
 
           <!-- Total -->
-          <div class="flex align-items-center gap-2">
-            <span class="font-semibold text-sm text-700">Total :</span>
-            <span class="font-bold text-900 bg-gray-100 px-2 py-1 border-round border-1 border-200 text-sm">
+          <div class="flex align-items-baseline gap-1">
+            <span class="font-medium text-sm text-600">Total :</span>
+            <span class="font-bold text-900 text-base">
               {{ formattedTotalAmount }}
             </span>
           </div>
 
           <!-- Filtre Membre -->
-          <div class="flex align-items-center gap-2">
-            <span class="p-input-icon-left p-input-icon-right">
-              <i class="pi pi-search text-500"></i>
+          <div class="flex align-items-center">
+            <p-iconfield iconPosition="left">
+              <p-inputicon class="pi pi-search"></p-inputicon>
               <input
                 type="text"
                 pInputText
                 [(ngModel)]="searchTerm"
                 placeholder="Filtrer membre (nom, prénom)..."
-                class="p-inputtext-sm"
-                style="width: 210px"
+                class="p-inputtext-sm w-15rem"
               />
-              <i
-                *ngIf="searchTerm"
-                class="pi pi-times cursor-pointer text-500"
-                (click)="clearSearch()"
-                pTooltip="Effacer le filtre">
-              </i>
-            </span>
+              @if (searchTerm) {
+                <p-inputicon class="pi pi-times cursor-pointer text-500" (click)="clearSearch()" pTooltip="Effacer le filtre"></p-inputicon>
+              }
+            </p-iconfield>
           </div>
         </div>
 
