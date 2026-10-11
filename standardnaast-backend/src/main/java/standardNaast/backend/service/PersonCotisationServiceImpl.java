@@ -37,19 +37,22 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
     private final CotisationRepository cotisationRepository;
     private final PersonCotisationMapper personCotisationMapper;
     private final MemberService memberService;
+    private final CotisationPdfReportService cotisationPdfReportService;
 
     public PersonCotisationServiceImpl(PersonCotisationRepository personCotisationRepository,
                                       PersonRepository personRepository,
                                       SeasonRepository seasonRepository,
                                       CotisationRepository cotisationRepository,
                                       PersonCotisationMapper personCotisationMapper,
-                                      MemberService memberService) {
+                                      MemberService memberService,
+                                      CotisationPdfReportService cotisationPdfReportService) {
         this.personCotisationRepository = personCotisationRepository;
         this.personRepository = personRepository;
         this.seasonRepository = seasonRepository;
         this.cotisationRepository = cotisationRepository;
         this.personCotisationMapper = personCotisationMapper;
         this.memberService = memberService;
+        this.cotisationPdfReportService = cotisationPdfReportService;
     }
 
     @Override
@@ -249,6 +252,13 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
         log.debug("Searching member cotisations with filters - season: {}, person: {}, carteEnvoyee: {}", seasonId, personId, carteEnvoyee);
         return personCotisationRepository.searchCotisations(seasonId, personId, carteEnvoyee, pageable)
                 .map(personCotisationMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] generateCotisationsPdf(String seasonId) {
+        log.info("Delegating Cotisations PDF generation for season: {}", seasonId);
+        return cotisationPdfReportService.generateCotisationsPdf(seasonId);
     }
 
     @Override

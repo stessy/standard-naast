@@ -624,10 +624,51 @@ export class CotisationListComponent implements OnInit {
   }
 
   onPrintCotisations(): void {
+    const seasonId = this.selectedSeasonId || this.seasonService.selectedSeason()?.id;
+    if (!seasonId) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Attention',
+        detail: 'Veuillez sélectionner une saison pour imprimer les cotisations.'
+      });
+      return;
+    }
+
     this.messageService.add({
       severity: 'info',
       summary: 'Impression cotisations',
-      detail: 'Fonctionnalité disponible prochainement'
+      detail: 'Génération du tableau des cotisations en cours...'
+    });
+
+    this.cotisationService.downloadCotisationsPdf(seasonId).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const fileName = `Tableau_Cotisations_${seasonId}.pdf`;
+
+        // Download the PDF file
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Open in new tab for print/preview
+        window.open(url, '_blank');
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: `Tableau des cotisations (${fileName}) téléchargé avec succès`
+        });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'Échec de la génération du tableau des cotisations'
+        });
+      }
     });
   }
 

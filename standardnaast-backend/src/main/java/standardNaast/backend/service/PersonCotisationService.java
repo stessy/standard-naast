@@ -25,5 +25,7 @@ public interface PersonCotisationService {
 
     Page<PersonCotisationDto> searchCotisations(String seasonId, Long personId, Boolean carteEnvoyee, Pageable pageable);
 
+    byte[] generateCotisationsPdf(String seasonId);
+
     void deleteMemberCotisation(Long id);
 }

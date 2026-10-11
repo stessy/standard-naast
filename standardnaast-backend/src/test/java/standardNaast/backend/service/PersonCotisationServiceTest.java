@@ -48,6 +48,9 @@ class PersonCotisationServiceTest {
     @Mock
     private MemberService memberService;
 
+    @Mock
+    private CotisationPdfReportService cotisationPdfReportService;
+
     private PersonCotisationMapper personCotisationMapper = Mappers.getMapper(PersonCotisationMapper.class);
 
     private PersonCotisationService personCotisationService;
@@ -60,7 +63,8 @@ class PersonCotisationServiceTest {
                 seasonRepository,
                 cotisationRepository,
                 personCotisationMapper,
-                memberService
+                memberService,
+                cotisationPdfReportService
         );
     }
 
@@ -188,5 +192,16 @@ class PersonCotisationServiceTest {
         assertThat(cot1.isCarteMembreEnvoyee()).isTrue();
         assertThat(cot2.isCarteMembreEnvoyee()).isTrue();
         verify(personCotisationRepository).saveAll(List.of(cot1, cot2));
+    }
+
+    @Test
+    void shouldGenerateCotisationsPdf() {
+        byte[] samplePdf = new byte[]{1, 2, 3};
+        when(cotisationPdfReportService.generateCotisationsPdf("2024-2025")).thenReturn(samplePdf);
+
+        byte[] result = personCotisationService.generateCotisationsPdf("2024-2025");
+
+        assertThat(result).isEqualTo(samplePdf);
+        verify(cotisationPdfReportService).generateCotisationsPdf("2024-2025");
     }
 }

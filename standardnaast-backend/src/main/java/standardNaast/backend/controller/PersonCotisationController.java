@@ -108,6 +108,23 @@ public class PersonCotisationController {
         return ResponseEntity.ok(personCotisationService.getSeasonOverview(seasonId));
     }
 
+    @GetMapping(value = "/pdf", produces = org.springframework.http.MediaType.APPLICATION_PDF_VALUE)
+    @Operation(summary = "Export cotisations table as PDF", description = "Generates and returns the PDF cotisations table report for a given season")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cotisations table PDF report generated successfully"),
+            @ApiResponse(responseCode = "404", description = "Season not found")
+    })
+    public ResponseEntity<byte[]> getCotisationsPdf(
+            @Parameter(description = "Season ID (defaults to current season if omitted)", example = "2024-2025")
+            @RequestParam(required = false) String seasonId) {
+        byte[] pdf = personCotisationService.generateCotisationsPdf(seasonId);
+        String filename = "Tableau_Cotisations_" + (seasonId != null ? seasonId : "saison") + ".pdf";
+        return ResponseEntity.ok()
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+                .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
     @PostMapping("/card-sent/bulk")
     @Operation(summary = "Bulk update member card sent status", description = "Updates the membership card sent status for multiple cotisations")
     @ApiResponse(responseCode = "204", description = "Member card statuses updated successfully")

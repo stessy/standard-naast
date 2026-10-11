@@ -56,6 +56,17 @@ export class CotisationService {
     return this.http.get<CotisationsSeasonOverview>(`${this.memberCotisationsApiUrl}/overview/${seasonId}`);
   }
 
+  downloadCotisationsPdf(seasonId?: string): Observable<Blob> {
+    let params = new HttpParams();
+    if (seasonId) {
+      params = params.set('seasonId', seasonId);
+    }
+    return this.http.get(`${this.memberCotisationsApiUrl}/pdf`, {
+      params,
+      responseType: 'blob'
+    });
+  }
+
   registerMemberCotisation(dto: { memberId: number; seasonId: string; datePaiement?: string; carteMembreEnvoyee: boolean }): Observable<PersonCotisation> {
     return this.http.post<PersonCotisation>(this.memberCotisationsApiUrl, dto);
   }

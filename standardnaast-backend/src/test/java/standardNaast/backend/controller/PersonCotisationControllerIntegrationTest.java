@@ -49,7 +49,10 @@ class PersonCotisationControllerIntegrationTest {
         objectMapper.registerModule(new JavaTimeModule());
         mockMvc = MockMvcBuilders.standaloneSetup(personCotisationController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-                .setMessageConverters(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper))
+                .setMessageConverters(
+                        new org.springframework.http.converter.ByteArrayHttpMessageConverter(),
+                        new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter(this.objectMapper)
+                )
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }
@@ -176,5 +179,20 @@ class PersonCotisationControllerIntegrationTest {
                 .andExpect(status().isNoContent());
 
         verify(personCotisationService).deleteMemberCotisation(1001L);
+    }
+
+    @Test
+    void shouldGetCotisationsPdf() throws Exception {
+        byte[] pdfBytes = "%PDF-1.4 test".getBytes();
+        when(personCotisationService.generateCotisationsPdf("2024-2025")).thenReturn(pdfBytes);
+
+        mockMvc.perform(get("/api/member-cotisations/pdf")
+                        .param("seasonId", "2024-2025"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_PDF))
+                .andExpect(header().string("Content-Disposition", "inline; filename=\"Tableau_Cotisations_2024-2025.pdf\""))
+                .andExpect(content().bytes(pdfBytes));
+
+        verify(personCotisationService).generateCotisationsPdf("2024-2025");
     }
 }
