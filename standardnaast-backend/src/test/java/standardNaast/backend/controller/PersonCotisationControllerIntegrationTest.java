@@ -20,6 +20,7 @@ import standardNaast.backend.exception.GlobalExceptionHandler;
 import standardNaast.backend.exception.ResourceNotFoundException;
 import standardNaast.backend.service.PersonCotisationService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -122,7 +123,7 @@ class PersonCotisationControllerIntegrationTest {
     @Test
     void shouldGetSeasonOverview() throws Exception {
         CotisationsSeasonOverviewDto overview = new CotisationsSeasonOverviewDto(
-                "2024-2025", 10, 8, 2, Collections.emptyList(), Collections.emptyList(), Collections.emptyList()
+                "2024-2025", 10, 8, 2, BigDecimal.valueOf(15), BigDecimal.valueOf(120), Collections.emptyList(), Collections.emptyList(), Collections.emptyList()
         );
         when(personCotisationService.getSeasonOverview("2024-2025")).thenReturn(overview);
 
@@ -131,7 +132,9 @@ class PersonCotisationControllerIntegrationTest {
                 .andExpect(jsonPath("$.seasonId").value("2024-2025"))
                 .andExpect(jsonPath("$.totalMembers").value(10))
                 .andExpect(jsonPath("$.totalPaid").value(8))
-                .andExpect(jsonPath("$.totalUnpaid").value(2));
+                .andExpect(jsonPath("$.totalUnpaid").value(2))
+                .andExpect(jsonPath("$.cotisationAmount").value(15))
+                .andExpect(jsonPath("$.totalAmount").value(120));
     }
 
     @Test

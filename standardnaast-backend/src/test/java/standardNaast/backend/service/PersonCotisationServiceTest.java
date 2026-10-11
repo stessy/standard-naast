@@ -15,10 +15,12 @@ import standardNaast.backend.dto.PersonCotisationCreateDto;
 import standardNaast.backend.dto.PersonCotisationDto;
 import standardNaast.backend.exception.ResourceNotFoundException;
 import standardNaast.backend.mapper.PersonCotisationMapper;
+import standardNaast.backend.repository.CotisationRepository;
 import standardNaast.backend.repository.PersonCotisationRepository;
 import standardNaast.backend.repository.PersonRepository;
 import standardNaast.backend.repository.SeasonRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +43,9 @@ class PersonCotisationServiceTest {
     private SeasonRepository seasonRepository;
 
     @Mock
+    private CotisationRepository cotisationRepository;
+
+    @Mock
     private MemberService memberService;
 
     private PersonCotisationMapper personCotisationMapper = Mappers.getMapper(PersonCotisationMapper.class);
@@ -53,6 +58,7 @@ class PersonCotisationServiceTest {
                 personCotisationRepository,
                 personRepository,
                 seasonRepository,
+                cotisationRepository,
                 personCotisationMapper,
                 memberService
         );
@@ -109,14 +115,17 @@ class PersonCotisationServiceTest {
         Person member2 = Person.builder().id(2L).memberNumber(2L).firstname("Bob").name("Dupont").build();
         Person member3 = Person.builder().id(3L).memberNumber(3L).firstname("Charlie").name("Durand").build();
 
-        Season season = Season.builder().id("2024-2025").build();
+        Season currentSeason = Season.builder().id("2024-2025").dateStart(LocalDate.of(2024, 7, 1)).montantCotisation(BigDecimal.valueOf(15)).build();
+        Season previousSeason = Season.builder().id("2023-2024").dateStart(LocalDate.of(2023, 7, 1)).montantCotisation(BigDecimal.valueOf(15)).build();
 
-        PersonCotisation cot1 = PersonCotisation.builder().id(101L).person(member1).season(season).carteMembreEnvoyee(true).datePaiement(LocalDate.now()).build();
-        PersonCotisation cot2 = PersonCotisation.builder().id(102L).person(member2).season(season).carteMembreEnvoyee(false).datePaiement(LocalDate.now()).build();
+        PersonCotisation cot1 = PersonCotisation.builder().id(101L).person(member1).season(currentSeason).carteMembreEnvoyee(true).datePaiement(LocalDate.now()).build();
+        PersonCotisation cot2 = PersonCotisation.builder().id(102L).person(member2).season(currentSeason).carteMembreEnvoyee(false).datePaiement(LocalDate.now()).build();
+        PersonCotisation prevCot3 = PersonCotisation.builder().id(103L).person(member3).season(previousSeason).carteMembreEnvoyee(true).datePaiement(LocalDate.now().minusYears(1)).build();
 
-        when(seasonRepository.existsById("2024-2025")).thenReturn(true);
-        when(personRepository.findAll()).thenReturn(List.of(member1, member2, member3));
+        when(seasonRepository.findById("2024-2025")).thenReturn(Optional.of(currentSeason));
+        when(seasonRepository.findAllByOrderByDateStartDesc()).thenReturn(List.of(currentSeason, previousSeason));
         when(personCotisationRepository.findBySeasonId("2024-2025")).thenReturn(List.of(cot1, cot2));
+        when(personCotisationRepository.findBySeasonId("2023-2024")).thenReturn(List.of(prevCot3));
 
         CotisationsSeasonOverviewDto overview = personCotisationService.getSeasonOverview("2024-2025");
 
@@ -124,9 +133,12 @@ class PersonCotisationServiceTest {
         assertThat(overview.totalMembers()).isEqualTo(3);
         assertThat(overview.totalPaid()).isEqualTo(2);
         assertThat(overview.totalUnpaid()).isEqualTo(1);
+        assertThat(overview.cotisationAmount()).isEqualByComparingTo(BigDecimal.valueOf(15));
+        assertThat(overview.totalAmount()).isEqualByComparingTo(BigDecimal.valueOf(30));
         assertThat(overview.paidCardSent()).hasSize(1);
         assertThat(overview.paidCardNotSent()).hasSize(1);
         assertThat(overview.unpaidMembers()).hasSize(1);
+        assertThat(overview.unpaidMembers().get(0).memberId()).isEqualTo(3L);
     }
 
     @Test

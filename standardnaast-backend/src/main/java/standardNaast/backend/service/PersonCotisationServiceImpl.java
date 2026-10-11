@@ -16,10 +16,12 @@ import standardNaast.backend.dto.PersonCotisationCreateDto;
 import standardNaast.backend.dto.PersonCotisationDto;
 import standardNaast.backend.exception.ResourceNotFoundException;
 import standardNaast.backend.mapper.PersonCotisationMapper;
+import standardNaast.backend.repository.CotisationRepository;
 import standardNaast.backend.repository.PersonCotisationRepository;
 import standardNaast.backend.repository.PersonRepository;
 import standardNaast.backend.repository.SeasonRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -32,17 +34,20 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
     private final PersonCotisationRepository personCotisationRepository;
     private final PersonRepository personRepository;
     private final SeasonRepository seasonRepository;
+    private final CotisationRepository cotisationRepository;
     private final PersonCotisationMapper personCotisationMapper;
     private final MemberService memberService;
 
     public PersonCotisationServiceImpl(PersonCotisationRepository personCotisationRepository,
                                       PersonRepository personRepository,
                                       SeasonRepository seasonRepository,
+                                      CotisationRepository cotisationRepository,
                                       PersonCotisationMapper personCotisationMapper,
                                       MemberService memberService) {
         this.personCotisationRepository = personCotisationRepository;
         this.personRepository = personRepository;
         this.seasonRepository = seasonRepository;
+        this.cotisationRepository = cotisationRepository;
         this.personCotisationMapper = personCotisationMapper;
         this.memberService = memberService;
     }
@@ -114,27 +119,19 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
     @Transactional(readOnly = true)
     public CotisationsSeasonOverviewDto getSeasonOverview(String seasonId) {
         log.debug("Generating cotisation overview for season ID: {}", seasonId);
-        if (!seasonRepository.existsById(seasonId)) {
-            throw new ResourceNotFoundException("Saison non trouvée avec l'identifiant : " + seasonId);
-        }
+        Season currentSeason = seasonRepository.findById(seasonId)
+                .orElseThrow(() -> new ResourceNotFoundException("Saison non trouvée avec l'identifiant : " + seasonId));
 
-        List<Person> allPersons = personRepository.findAll();
         List<PersonCotisation> seasonCotisations = personCotisationRepository.findBySeasonId(seasonId);
 
         Map<Long, PersonCotisation> cotisationsByPersonId = new HashMap<>();
-        for (PersonCotisation pc : seasonCotisations) {
-            if (pc.getPerson() != null) {
-                cotisationsByPersonId.put(pc.getPerson().getId(), pc);
-            }
-        }
-
         List<MemberCotisationItemDto> paidCardSent = new ArrayList<>();
         List<MemberCotisationItemDto> paidCardNotSent = new ArrayList<>();
-        List<MemberCotisationItemDto> unpaidMembers = new ArrayList<>();
 
-        for (Person p : allPersons) {
-            PersonCotisation cot = cotisationsByPersonId.get(p.getId());
-            if (cot != null) {
+        for (PersonCotisation cot : seasonCotisations) {
+            Person p = cot.getPerson();
+            if (p != null) {
+                cotisationsByPersonId.put(p.getId(), cot);
                 MemberCotisationItemDto item = new MemberCotisationItemDto(
                         p.getId(),
                         p.getMemberNumber(),
@@ -151,26 +148,56 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
                 } else {
                     paidCardNotSent.add(item);
                 }
-            } else {
-                MemberCotisationItemDto item = new MemberCotisationItemDto(
-                        p.getId(),
-                        p.getMemberNumber(),
-                        p.getFirstname(),
-                        p.getName(),
-                        p.getEmail(),
-                        p.getMobilePhone(),
-                        null,
-                        null,
-                        false
-                );
-                unpaidMembers.add(item);
+            }
+        }
+
+        // Find previous season based on dateStart or fallback season id order
+        List<Season> allSeasonsSorted = seasonRepository.findAllByOrderByDateStartDesc();
+        Season previousSeason = null;
+        for (Season s : allSeasonsSorted) {
+            if (Objects.equals(s.getId(), currentSeason.getId())) {
+                continue;
+            }
+            if (currentSeason.getDateStart() != null && s.getDateStart() != null) {
+                if (s.getDateStart().isBefore(currentSeason.getDateStart())) {
+                    previousSeason = s;
+                    break;
+                }
+            } else if (s.getId().compareTo(currentSeason.getId()) < 0) {
+                previousSeason = s;
+                break;
+            }
+        }
+
+        // Unpaid members are those from previous season who haven't paid yet for current season
+        List<MemberCotisationItemDto> unpaidMembers = new ArrayList<>();
+        if (previousSeason != null) {
+            List<PersonCotisation> prevSeasonCotisations = personCotisationRepository.findBySeasonId(previousSeason.getId());
+            Set<Long> processedMemberIds = new HashSet<>();
+            for (PersonCotisation prevCot : prevSeasonCotisations) {
+                Person p = prevCot.getPerson();
+                if (p != null && !cotisationsByPersonId.containsKey(p.getId()) && processedMemberIds.add(p.getId())) {
+                    MemberCotisationItemDto item = new MemberCotisationItemDto(
+                            p.getId(),
+                            p.getMemberNumber(),
+                            p.getFirstname(),
+                            p.getName(),
+                            p.getEmail(),
+                            p.getMobilePhone(),
+                            null,
+                            null,
+                            false
+                    );
+                    unpaidMembers.add(item);
+                }
             }
         }
 
         // Sort by member number / name
         Comparator<MemberCotisationItemDto> comparator = Comparator
                 .comparing(MemberCotisationItemDto::memberNumber, Comparator.nullsLast(Comparator.naturalOrder()))
-                .thenComparing(MemberCotisationItemDto::name, Comparator.nullsLast(Comparator.naturalOrder()));
+                .thenComparing(MemberCotisationItemDto::name, Comparator.nullsLast(Comparator.naturalOrder()))
+                .thenComparing(MemberCotisationItemDto::firstName, Comparator.nullsLast(Comparator.naturalOrder()));
 
         paidCardSent.sort(comparator);
         paidCardNotSent.sort(comparator);
@@ -178,13 +205,28 @@ public class PersonCotisationServiceImpl implements PersonCotisationService {
 
         int totalPaid = paidCardSent.size() + paidCardNotSent.size();
         int totalUnpaid = unpaidMembers.size();
-        int totalMembers = allPersons.size();
+        int totalMembers = totalPaid + totalUnpaid;
+
+        BigDecimal cotisationAmount = currentSeason.getMontantCotisation() != null ? currentSeason.getMontantCotisation() : BigDecimal.ZERO;
+        if (BigDecimal.ZERO.compareTo(cotisationAmount) == 0 && currentSeason.getDateStart() != null) {
+            long year = currentSeason.getDateStart().getYear();
+            cotisationRepository.findById(year).ifPresent(c -> {
+                // do not mutate local inside lambda, but we can read it
+            });
+            var cotOpt = cotisationRepository.findById(year);
+            if (cotOpt.isPresent() && cotOpt.get().getMontantCotisation() != null) {
+                cotisationAmount = cotOpt.get().getMontantCotisation();
+            }
+        }
+        BigDecimal totalAmount = cotisationAmount.multiply(BigDecimal.valueOf(totalPaid));
 
         return new CotisationsSeasonOverviewDto(
                 seasonId,
                 totalMembers,
                 totalPaid,
                 totalUnpaid,
+                cotisationAmount,
+                totalAmount,
                 paidCardSent,
                 paidCardNotSent,
                 unpaidMembers

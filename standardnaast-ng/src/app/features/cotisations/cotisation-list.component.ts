@@ -1,19 +1,20 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Table, TableModule, TableLazyLoadEvent } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
-import { CardModule } from 'primeng/card';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { forkJoin } from 'rxjs';
 import { CotisationService } from '../../core/services/cotisation.service';
 import { SeasonService } from '../../core/services/season.service';
 import { MemberService } from '../../core/services/member.service';
-import { CotisationsSeasonOverview, PersonCotisation } from '../../core/models/cotisation.model';
+import { CotisationsSeasonOverview, MemberCotisationItem } from '../../core/models/cotisation.model';
 import { Season } from '../../core/models/season.model';
 import { Member } from '../../core/models/member.model';
 
@@ -31,108 +32,230 @@ import { Member } from '../../core/models/member.model';
     DialogModule,
     CheckboxModule,
     TagModule,
-    CardModule
+    TooltipModule
   ],
   template: `
-    <div class="cotisations-page flex flex-column gap-2">
-      <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
-        <div>
-          <h1 class="text-xl font-bold text-900 m-0">Gestion des Cotisations</h1>
-          <p class="text-500 text-xs m-0 mt-1">Suivi des cotisations annuelles, paiements et expéditions des cartes</p>
-        </div>
-        <div class="flex flex-wrap align-items-center gap-2">
+    <div class="cotisations-container flex flex-column gap-2 p-2">
+      <!-- Top Red Header Bar -->
+      <div class="top-red-bar flex flex-wrap align-items-center justify-content-between px-3 py-2 border-round shadow-2">
+        <div class="flex flex-wrap align-items-center gap-3">
+          <!-- Saison Selector -->
           <div class="flex align-items-center gap-2">
-            <label class="font-semibold text-sm text-700 white-space-nowrap">Saison :</label>
+            <span class="text-white font-bold text-sm">Saison</span>
             <p-dropdown
               [options]="seasons"
               optionLabel="id"
               optionValue="id"
               [(ngModel)]="selectedSeasonId"
               (onChange)="onSeasonFilterChange($event.value)"
-              placeholder="Toutes les saisons"
-              [showClear]="true"
-              styleClass="p-inputtext-sm"
-              [style]="{ 'min-width': '160px' }">
+              placeholder="Choisir..."
+              styleClass="p-inputtext-sm season-dropdown"
+              [style]="{ 'min-width': '140px' }">
             </p-dropdown>
           </div>
-          <button pButton label="Marquer cartes envoyées" icon="pi pi-send" class="p-button-outlined p-button-success p-button-sm font-bold" (click)="bulkMarkSent()" [disabled]="!selectedCotisations.length"></button>
-          <button pButton label="Enregistrer Cotisation" icon="pi pi-plus" class="p-button-danger p-button-sm font-bold" (click)="openNewDialog()"></button>
+
+          <!-- Payé -->
+          <div class="flex align-items-center gap-2">
+            <span class="text-white font-bold text-sm">Payé</span>
+            <input
+              type="text"
+              pInputText
+              [value]="overview?.totalPaid ?? 0"
+              readonly
+              class="p-inputtext-sm stat-input font-bold"
+            />
+          </div>
+
+          <!-- Non Payé -->
+          <div class="flex align-items-center gap-2">
+            <span class="text-white font-bold text-sm">Non Payé</span>
+            <input
+              type="text"
+              pInputText
+              [value]="overview?.totalUnpaid ?? 0"
+              readonly
+              class="p-inputtext-sm stat-input font-bold"
+            />
+          </div>
+
+          <!-- Total -->
+          <div class="flex align-items-center gap-2">
+            <span class="text-white font-bold text-sm">Total</span>
+            <input
+              type="text"
+              pInputText
+              [value]="formattedTotalAmount"
+              readonly
+              class="p-inputtext-sm stat-input-wide font-bold"
+            />
+          </div>
+        </div>
+
+        <!-- Top Action Buttons -->
+        <div class="flex align-items-center gap-2 mt-2 sm:mt-0">
+          <button
+            pButton
+            type="button"
+            label="Impression cotisations"
+            icon="pi pi-print"
+            class="p-button-secondary p-button-sm font-bold bg-white text-900 border-none shadow-1 hover:surface-200"
+            (click)="onPrintCotisations()"
+            pTooltip="Imprimer le tableau des cotisations"
+            tooltipPosition="bottom">
+          </button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-plus"
+            pTooltip="Enregistrer une cotisation manuellement"
+            tooltipPosition="bottom"
+            class="p-button-secondary p-button-sm bg-white text-900 border-none shadow-1 hover:surface-200"
+            (click)="openNewDialog()">
+          </button>
         </div>
       </div>
 
-      <!-- KPI Summary Cards -->
-      <div class="grid" *ngIf="overview">
-        <div class="col-12 sm:col-4">
-          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-sm">Total Membres</span>
-            <div class="text-900 font-bold text-2xl mt-1">{{ overview.totalMembers }}</div>
-          </div>
+      <!-- Top Table: Cotisations payées cartes membres envoyées -->
+      <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden">
+        <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300">
+          Cotisations payées cartes membres envoyées
         </div>
-        <div class="col-12 sm:col-4">
-          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-green-600 text-sm">Cotisations Payées</span>
-            <div class="text-green-600 font-bold text-2xl mt-1">{{ overview.totalPaid }}</div>
-          </div>
-        </div>
-        <div class="col-12 sm:col-4">
-          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-red-600 text-sm">En Attente de Paiement</span>
-            <div class="text-red-600 font-bold text-2xl mt-1">{{ overview.totalUnpaid }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
         <p-table
-          #table
-          [value]="cotisations"
-          [(selection)]="selectedCotisations"
-          [lazy]="true"
-          (onLazyLoad)="loadCotisations($event)"
-          [paginator]="true"
-          [rows]="pageSize"
-          [totalRecords]="totalElements"
+          [value]="overview?.paidCardSent || []"
           [loading]="loading"
-          sortField="memberNumber"
-          [sortOrder]="1"
-          [defaultSortOrder]="1"
-          responsiveLayout="stack"
-          styleClass="p-datatable-sm p-datatable-striped">
+          [scrollable]="true"
+          scrollHeight="18vh"
+          styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines compact-table">
           <ng-template pTemplate="header">
             <tr>
-              <th style="width: 4rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
-              <th pSortableColumn="memberNumber">N° Membre <p-sortIcon field="memberNumber"></p-sortIcon></th>
-              <th>Membre</th>
-              <th>Saison</th>
-              <th>Date de paiement</th>
-              <th>Carte envoyée</th>
-              <th class="text-center">Actions</th>
+              <th style="width: 20%">Numéro membre</th>
+              <th style="width: 30%">Nom</th>
+              <th style="width: 25%">Prénom</th>
+              <th style="width: 25%">Date paiement</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-cot>
             <tr>
-              <td><p-tableCheckbox [value]="cot"></p-tableCheckbox></td>
-              <td><span class="font-bold text-red-700">{{ cot.memberNumber || '-' }}</span></td>
-              <td><span class="font-semibold">{{ cot.firstName }} {{ cot.name || cot.lastName }}</span></td>
-              <td><span class="font-medium text-700">{{ cot.seasonId || selectedSeasonId || '-' }}</span></td>
-              <td>{{ (cot.paymentDate || cot.datePaiement) ? ((cot.paymentDate || cot.datePaiement) | date:'dd/MM/yyyy') : '-' }}</td>
-              <td>
-                <p-tag [severity]="(cot.cardSent ?? cot.carteMembreEnvoyee) ? 'success' : 'warning'" [value]="(cot.cardSent ?? cot.carteMembreEnvoyee) ? 'Envoyée' : 'Non envoyée'"></p-tag>
-              </td>
-              <td class="text-center">
-                <div class="flex justify-content-center gap-2">
-                  <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-sm p-button-danger" (click)="confirmDelete(cot)"></button>
-                </div>
-              </td>
+              <td>{{ cot.memberNumber }}</td>
+              <td>{{ cot.name }}</td>
+              <td>{{ cot.firstName }}</td>
+              <td>{{ cot.paymentDate }}</td>
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
-            <tr><td colspan="7" class="text-center p-3 text-500">Aucune cotisation enregistrée pour cette sélection.</td></tr>
+            <tr>
+              <td colspan="4" class="text-center p-3 text-500">No content in table</td>
+            </tr>
           </ng-template>
         </p-table>
       </div>
 
-      <!-- Cotisation Dialog -->
+      <!-- Bottom Two Tables (Split 50% / 50%) -->
+      <div class="bottom-tables-grid grid m-0">
+        <!-- Bottom Left: Cotisations payées cartes membres non envoyées -->
+        <div class="col-12 md:col-6 p-0 pr-0 md:pr-1">
+          <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
+            <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300">
+              Cotisations payées cartes membres non envoyées
+            </div>
+            <p-table
+              [value]="overview?.paidCardNotSent || []"
+              [(selection)]="selectedPaidNotSent"
+              dataKey="cotisationId"
+              [loading]="loading"
+              [scrollable]="true"
+              scrollHeight="22vh"
+              styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines compact-table">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                  <th style="width: 20%">Numéro membre</th>
+                  <th style="width: 30%">Nom</th>
+                  <th style="width: 25%">Prénom</th>
+                  <th style="width: 25%">Date paiement</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-cot>
+                <tr [pSelectableRow]="cot">
+                  <td><p-tableCheckbox [value]="cot"></p-tableCheckbox></td>
+                  <td>{{ cot.memberNumber }}</td>
+                  <td>{{ cot.name }}</td>
+                  <td>{{ cot.firstName }}</td>
+                  <td>{{ cot.paymentDate }}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="5" class="text-center p-3 text-500">No content in table</td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <!-- Bottom Action for Left Table -->
+            <div class="flex justify-content-end p-2 bg-50 border-top-1 border-200">
+              <button
+                pButton
+                type="button"
+                label="Cartes de membres envoyées"
+                class="p-button-secondary p-button-sm border-1 border-300"
+                [disabled]="!selectedPaidNotSent.length"
+                (click)="onMarkCardsSent()">
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Right: Cotisations non payées -->
+        <div class="col-12 md:col-6 p-0 pl-0 md:pl-1 mt-2 md:mt-0">
+          <div class="table-section flex flex-column surface-card border-round shadow-1 overflow-hidden h-full">
+            <div class="table-header-title text-center font-bold py-1 border-bottom-1 border-300">
+              Cotisations non payées
+            </div>
+            <p-table
+              [value]="overview?.unpaidMembers || []"
+              [(selection)]="selectedUnpaid"
+              dataKey="memberId"
+              [loading]="loading"
+              [scrollable]="true"
+              scrollHeight="22vh"
+              styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines compact-table">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                  <th style="width: 25%">Numéro membre</th>
+                  <th style="width: 40%">Nom</th>
+                  <th style="width: 35%">Prénom</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-cot>
+                <tr [pSelectableRow]="cot">
+                  <td><p-tableCheckbox [value]="cot"></p-tableCheckbox></td>
+                  <td>{{ cot.memberNumber }}</td>
+                  <td>{{ cot.name }}</td>
+                  <td>{{ cot.firstName }}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="4" class="text-center p-3 text-500">No content in table</td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <!-- Bottom Action for Right Table -->
+            <div class="flex justify-content-end p-2 bg-50 border-top-1 border-200">
+              <button
+                pButton
+                type="button"
+                label="Cotisation payée"
+                class="p-button-secondary p-button-sm border-1 border-300"
+                [disabled]="!selectedUnpaid.length"
+                (click)="onMarkCotisationPaid()">
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cotisation Dialog (for manual addition if needed) -->
       <p-dialog [(visible)]="dialogVisible" header="Enregistrer une cotisation" [modal]="true" [style]="{ width: '450px' }">
         <form [formGroup]="form" (ngSubmit)="saveCotisation()" class="flex flex-column gap-3 mt-2">
           <div class="flex flex-column gap-2">
@@ -178,11 +301,72 @@ import { Member } from '../../core/models/member.model';
         </form>
       </p-dialog>
     </div>
-  `
+  `,
+  styles: [`
+    .cotisations-container {
+      height: calc(100vh - 75px);
+      max-height: calc(100vh - 75px);
+      box-sizing: border-box;
+      overflow-y: hidden;
+    }
+
+    .top-red-bar {
+      background-color: #8B0000;
+      color: #ffffff;
+      min-height: 48px;
+    }
+
+    .stat-input {
+      width: 70px;
+      text-align: center;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      opacity: 1 !important;
+      cursor: default;
+    }
+
+    .stat-input-wide {
+      width: 100px;
+      text-align: center;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      opacity: 1 !important;
+      cursor: default;
+    }
+
+    .table-section {
+      background: #ffffff;
+      border: 1px solid #ced4da;
+    }
+
+    .table-header-title {
+      background: linear-gradient(to bottom, #f2f2f2, #e0e0e0);
+      color: #333333;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #cccccc;
+    }
+
+    :host ::ng-deep .compact-table .p-datatable-thead > tr > th {
+      background: #f8f9fa;
+      color: #495057;
+      padding: 0.4rem 0.5rem;
+      font-size: 0.85rem;
+      border-color: #dee2e6;
+    }
+
+    :host ::ng-deep .compact-table .p-datatable-tbody > tr > td {
+      padding: 0.35rem 0.5rem;
+      font-size: 0.85rem;
+      border-color: #dee2e6;
+    }
+
+    .bottom-tables-grid {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+  `]
 })
 export class CotisationListComponent implements OnInit {
-  @ViewChild('table') table?: Table;
-
   private cotisationService = inject(CotisationService);
   private seasonService = inject(SeasonService);
   private memberService = inject(MemberService);
@@ -191,13 +375,12 @@ export class CotisationListComponent implements OnInit {
   private fb = inject(FormBuilder);
 
   overview: CotisationsSeasonOverview | null = null;
-  cotisations: (PersonCotisation & { name?: string; paymentDate?: string; cardSent?: boolean; cotisationId?: number })[] = [];
-  selectedCotisations: (PersonCotisation & { name?: string; paymentDate?: string; cardSent?: boolean; cotisationId?: number })[] = [];
+  selectedPaidNotSent: MemberCotisationItem[] = [];
+  selectedUnpaid: MemberCotisationItem[] = [];
+
   members: (Member & { displayName?: string })[] = [];
   seasons: Season[] = [];
   selectedSeasonId: string | null = null;
-  totalElements = 0;
-  pageSize = 20;
   loading = false;
   dialogVisible = false;
 
@@ -208,6 +391,16 @@ export class CotisationListComponent implements OnInit {
     carteMembreEnvoyee: [false]
   });
 
+  get formattedTotalAmount(): string {
+    if (this.overview?.totalAmount != null) {
+      return `${this.overview.totalAmount} €`;
+    }
+    const totalPaid = this.overview?.totalPaid ?? 0;
+    const currentSeason = this.seasons.find(s => s.id === this.selectedSeasonId);
+    const amount = currentSeason?.montantCotisation ?? this.overview?.cotisationAmount ?? 0;
+    return `${totalPaid * amount} €`;
+  }
+
   ngOnInit(): void {
     const currentSeason = this.seasonService.selectedSeason()?.id || null;
     this.selectedSeasonId = currentSeason;
@@ -217,10 +410,8 @@ export class CotisationListComponent implements OnInit {
         this.seasons = seasons;
         if (!this.selectedSeasonId && seasons.length > 0) {
           this.selectedSeasonId = seasons[0].id;
-          if (this.table) {
-            this.table.reset();
-          }
         }
+        this.loadOverview();
       }
     });
 
@@ -232,14 +423,13 @@ export class CotisationListComponent implements OnInit {
         }));
       }
     });
-
-    this.loadOverview();
   }
 
   onSeasonFilterChange(seasonId: string | null): void {
     this.selectedSeasonId = seasonId;
-    this.selectedCotisations = [];
-    this.reload();
+    this.selectedPaidNotSent = [];
+    this.selectedUnpaid = [];
+    this.loadOverview();
   }
 
   loadOverview(): void {
@@ -249,55 +439,97 @@ export class CotisationListComponent implements OnInit {
       return;
     }
 
+    this.loading = true;
     this.cotisationService.getSeasonOverview(curSeason).subscribe({
       next: (data) => {
         this.overview = data;
+        this.loading = false;
       },
       error: () => {
         this.overview = null;
+        this.loading = false;
       }
     });
   }
 
-  loadCotisations(event: TableLazyLoadEvent): void {
+  onMarkCardsSent(): void {
+    if (!this.selectedPaidNotSent.length) return;
+
+    const ids = this.selectedPaidNotSent
+      .map(c => c.cotisationId)
+      .filter((id): id is number => id != null);
+
+    if (!ids.length) return;
+
+    this.cotisationService.bulkUpdateCardSent(ids, true).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: 'Cartes de membres marquées comme envoyées'
+        });
+        this.selectedPaidNotSent = [];
+        this.loadOverview();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'Impossible de mettre à jour le statut des cartes'
+        });
+      }
+    });
+  }
+
+  onMarkCotisationPaid(): void {
+    if (!this.selectedUnpaid.length || !this.selectedSeasonId) return;
+
+    const today = new Date().toISOString().split('T')[0];
+    const calls = this.selectedUnpaid.map(item =>
+      this.cotisationService.registerMemberCotisation({
+        memberId: item.memberId,
+        seasonId: this.selectedSeasonId!,
+        datePaiement: today,
+        carteMembreEnvoyee: false
+      })
+    );
+
     this.loading = true;
-    const page = event.first ? Math.floor(event.first / (event.rows || this.pageSize)) : 0;
-    const size = event.rows || this.pageSize;
-    const seasonToFilter = this.selectedSeasonId || undefined;
-
-    let sort = 'person.memberNumber,asc';
-    if (event.sortField) {
-      const field = Array.isArray(event.sortField) ? event.sortField[0] : event.sortField;
-      const order = event.sortOrder === -1 ? 'desc' : 'asc';
-      const backendField = field === 'memberNumber' ? 'person.memberNumber' : field;
-      sort = `${backendField},${order}`;
-    }
-
-    this.cotisationService.getMemberCotisations(seasonToFilter, undefined, undefined, page, size, sort).subscribe({
-      next: (res) => {
-        this.cotisations = res.content;
-        this.totalElements = res.totalElements;
-        this.loading = false;
+    forkJoin(calls).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: 'Cotisations enregistrées avec succès'
+        });
+        this.selectedUnpaid = [];
+        this.loadOverview();
       },
       error: () => {
         this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: "Erreur lors de l'enregistrement des cotisations"
+        });
       }
     });
   }
 
-  reload(): void {
-    this.loadOverview();
-    if (this.table) {
-      this.table.reset();
-    } else {
-      this.loadCotisations({ first: 0, rows: this.pageSize });
-    }
+  onPrintCotisations(): void {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Impression cotisations',
+      detail: 'Fonctionnalité disponible prochainement'
+    });
   }
 
   openNewDialog(): void {
     const curSeason = this.selectedSeasonId || this.seasonService.selectedSeason()?.id || (this.seasons.length > 0 ? this.seasons[0].id : '');
+    const today = new Date().toISOString().split('T')[0];
     this.form.reset({
       seasonId: curSeason,
+      datePaiement: today,
       carteMembreEnvoyee: false
     });
     this.dialogVisible = true;
@@ -313,54 +545,10 @@ export class CotisationListComponent implements OnInit {
       next: () => {
         this.dialogVisible = false;
         this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Cotisation enregistrée' });
-        this.reload();
+        this.loadOverview();
       },
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "Impossible d'enregistrer la cotisation" });
-      }
-    });
-  }
-
-  bulkMarkSent(): void {
-    const ids = this.selectedCotisations
-      .map(c => c.cotisationId || c.id)
-      .filter(id => id != null) as number[];
-    if (!ids.length) return;
-
-    this.cotisationService.bulkUpdateCardSent(ids, true).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Cartes marquées comme envoyées' });
-        this.selectedCotisations = [];
-        this.reload();
-      },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Impossible de mettre à jour le statut des cartes' });
-      }
-    });
-  }
-
-  confirmDelete(cot: any): void {
-    const cotId = cot.cotisationId || cot.id;
-    const memberName = `${cot.firstName || ''} ${cot.name || cot.lastName || ''}`.trim();
-    this.confirmationService.confirm({
-      message: `Supprimer la cotisation pour ${memberName || 'ce membre'} ?`,
-      header: 'Suppression de la cotisation',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Oui',
-      rejectLabel: 'Non',
-      acceptButtonStyleClass: 'p-button-danger',
-      rejectButtonStyleClass: 'p-button-text',
-      accept: () => {
-        if (!cotId) return;
-        this.cotisationService.deleteMemberCotisation(cotId).subscribe({
-          next: () => {
-            this.messageService.add({ severity: 'success', summary: 'Supprimé', detail: 'Cotisation supprimée' });
-            this.reload();
-          },
-          error: () => {
-            this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Impossible de supprimer la cotisation' });
-          }
-        });
       }
     });
   }

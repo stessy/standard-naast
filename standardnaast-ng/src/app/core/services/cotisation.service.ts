@@ -62,7 +62,7 @@ export class CotisationService {
 
   bulkUpdateCardSent(ids: number[], carteMembreEnvoyee: boolean): Observable<void> {
     return this.http.post<void>(`${this.memberCotisationsApiUrl}/card-sent/bulk`, {
-      personCotisationIds: ids,
+      cotisationIds: ids,
       carteMembreEnvoyee
     });
   }

@@ -2,6 +2,7 @@ package standardNaast.backend.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,6 +19,12 @@ public record CotisationsSeasonOverviewDto(
 
         @Schema(description = "Number of unpaid cotisations")
         int totalUnpaid,
+
+        @Schema(description = "Cotisation amount for this season")
+        BigDecimal cotisationAmount,
+
+        @Schema(description = "Total amount collected for this season")
+        BigDecimal totalAmount,
 
         @Schema(description = "List of paid cotisations with member card sent")
         List<MemberCotisationItemDto> paidCardSent,
