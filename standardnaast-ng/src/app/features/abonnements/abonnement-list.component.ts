@@ -4,16 +4,13 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Table, TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
-import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
-import { TagModule } from 'primeng/tag';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AbonnementService } from '../../core/services/abonnement.service';
 import { SeasonService } from '../../core/services/season.service';
 import { MemberService } from '../../core/services/member.service';
-import { Abonnement, AbonnementCreateUpdate, AbonnementStatus, AbonnementPrice } from '../../core/models/abonnement.model';
+import { Abonnement, AbonnementCreateUpdate } from '../../core/models/abonnement.model';
 import { Season } from '../../core/models/season.model';
 import { Member } from '../../core/models/member.model';
 
@@ -27,18 +24,15 @@ import { Member } from '../../core/models/member.model';
     TableModule,
     ButtonModule,
     InputTextModule,
-    InputNumberModule,
     DropdownModule,
-    CheckboxModule,
-    DialogModule,
-    TagModule
+    DialogModule
   ],
   template: `
     <div class="abonnements-page flex flex-column gap-2">
       <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
         <div>
           <h1 class="text-xl font-bold text-900 m-0">Gestion des Abonnements</h1>
-          <p class="text-500 text-xs m-0 mt-1">Suivi des commandes, réceptions et distributions d'abonnements</p>
+          <p class="text-500 text-xs m-0 mt-1">Gestion des abonnements des membres par saison</p>
         </div>
         <div class="flex flex-wrap align-items-center gap-2">
           <div class="flex align-items-center gap-2">
@@ -79,10 +73,9 @@ import { Member } from '../../core/models/member.model';
               <th pSortableColumn="memberNumber">N° Membre <p-sortIcon field="memberNumber"></p-sortIcon></th>
               <th>Membre</th>
               <th>Saison</th>
-              <th>Bloc / Rang / Place</th>
-              <th>Montant</th>
-              <th>Payé</th>
-              <th>Statut</th>
+              <th>Bloc</th>
+              <th>Rang</th>
+              <th>Place</th>
               <th class="text-center">Actions</th>
             </tr>
           </ng-template>
@@ -91,14 +84,9 @@ import { Member } from '../../core/models/member.model';
               <td><span class="font-bold text-red-700">{{ abo.memberNumber || abo.personMemberNumber || '-' }}</span></td>
               <td><span class="font-semibold">{{ abo.personFirstName }} {{ abo.personName }}</span></td>
               <td><span class="font-medium text-700">{{ abo.seasonId }}</span></td>
-              <td>{{ (abo.bloc || abo.abonnementPrice?.bloc || '-') }} / {{ abo.rang || '-' }} / {{ abo.place || '-' }}</td>
-              <td>{{ (abo.acompte != null ? abo.acompte : abo.montantPaye) | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
-              <td>
-                <p-tag [severity]="abo.paye ? 'success' : 'danger'" [value]="abo.paye ? 'Oui' : 'Non'"></p-tag>
-              </td>
-              <td>
-                <p-tag [severity]="getStatusSeverity(abo.abonnementStatus || abo.status)" [value]="abo.abonnementStatus || abo.status"></p-tag>
-              </td>
+              <td>{{ abo.bloc || abo.abonnementPrice?.bloc || '-' }}</td>
+              <td>{{ abo.rang || '-' }}</td>
+              <td>{{ abo.place || '-' }}</td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-2">
                   <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm p-button-warning" (click)="openEditDialog(abo)"></button>
@@ -109,14 +97,14 @@ import { Member } from '../../core/models/member.model';
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="8" class="text-center p-3 text-500">Aucun abonnement trouvé pour cette sélection.</td>
+              <td colspan="7" class="text-center p-3 text-500">Aucun abonnement trouvé pour cette sélection.</td>
             </tr>
           </ng-template>
         </p-table>
       </div>
 
       <!-- Abonnement Dialog -->
-      <p-dialog [(visible)]="dialogVisible" [header]="isEditMode ? 'Modifier l\\'abonnement' : 'Nouvel abonnement'" [modal]="true" [style]="{ width: '600px' }">
+      <p-dialog [(visible)]="dialogVisible" [header]="isEditMode ? 'Modifier l\\'abonnement' : 'Nouvel abonnement'" [modal]="true" [style]="{ width: '500px' }">
         <form [formGroup]="form" (ngSubmit)="saveAbonnement()" class="flex flex-column gap-3 mt-2">
           <div class="grid">
             <div class="col-12 md:col-6 flex flex-column gap-2">
@@ -129,6 +117,7 @@ import { Member } from '../../core/models/member.model';
                 [filter]="true"
                 filterBy="name,firstname,displayName"
                 placeholder="Choisir un membre"
+                (onChange)="onDialogMemberChange($event.value)"
                 [style]="{ width: '100%' }">
               </p-dropdown>
             </div>
@@ -139,27 +128,20 @@ import { Member } from '../../core/models/member.model';
                 optionLabel="id"
                 optionValue="id"
                 formControlName="seasonId"
-                placeholder="Choisir une saison"
-                (onChange)="onDialogSeasonChange($event.value)">
+                placeholder="Choisir une saison">
               </p-dropdown>
             </div>
           </div>
 
-          <div class="grid">
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Tarif Abonnement *</label>
-              <p-dropdown
-                [options]="priceOptions"
-                optionLabel="label"
-                optionValue="value"
-                formControlName="abonnementPriceId"
-                placeholder="Choisir un tarif">
-              </p-dropdown>
-            </div>
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Statut</label>
-              <p-dropdown [options]="statusOptions" formControlName="status"></p-dropdown>
-            </div>
+          <div class="flex flex-column gap-2">
+            <label class="font-semibold text-sm">Bloc *</label>
+            <p-dropdown
+              [options]="availableBlocs"
+              formControlName="bloc"
+              [filter]="true"
+              placeholder="Choisir un bloc"
+              [style]="{ width: '100%' }">
+            </p-dropdown>
           </div>
 
           <div class="grid">
@@ -171,22 +153,6 @@ import { Member } from '../../core/models/member.model';
               <label class="font-semibold text-sm">Place</label>
               <input type="text" pInputText formControlName="place" />
             </div>
-          </div>
-
-          <div class="grid">
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Montant Payé (€)</label>
-              <p-inputNumber formControlName="montantPaye" mode="currency" currency="EUR" locale="fr-FR"></p-inputNumber>
-            </div>
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Réduction (€)</label>
-              <p-inputNumber formControlName="reduction" mode="currency" currency="EUR" locale="fr-FR"></p-inputNumber>
-            </div>
-          </div>
-
-          <div class="flex align-items-center gap-2 mt-2">
-            <p-checkbox formControlName="paye" [binary]="true" inputId="paye"></p-checkbox>
-            <label for="paye" class="text-sm font-medium">Abonnement payé</label>
           </div>
 
           <div class="flex justify-content-end gap-2 mt-4">
@@ -211,9 +177,8 @@ export class AbonnementListComponent implements OnInit {
   abonnements: Abonnement[] = [];
   members: (Member & { displayName?: string })[] = [];
   seasons: Season[] = [];
+  availableBlocs: string[] = [];
   selectedSeasonId: string | null = null;
-  prices: AbonnementPrice[] = [];
-  priceOptions: { label: string; value: number }[] = [];
   totalElements = 0;
   pageSize = 20;
   loading = false;
@@ -221,23 +186,12 @@ export class AbonnementListComponent implements OnInit {
   isEditMode = false;
   selectedAbonnementId: number | null = null;
 
-  statusOptions = [
-    { label: 'Nouveau', value: AbonnementStatus.NEW },
-    { label: 'Commandé', value: AbonnementStatus.ORDERED },
-    { label: 'Reçu', value: AbonnementStatus.RECEIVED },
-    { label: 'Distribué', value: AbonnementStatus.DISTRIBUTED }
-  ];
-
   form: FormGroup = this.fb.group({
     personId: [null, Validators.required],
     seasonId: ['', Validators.required],
-    abonnementPriceId: [null, Validators.required],
+    bloc: ['', Validators.required],
     rang: [''],
-    place: [''],
-    montantPaye: [0],
-    reduction: [0],
-    paye: [false],
-    status: [AbonnementStatus.NEW]
+    place: ['']
   });
 
   ngOnInit(): void {
@@ -263,6 +217,15 @@ export class AbonnementListComponent implements OnInit {
           displayName: `${m.name} ${m.firstname}`.trim()
         }));
       }
+    });
+
+    this.loadAvailableBlocs();
+  }
+
+  loadAvailableBlocs(): void {
+    this.abonnementService.getAvailableBlocs().subscribe({
+      next: (blocs) => (this.availableBlocs = blocs),
+      error: () => (this.availableBlocs = [])
     });
   }
 
@@ -299,45 +262,19 @@ export class AbonnementListComponent implements OnInit {
     });
   }
 
-  onDialogSeasonChange(seasonId: string): void {
-    if (seasonId) {
-      this.loadPricesForSeason(seasonId);
-    } else {
-      this.prices = [];
-      this.priceOptions = [];
-      this.form.patchValue({ abonnementPriceId: null });
-    }
-  }
-
-  loadPricesForSeason(seasonId: string, preselectedPriceId?: number): void {
-    this.abonnementService.getPricesBySeason(seasonId).subscribe({
-      next: (prices) => {
-        this.prices = prices;
-        this.priceOptions = prices.map(p => ({
-          label: `${p.bloc || '-'} - ${p.personType || ''} (${p.price != null ? p.price + ' €' : '-'})`,
-          value: p.id
-        }));
-        if (preselectedPriceId) {
-          this.form.patchValue({ abonnementPriceId: preselectedPriceId });
-        } else if (prices.length > 0 && !this.form.get('abonnementPriceId')?.value) {
-          this.form.patchValue({ abonnementPriceId: prices[0].id });
+  onDialogMemberChange(memberId: number): void {
+    if (!memberId || this.isEditMode) return;
+    this.abonnementService.getLatestAbonnementByMember(memberId).subscribe({
+      next: (latestAbo) => {
+        if (latestAbo) {
+          this.form.patchValue({
+            bloc: latestAbo.bloc || latestAbo.abonnementPrice?.bloc || '',
+            rang: latestAbo.rang || '',
+            place: latestAbo.place || ''
+          });
         }
-      },
-      error: () => {
-        this.prices = [];
-        this.priceOptions = [];
       }
     });
-  }
-
-  getStatusSeverity(status: AbonnementStatus): string {
-    switch (status) {
-      case AbonnementStatus.NEW: return 'info';
-      case AbonnementStatus.ORDERED: return 'warning';
-      case AbonnementStatus.RECEIVED: return 'primary';
-      case AbonnementStatus.DISTRIBUTED: return 'success';
-      default: return 'secondary';
-    }
   }
 
   openNewDialog(): void {
@@ -345,17 +282,12 @@ export class AbonnementListComponent implements OnInit {
     this.selectedAbonnementId = null;
     const seasonId = this.selectedSeasonId || this.seasonService.selectedSeason()?.id || (this.seasons.length > 0 ? this.seasons[0].id : '');
     this.form.reset({
+      personId: null,
       seasonId: seasonId,
-      paye: false,
-      status: AbonnementStatus.NEW,
-      montantPaye: 0,
-      reduction: 0
+      bloc: '',
+      rang: '',
+      place: ''
     });
-    if (seasonId) {
-      this.loadPricesForSeason(seasonId);
-    } else {
-      this.priceOptions = [];
-    }
     this.dialogVisible = true;
   }
 
@@ -363,23 +295,13 @@ export class AbonnementListComponent implements OnInit {
     this.isEditMode = true;
     this.selectedAbonnementId = abo.id;
     const seasonId = abo.seasonId || this.selectedSeasonId || '';
-    const priceId = abo.abonnementPrice?.id;
     this.form.patchValue({
       personId: abo.memberId || abo.personId,
       seasonId: seasonId,
-      abonnementPriceId: priceId,
-      rang: abo.rang,
-      place: abo.place,
-      montantPaye: abo.montantPaye,
-      reduction: abo.reduction,
-      paye: abo.paye,
-      status: abo.abonnementStatus || abo.status || AbonnementStatus.NEW
+      bloc: abo.bloc || abo.abonnementPrice?.bloc || '',
+      rang: abo.rang || '',
+      place: abo.place || ''
     });
-    if (seasonId) {
-      this.loadPricesForSeason(seasonId, priceId);
-    } else {
-      this.priceOptions = [];
-    }
     this.dialogVisible = true;
   }
 
@@ -427,7 +349,7 @@ export class AbonnementListComponent implements OnInit {
       accept: () => {
         this.abonnementService.deleteAbonnement(abo.id).subscribe({
           next: () => {
-            this.messageService.add({ severity: 'success', summary: 'Supprimé', detail: 'Abonnement supprimé' });
+            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Abonnement supprimé' });
             this.loadAbonnements({ first: 0, rows: this.pageSize });
           },
           error: () => {

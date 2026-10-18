@@ -177,8 +177,6 @@ import { Season } from '../../core/models/season.model';
                   <th>Bloc</th>
                   <th>Rang</th>
                   <th>Place</th>
-                  <th>Réduc (€)</th>
-                  <th>Statut</th>
                   <th class="text-center" style="width: 3rem"></th>
                 </tr>
               </ng-template>
@@ -188,10 +186,6 @@ import { Season } from '../../core/models/season.model';
                   <td>{{ abo.bloc || abo.abonnementPrice?.bloc || '-' }}</td>
                   <td>{{ abo.rang || '-' }}</td>
                   <td>{{ abo.place || '-' }}</td>
-                  <td>{{ (abo.reduction != null ? abo.reduction : 0) | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
-                  <td>
-                    <p-tag [severity]="getStatusSeverity(abo.abonnementStatus || abo.status)" [value]="abo.abonnementStatus || abo.status"></p-tag>
-                  </td>
                   <td class="text-center">
                     <button
                       pButton
@@ -206,7 +200,7 @@ import { Season } from '../../core/models/season.model';
               </ng-template>
               <ng-template pTemplate="emptymessage">
                 <tr>
-                  <td colspan="7" class="text-center p-3 text-500">Aucun abonnement pour ce membre.</td>
+                  <td colspan="5" class="text-center p-3 text-500">Aucun abonnement pour ce membre.</td>
                 </tr>
               </ng-template>
             </p-table>
@@ -288,32 +282,25 @@ import { Season } from '../../core/models/season.model';
         [dismissableMask]="true"
         [style]="{ width: '600px' }">
         <form [formGroup]="abonnementForm" (ngSubmit)="saveAbonnement()" class="flex flex-column gap-3 mt-2">
-          <div class="grid">
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Saison *</label>
-              <p-dropdown
-                [options]="seasons"
-                optionLabel="id"
-                optionValue="id"
-                formControlName="seasonId"
-                placeholder="Sélectionner une saison"
-                (onChange)="onAbonnementSeasonChange($event.value)">
-              </p-dropdown>
-            </div>
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Statut</label>
-              <p-dropdown [options]="statusOptions" formControlName="status"></p-dropdown>
-            </div>
+          <div class="flex flex-column gap-2">
+            <label class="font-semibold text-sm">Saison *</label>
+            <p-dropdown
+              [options]="seasons"
+              optionLabel="id"
+              optionValue="id"
+              formControlName="seasonId"
+              placeholder="Sélectionner une saison">
+            </p-dropdown>
           </div>
 
           <div class="flex flex-column gap-2">
-            <label class="font-semibold text-sm">Tarif Abonnement *</label>
+            <label class="font-semibold text-sm">Bloc *</label>
             <p-dropdown
-              [options]="priceOptions"
-              optionLabel="label"
-              optionValue="value"
-              formControlName="abonnementPriceId"
-              placeholder="Choisir un tarif">
+              [options]="availableBlocs"
+              formControlName="bloc"
+              [filter]="true"
+              placeholder="Choisir un bloc"
+              [style]="{ width: '100%' }">
             </p-dropdown>
           </div>
 
@@ -326,22 +313,6 @@ import { Season } from '../../core/models/season.model';
               <label class="font-semibold text-sm">Place</label>
               <input type="text" pInputText formControlName="place" />
             </div>
-          </div>
-
-          <div class="grid">
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Montant Payé (€)</label>
-              <p-inputNumber formControlName="montantPaye" mode="currency" currency="EUR" locale="fr-FR"></p-inputNumber>
-            </div>
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Réduction (€)</label>
-              <p-inputNumber formControlName="reduction" mode="currency" currency="EUR" locale="fr-FR"></p-inputNumber>
-            </div>
-          </div>
-
-          <div class="flex align-items-center gap-2 mt-2">
-            <p-checkbox formControlName="paye" [binary]="true" inputId="detail_abo_paye"></p-checkbox>
-            <label for="detail_abo_paye" class="text-sm font-medium">Abonnement entièrement payé</label>
           </div>
 
           <div class="flex justify-content-end gap-2 mt-4">
@@ -422,8 +393,7 @@ export class MemberDetailComponent implements OnInit {
   cotisations: PersonCotisation[] = [];
   abonnements: Abonnement[] = [];
   seasons: Season[] = [];
-  prices: AbonnementPrice[] = [];
-  priceOptions: { label: string; value: number }[] = [];
+  availableBlocs: string[] = [];
 
   savingMember = false;
   savingAbonnement = false;
@@ -431,13 +401,6 @@ export class MemberDetailComponent implements OnInit {
 
   addAbonnementDialogVisible = false;
   addCotisationDialogVisible = false;
-
-  statusOptions = [
-    { label: 'Nouveau', value: AbonnementStatus.NEW },
-    { label: 'Commandé', value: AbonnementStatus.ORDERED },
-    { label: 'Reçu', value: AbonnementStatus.RECEIVED },
-    { label: 'Distribué', value: AbonnementStatus.DISTRIBUTED }
-  ];
 
   memberForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -457,13 +420,9 @@ export class MemberDetailComponent implements OnInit {
 
   abonnementForm: FormGroup = this.fb.group({
     seasonId: ['', Validators.required],
-    abonnementPriceId: [null, Validators.required],
+    bloc: ['', Validators.required],
     rang: [''],
-    place: [''],
-    montantPaye: [0],
-    reduction: [0],
-    paye: [false],
-    status: [AbonnementStatus.NEW]
+    place: ['']
   });
 
   cotisationForm: FormGroup = this.fb.group({
@@ -476,6 +435,11 @@ export class MemberDetailComponent implements OnInit {
     this.seasonService.getAllSeasons().subscribe({
       next: (data) => (this.seasons = data),
       error: () => (this.seasons = [])
+    });
+
+    this.abonnementService.getAvailableBlocs().subscribe({
+      next: (data) => (this.availableBlocs = data),
+      error: () => (this.availableBlocs = [])
     });
 
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -557,54 +521,16 @@ export class MemberDetailComponent implements OnInit {
     if (!this.member) return;
 
     const curSeason = this.seasonService.selectedSeason()?.id || (this.seasons.length > 0 ? this.seasons[0].id : '');
+    const latestAbo = this.abonnements && this.abonnements.length > 0 ? this.abonnements[0] : null;
 
     this.abonnementForm.reset({
       seasonId: curSeason,
-      abonnementPriceId: null,
-      rang: '',
-      place: '',
-      montantPaye: 0,
-      reduction: 0,
-      paye: false,
-      status: AbonnementStatus.NEW
+      bloc: latestAbo ? (latestAbo.bloc || latestAbo.abonnementPrice?.bloc || '') : '',
+      rang: latestAbo?.rang || '',
+      place: latestAbo?.place || ''
     });
-
-    if (curSeason) {
-      this.loadPricesForSeason(curSeason);
-    } else {
-      this.prices = [];
-      this.priceOptions = [];
-    }
 
     this.addAbonnementDialogVisible = true;
-  }
-
-  onAbonnementSeasonChange(seasonId: string): void {
-    if (seasonId) {
-      this.loadPricesForSeason(seasonId);
-    } else {
-      this.prices = [];
-      this.priceOptions = [];
-    }
-  }
-
-  loadPricesForSeason(seasonId: string): void {
-    this.abonnementService.getPricesBySeason(seasonId).subscribe({
-      next: (prices) => {
-        this.prices = prices;
-        this.priceOptions = prices.map(p => ({
-          label: `${p.bloc || ''} - ${p.personType || ''} (${p.price} €)`,
-          value: p.id
-        }));
-        if (prices.length > 0 && !this.abonnementForm.get('abonnementPriceId')?.value) {
-          this.abonnementForm.patchValue({ abonnementPriceId: prices[0].id });
-        }
-      },
-      error: () => {
-        this.prices = [];
-        this.priceOptions = [];
-      }
-    });
   }
 
   saveAbonnement(): void {

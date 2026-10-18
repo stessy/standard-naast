@@ -113,6 +113,41 @@ class AbonnementControllerIntegrationTest {
     }
 
     @Test
+    void getLatestAbonnementByMember_whenExists_shouldReturnLatest() throws Exception {
+        when(this.abonnementService.getLatestAbonnementByMember(100L))
+                .thenReturn(this.sampleAbonnementDto);
+
+        this.mockMvc.perform(get("/api/abonnements/member/{memberId}/latest", 100L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.bloc", is("T1")));
+    }
+
+    @Test
+    void getLatestAbonnementByMember_whenNotFound_shouldReturnNoContent() throws Exception {
+        when(this.abonnementService.getLatestAbonnementByMember(100L))
+                .thenReturn(null);
+
+        this.mockMvc.perform(get("/api/abonnements/member/{memberId}/latest", 100L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void getAvailableBlocs_shouldReturnBlocsList() throws Exception {
+        when(this.abonnementService.getAvailableBlocs())
+                .thenReturn(List.of("A1", "B1", "T1"));
+
+        this.mockMvc.perform(get("/api/abonnements/blocs")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]", is("A1")))
+                .andExpect(jsonPath("$[1]", is("B1")))
+                .andExpect(jsonPath("$[2]", is("T1")));
+    }
+
+    @Test
     void getAbonnementById_whenExists_shouldReturnAbonnement() throws Exception {
         when(this.abonnementService.getAbonnementById(1L)).thenReturn(this.sampleAbonnementDto);
 

@@ -18,6 +18,10 @@ public interface AbonnementService {
 
     List<AbonnementDto> getAbonnementsByMember(Long memberId);
 
+    AbonnementDto getLatestAbonnementByMember(Long memberId);
+
+    List<String> getAvailableBlocs();
+
     List<AbonnementDto> getPurchasableAbonnements(String seasonId);
 
     AbonnementDto getAbonnementById(Long id);

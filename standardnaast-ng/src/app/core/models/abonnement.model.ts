@@ -48,11 +48,12 @@ export interface Abonnement {
 export interface AbonnementCreateUpdate {
   personId: number;
   seasonId: string;
-  abonnementPriceId: number;
+  bloc?: string;
   rang?: string;
   place?: string;
-  montantPaye: number;
-  paye: boolean;
-  reduction: number;
-  status: AbonnementStatus;
+  abonnementPriceId?: number;
+  montantPaye?: number;
+  paye?: boolean;
+  reduction?: number;
+  status?: AbonnementStatus;
 }

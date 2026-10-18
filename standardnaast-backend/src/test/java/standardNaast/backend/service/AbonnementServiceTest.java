@@ -53,6 +53,9 @@ class AbonnementServiceTest {
     @Mock
     private AbonnementPricesRepository abonnementPricesRepository;
 
+    @Mock
+    private standardNaast.backend.repository.BlocRepository blocRepository;
+
     @Spy
     private AbonnementMapper abonnementMapper = Mappers.getMapper(AbonnementMapper.class);
 
@@ -161,6 +164,36 @@ class AbonnementServiceTest {
 
         assertThat(result).hasSize(1);
         assertThat(result.getFirst().personName()).isEqualTo("Hazard");
+    }
+
+    @Test
+    void getLatestAbonnementByMember_whenExists_shouldReturnLatest() {
+        when(this.abonnementRepository.findByPersonne_IdOrderBySeason_DateStartDesc(100L)).thenReturn(List.of(this.sampleAbonnement));
+
+        AbonnementDto result = this.abonnementService.getLatestAbonnementByMember(100L);
+
+        assertThat(result).isNotNull();
+        assertThat(result.bloc()).isEqualTo("T1");
+        assertThat(result.rang()).isEqualTo("A");
+        assertThat(result.place()).isEqualTo("12");
+    }
+
+    @Test
+    void getLatestAbonnementByMember_whenNone_shouldReturnNull() {
+        when(this.abonnementRepository.findByPersonne_IdOrderBySeason_DateStartDesc(100L)).thenReturn(List.of());
+
+        AbonnementDto result = this.abonnementService.getLatestAbonnementByMember(100L);
+
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void getAvailableBlocs_shouldReturnBlocs() {
+        when(this.blocRepository.findStandardBlocValues()).thenReturn(List.of("A1", "B1", "T1"));
+
+        List<String> result = this.abonnementService.getAvailableBlocs();
+
+        assertThat(result).containsExactly("A1", "B1", "T1");
     }
 
     @Test

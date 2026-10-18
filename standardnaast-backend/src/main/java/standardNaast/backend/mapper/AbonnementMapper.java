@@ -18,6 +18,7 @@ public interface AbonnementMapper {
     @Mapping(target = "personFirstName", source = "personne.firstname")
     @Mapping(target = "personName", source = "personne.name")
     @Mapping(target = "memberNumber", source = "personne.memberNumber")
+    @Mapping(target = "bloc", expression = "java(abonnement.getBloc() != null ? abonnement.getBloc() : (abonnement.getAbonnementPrice() != null ? abonnement.getAbonnementPrice().getBloc() : null))")
     AbonnementDto toDto(Abonnement abonnement);
 
     List<AbonnementDto> toDtoList(List<Abonnement> abonnements);

@@ -8,6 +8,7 @@ import standardNaast.backend.domain.Abonnement;
 import standardNaast.backend.domain.AbonnementPrices;
 import standardNaast.backend.domain.AbonnementStatus;
 import standardNaast.backend.domain.Person;
+import standardNaast.backend.domain.Prices;
 import standardNaast.backend.domain.Season;
 import standardNaast.backend.dto.AbonnementCreateUpdateDto;
 import standardNaast.backend.dto.AbonnementDto;
@@ -15,10 +16,12 @@ import standardNaast.backend.exception.ResourceNotFoundException;
 import standardNaast.backend.mapper.AbonnementMapper;
 import standardNaast.backend.repository.AbonnementPricesRepository;
 import standardNaast.backend.repository.AbonnementRepository;
+import standardNaast.backend.repository.BlocRepository;
 import standardNaast.backend.repository.PersonRepository;
 import standardNaast.backend.repository.SeasonRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -28,6 +31,7 @@ public class AbonnementServiceImpl implements AbonnementService {
     private final SeasonRepository seasonRepository;
     private final PersonRepository personRepository;
     private final AbonnementPricesRepository abonnementPricesRepository;
+    private final BlocRepository blocRepository;
     private final AbonnementMapper abonnementMapper;
 
     public AbonnementServiceImpl(
@@ -35,12 +39,14 @@ public class AbonnementServiceImpl implements AbonnementService {
             SeasonRepository seasonRepository,
             PersonRepository personRepository,
             AbonnementPricesRepository abonnementPricesRepository,
+            BlocRepository blocRepository,
             AbonnementMapper abonnementMapper
     ) {
         this.abonnementRepository = abonnementRepository;
         this.seasonRepository = seasonRepository;
         this.personRepository = personRepository;
         this.abonnementPricesRepository = abonnementPricesRepository;
+        this.blocRepository = blocRepository;
         this.abonnementMapper = abonnementMapper;
     }
 
@@ -80,6 +86,34 @@ public class AbonnementServiceImpl implements AbonnementService {
 
     @Override
     @Transactional(readOnly = true)
+    public AbonnementDto getLatestAbonnementByMember(Long memberId) {
+        List<Abonnement> list = abonnementRepository.findByPersonne_IdOrderBySeason_DateStartDesc(memberId);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return abonnementMapper.toDto(list.getFirst());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> getAvailableBlocs() {
+        List<String> blocs = blocRepository.findStandardBlocValues();
+        if (blocs.isEmpty()) {
+            blocs = blocRepository.findAllBlocValues();
+        }
+        if (blocs.isEmpty()) {
+            blocs = abonnementPricesRepository.findAll().stream()
+                    .map(Prices::getBloc)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .sorted()
+                    .toList();
+        }
+        return blocs;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<AbonnementDto> getPurchasableAbonnements(String seasonId) {
         Season season = seasonRepository.findById(seasonId)
                 .orElseThrow(() -> new ResourceNotFoundException("Season not found with id: " + seasonId));
@@ -105,11 +139,17 @@ public class AbonnementServiceImpl implements AbonnementService {
         Abonnement entity = abonnementMapper.toEntity(dto);
         entity.setSeason(season);
         entity.setPersonne(person);
+        if (dto.bloc() != null && !dto.bloc().isBlank()) {
+            entity.setBloc(dto.bloc());
+        }
 
         if (dto.abonnementPriceId() != null) {
             AbonnementPrices price = abonnementPricesRepository.findById(dto.abonnementPriceId())
                     .orElseThrow(() -> new ResourceNotFoundException("Abonnement price not found with id: " + dto.abonnementPriceId()));
             entity.setAbonnementPrice(price);
+            if (entity.getBloc() == null) {
+                entity.setBloc(price.getBloc());
+            }
         }
 
         if (entity.getAbonnementStatus() == null) {
@@ -134,6 +174,9 @@ public class AbonnementServiceImpl implements AbonnementService {
         abonnementMapper.updateEntityFromDto(dto, entity);
         entity.setSeason(season);
         entity.setPersonne(person);
+        if (dto.bloc() != null && !dto.bloc().isBlank()) {
+            entity.setBloc(dto.bloc());
+        }
 
         if (dto.abonnementPriceId() != null) {
             AbonnementPrices price = abonnementPricesRepository.findById(dto.abonnementPriceId())

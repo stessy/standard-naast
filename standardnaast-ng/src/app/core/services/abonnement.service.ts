@@ -31,6 +31,14 @@ export class AbonnementService {
     return this.http.get<Abonnement[]>(`${this.apiUrl}/member/${memberId}`);
   }
 
+  getLatestAbonnementByMember(memberId: number): Observable<Abonnement> {
+    return this.http.get<Abonnement>(`${this.apiUrl}/member/${memberId}/latest`);
+  }
+
+  getAvailableBlocs(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/blocs`);
+  }
+
   getAbonnementById(id: number): Observable<Abonnement> {
     return this.http.get<Abonnement>(`${this.apiUrl}/${id}`);
   }

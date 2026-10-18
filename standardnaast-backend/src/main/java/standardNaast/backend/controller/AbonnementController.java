@@ -60,6 +60,22 @@ public class AbonnementController {
         return ResponseEntity.ok(abonnementService.getAbonnementsByMember(memberId));
     }
 
+    @GetMapping("/member/{memberId}/latest")
+    @Operation(summary = "Get the latest abonnement for a specific member")
+    public ResponseEntity<AbonnementDto> getLatestAbonnementByMember(@PathVariable Long memberId) {
+        AbonnementDto latest = abonnementService.getLatestAbonnementByMember(memberId);
+        if (latest == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(latest);
+    }
+
+    @GetMapping("/blocs")
+    @Operation(summary = "Get list of available blocs")
+    public ResponseEntity<List<String>> getAvailableBlocs() {
+        return ResponseEntity.ok(abonnementService.getAvailableBlocs());
+    }
+
     @GetMapping("/purchasable")
     @Operation(summary = "Get purchasable abonnements for a season")
     public ResponseEntity<List<AbonnementDto>> getPurchasableAbonnements(@RequestParam String seasonId) {
