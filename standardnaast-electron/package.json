@@ -49,24 +49,26 @@
         "filter": [
           "**/*"
         ]
-      },
-      {
-        "from": "resources/jre/${os}-${arch}",
-        "to": "jre",
-        "filter": [
-          "**/*"
-        ]
-      },
-      {
-        "from": "resources/postgres/${os}-${arch}",
-        "to": "postgres",
-        "filter": [
-          "**/*"
-        ]
       }
     ],
     "mac": {
       "category": "public.app-category.sports",
+      "extraResources": [
+        {
+          "from": "resources/jre/darwin-${arch}",
+          "to": "jre",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "resources/postgres/darwin-${arch}",
+          "to": "postgres",
+          "filter": [
+            "**/*"
+          ]
+        }
+      ],
       "target": [
         {
           "target": "dmg",
@@ -99,6 +101,22 @@
       }
     },
     "win": {
+      "extraResources": [
+        {
+          "from": "resources/jre/win32-${arch}",
+          "to": "jre",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "resources/postgres/win32-${arch}",
+          "to": "postgres",
+          "filter": [
+            "**/*"
+          ]
+        }
+      ],
       "target": [
         {
           "target": "nsis",

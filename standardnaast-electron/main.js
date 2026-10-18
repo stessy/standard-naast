@@ -90,8 +90,16 @@ async function startPostgreSQL() {
   const pgCtlCmd = hasEmbeddedPostgres ? pgCtlExecutable : 'pg_ctl';
   const initdbCmd = hasEmbeddedPostgres ? initdbExecutable : 'initdb';
 
-  if (!fs.existsSync(pgDataDir)) {
+  const pgVersionFile = path.join(pgDataDir, 'PG_VERSION');
+  if (!fs.existsSync(pgDataDir) || !fs.existsSync(pgVersionFile)) {
     updateSplashStatus('Initialisation de la base de données...');
+    if (fs.existsSync(pgDataDir)) {
+      try {
+        fs.rmSync(pgDataDir, { recursive: true, force: true });
+      } catch (err) {
+        console.warn('Impossible de nettoyer le dossier pgData non initialisé :', err);
+      }
+    }
     fs.mkdirSync(pgDataDir, { recursive: true });
     try {
       execSync(`"${initdbCmd}" -D "${pgDataDir}" -U standardnaast -A trust --encoding=UTF8`, {
@@ -100,6 +108,7 @@ async function startPostgreSQL() {
       console.log('Cluster PostgreSQL initialisé avec succès.');
     } catch (e) {
       console.error('Erreur lors de initdb:', e);
+      throw new Error(`Échec de l'initialisation du cluster PostgreSQL : ${e.message}`);
     }
   }
 
