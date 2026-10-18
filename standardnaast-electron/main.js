@@ -35,9 +35,13 @@ const jarFile = isPackaged
   : path.join(__dirname, '..', 'standardnaast-backend', 'target', 'standardnaast-backend-1.0.0-SNAPSHOT.jar');
 
 // Chemins PostgreSQL
-const pgBinDir = isPackaged
-  ? path.join(resourcesDir, 'postgres', 'bin')
-  : path.join(resourcesDir, 'postgres', platformDir, 'bin');
+const pgRootDir = isPackaged
+  ? path.join(resourcesDir, 'postgres')
+  : path.join(resourcesDir, 'postgres', platformDir);
+
+const pgBinDir = path.join(pgRootDir, 'bin');
+const pgLibDir = path.join(pgRootDir, 'lib');
+const pgShareDir = path.join(pgRootDir, 'share', 'postgresql');
 
 const pgDataDir = path.join(app.getPath('userData'), 'postgres_data');
 const backupsDir = path.join(app.getPath('userData'), 'backups');
@@ -47,6 +51,26 @@ const initdbExecutable = process.platform === 'win32' ? path.join(pgBinDir, 'ini
 const pgCtlExecutable = process.platform === 'win32' ? path.join(pgBinDir, 'pg_ctl.exe') : path.join(pgBinDir, 'pg_ctl');
 const createdbExecutable = process.platform === 'win32' ? path.join(pgBinDir, 'createdb.exe') : path.join(pgBinDir, 'createdb');
 const pgDumpExecutable = process.platform === 'win32' ? path.join(pgBinDir, 'pg_dump.exe') : path.join(pgBinDir, 'pg_dump');
+
+function getPostgresEnv() {
+  const env = Object.assign({}, process.env);
+  const pathSep = process.platform === 'win32' ? ';' : ':';
+
+  if (fs.existsSync(pgBinDir)) {
+    env.PATH = `${pgBinDir}${pathSep}${env.PATH || ''}`;
+  }
+
+  if (fs.existsSync(pgLibDir)) {
+    env.DYLD_LIBRARY_PATH = `${pgLibDir}${pathSep}${env.DYLD_LIBRARY_PATH || ''}`;
+    env.LD_LIBRARY_PATH = `${pgLibDir}${pathSep}${env.LD_LIBRARY_PATH || ''}`;
+  }
+
+  if (fs.existsSync(pgShareDir)) {
+    env.PGSYSCONFDIR = path.join(pgRootDir, 'etc');
+  }
+
+  return env;
+}
 
 // Fonction pour envoyer un message à la fenêtre splash
 function updateSplashStatus(message) {
@@ -103,7 +127,8 @@ async function startPostgreSQL() {
     fs.mkdirSync(pgDataDir, { recursive: true });
     try {
       execSync(`"${initdbCmd}" -D "${pgDataDir}" -U standardnaast -A trust --encoding=UTF8`, {
-        windowsHide: true
+        windowsHide: true,
+        env: getPostgresEnv()
       });
       console.log('Cluster PostgreSQL initialisé avec succès.');
     } catch (e) {
@@ -117,7 +142,8 @@ async function startPostgreSQL() {
 
   try {
     execSync(`"${pgCtlCmd}" -D "${pgDataDir}" -l "${logFile}" -o "-p ${PG_PORT}" start`, {
-      windowsHide: true
+      windowsHide: true,
+      env: getPostgresEnv()
     });
     console.log('PostgreSQL démarré.');
   } catch (e) {
@@ -138,7 +164,8 @@ async function startPostgreSQL() {
     const createdbCmd = hasEmbeddedPostgres ? createdbExecutable : 'createdb';
     execSync(`"${createdbCmd}" -p ${PG_PORT} -U standardnaast standardnaast`, {
       windowsHide: true,
-      stdio: 'ignore'
+      stdio: 'ignore',
+      env: getPostgresEnv()
     });
     console.log("Base 'standardnaast' créée ou déjà existante.");
   } catch (e) {
@@ -547,7 +574,8 @@ function backupDatabase() {
 
     execSync(`"${pgDumpCmd}" -p ${PG_PORT} -U standardnaast -d standardnaast -F p -f "${backupFile}"`, {
       windowsHide: true,
-      stdio: 'pipe'
+      stdio: 'pipe',
+      env: getPostgresEnv()
     });
 
     console.log(`[Backup]: Sauvegarde effectuée avec succès : ${backupFile}`);
@@ -587,7 +615,10 @@ function cleanOldBackups(maxKeep = 15) {
 }
 
 // 6. Arrêt des services
+let isStoppingServices = false;
 function stopServices() {
+  if (isStoppingServices) return;
+  isStoppingServices = true;
   isQuitting = true;
   console.log('Arrêt des sous-processus...');
 
@@ -601,18 +632,21 @@ function stopServices() {
     }
   }
 
-  // Sauvegarde de la base de données pendant que PostgreSQL est encore en cours d'exécution
-  backupDatabase();
-
   const hasEmbeddedPostgres = fs.existsSync(pgCtlExecutable);
   const pgCtlCmd = hasEmbeddedPostgres ? pgCtlExecutable : 'pg_ctl';
 
   if (fs.existsSync(pgDataDir)) {
     try {
+      // Sauvegarde de la base de données uniquement si PostgreSQL était actif
+      backupDatabase();
+    } catch (e) {}
+
+    try {
       console.log('Arrêt de PostgreSQL...');
       execSync(`"${pgCtlCmd}" -D "${pgDataDir}" stop -m fast`, {
         windowsHide: true,
-        stdio: 'ignore'
+        stdio: 'ignore',
+        env: getPostgresEnv()
       });
     } catch (e) {
       // Ignorer si déjà arrêté
