@@ -1,20 +1,20 @@
 {
   "jre": {
-    "version": "21",
+    "version": "25",
     "distribution": "corretto",
     "targets": {
       "darwin-arm64": {
-        "url": "https://corretto.aws/downloads/latest/amazon-corretto-21-aarch64-macos-jdk.tar.gz",
+        "url": "https://corretto.aws/downloads/latest/amazon-corretto-25-aarch64-macos-jdk.tar.gz",
         "format": "tar.gz",
         "subDir": "Contents/Home"
       },
       "darwin-x64": {
-        "url": "https://corretto.aws/downloads/latest/amazon-corretto-21-x64-macos-jdk.tar.gz",
+        "url": "https://corretto.aws/downloads/latest/amazon-corretto-25-x64-macos-jdk.tar.gz",
         "format": "tar.gz",
         "subDir": "Contents/Home"
       },
       "win32-x64": {
-        "url": "https://corretto.aws/downloads/latest/amazon-corretto-21-x64-windows-jdk.zip",
+        "url": "https://corretto.aws/downloads/latest/amazon-corretto-25-x64-windows-jdk.zip",
         "format": "zip"
       }
     }

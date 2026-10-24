@@ -1,5 +1,5 @@
 # Stage 1: Build application
-FROM maven:3.9.9-eclipse-temurin-21-alpine AS builder
+FROM maven:3.9.12-eclipse-temurin-25-alpine AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ COPY standardnaast-backend/src ./standardnaast-backend/src
 RUN mvn -pl standardnaast-backend clean package -DskipTests
 
 # Stage 2: Runtime image
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 
 WORKDIR /app
 

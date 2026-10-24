@@ -6,6 +6,7 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportRuntimeHints;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Configuration
+@ImportRuntimeHints(LiquibaseRuntimeHints.class)
 public class LiquibaseConfig {
 
     @Value("${spring.liquibase.change-log:db/changelog/db.changelog-master.xml}")

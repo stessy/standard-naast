@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -128,6 +129,7 @@ public class H2ToPostgresMigrator {
         int decimalDigits;
         boolean nullable;
         String defaultValue;
+        String postgresType;
     }
 
     private static class ForeignKeyInfo {
@@ -199,6 +201,7 @@ public class H2ToPostgresMigrator {
                 tablePrimaryKeys.put(tableName, extractPrimaryKeys(h2Conn, tableName));
                 foreignKeys.addAll(extractForeignKeys(h2Conn, tableName));
             }
+            alignForeignKeyTypes(tableColumns, foreignKeys);
 
             // 3. Création des tables dans PostgreSQL (sans contraintes FK pour l'insertion ordonnée)
             notify(config, "Création des tables dans PostgreSQL...", 20.0);
@@ -401,7 +404,7 @@ public class H2ToPostgresMigrator {
 
     private void createSequencesInPostgres(Connection pgConn, List<SequenceInfo> sequences, MigrationResult result) throws SQLException {
         for (SequenceInfo seq : sequences) {
-            String checkSql = "SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = lower(?)";
+            String checkSql = "SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = ?";
             boolean exists = false;
             try (PreparedStatement ps = pgConn.prepareStatement(checkSql)) {
                 ps.setString(1, seq.name);
@@ -466,6 +469,9 @@ public class H2ToPostgresMigrator {
     }
 
     private String mapH2TypeToPostgres(ColumnInfo col) {
+        if (col.postgresType != null) {
+            return col.postgresType;
+        }
         String typeUpper = col.typeName != null ? col.typeName.toUpperCase() : "";
 
         if (typeUpper.contains("VARCHAR") || typeUpper.contains("CHARACTER VARYING")) {
@@ -499,10 +505,11 @@ public class H2ToPostgresMigrator {
             return "TIMESTAMP";
         }
         if (typeUpper.contains("DECIMAL") || typeUpper.contains("NUMERIC") || col.dataType == Types.NUMERIC || col.dataType == Types.DECIMAL) {
-            if (col.columnSize > 0) {
-                return "NUMERIC(" + col.columnSize + ", " + Math.max(0, col.decimalDigits) + ")";
+            // H2 supports precisions above PostgreSQL's explicit NUMERIC limit.
+            if (col.columnSize > 1000 || col.columnSize <= 0) {
+                return "NUMERIC";
             }
-            return "NUMERIC(19, 2)";
+            return "NUMERIC(" + col.columnSize + ", " + Math.max(0, col.decimalDigits) + ")";
         }
         if (typeUpper.contains("DOUBLE") || typeUpper.contains("FLOAT8") || col.dataType == Types.DOUBLE || col.dataType == Types.FLOAT) {
             return "DOUBLE PRECISION";
@@ -515,6 +522,41 @@ public class H2ToPostgresMigrator {
         }
 
         return "VARCHAR(255)";
+    }
+
+    private void alignForeignKeyTypes(Map<String, List<ColumnInfo>> tableColumns, List<ForeignKeyInfo> foreignKeys) {
+        boolean changed;
+        do {
+            changed = false;
+            for (ForeignKeyInfo fk : foreignKeys) {
+                ColumnInfo child = findColumn(tableColumns, fk.fkTableName, fk.fkColumnName);
+                ColumnInfo parent = findColumn(tableColumns, fk.pkTableName, fk.pkColumnName);
+                String childType = mapH2TypeToPostgres(child);
+                String parentType = mapH2TypeToPostgres(parent);
+                if (!childType.equals(parentType)
+                        && isExactNumericType(childType) && isExactNumericType(parentType)
+                        && (childType.startsWith("NUMERIC") || parentType.startsWith("NUMERIC"))) {
+                    // Widen both ends without rounding decimals or overflowing integer keys.
+                    child.postgresType = "NUMERIC";
+                    parent.postgresType = "NUMERIC";
+                    changed = true;
+                }
+            }
+        } while (changed);
+    }
+
+    private ColumnInfo findColumn(Map<String, List<ColumnInfo>> tableColumns, String table, String column) {
+        for (ColumnInfo candidate : tableColumns.getOrDefault(table, List.of())) {
+            if (candidate.name.equals(column)) {
+                return candidate;
+            }
+        }
+        throw new IllegalStateException("Colonne de clé étrangère introuvable: " + table + "." + column);
+    }
+
+    private boolean isExactNumericType(String type) {
+        return type.startsWith("NUMERIC") || type.equals("BIGINT")
+                || type.equals("INTEGER") || type.equals("SMALLINT");
     }
 
     private long copyTableData(Connection h2Conn, Connection pgConn, String tableName, List<ColumnInfo> columns, MigrationConfig config) throws SQLException {
@@ -596,7 +638,7 @@ public class H2ToPostgresMigrator {
         return rowsCount;
     }
 
-    private void applyForeignKeysInPostgres(Connection pgConn, List<ForeignKeyInfo> foreignKeys, MigrationResult result) {
+    private void applyForeignKeysInPostgres(Connection pgConn, List<ForeignKeyInfo> foreignKeys, MigrationResult result) throws SQLException {
         Set<String> processedFks = new HashSet<>();
         for (ForeignKeyInfo fk : foreignKeys) {
             String fkKey = fk.fkTableName + "_" + fk.fkColumnName + "_" + fk.pkTableName;
@@ -614,18 +656,17 @@ public class H2ToPostgresMigrator {
                     escapeIdentifier(fk.pkTableName),
                     escapeIdentifier(fk.pkColumnName));
 
-            try (Statement stmt = pgConn.createStatement()) {
-                stmt.execute(sql);
-            } catch (SQLException e) {
-                // Avertissement sans bloquer la migration
-                result.getWarnings().add("Contrainte FK ignorée (" + constraintName + "): " + e.getMessage());
-            }
+            executeWithSavepoint(pgConn, result, "Contrainte FK ignorée (" + constraintName + ")", () -> {
+                try (Statement stmt = pgConn.createStatement()) {
+                    stmt.execute(sql);
+                }
+            });
         }
     }
 
-    private void syncPostgresSequences(Connection pgConn, List<SequenceInfo> sequences, Map<String, List<String>> tablePrimaryKeys, MigrationResult result) {
+    private void syncPostgresSequences(Connection pgConn, List<SequenceInfo> sequences, Map<String, List<String>> tablePrimaryKeys, MigrationResult result) throws SQLException {
         for (SequenceInfo seq : sequences) {
-            try {
+            executeWithSavepoint(pgConn, result, "Impossible de synchroniser la séquence " + seq.name, () -> {
                 // Essayer de trouver la table correspondante basée sur le nom de séquence
                 String cleanSeq = seq.name.toUpperCase().replace("_SEQ", "").replace("SEQ_", "");
                 String matchedTable = null;
@@ -651,18 +692,35 @@ public class H2ToPostgresMigrator {
                             long tableMax = rs.getLong(1);
                             maxVal = Math.max(maxVal, tableMax);
                         }
-                    } catch (SQLException ignored) {}
+                    }
                 }
 
                 if (maxVal > 0) {
-                    String setValSql = String.format("SELECT setval('%s', %d, true)", seq.name.toLowerCase(), maxVal);
-                    try (Statement stmt = pgConn.createStatement()) {
-                        stmt.execute(setValSql);
+                    try (PreparedStatement stmt = pgConn.prepareStatement("SELECT setval(?::regclass, ?, true)")) {
+                        stmt.setString(1, "\"public\"." + escapeIdentifier(seq.name));
+                        stmt.setLong(2, maxVal);
+                        stmt.execute();
                     }
                 }
-            } catch (Exception e) {
-                result.getWarnings().add("Impossible de synchroniser la séquence " + seq.name + ": " + e.getMessage());
-            }
+            });
+        }
+    }
+
+    @FunctionalInterface
+    private interface SqlOperation {
+        void execute() throws SQLException;
+    }
+
+    private void executeWithSavepoint(Connection connection, MigrationResult result,
+                                      String warning, SqlOperation operation) throws SQLException {
+        Savepoint savepoint = connection.setSavepoint();
+        try {
+            operation.execute();
+        } catch (SQLException e) {
+            connection.rollback(savepoint);
+            result.getWarnings().add(warning + ": " + e.getMessage());
+        } finally {
+            connection.releaseSavepoint(savepoint);
         }
     }
 

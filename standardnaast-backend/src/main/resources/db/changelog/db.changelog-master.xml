@@ -3,7 +3,14 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <!-- 1. Initial complete schema (tables & sequences) -->
+    <changeSet id="017-normalize-imported-identifiers" author="standardnaast" dbms="postgresql">
+        <sqlFile path="liquibaseChangelog/017_normalize_imported_identifiers.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+    <!-- Imported objects are normalized before the idempotent baseline runs. -->
     <changeSet id="000-initial-schema" author="standardnaast">
         <sqlFile path="liquibaseChangelog/000_initial_schema.sql"
                  relativeToChangelogFile="true"
@@ -16,6 +23,20 @@
 
     <!-- 3. Add Roboticket ID to Personnes -->
     <include file="liquibaseChangelog/016_add_roboticket_id.xml" relativeToChangelogFile="true"/>
+
+    <changeSet id="018-restore-imported-integer-types" author="standardnaast" dbms="postgresql">
+        <sqlFile path="liquibaseChangelog/018_restore_imported_integer_types.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+    <changeSet id="019-align-sequence-increments" author="standardnaast" dbms="postgresql">
+        <sqlFile path="liquibaseChangelog/019_align_sequence_increments.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
 
     <!--&lt;!&ndash; 3. Initial / Migrated Data from H2 (executed once on fresh installation) &ndash;&gt;
     <changeSet id="099-initial-data" author="standardnaast">

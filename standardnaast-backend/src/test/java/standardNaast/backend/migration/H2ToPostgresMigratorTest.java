@@ -2,6 +2,8 @@ package standardNaast.backend.migration;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -9,13 +11,139 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class H2ToPostgresMigratorTest {
 
     @TempDir
     Path tempDir;
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "MIGRATION_TEST_PG_URL", matches = ".+")
+    void migratesMixedNumericForeignKeysAndQuotedSequencesToPostgres() throws Exception {
+        String sourceUrl = "jdbc:h2:mem:fk_migration;DB_CLOSE_DELAY=-1";
+        try (Connection source = DriverManager.getConnection(sourceUrl, "sa", "");
+             Statement stmt = source.createStatement()) {
+            stmt.execute("CREATE SEQUENCE MATCH_SEQ START WITH 50");
+            stmt.execute("CREATE TABLE PARENT (ID BIGINT PRIMARY KEY)");
+            stmt.execute("CREATE TABLE CHILD (ID NUMERIC PRIMARY KEY REFERENCES PARENT(ID))");
+            stmt.execute("CREATE TABLE GRANDCHILD (ID BIGINT PRIMARY KEY REFERENCES CHILD(ID))");
+            stmt.execute("INSERT INTO PARENT VALUES (9223372036854775807)");
+            stmt.execute("INSERT INTO CHILD VALUES (9223372036854775807)");
+            stmt.execute("INSERT INTO GRANDCHILD VALUES (9223372036854775807)");
+        }
+        String pgUrl = System.getenv("MIGRATION_TEST_PG_URL");
+        String pgUser = System.getProperty("user.name");
+        H2ToPostgresMigrator.MigrationResult result = new H2ToPostgresMigrator().migrate(
+                new H2ToPostgresMigrator.MigrationConfig(sourceUrl)
+                        .setH2Password("").setPgUrl(pgUrl).setPgUser(pgUser).setPgPassword(""));
+
+        assertThat(result.isSuccess()).as(result.toString()).isTrue();
+        assertThat(result.getWarnings()).isEmpty();
+        assertThat(result.getTotalRowsMigrated()).isEqualTo(3);
+        try (Connection target = DriverManager.getConnection(pgUrl, pgUser, "");
+             Statement stmt = target.createStatement()) {
+            try (Connection source = DriverManager.getConnection(sourceUrl, "sa", "")) {
+                H2ToPostgresMigrator migrator = new H2ToPostgresMigrator();
+                List<?> sequences = ReflectionTestUtils.invokeMethod(migrator, "extractSequences", source, result);
+                ReflectionTestUtils.invokeMethod(migrator, "createSequencesInPostgres", target, sequences, result);
+            }
+            try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM pg_constraint WHERE contype = 'f'")) {
+                assertThat(rs.next()).isTrue();
+                assertThat(rs.getInt(1)).isEqualTo(2);
+            }
+            try (ResultSet rs = stmt.executeQuery("SELECT \"ID\" FROM \"GRANDCHILD\"")) {
+                assertThat(rs.next()).isTrue();
+                assertThat(rs.getBigDecimal(1).toBigIntegerExact()).isEqualTo(java.math.BigInteger.valueOf(Long.MAX_VALUE));
+            }
+            try (ResultSet rs = stmt.executeQuery("SELECT nextval('\"MATCH_SEQ\"')")) {
+                assertThat(rs.next()).isTrue();
+                assertThat(rs.getLong(1)).isEqualTo(51);
+            }
+        }
+    }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "MIGRATION_TEST_PG_URL", matches = ".+")
+    void rollsBackFailedForeignKeyAndSequenceWithoutAbortingNextOperations() throws Exception {
+        H2ToPostgresMigrator migrator = new H2ToPostgresMigrator();
+        H2ToPostgresMigrator.MigrationResult result = new H2ToPostgresMigrator.MigrationResult();
+        try (Connection source = DriverManager.getConnection("jdbc:h2:mem:savepoint_test", "sa", "");
+             Connection target = DriverManager.getConnection(
+                     System.getenv("MIGRATION_TEST_PG_URL"), System.getProperty("user.name"), "");
+             Statement sourceStmt = source.createStatement();
+             Statement targetStmt = target.createStatement()) {
+            sourceStmt.execute("CREATE TABLE FK_PARENT (ID BIGINT PRIMARY KEY)");
+            sourceStmt.execute("CREATE TABLE FK_BAD (ID BIGINT REFERENCES FK_PARENT(ID))");
+            sourceStmt.execute("CREATE TABLE FK_GOOD (ID BIGINT REFERENCES FK_PARENT(ID))");
+            sourceStmt.execute("CREATE SEQUENCE MISSING_SEQ START WITH 10");
+            sourceStmt.execute("CREATE SEQUENCE WORKING_SEQ START WITH 10");
+            target.setAutoCommit(false);
+            targetStmt.execute("CREATE TABLE \"FK_PARENT\" (\"ID\" BIGINT PRIMARY KEY)");
+            targetStmt.execute("CREATE TABLE \"FK_BAD\" (\"ID\" BIGINT)");
+            targetStmt.execute("CREATE TABLE \"FK_GOOD\" (\"ID\" BIGINT)");
+            targetStmt.execute("INSERT INTO \"FK_BAD\" VALUES (1)");
+            targetStmt.execute("CREATE SEQUENCE \"WORKING_SEQ\"");
+            List<?> bad = ReflectionTestUtils.invokeMethod(migrator, "extractForeignKeys", source, "FK_BAD");
+            List<?> good = ReflectionTestUtils.invokeMethod(migrator, "extractForeignKeys", source, "FK_GOOD");
+            ReflectionTestUtils.invokeMethod(migrator, "applyForeignKeysInPostgres", target, bad, result);
+            ReflectionTestUtils.invokeMethod(migrator, "applyForeignKeysInPostgres", target, good, result);
+            List<?> sequences = ReflectionTestUtils.invokeMethod(migrator, "extractSequences", source, result);
+            ReflectionTestUtils.invokeMethod(migrator, "syncPostgresSequences", target, sequences, Map.of(), result);
+            target.commit();
+
+            assertThat(result.getWarnings()).hasSize(2)
+                    .anyMatch(w -> w.contains("FK ignorée"))
+                    .anyMatch(w -> w.contains("MISSING_SEQ"))
+                    .noneMatch(w -> w.contains("transaction is aborted"));
+            try (ResultSet rs = targetStmt.executeQuery(
+                    "SELECT COUNT(*) FROM pg_constraint WHERE conrelid = '\"FK_GOOD\"'::regclass AND contype = 'f'")) {
+                assertThat(rs.next()).isTrue();
+                assertThat(rs.getInt(1)).isEqualTo(1);
+            }
+            try (ResultSet rs = targetStmt.executeQuery("SELECT nextval('\"WORKING_SEQ\"')")) {
+                assertThat(rs.next()).isTrue();
+                assertThat(rs.getLong(1)).isEqualTo(11);
+            }
+        }
+    }
+
+    @Test
+    void mapsH2NumericPrecisionToPostgresWithoutClamping() throws Exception {
+        try (Connection source = DriverManager.getConnection("jdbc:h2:mem:numeric_mapping", "sa", "");
+             Statement statement = source.createStatement()) {
+            statement.execute("CREATE TABLE NUMERIC_TEST ("
+                    + "UNBOUNDED NUMERIC, WIDE DECIMAL(100000, 4), "
+                    + "BOUNDARY NUMERIC(1000, 3), OVER_LIMIT NUMERIC(1001, 2), "
+                    + "PRICE DECIMAL(19, 2))");
+
+            H2ToPostgresMigrator migrator = new H2ToPostgresMigrator();
+            List<?> columns = ReflectionTestUtils.invokeMethod(migrator, "extractColumns", source, "NUMERIC_TEST");
+            Connection target = mock(Connection.class);
+            Statement targetStatement = mock(Statement.class);
+            when(target.createStatement()).thenReturn(targetStatement);
+            when(targetStatement.execute(anyString())).thenReturn(false);
+
+            ReflectionTestUtils.invokeMethod(migrator, "createTableInPostgres",
+                    target, "NUMERIC_TEST", columns, List.of(), false);
+
+            verify(targetStatement).execute("""
+                    CREATE TABLE IF NOT EXISTS "NUMERIC_TEST" (
+                        "UNBOUNDED" NUMERIC,
+                        "WIDE" NUMERIC,
+                        "BOUNDARY" NUMERIC(1000, 3),
+                        "OVER_LIMIT" NUMERIC,
+                        "PRICE" NUMERIC(19, 2))
+                    """.stripTrailing());
+        }
+    }
 
     @Test
     void testH2IntrospectionAndStructure() throws Exception {
