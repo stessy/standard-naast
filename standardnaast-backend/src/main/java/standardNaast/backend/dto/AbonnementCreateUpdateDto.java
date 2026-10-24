@@ -8,8 +8,8 @@ public record AbonnementCreateUpdateDto(
         Long abonnementPriceId,
         String rang,
         String place,
-        long reduction,
-        boolean paye,
+        Long reduction,
+        Boolean paye,
         Long acompte,
         @NotBlank(message = "Season ID is mandatory")
         String seasonId,
@@ -18,4 +18,8 @@ public record AbonnementCreateUpdateDto(
         AbonnementStatus abonnementStatus,
         String bloc
 ) {
+    public AbonnementCreateUpdateDto {
+        reduction = reduction != null ? reduction : 0L;
+        paye = paye != null ? paye : false;
+    }
 }

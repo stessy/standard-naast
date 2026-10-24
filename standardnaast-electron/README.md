@@ -108,6 +108,11 @@ Electron ; un binaire deja installe ne beneficie pas de ces changements.
 
 ### Option 1 : Script tout-en-un à la racine du projet (Recommandé)
 
+L'ajout d'un abonnement depuis la gestion des membres ne demande pas de donnees
+de paiement : l'API initialise `reduction` a `0` et `paye` a `false` lorsque
+ces champs sont absents ou `null`. Les valeurs explicites restent conservees ;
+la saison et le membre restent obligatoires.
+
 Un script d'automatisation complet compile le backend Spring Boot (Maven), le frontend Angular, télécharge les binaires (JRE + PostgreSQL) et assemble le package Electron :
 
 * **Sur macOS / Linux :**

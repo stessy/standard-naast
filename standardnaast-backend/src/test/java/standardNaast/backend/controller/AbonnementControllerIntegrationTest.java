@@ -1,10 +1,13 @@
 package standardNaast.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -12,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import standardNaast.backend.domain.AbonnementStatus;
@@ -28,6 +32,7 @@ import standardNaast.backend.service.AbonnementService;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -52,6 +57,7 @@ class AbonnementControllerIntegrationTest {
     void setUp() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule());
+        this.objectMapper.enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.abonnementController)
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
@@ -190,6 +196,52 @@ class AbonnementControllerIntegrationTest {
                         .content(this.objectMapper.writeValueAsString(createDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1)));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "{\"seasonId\":\"2024-2025\",\"personId\":100,\"bloc\":\"T1\"}",
+            "{\"seasonId\":\"2024-2025\",\"personId\":100,\"bloc\":\"T1\",\"reduction\":null,\"paye\":null}"
+    })
+    void createAbonnementFromMember_shouldDefaultOptionalPaymentFields(String json) throws Exception {
+        when(this.abonnementService.createAbonnement(any())).thenReturn(this.sampleAbonnementDto);
+
+        this.mockMvc.perform(post("/api/abonnements")
+                        .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        verify(this.abonnementService).createAbonnement(new AbonnementCreateUpdateDto(
+                null, null, null, 0L, false, null, "2024-2025", 100L, null, "T1"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "{\"seasonId\":\"2024-2025\",\"personId\":100,\"bloc\":\"T1\"}",
+            "{\"seasonId\":\"2024-2025\",\"personId\":100,\"bloc\":\"T1\",\"reduction\":null,\"paye\":null}"
+    })
+    void updateAbonnement_shouldDefaultOptionalPaymentFields(String json) throws Exception {
+        when(this.abonnementService.updateAbonnement(eq(1L), any())).thenReturn(this.sampleAbonnementDto);
+
+        this.mockMvc.perform(put("/api/abonnements/1")
+                        .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isOk());
+
+        verify(this.abonnementService).updateAbonnement(1L, new AbonnementCreateUpdateDto(
+                null, null, null, 0L, false, null, "2024-2025", 100L, null, "T1"));
+    }
+
+    @Test
+    void createAbonnementFromMember_shouldStillRequirePersonId() throws Exception {
+        this.mockMvc.perform(post("/api/abonnements")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"seasonId\":\"2024-2025\",\"bloc\":\"T1\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertThat(result.getResolvedException())
+                        .isInstanceOfSatisfying(MethodArgumentNotValidException.class,
+                                exception -> assertThat(exception.getBindingResult().getFieldError("personId"))
+                                        .isNotNull()));
+
+        verifyNoInteractions(this.abonnementService);
     }
 
     @Test
