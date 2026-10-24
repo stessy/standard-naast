@@ -2,7 +2,7 @@ import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angul
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import localeFrExtra from '@angular/common/locales/extra/fr';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withHashLocation } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -19,7 +19,7 @@ registerLocaleData(localeFr, 'fr-BE', localeFrExtra);
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes, ...(window.location.protocol === 'file:' ? [withHashLocation()] : [])),
     provideHttpClient(
       withInterceptors([authInterceptor, errorInterceptor])
     ),

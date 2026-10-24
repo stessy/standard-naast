@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
+    "test:ui": "electron scripts/test-ui.js",
     "migrate:h2": "node scripts/migrate-h2.js",
     "download:binaries": "node scripts/download-binaries.js",
     "download:binaries:all": "node scripts/download-binaries.js --all",

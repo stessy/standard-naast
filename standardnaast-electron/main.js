@@ -563,14 +563,30 @@ function createMainWindow() {
 
   buildApplicationMenu();
 
+  mainWindow.webContents.on('did-fail-load', (_event, code, description, url, isMainFrame) => {
+    if (isMainFrame) {
+      console.error(`[Frontend]: Echec du chargement ${url} (${code}): ${description}`);
+      dialog.showErrorBox('Erreur de chargement de l’interface', `${description}\n${url}`);
+    }
+  });
+  mainWindow.webContents.on('console-message', details => {
+    if (details.level === 'error') {
+      console.error(`[Frontend]: ${details.message} (${details.sourceId}:${details.lineNumber})`);
+    }
+  });
+
   // Chargement de l'application (servie par Spring Boot ou packagée dans ui/)
   const uiLocalPath = path.join(__dirname, 'ui', 'browser', 'index.html');
   if (fs.existsSync(uiLocalPath)) {
     // Si UI embarquée directement dans Electron
-    mainWindow.loadFile(uiLocalPath);
+    mainWindow.loadFile(uiLocalPath).catch(error => {
+      console.error('[Frontend]: Impossible de charger les fichiers Angular.', error);
+    });
   } else {
     // Si servie via le serveur web Spring Boot
-    mainWindow.loadURL(`http://localhost:${BACKEND_PORT}`);
+    mainWindow.loadURL(`http://localhost:${BACKEND_PORT}`).catch(error => {
+      console.error('[Frontend]: Impossible de charger le serveur web.', error);
+    });
   }
 
   mainWindow.once('ready-to-show', () => {

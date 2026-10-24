@@ -102,7 +102,7 @@ async function main() {
   }
 
   try {
-    run('pnpm run build', ngDir);
+    run('pnpm run build:electron', ngDir);
   } catch (e) {
     console.error('❌ Erreur lors du build Angular.');
     throw e;

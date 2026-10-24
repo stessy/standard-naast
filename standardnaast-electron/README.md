@@ -126,6 +126,31 @@ pnpm run dist:all
 
 > Les installeurs finaux (`.dmg` ou `.exe`) sont générés dans le dossier `standardnaast-electron/dist-package/`.
 
+### Verification de l'interface Electron
+
+La preparation utilise `pnpm run build:electron` dans le frontend : la configuration
+`production,electron` genere une base relative (`./index.html`) pour charger les scripts et
+styles depuis `file://`. Dans ce contexte uniquement, Angular utilise les routes
+`#/login`. La base HTML conserve explicitement `index.html` lors d'un
+rechargement. La version web conserve ses routes habituelles (`/login`).
+
+Pour verifier le rendu reel sans demarrer le backend ni acceder aux donnees
+de l'application installee :
+
+```bash
+cd standardnaast-ng
+pnpm run build --output-path dist/standardnaast-ng-web
+pnpm run build:electron
+cd ../standardnaast-electron
+pnpm run test:ui
+```
+
+Ce test ouvre une fenetre Electron invisible avec un profil temporaire. Il verifie
+le formulaire de connexion charge a la demande, la redirection des routes protegees
+et le rechargement en `file://`, puis le routage HTTP classique et son rechargement.
+Les erreurs du renderer font echouer le test. Les echecs de chargement et les
+erreurs console du frontend sont aussi journalises par l'application principale.
+
 ---
 
 ## 4. Persistance des données et Mises à jour
