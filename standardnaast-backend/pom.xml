@@ -195,6 +195,7 @@
                             <buildArgs>
                                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
                                 <buildArg>--no-fallback</buildArg>
+                                <buildArg>-H:+AddAllCharsets</buildArg>
                             </buildArgs>
                         </configuration>
                         <executions>

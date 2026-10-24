@@ -2,6 +2,9 @@ package standardNaast.backend.liquibase;
 
 import liquibase.integration.spring.SpringLiquibase;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import jakarta.persistence.Entity;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.bytecode.internal.none.BytecodeProviderImpl;
@@ -288,6 +291,31 @@ class ImportedDatabaseLiquibaseTest {
             var body = mapper.readTree(abonnement.body());
             assertThat(body.path("personId").asLong()).isEqualTo(42);
             assertThat(body.path("personName").asText()).isEqualTo("Migration test");
+            var pdf = client.send(HttpRequest.newBuilder(
+                            URI.create(baseUrl + "/api/member-cotisations/pdf?seasonId=2026"))
+                            .timeout(Duration.ofSeconds(10)).header("Authorization", "Bearer " + token).GET().build(),
+                    HttpResponse.BodyHandlers.ofByteArray());
+            assertThat(pdf.statusCode()).as("Native cotisations PDF: %s%n%s",
+                    new String(pdf.body(), StandardCharsets.UTF_8), Files.readString(log)).isEqualTo(200);
+            assertThat(pdf.headers().firstValue("Content-Type")).contains("application/pdf");
+            var reader = new PdfReader(pdf.body());
+            try {
+                assertThat(PdfTextExtractor.getTextFromPage(reader, 1)).contains("Cotisations Saison 2026");
+                var resources = reader.getPageN(1).getAsDict(PdfName.RESOURCES);
+                var fonts = resources.getAsDict(PdfName.FONT);
+                assertThat(fonts.getKeys()).isNotEmpty();
+                for (var key : fonts.getKeys()) {
+                    var font = fonts.getAsDict(key);
+                    assertThat(font.getAsName(PdfName.BASEFONT).toString()).contains("ComicSansMS-Bold");
+                    assertThat(font.getAsDict(PdfName.FONTDESCRIPTOR).get(PdfName.FONTFILE2)).isNotNull();
+                }
+                var images = resources.getAsDict(PdfName.XOBJECT);
+                assertThat(images).isNotNull();
+                assertThat(images.getKeys()).anySatisfy(key ->
+                        assertThat(images.getAsStream(key).getAsName(PdfName.SUBTYPE)).isEqualTo(PdfName.IMAGE));
+            } finally {
+                reader.close();
+            }
         }
     }
 

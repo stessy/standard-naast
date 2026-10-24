@@ -1,6 +1,7 @@
 package standardNaast.backend.service;
 
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -103,6 +104,18 @@ class CotisationPdfReportServiceTest {
         assertThat(text).contains("Fellaini Marouane");
         assertThat(text).contains("10");
         assertThat(text).contains("28");
+        var resources = reader.getPageN(1).getAsDict(PdfName.RESOURCES);
+        var fonts = resources.getAsDict(PdfName.FONT);
+        assertThat(fonts.getKeys()).isNotEmpty();
+        for (var key : fonts.getKeys()) {
+            var font = fonts.getAsDict(key);
+            assertThat(font.getAsName(PdfName.BASEFONT).toString()).contains("ComicSansMS-Bold");
+            assertThat(font.getAsDict(PdfName.FONTDESCRIPTOR).get(PdfName.FONTFILE2)).isNotNull();
+        }
+        var images = resources.getAsDict(PdfName.XOBJECT);
+        assertThat(images).isNotNull();
+        assertThat(images.getKeys()).anySatisfy(key ->
+                assertThat(images.getAsStream(key).getAsName(PdfName.SUBTYPE)).isEqualTo(PdfName.IMAGE));
         reader.close();
     }
 

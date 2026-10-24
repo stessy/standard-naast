@@ -15,9 +15,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import standardNaast.backend.domain.Person;
+import standardNaast.backend.config.PdfRuntimeHints;
 import standardNaast.backend.domain.PersonCotisation;
 import standardNaast.backend.domain.Season;
 import standardNaast.backend.exception.ResourceNotFoundException;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@ImportRuntimeHints(PdfRuntimeHints.class)
 public class CotisationPdfReportServiceImpl implements CotisationPdfReportService {
 
     private static final Logger log = LoggerFactory.getLogger(CotisationPdfReportServiceImpl.class);

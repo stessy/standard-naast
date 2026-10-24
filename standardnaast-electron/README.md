@@ -93,6 +93,19 @@ a une personne et la lecture d'un abonnement via HTTP sur deux demarrages natifs
 
 Dans VS Code, le build Java automatique est désactivé dans `.vscode/settings.json` pour éviter que le compilateur de l'IDE ne remplace les classes produites par Maven pendant le build, notamment les mappers MapStruct lors du traitement AOT. Utilisez Maven pour compiler le backend. Après un changement de ce réglage, rechargez la fenêtre VS Code avant de relancer un build propre.
 
+Le rapport PDF des cotisations enregistre ses ressources natives via
+`PdfRuntimeHints` : polices et banniere `pdf/**`, metriques et encodages iText
+`com/itextpdf/text/pdf/fonts/**`, ainsi que les messages d'erreur iText.
+Ces ressources doivent rester embarquees pour conserver la police Comic Sans Bold,
+la banniere et le repli Helvetica-Bold dans le binaire natif.
+Le profil Maven `native` inclut les jeux de caracteres (`-H:+AddAllCharsets`),
+notamment Windows-1252 utilise par iText. Les hints autorisent aussi la copie
+reflective des images PNG par iText lors de la construction du tableau.
+Le test HTTP active
+avec `MIGRATION_NATIVE_BINARY` verifie aussi la generation du PDF des cotisations.
+Apres une modification de ces hints, reconstruisez le backend natif et le package
+Electron ; un binaire deja installe ne beneficie pas de ces changements.
+
 ### Option 1 : Script tout-en-un à la racine du projet (Recommandé)
 
 Un script d'automatisation complet compile le backend Spring Boot (Maven), le frontend Angular, télécharge les binaires (JRE + PostgreSQL) et assemble le package Electron :
