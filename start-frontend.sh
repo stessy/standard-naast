@@ -15,15 +15,15 @@ echo "=================================================="
 echo " Démarrage du frontend Angular (Standard Naast)"
 echo "=================================================="
 
-# 1. Vérification et configuration de Node / npm
-# Utilisation du Node/npm local installé par frontend-maven-plugin s'il existe
+# 1. Vérification et configuration de Node.js / pnpm
+# Utilisation du Node local installé par frontend-maven-plugin s'il existe
 if [ -d "${NG_DIR}/node" ]; then
     export PATH="${NG_DIR}/node:${PATH}"
 fi
 
-# Vérification si node et npm sont accessibles
-if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
-    echo "⚠️ Node.js / npm n'ont pas été trouvés dans le PATH."
+# Vérification de Node.js
+if ! command -v node >/dev/null 2>&1; then
+    echo "⚠️ Node.js n'a pas été trouvé dans le PATH."
     echo "📦 Tentative d'installation automatique via Maven (frontend-maven-plugin)..."
     
     # Chercher mvn (PATH ou IntelliJ)
@@ -39,18 +39,23 @@ if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
             export PATH="${NG_DIR}/node:${PATH}"
         fi
     else
-        echo "❌ Erreur : ni Node.js/npm ni Maven ne sont installés ou trouvés dans le PATH."
+        echo "❌ Erreur : ni Node.js ni Maven ne sont installés ou trouvés dans le PATH."
         exit 1
     fi
 fi
 
+if ! command -v pnpm >/dev/null 2>&1; then
+    echo "❌ Erreur : pnpm est requis mais introuvable. Installez pnpm et vérifiez votre PATH."
+    exit 1
+fi
+
 echo " Node.js version : $(node -v)"
-echo " npm version     : $(npm -v)"
+echo " pnpm version    : $(pnpm -v)"
 
 # 2. Vérification des dépendances (node_modules)
 if [ ! -d "${NG_DIR}/node_modules" ]; then
-    echo "📦 Installation des dépendances npm..."
-    npm install
+    echo "📦 Installation des dépendances pnpm..."
+    pnpm install
 fi
 
 # 3. Lancement du serveur de développement Angular
@@ -58,4 +63,4 @@ PORT="${PORT:-4200}"
 HOST="${HOST:-localhost}"
 
 echo "🚀 Lancement de l'application Angular sur http://${HOST}:${PORT} ..."
-npm start -- --host "${HOST}" --port "${PORT}" "$@"
+pnpm start -- --host "${HOST}" --port "${PORT}" "$@"

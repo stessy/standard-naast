@@ -97,12 +97,12 @@ async function main() {
   log('1. Vérification et build du Frontend Angular');
   const ngNodeModules = path.join(ngDir, 'node_modules');
   if (!fs.existsSync(ngNodeModules)) {
-    console.log('Installation des dépendances npm dans standardnaast-ng...');
-    run('npm install', ngDir);
+    console.log('Installation des dépendances pnpm dans standardnaast-ng...');
+    run('pnpm install', ngDir);
   }
 
   try {
-    run('npm run build', ngDir);
+    run('pnpm run build', ngDir);
   } catch (e) {
     console.error('❌ Erreur lors du build Angular.');
     throw e;

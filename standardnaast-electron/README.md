@@ -44,7 +44,7 @@ Vous pouvez personnaliser les versions et URLs sources pour chaque OS/architectu
 ```json
 {
   "jre": {
-    "version": "21",
+    "version": "25",
     "targets": { ... }
   },
   "postgres": {
@@ -57,26 +57,28 @@ Vous pouvez personnaliser les versions et URLs sources pour chaque OS/architectu
 ### B. Commandes de téléchargement
 - **Pour votre OS actuel (ex: macOS Apple Silicon) :**
   ```bash
-  npm run download:binaries
+  pnpm run download:binaries
   ```
 - **Pour toutes les plateformes (macOS ARM64, macOS x64, Windows x64) :**
   ```bash
-  npm run download:binaries:all
+  pnpm run download:binaries:all
   ```
 - **Pour Windows uniquement :**
   ```bash
-  npm run download:binaries:win
+  pnpm run download:binaries:win
   ```
 - **Pour forcer un re-téléchargement :**
   ```bash
   node scripts/download-binaries.js --force
   ```
 
-*(Note : La commande `npm run build:prepare` vérifie et télécharge également automatiquement les binaires manquants).*
+*(Note : La commande `pnpm run build:prepare` vérifie et télécharge également automatiquement les binaires manquants).*
 
 ---
 
 ## 3. Commandes de Build et Génération automatisée
+
+Les builds nécessitent **Node.js**, **pnpm** et **Maven**. Les scripts utilisent pnpm pour installer les dépendances et exécuter les commandes frontend/Electron.
 
 ### Option 1 : Script tout-en-un à la racine du projet (Recommandé)
 
@@ -109,13 +111,13 @@ Chaque commande `dist` ou `build` intègre désormais automatiquement toutes les
 cd standardnaast-electron
 
 # Pour macOS (.dmg) :
-npm run dist:mac
+pnpm run dist:mac
 
 # Pour Windows (.exe) :
-npm run dist:win
+pnpm run dist:win
 
 # Pour toutes les plateformes :
-npm run dist:all
+pnpm run dist:all
 ```
 
 > Les installeurs finaux (`.dmg` ou `.exe`) sont générés dans le dossier `standardnaast-electron/dist-package/`.

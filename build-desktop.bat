@@ -17,7 +17,7 @@ echo =================================================================
 echo   Build ^& Packaging Desktop - Standard de Naast (Windows)
 echo =================================================================
 
-REM 1. Verification de Node et npm
+REM 1. Verification de Node.js et pnpm
 where node >nul 2>nul
 if %errorlevel% neq 0 (
     echo [ERREUR] Node.js est introuvable dans le PATH.
@@ -25,9 +25,9 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-where npm >nul 2>nul
+where pnpm >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [ERREUR] npm est introuvable dans le PATH.
+    echo [ERREUR] pnpm est introuvable dans le PATH.
     pause
     exit /b 1
 )
@@ -43,12 +43,12 @@ if %errorlevel% neq 0 (
 REM 3. Installation des dependances si necessaire
 if not exist "%ELECTRON_DIR%\node_modules" (
     echo [INFO] Installation des dependances Electron...
-    cd /d "%ELECTRON_DIR%" && call npm install
+    cd /d "%ELECTRON_DIR%" && call pnpm install
 )
 
 if not exist "%NG_DIR%\node_modules" (
     echo [INFO] Installation des dependances Angular...
-    cd /d "%NG_DIR%" && call npm install
+    cd /d "%NG_DIR%" && call pnpm install
 )
 
 REM 4. Lancement du packaging
@@ -56,13 +56,13 @@ cd /d "%ELECTRON_DIR%"
 
 if /i "%TARGET%"=="win" (
     echo [INFO] Packaging Windows NSIS (x64)...
-    call npm run dist:win
+    call pnpm run dist:win
 ) else if /i "%TARGET%"=="all" (
     echo [INFO] Packaging multi-plateformes...
-    call npm run dist:all
+    call pnpm run dist:all
 ) else (
     echo [INFO] Packaging selon cible: %TARGET%...
-    call npm run dist
+    call pnpm run dist
 )
 
 if %errorlevel% neq 0 (
