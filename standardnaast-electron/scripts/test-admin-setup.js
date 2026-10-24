@@ -22,6 +22,7 @@ async function test() {
       return latestWindow;
     },
     ipcMain, path, fs, process, Buffer, setTimeout, clearTimeout,
+    app,
     __dirname: directory,
     nativeExecutable: path.join(directory, 'missing-test-native'),
     javaExecutable: path.join(directory, 'missing-test-java'),

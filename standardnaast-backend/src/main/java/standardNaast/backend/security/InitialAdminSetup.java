@@ -13,6 +13,7 @@ import java.sql.SQLException;
  * Local desktop provisioning command. Credentials are read from stdin, never command arguments.
  */
 public final class InitialAdminSetup {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(InitialAdminSetup.class);
     private InitialAdminSetup() {}
 
     public static void run(boolean create) {
@@ -21,19 +22,19 @@ public final class InitialAdminSetup {
                 System.getenv("SPRING_DATASOURCE_USERNAME"),
                 System.getenv("SPRING_DATASOURCE_PASSWORD"))) {
             if (!create) {
-                System.out.println(hasUsers(connection) ? "ADMIN_SETUP:EXISTS" : "ADMIN_SETUP:REQUIRED");
+                log.info(hasUsers(connection) ? "ADMIN_SETUP:EXISTS" : "ADMIN_SETUP:REQUIRED");
                 return;
             }
             var input = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
             String username = input.readLine();
             String password = input.readLine();
             createAdmin(connection, username, password);
-            System.out.println("ADMIN_SETUP:CREATED");
+            log.info("ADMIN_SETUP:CREATED");
         } catch (IllegalArgumentException | IllegalStateException e) {
-            System.err.println(e.getMessage());
+            log.error("Initialisation administrateur refusee: {}", e.getMessage());
             System.exit(1);
         } catch (Exception e) {
-            System.err.println("Impossible d'initialiser le compte administrateur (" + e.getClass().getSimpleName() + ").");
+            log.error("Impossible d'initialiser le compte administrateur: {}", e.getClass().getSimpleName());
             System.exit(1);
         }
     }

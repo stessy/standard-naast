@@ -34,6 +34,7 @@ import org.h2.tools.RunScript;
  * sauvegarde SQL H2 restaurée temporairement vers PostgreSQL.
  */
 public class H2ToPostgresMigrator {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(H2ToPostgresMigrator.class);
 
     public interface MigrationProgressListener {
         void onProgress(String message, double percent);
@@ -190,12 +191,11 @@ public class H2ToPostgresMigrator {
                 h2JdbcUrl = normalizeH2Url(h2Source);
             }
 
-            System.out.println("[MIGRATION] URL H2 Source: " + h2JdbcUrl);
-            System.out.println("[MIGRATION] URL PostgreSQL Cible: " + config.getPgUrl());
+            log.info("[MIGRATION] Sources preparees, connexion a PostgreSQL.");
 
             migrateConnections(config, result, h2JdbcUrl);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Echec de la migration: {}", e.getClass().getSimpleName());
             result.setSuccess(false);
             result.setMessage("Erreur lors de la migration: " + e.getMessage());
             notify(config, "Erreur migration: " + e.getMessage(), -1.0);
@@ -331,10 +331,10 @@ public class H2ToPostgresMigrator {
         } catch (SQLException authEx) {
             // Si mot de passe échoue, tenter fallback
             if ("standard".equals(config.getH2Password())) {
-                System.out.println("[MIGRATION] Tentative avec mot de passe H2 vide...");
+                log.info("[MIGRATION] Nouvelle tentative d'authentification H2.");
                 return DriverManager.getConnection(h2JdbcUrl, config.getH2User(), "");
             } else if (config.getH2Password() == null || config.getH2Password().isEmpty()) {
-                System.out.println("[MIGRATION] Tentative avec mot de passe H2 'standard'...");
+                log.info("[MIGRATION] Nouvelle tentative d'authentification H2.");
                 return DriverManager.getConnection(h2JdbcUrl, config.getH2User(), "standard");
             }
             throw authEx;
@@ -342,7 +342,7 @@ public class H2ToPostgresMigrator {
     }
 
     private void notify(MigrationConfig config, String message, double percent) {
-        System.out.println("[MIGRATION] " + String.format("%.0f%%", Math.max(0, percent)) + " - " + message);
+        log.info("[MIGRATION] {}% - {}", Math.round(Math.max(0, percent)), message);
         if (config.getListener() != null) {
             config.getListener().onProgress(message, percent);
         }
@@ -833,21 +833,21 @@ public class H2ToPostgresMigrator {
             } else if (arg.equals("--truncate-tables")) {
                 config.setTruncateTargetTables(true);
             } else if (arg.equals("--help") || arg.equals("-h")) {
-                System.out.println("Utilisation: H2ToPostgresMigrator --h2=<chemin_base_h2> [--pg-url=<url>] [--pg-user=<user>] [--pg-password=<pass>] [--drop-tables]");
+                log.info("Utilisation: H2ToPostgresMigrator --h2=<chemin_base_h2> [--pg-url=<url>] [--pg-user=<user>] [--pg-password=<pass>] [--drop-tables]");
                 System.exit(0);
             }
         }
 
         if (config.getH2PathOrUrl() == null || config.getH2PathOrUrl().trim().isEmpty()) {
-            System.err.println("ERREUR: Le paramètre --h2=<chemin> est obligatoire.");
-            System.err.println("Exemple: java standardNaast.backend.migration.H2ToPostgresMigrator --h2=/path/to/standardnaast.mv.db");
+            log.error("Le parametre --h2=<chemin> est obligatoire.");
+            log.info("Exemple: java standardNaast.backend.migration.H2ToPostgresMigrator --h2=/path/to/standardnaast.mv.db");
             System.exit(1);
         }
 
         H2ToPostgresMigrator migrator = new H2ToPostgresMigrator();
         MigrationResult result = migrator.migrate(config);
 
-        System.out.println(result);
+        log.info("{}", result);
 
         if (!result.isSuccess()) {
             System.exit(1);

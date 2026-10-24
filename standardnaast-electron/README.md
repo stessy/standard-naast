@@ -32,6 +32,24 @@ ce parcours. Les commandes locales `--initial-admin-status` et
 `--create-initial-admin` utilisent les variables `SPRING_DATASOURCE_*` du lanceur ;
 la seconde lit l'identifiant et le mot de passe sur deux lignes de l'entree standard.
 
+## Journaux du backend
+
+SLF4J/Logback ecrit dans la console et dans `standardnaast-backend.log`.
+Le lanceur Electron transmet `LOG_DIR` aux trois modes du backend (serveur,
+migration et creation du premier administrateur), dans le sous-dossier `logs`
+du repertoire utilisateur Electron. Sur macOS, il se situe habituellement dans
+`~/Library/Application Support/standardnaast-desktop/logs`.
+En lancement Java direct, le repertoire par defaut est `./logs` ; la variable
+`LOG_DIR` permet de le changer avant le lancement. `logback.xml` est commun aux
+commandes hors Spring et au serveur, y compris dans le package natif.
+La rotation se fait par jour et par tranche de 10 Mo, avec 14 jours d'historique
+et un plafond de 100 Mo pour les archives.
+
+Les messages sont emis directement par les loggers SLF4J des classes, sans
+instrumentation des methodes. Les avertissements et erreurs sont aussi envoyes
+sur la sortie d'erreur pour le lanceur Electron. Les marqueurs `ADMIN_SETUP:*`
+et `[MIGRATION]` restent disponibles dans la console pour le lanceur.
+
 ## 1. Arborescence du module
 
 ```text

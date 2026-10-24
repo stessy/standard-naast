@@ -209,7 +209,10 @@ function executeH2Migration(h2FilePath) {
       args = ['-jar', jarFile, ...migrationParams];
     }
 
-    const proc = spawn(runCmd, args, { windowsHide: true });
+    const proc = spawn(runCmd, args, {
+      windowsHide: true,
+      env: { ...process.env, LOG_DIR: path.join(app.getPath('userData'), 'logs') }
+    });
 
     proc.stdout.on('data', (data) => {
       const text = data.toString();
@@ -371,7 +374,8 @@ function startSpringBoot() {
       SPRING_DATASOURCE_USERNAME: 'standardnaast',
       SPRING_DATASOURCE_PASSWORD: 'standardnaast_password',
       SERVER_PORT: `${BACKEND_PORT}`,
-      APP_JWT_SECRET: 'yourSuperSecretKeyForProductionMustBeAtLeast256BitsLongAndSecure'
+      APP_JWT_SECRET: 'yourSuperSecretKeyForProductionMustBeAtLeast256BitsLongAndSecure',
+      LOG_DIR: path.join(app.getPath('userData'), 'logs')
     });
 
     springProcess = spawn(runCmd, runArgs, {
@@ -439,6 +443,7 @@ function runInitialAdminCommand(create, credentials) {
       windowsHide: true,
       env: {
         ...process.env,
+        LOG_DIR: path.join(app.getPath('userData'), 'logs'),
         SPRING_DATASOURCE_URL: `jdbc:postgresql://localhost:${PG_PORT}/standardnaast`,
         SPRING_DATASOURCE_USERNAME: 'standardnaast',
         SPRING_DATASOURCE_PASSWORD: 'standardnaast_password'

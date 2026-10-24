@@ -2,11 +2,15 @@ package standardNaast.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportRuntimeHints;
+import standardNaast.backend.logging.LoggingRuntimeHints;
 import standardNaast.backend.migration.H2ToPostgresMigrator;
 import standardNaast.backend.security.InitialAdminSetup;
 
 @SpringBootApplication
+@ImportRuntimeHints(LoggingRuntimeHints.class)
 public class StandardNaastApplication {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(StandardNaastApplication.class);
 
     public static void main(String[] args) {
         for (String arg : args) {
@@ -16,10 +20,9 @@ public class StandardNaastApplication {
             }
             if (arg.startsWith("--migrate-from-h2=") || arg.startsWith("--migrate-h2=")) {
                 String h2Path = arg.substring(arg.indexOf('=') + 1);
-                System.out.println(">>> Mode migration H2 vers PostgreSQL activé.");
-                System.out.println(">>> Fichier source H2: " + h2Path);
+                log.info("Mode migration H2 vers PostgreSQL active.");
                 H2ToPostgresMigrator.main(args);
-                System.out.println(">>> Migration achevée.");
+                log.info("Migration achevee.");
                 return;
             }
         }
