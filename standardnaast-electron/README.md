@@ -82,6 +82,15 @@ Les builds nécessitent **Node.js**, **pnpm** et **Maven**. Les scripts utilisen
 
 Le backend natif enregistre explicitement `db/changelog/**` via les Runtime Hints Spring afin d'embarquer le changelog Liquibase et ses fichiers XML/SQL inclus. Il autorise aussi les appels reflectifs aux types de changements et preconditions utilises par le changelog actif, y compris leurs setters herites. Lors de l'ajout d'un nouveau type de changement Liquibase, adaptez `LiquibaseRuntimeHints` et verifiez le demarrage du binaire natif sur une base jetable.
 
+Le plugin Maven `org.hibernate.orm:hibernate-maven-plugin`, aligne sur la version
+Hibernate geree par Spring Boot, enrichit les entites a la phase `process-classes`,
+avant le traitement AOT. Cet enhancement permet de charger les associations
+`LAZY` sans generer de proxies Hibernate a l'execution dans le binaire natif.
+Ne le remplacez pas par un changement de BytecodeProvider ou un passage global en
+`EAGER`. Les tests PostgreSQL verifient ces lectures avec le provider `none` ;
+avec `MIGRATION_NATIVE_BINARY`, ils testent aussi la connexion d'un utilisateur lie
+a une personne et la lecture d'un abonnement via HTTP sur deux demarrages natifs.
+
 Dans VS Code, le build Java automatique est désactivé dans `.vscode/settings.json` pour éviter que le compilateur de l'IDE ne remplace les classes produites par Maven pendant le build, notamment les mappers MapStruct lors du traitement AOT. Utilisez Maven pour compiler le backend. Après un changement de ce réglage, rechargez la fenêtre VS Code avant de relancer un build propre.
 
 ### Option 1 : Script tout-en-un à la racine du projet (Recommandé)

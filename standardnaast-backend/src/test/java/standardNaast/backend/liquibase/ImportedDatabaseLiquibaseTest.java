@@ -1,6 +1,12 @@
 package standardNaast.backend.liquibase;
 
 import liquibase.integration.spring.SpringLiquibase;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.Entity;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.bytecode.internal.none.BytecodeProviderImpl;
+import org.hibernate.bytecode.spi.BytecodeProvider;
+import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,12 +16,22 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import standardNaast.backend.domain.Abonnement;
+import standardNaast.backend.domain.AppUser;
+import standardNaast.backend.domain.Person;
 import standardNaast.backend.migration.H2ToPostgresMigrator;
 
 import java.nio.file.Files;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,6 +40,7 @@ import java.time.Duration;
 import java.util.UUID;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -57,6 +74,38 @@ class ImportedDatabaseLiquibaseTest {
                  Statement statement = connection.createStatement()) {
                 statement.execute("DROP DATABASE " + database + " WITH (FORCE)");
             }
+        }
+    }
+
+    @Test
+    void loadsImportedLazyAssociationsWithoutRuntimeBytecodeGeneration() throws Exception {
+        importH2(true);
+        update();
+        Configuration configuration = new Configuration();
+        var scanner = new ClassPathScanningCandidateComponentProvider(false);
+        scanner.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
+        for (var entity : scanner.findCandidateComponents("standardNaast.backend.domain")) {
+            configuration.addAnnotatedClass(Class.forName(entity.getBeanClassName()));
+        }
+        var registry = new StandardServiceRegistryBuilder()
+                .applySetting("hibernate.connection.url", url)
+                .applySetting("hibernate.connection.username", user)
+                .applySetting("hibernate.connection.password", "")
+                .applySetting("hibernate.hbm2ddl.auto", "validate")
+                .addService(BytecodeProvider.class, new BytecodeProviderImpl())
+                .build();
+        try (var factory = configuration.buildSessionFactory(registry)) {
+            try (var session = factory.openSession()) {
+                var abonnement = session.find(Abonnement.class, 2L);
+                assertThat(org.hibernate.Hibernate.isInitialized(abonnement.getPersonne())).isFalse();
+                assertThat(abonnement.getPersonne().getName()).isEqualTo("Migration test");
+                assertThat(session.find(AppUser.class, 1000L).getPerson().getRoboticketId()).isEqualTo("kept-ticket");
+            }
+            try (var session = factory.openSession()) {
+                assertThat(session.getReference(Person.class, 42L).getName()).isEqualTo("Migration test");
+            }
+        } finally {
+            StandardServiceRegistryBuilder.destroy(registry);
         }
     }
 
@@ -177,6 +226,12 @@ class ImportedDatabaseLiquibaseTest {
     @EnabledIfEnvironmentVariable(named = "MIGRATION_NATIVE_BINARY", matches = ".+")
     void startsNativeApplicationTwiceAfterH2Import() throws Exception {
         importH2(true);
+        try (Connection connection = connect();
+             var statement = connection.prepareStatement(
+                     "UPDATE \"APP_USERS\" SET \"PASSWORD\" = ? WHERE \"USER_ID\" = 1000")) {
+            statement.setString(1, new BCryptPasswordEncoder(4).encode("native-test-password"));
+            statement.executeUpdate();
+        }
         long sequenceValue = scalar("SELECT last_value FROM \"PERSON_SEQ\"");
         for (int attempt = 0; attempt < 2; attempt++) {
             Path log = tempDir.resolve("native-" + attempt + ".log");
@@ -194,9 +249,10 @@ class ImportedDatabaseLiquibaseTest {
                     Thread.sleep(200);
                 }
                 assertThat(Files.readString(log)).contains("Started StandardNaastApplication");
+                assertNativeAssociations(log);
                 assertImportedData(sequenceValue);
                 assertThat(scalar("SELECT user_id FROM app_users WHERE username = 'migration-user'")).isEqualTo(1000);
-                assertThat(scalar("SELECT count(*) FROM app_user_roles WHERE user_id = 1000 AND role = 'ROLE_USER'"))
+                assertThat(scalar("SELECT count(*) FROM app_user_roles WHERE user_id = 1000 AND role = 'ROLE_MEMBER'"))
                         .isEqualTo(1);
                 assertThat(scalar("SELECT count(*) FROM personnes WHERE roboticket_id = 'kept-ticket'")).isEqualTo(1);
             } finally {
@@ -206,6 +262,32 @@ class ImportedDatabaseLiquibaseTest {
                     assertThat(process.waitFor(15, TimeUnit.SECONDS)).isTrue();
                 }
             }
+        }
+    }
+
+    private void assertNativeAssociations(Path log) throws Exception {
+        var port = Pattern.compile("Tomcat started on port (\\d+)").matcher(Files.readString(log));
+        assertThat(port.find()).as("Native HTTP port").isTrue();
+        String baseUrl = "http://127.0.0.1:" + port.group(1);
+        try (var client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build()) {
+            var login = client.send(HttpRequest.newBuilder(URI.create(baseUrl + "/api/auth/login"))
+                            .timeout(Duration.ofSeconds(10)).header("Content-Type", "application/json")
+                            .POST(HttpRequest.BodyPublishers.ofString(
+                                    "{\"username\":\"migration-user\",\"password\":\"native-test-password\"}")).build(),
+                    HttpResponse.BodyHandlers.ofString());
+            assertThat(login.statusCode()).as("Native login: %s", login.body()).isEqualTo(200);
+            var mapper = new ObjectMapper();
+            var authentication = mapper.readTree(login.body());
+            assertThat(authentication.path("user").path("personId").asLong()).isEqualTo(42);
+            String token = authentication.path("accessToken").asText();
+            assertThat(token).isNotBlank();
+            var abonnement = client.send(HttpRequest.newBuilder(URI.create(baseUrl + "/api/abonnements/2"))
+                            .timeout(Duration.ofSeconds(10)).header("Authorization", "Bearer " + token).GET().build(),
+                    HttpResponse.BodyHandlers.ofString());
+            assertThat(abonnement.statusCode()).as("Native abonnement: %s", abonnement.body()).isEqualTo(200);
+            var body = mapper.readTree(abonnement.body());
+            assertThat(body.path("personId").asLong()).isEqualTo(42);
+            assertThat(body.path("personName").asText()).isEqualTo("Migration test");
         }
     }
 
@@ -245,7 +327,7 @@ class ImportedDatabaseLiquibaseTest {
                  Statement statement = source.createStatement()) {
                 statement.execute("INSERT INTO APP_USERS (USER_ID, USERNAME, PASSWORD, PERSONNE_ID) "
                         + "VALUES (1000, 'migration-user', 'test-only', 42)");
-                statement.execute("INSERT INTO APP_USER_ROLES VALUES (1000, 'ROLE_USER')");
+                statement.execute("INSERT INTO APP_USER_ROLES VALUES (1000, 'ROLE_MEMBER')");
                 statement.execute("UPDATE PERSONNES SET ROBOTICKET_ID = 'kept-ticket' WHERE PERSONNE_ID = 42");
                 statement.execute("ALTER SEQUENCE USER_SEQ INCREMENT BY 50");
             }
