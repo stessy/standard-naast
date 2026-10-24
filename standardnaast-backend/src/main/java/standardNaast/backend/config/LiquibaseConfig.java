@@ -15,7 +15,7 @@ import java.util.Set;
 @Configuration
 public class LiquibaseConfig {
 
-    @Value("${spring.liquibase.change-log:classpath:/db/changelog/db.changelog-master.xml}")
+    @Value("${spring.liquibase.change-log:db/changelog/db.changelog-master.xml}")
     private String changeLog;
 
     @Value("${spring.liquibase.enabled:true}")

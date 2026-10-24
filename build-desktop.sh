@@ -13,6 +13,14 @@ NG_DIR="${SCRIPT_DIR}/standardnaast-ng"
 BACKEND_DIR="${SCRIPT_DIR}/standardnaast-backend"
 
 TARGET="${1:-auto}"
+NATIVE_FLAG="${2:-}"
+
+if [ "${TARGET}" = "--native" ] || [ "${1}" = "native" ]; then
+    export NATIVE_BUILD="true"
+    TARGET="${2:-auto}"
+elif [ "${NATIVE_FLAG}" = "--native" ] || [ "${NATIVE_FLAG}" = "native" ]; then
+    export NATIVE_BUILD="true"
+fi
 
 echo "================================================================="
 echo "  🚀 Build & Packaging Desktop - Standard de Naast"

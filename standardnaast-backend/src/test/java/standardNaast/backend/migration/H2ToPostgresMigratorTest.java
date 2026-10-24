@@ -59,7 +59,13 @@ class H2ToPostgresMigratorTest {
                 path = path.substring(0, path.length() - ".mv.db".length());
             }
             String url = "jdbc:h2:file:" + path + ";DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;NON_KEYWORDS=VALUE,USER,ROLE";
-            try (Connection conn = DriverManager.getConnection(url, "sa", "")) {
+            Connection conn = null;
+            try {
+                try {
+                    conn = DriverManager.getConnection(url, "sa", "standard");
+                } catch (Exception ex) {
+                    conn = DriverManager.getConnection(url, "sa", "");
+                }
                 try (Statement stmt = conn.createStatement();
                      ResultSet rs = stmt.executeQuery("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC'")) {
                     int count = 0;
@@ -68,6 +74,8 @@ class H2ToPostgresMigratorTest {
                     }
                     assertThat(count).isGreaterThan(0);
                 }
+            } finally {
+                if (conn != null) conn.close();
             }
         }
     }

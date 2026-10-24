@@ -123,25 +123,50 @@ async function main() {
   // 3. Build Spring Boot
   log('3. Compilation du Backend Spring Boot');
   const mvnCmd = findMavenCommand();
+  const useNative = process.argv.includes('--native') || process.env.NATIVE_BUILD === 'true';
+  const mavenGoals = useNative
+    ? `"${mvnCmd}" clean package -Pnative -DskipTests`
+    : `"${mvnCmd}" clean package -DskipTests`;
+
   try {
-    run(`"${mvnCmd}" clean package -DskipTests`, backendDir);
+    run(mavenGoals, backendDir);
   } catch (e) {
     console.error('❌ Erreur lors du build Maven backend');
     throw e;
   }
 
-  // 4. Copie du JAR dans resources/backend
-  log('4. Copie du JAR Spring Boot vers resources/backend');
-  const backendTargetJar = path.join(backendDir, 'target', 'standardnaast-backend-1.0.0-SNAPSHOT.jar');
+  // 4. Copie du binaire backend dans resources/backend (JAR ou natif)
+  log('4. Copie des artefacts Spring Boot vers resources/backend');
   const electronBackendDir = path.join(electronDir, 'resources', 'backend');
   ensureDir(electronBackendDir);
+
+  const nativeBinaryName = process.platform === 'win32' ? 'standardnaast-backend.exe' : 'standardnaast-backend';
+  const backendTargetNative = path.join(backendDir, 'target', nativeBinaryName);
+  const backendTargetJar = path.join(backendDir, 'target', 'standardnaast-backend-1.0.0-SNAPSHOT.jar');
+
+  let artifactFound = false;
+
+  if (fs.existsSync(backendTargetNative)) {
+    const destNative = path.join(electronBackendDir, nativeBinaryName);
+    fs.copyFileSync(backendTargetNative, destNative);
+    if (process.platform !== 'win32') {
+      try {
+        fs.chmodSync(destNative, 0o755);
+      } catch (err) {}
+    }
+    console.log(`✅ Binaire natif GraalVM copié avec succès vers ${destNative}`);
+    artifactFound = true;
+  }
 
   if (fs.existsSync(backendTargetJar)) {
     const destJar = path.join(electronBackendDir, 'standardnaast-backend.jar');
     fs.copyFileSync(backendTargetJar, destJar);
     console.log(`✅ JAR copié avec succès vers ${destJar}`);
-  } else {
-    throw new Error(`❌ Le JAR généré ${backendTargetJar} n'a pas été trouvé.`);
+    artifactFound = true;
+  }
+
+  if (!artifactFound) {
+    throw new Error(`❌ Aucun artefact généré (${nativeBinaryName} ou ${backendTargetJar}) n'a été trouvé.`);
   }
 
   // 5. Téléchargement et vérification des binaires JRE et PostgreSQL

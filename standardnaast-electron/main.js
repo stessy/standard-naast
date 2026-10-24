@@ -20,7 +20,7 @@ const resourcesDir = isPackaged
   ? process.resourcesPath
   : path.join(__dirname, 'resources');
 
-// Chemins du JRE et du JAR
+// Chemins du JRE, du JAR et du binaire natif
 const platformDir = `${process.platform}-${process.arch}`;
 const jreBinDir = isPackaged
   ? path.join(resourcesDir, 'jre', 'bin')
@@ -33,6 +33,11 @@ const javaExecutable = process.platform === 'win32'
 const jarFile = isPackaged
   ? path.join(resourcesDir, 'backend', 'standardnaast-backend.jar')
   : path.join(__dirname, '..', 'standardnaast-backend', 'target', 'standardnaast-backend-1.0.0-SNAPSHOT.jar');
+
+const nativeExecutableName = process.platform === 'win32' ? 'standardnaast-backend.exe' : 'standardnaast-backend';
+const nativeExecutable = isPackaged
+  ? path.join(resourcesDir, 'backend', nativeExecutableName)
+  : path.join(__dirname, '..', 'standardnaast-backend', 'target', nativeExecutableName);
 
 // Chemins PostgreSQL
 const pgRootDir = isPackaged
@@ -177,23 +182,34 @@ async function startPostgreSQL() {
 function executeH2Migration(h2FilePath) {
   return new Promise((resolve, reject) => {
     updateSplashStatus(`Migration des données H2 vers PostgreSQL...`);
-    const javaCmd = fs.existsSync(javaExecutable) ? javaExecutable : 'java';
+    const isNative = fs.existsSync(nativeExecutable);
+    let runCmd;
+    let args = [];
 
-    if (!fs.existsSync(jarFile)) {
-      return reject(new Error(`Fichier JAR backend introuvable : ${jarFile}`));
-    }
-
-    console.log(`[Migration H2]: Lancement de la migration pour ${h2FilePath}`);
-    const args = [
-      '-jar',
-      jarFile,
+    const migrationParams = [
       `--migrate-from-h2=${h2FilePath}`,
+      '--h2-user=sa',
+      '--h2-password=standard',
       `--pg-url=jdbc:postgresql://localhost:${PG_PORT}/standardnaast`,
       '--pg-user=standardnaast',
       '--pg-password=standardnaast_password'
     ];
 
-    const proc = spawn(javaCmd, args, { windowsHide: true });
+    if (isNative) {
+      console.log(`[Migration H2]: Lancement via le binaire natif (${nativeExecutable}) pour ${h2FilePath}`);
+      runCmd = nativeExecutable;
+      args = migrationParams;
+    } else {
+      const javaCmd = fs.existsSync(javaExecutable) ? javaExecutable : 'java';
+      if (!fs.existsSync(jarFile)) {
+        return reject(new Error(`Fichier backend introuvable (ni binaire natif ni JAR) : ${jarFile}`));
+      }
+      console.log(`[Migration H2]: Lancement via Java (${javaCmd}) pour ${h2FilePath}`);
+      runCmd = javaCmd;
+      args = ['-jar', jarFile, ...migrationParams];
+    }
+
+    const proc = spawn(runCmd, args, { windowsHide: true });
 
     proc.stdout.on('data', (data) => {
       const text = data.toString();
@@ -332,12 +348,25 @@ function startSpringBoot() {
   return new Promise((resolve, reject) => {
     updateSplashStatus('Démarrage du serveur backend Spring Boot...');
 
-    const javaCmd = fs.existsSync(javaExecutable) ? javaExecutable : 'java';
-    console.log(`Utilisation de Java : ${javaCmd}`);
-    console.log(`Utilisation du JAR : ${jarFile}`);
+    const isNative = fs.existsSync(nativeExecutable);
+    let runCmd;
+    let runArgs = [];
 
-    if (!fs.existsSync(jarFile)) {
-      return reject(new Error(`Fichier backend introuvable : ${jarFile}`));
+    if (isNative) {
+      console.log(`Utilisation du binaire natif GraalVM : ${nativeExecutable}`);
+      runCmd = nativeExecutable;
+      runArgs = [];
+    } else {
+      const javaCmd = fs.existsSync(javaExecutable) ? javaExecutable : 'java';
+      console.log(`Utilisation de Java : ${javaCmd}`);
+      console.log(`Utilisation du JAR : ${jarFile}`);
+
+      if (!fs.existsSync(jarFile)) {
+        return reject(new Error(`Fichier backend introuvable (ni binaire natif ni JAR) : ${jarFile}`));
+      }
+
+      runCmd = javaCmd;
+      runArgs = ['-jar', jarFile];
     }
 
     const env = Object.assign({}, process.env, {
@@ -349,7 +378,7 @@ function startSpringBoot() {
       APP_JWT_SECRET: 'yourSuperSecretKeyForProductionMustBeAtLeast256BitsLongAndSecure'
     });
 
-    springProcess = spawn(javaCmd, ['-jar', jarFile], {
+    springProcess = spawn(runCmd, runArgs, {
       env,
       windowsHide: true
     });

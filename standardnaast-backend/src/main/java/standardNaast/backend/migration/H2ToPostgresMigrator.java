@@ -34,7 +34,7 @@ public class H2ToPostgresMigrator {
     public static class MigrationConfig {
         private String h2PathOrUrl;
         private String h2User = "sa";
-        private String h2Password = "";
+        private String h2Password = "standard";
         private String pgUrl = "jdbc:postgresql://localhost:5432/standardnaast";
         private String pgUser = "standardnaast";
         private String pgPassword = "password";
@@ -173,7 +173,7 @@ public class H2ToPostgresMigrator {
             return result;
         }
 
-        try (Connection h2Conn = DriverManager.getConnection(h2JdbcUrl, config.getH2User(), config.getH2Password());
+        try (Connection h2Conn = openH2Connection(h2JdbcUrl, config);
              Connection pgConn = DriverManager.getConnection(config.getPgUrl(), config.getPgUser(), config.getPgPassword())) {
 
             pgConn.setAutoCommit(false);
@@ -247,6 +247,22 @@ public class H2ToPostgresMigrator {
         }
 
         return result;
+    }
+
+    private Connection openH2Connection(String h2JdbcUrl, MigrationConfig config) throws SQLException {
+        try {
+            return DriverManager.getConnection(h2JdbcUrl, config.getH2User(), config.getH2Password());
+        } catch (SQLException authEx) {
+            // Si mot de passe échoue, tenter fallback
+            if ("standard".equals(config.getH2Password())) {
+                System.out.println("[MIGRATION] Tentative avec mot de passe H2 vide...");
+                return DriverManager.getConnection(h2JdbcUrl, config.getH2User(), "");
+            } else if (config.getH2Password() == null || config.getH2Password().isEmpty()) {
+                System.out.println("[MIGRATION] Tentative avec mot de passe H2 'standard'...");
+                return DriverManager.getConnection(h2JdbcUrl, config.getH2User(), "standard");
+            }
+            throw authEx;
+        }
     }
 
     private void notify(MigrationConfig config, String message, double percent) {
@@ -671,6 +687,10 @@ public class H2ToPostgresMigrator {
                 config.setH2PathOrUrl(arg.substring("--migrate-from-h2=".length()));
             } else if (arg.startsWith("--migrate-h2=")) {
                 config.setH2PathOrUrl(arg.substring("--migrate-h2=".length()));
+            } else if (arg.startsWith("--h2-user=")) {
+                config.setH2User(arg.substring("--h2-user=".length()));
+            } else if (arg.startsWith("--h2-password=")) {
+                config.setH2Password(arg.substring("--h2-password=".length()));
             } else if (arg.startsWith("--pg-url=")) {
                 config.setPgUrl(arg.substring("--pg-url=".length()));
             } else if (arg.startsWith("--pg-user=")) {
