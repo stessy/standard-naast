@@ -23,6 +23,7 @@ async function test() {
     },
     ipcMain, path, fs, process, Buffer, setTimeout, clearTimeout,
     app,
+    logsDir: path.join(userData, 'logs'),
     __dirname: directory,
     nativeExecutable: path.join(directory, 'missing-test-native'),
     javaExecutable: path.join(directory, 'missing-test-java'),
@@ -31,8 +32,9 @@ async function test() {
     mainWindow: null,
     splashWindow: null,
     updateSplashStatus() {},
-    spawn(command, args) {
+    spawn(command, args, options) {
       assert.equal(command, 'java');
+      assert.equal(options.env.LOG_DIR, path.join(userData, 'logs'));
       assert.ok(!args.some(value => value.includes('12345678')));
       const child = new EventEmitter();
       child.stdin = new PassThrough();

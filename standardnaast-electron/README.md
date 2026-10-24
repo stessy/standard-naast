@@ -34,10 +34,32 @@ la seconde lit l'identifiant et le mot de passe sur deux lignes de l'entree stan
 
 ## Journaux du backend
 
+### Choix des dossiers
+
+Le menu **Outils > Paramètres…** (`Cmd+,` sur macOS, `Ctrl+,` sur Windows)
+permet de choisir les dossiers des sauvegardes PostgreSQL et des logs du backend.
+Cliquez sur **Choisir…**, puis **Enregistrer**. Les choix sont conserves dans
+`settings.json` dans le repertoire utilisateur Electron.
+La fenetre se ferme apres un enregistrement reussi ; en cas d'erreur, elle reste
+ouverte et affiche le message pour permettre de corriger puis reessayer.
+Le bouton **Annuler** ou la touche **Echap** ferme la fenetre sans enregistrer
+les modifications.
+
+Le dossier des sauvegardes s'applique des la prochaine sauvegarde, manuelle ou
+a la fermeture. Le dossier des logs s'applique au prochain demarrage de
+l'application, pour le serveur, la migration et la creation d'administrateur.
+Les anciens fichiers ne sont ni deplaces ni supprimes lors du changement.
+La retention existante des 15 dernieres sauvegardes s'applique au dossier actif.
+Les dossiers choisis doivent rester accessibles en ecriture.
+Sans configuration, les sous-dossiers `backups` et `logs` du repertoire
+utilisateur Electron sont conserves. Le fichier technique `postgres.log`
+du moteur PostgreSQL reste dans le repertoire utilisateur Electron.
+
 SLF4J/Logback ecrit dans la console et dans `standardnaast-backend.log`.
-Le lanceur Electron transmet `LOG_DIR` aux trois modes du backend (serveur,
-migration et creation du premier administrateur), dans le sous-dossier `logs`
-du repertoire utilisateur Electron. Sur macOS, il se situe habituellement dans
+Le lanceur Electron transmet le dossier choisi via `LOG_DIR` aux trois modes
+du backend (serveur, migration et creation du premier administrateur).
+Par defaut, il utilise le sous-dossier `logs` du repertoire utilisateur Electron.
+Sur macOS, il se situe habituellement dans
 `~/Library/Application Support/standardnaast-desktop/logs`.
 En lancement Java direct, le repertoire par defaut est `./logs` ; la variable
 `LOG_DIR` permet de le changer avant le lancement. `logback.xml` est commun aux
@@ -254,7 +276,7 @@ Le changeset `019-align-sequence-increments` aligne les 12 sequences JPA sur les
 ## 5. Sauvegardes automatiques (Backups)
 
 * À chaque arrêt ou fermeture de l'application, un dump complet de la base de données PostgreSQL est automatiquement généré via `pg_dump`.
-* **Emplacement des sauvegardes :**
+* **Emplacement des sauvegardes :** configurable dans **Outils > Paramètres…**. Par défaut :
   - **macOS :** `~/Library/Application Support/be.standardnaast.desktop/backups/backup_YYYY-MM-DD-HH-mm-ss.sql`
   - **Windows :** `%APPDATA%\be.standardnaast.desktop\backups\backup_YYYY-MM-DD-HH-mm-ss.sql`
 * **Rotation automatique :** Seules les **15 sauvegardes les plus récentes** sont conservées pour éviter de saturer le disque dur du client.

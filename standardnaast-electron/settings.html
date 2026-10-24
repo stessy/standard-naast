@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'">
+  <title>Paramètres</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 28px; color: #222; }
+    h1 { font-size: 22px; color: #991b1b; }
+    form { display: flex; flex-direction: column; gap: 12px; }
+    .folder { display: flex; gap: 8px; }
+    input { flex: 1; min-width: 0; }
+    input, button { padding: 10px; font: inherit; }
+    button { background: #991b1b; color: white; border: none; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: default; }
+    .actions { display: flex; justify-content: flex-end; gap: 8px; }
+    #cancel { background: #eee; color: #222; }
+    p { font-size: 14px; }
+    #message { min-height: 24px; }
+    #message.error { color: #991b1b; }
+  </style>
+</head>
+<body>
+  <h1>Paramètres</h1>
+  <form id="settings-form">
+    <label for="backupsDir">Dossier des sauvegardes PostgreSQL</label>
+    <div class="folder">
+      <input id="backupsDir" readonly required>
+      <button type="button" data-folder="backupsDir">Choisir…</button>
+    </div>
+    <label for="logsDir">Dossier des logs applicatifs du backend</label>
+    <div class="folder">
+      <input id="logsDir" readonly required>
+      <button type="button" data-folder="logsDir">Choisir…</button>
+    </div>
+    <p>Les sauvegardes utiliseront le nouveau dossier dès la prochaine sauvegarde.
+      Le dossier des logs sera appliqué après redémarrage de l'application.
+      Les anciens fichiers ne sont ni déplacés ni supprimés.</p>
+    <div id="message" role="status" aria-live="polite"></div>
+    <div class="actions">
+      <button id="cancel" type="button">Annuler</button>
+      <button id="save" type="submit" disabled>Enregistrer</button>
+    </div>
+  </form>
+  <script src="settings-renderer.js"></script>
+</body>
+</html>

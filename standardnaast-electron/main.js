@@ -1,9 +1,10 @@
 const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron');
 const path = require('path');
-const { spawn, execSync } = require('child_process');
+const { spawn, execSync, execFileSync } = require('child_process');
 const http = require('http');
 const net = require('net');
 const fs = require('fs');
+const { createSettingsStore, createSettingsWindow } = require('./settings');
 
 let splashWindow = null;
 let mainWindow = null;
@@ -49,7 +50,9 @@ const pgLibDir = path.join(pgRootDir, 'lib');
 const pgShareDir = path.join(pgRootDir, 'share', 'postgresql');
 
 const pgDataDir = path.join(app.getPath('userData'), 'postgres_data');
-const backupsDir = path.join(app.getPath('userData'), 'backups');
+let settingsStore;
+let showSettings;
+let logsDir;
 const migrationStatusFile = path.join(app.getPath('userData'), 'migration_h2_status.json');
 
 const initdbExecutable = process.platform === 'win32' ? path.join(pgBinDir, 'initdb.exe') : path.join(pgBinDir, 'initdb');
@@ -211,7 +214,7 @@ function executeH2Migration(h2FilePath) {
 
     const proc = spawn(runCmd, args, {
       windowsHide: true,
-      env: { ...process.env, LOG_DIR: path.join(app.getPath('userData'), 'logs') }
+      env: { ...process.env, LOG_DIR: logsDir }
     });
 
     proc.stdout.on('data', (data) => {
@@ -375,7 +378,7 @@ function startSpringBoot() {
       SPRING_DATASOURCE_PASSWORD: 'standardnaast_password',
       SERVER_PORT: `${BACKEND_PORT}`,
       APP_JWT_SECRET: 'yourSuperSecretKeyForProductionMustBeAtLeast256BitsLongAndSecure',
-      LOG_DIR: path.join(app.getPath('userData'), 'logs')
+      LOG_DIR: logsDir
     });
 
     springProcess = spawn(runCmd, runArgs, {
@@ -443,7 +446,7 @@ function runInitialAdminCommand(create, credentials) {
       windowsHide: true,
       env: {
         ...process.env,
-        LOG_DIR: path.join(app.getPath('userData'), 'logs'),
+        LOG_DIR: logsDir,
         SPRING_DATASOURCE_URL: `jdbc:postgresql://localhost:${PG_PORT}/standardnaast`,
         SPRING_DATASOURCE_USERNAME: 'standardnaast',
         SPRING_DATASOURCE_PASSWORD: 'standardnaast_password'
@@ -580,14 +583,23 @@ function buildApplicationMenu() {
       label: 'Outils',
       submenu: [
         {
+          label: 'Paramètres…',
+          accelerator: 'CmdOrCtrl+,',
+          click: () => showSettings(mainWindow)
+        },
+        { type: 'separator' },
+        {
           label: 'Effectuer une sauvegarde manuelle...',
           click: () => {
-            backupDatabase();
+            if (!backupDatabase()) {
+              dialog.showErrorBox('Erreur de sauvegarde', "La sauvegarde a échoué. Vérifiez le dossier choisi et les journaux.");
+              return;
+            }
             dialog.showMessageBoxSync({
               type: 'info',
               title: 'Sauvegarde',
               message: 'Sauvegarde effectuée avec succès',
-              detail: `Le fichier de sauvegarde a été enregistré dans le dossier : ${backupsDir}`
+              detail: `Le fichier de sauvegarde a été enregistré dans le dossier : ${settingsStore.get().backupsDir}`
             });
           }
         },
@@ -711,6 +723,7 @@ function createMainWindow() {
 // 5. Sauvegarde de la base de données
 function backupDatabase() {
   try {
+    const { backupsDir } = settingsStore.get();
     if (!fs.existsSync(backupsDir)) {
       fs.mkdirSync(backupsDir, { recursive: true });
     }
@@ -724,7 +737,7 @@ function backupDatabase() {
 
     console.log(`[Backup]: Début de la sauvegarde PostgreSQL vers ${backupFile}...`);
 
-    execSync(`"${pgDumpCmd}" -p ${PG_PORT} -U standardnaast -d standardnaast -F p -f "${backupFile}"`, {
+    execFileSync(pgDumpCmd, ['-p', String(PG_PORT), '-U', 'standardnaast', '-d', 'standardnaast', '-F', 'p', '-f', backupFile], {
       windowsHide: true,
       stdio: 'pipe',
       env: getPostgresEnv()
@@ -732,13 +745,16 @@ function backupDatabase() {
 
     console.log(`[Backup]: Sauvegarde effectuée avec succès : ${backupFile}`);
     cleanOldBackups(15);
+    return true;
   } catch (error) {
     console.error('[Backup ERROR]: Erreur lors de la sauvegarde de PostgreSQL :', error.message);
+    return false;
   }
 }
 
 function cleanOldBackups(maxKeep = 15) {
   try {
+    const { backupsDir } = settingsStore.get();
     if (!fs.existsSync(backupsDir)) return;
 
     const files = fs.readdirSync(backupsDir)
@@ -811,6 +827,11 @@ app.on('ready', async () => {
   createSplashWindow();
 
   try {
+    settingsStore = createSettingsStore(app.getPath('userData'));
+    logsDir = settingsStore.get().logsDir;
+    fs.mkdirSync(logsDir, { recursive: true });
+    fs.accessSync(logsDir, fs.constants.W_OK | fs.constants.X_OK);
+    showSettings = createSettingsWindow({ BrowserWindow, dialog, ipcMain, store: settingsStore });
     await startPostgreSQL();
     await checkAndPerformInitialH2Migration();
     await startSpringBoot();
