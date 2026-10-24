@@ -27,6 +27,39 @@ function ensureDir(dir) {
   }
 }
 
+function fixRelativeSymlinks(baseDir) {
+  if (!fs.existsSync(baseDir)) return;
+  let fixedCount = 0;
+
+  function traverse(currentDir) {
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(currentDir, entry.name);
+      if (entry.isSymbolicLink()) {
+        const linkTarget = fs.readlinkSync(fullPath);
+        if (path.isAbsolute(linkTarget)) {
+          const match = linkTarget.match(/\/Versions\/\d+\/(.+)$/);
+          if (match) {
+            const relToVersionRoot = match[1];
+            const targetInDest = path.join(baseDir, relToVersionRoot);
+            const relativePath = path.relative(currentDir, targetInDest);
+            fs.unlinkSync(fullPath);
+            fs.symlinkSync(relativePath, fullPath);
+            fixedCount++;
+          }
+        }
+      } else if (entry.isDirectory()) {
+        traverse(fullPath);
+      }
+    }
+  }
+
+  traverse(baseDir);
+  if (fixedCount > 0) {
+    console.log(`[Symlinks] ${fixedCount} liens symboliques absolus convertis en liens relatifs dans ${baseDir}.`);
+  }
+}
+
 function findMavenCommand() {
   const isWindows = process.platform === 'win32';
   const defaultMvn = isWindows ? 'mvn.cmd' : 'mvn';
@@ -119,6 +152,19 @@ async function main() {
   } catch (e) {
     console.error('❌ Erreur lors du téléchargement des binaires :', e.message);
     throw e;
+  }
+
+  // 6. Vérification de la validité des liens symboliques dans resources/postgres
+  log('6. Vérification et correction des liens symboliques PostgreSQL');
+  const postgresBase = path.join(electronDir, 'resources', 'postgres');
+  if (fs.existsSync(postgresBase)) {
+    const platforms = fs.readdirSync(postgresBase);
+    for (const plat of platforms) {
+      const platDir = path.join(postgresBase, plat);
+      if (fs.statSync(platDir).isDirectory()) {
+        fixRelativeSymlinks(platDir);
+      }
+    }
   }
 
   console.log('\n✅ Préparation terminée avec succès ! Prêt pour le packaging.');

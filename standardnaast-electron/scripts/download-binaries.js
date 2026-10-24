@@ -105,6 +105,40 @@ function fixPermissions(dir) {
   }
 }
 
+function fixRelativeSymlinks(baseDir) {
+  if (!fs.existsSync(baseDir)) return;
+  let fixedCount = 0;
+
+  function traverse(currentDir) {
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(currentDir, entry.name);
+      if (entry.isSymbolicLink()) {
+        const linkTarget = fs.readlinkSync(fullPath);
+        if (path.isAbsolute(linkTarget)) {
+          // If the link points to a volume or absolute path inside Postgres.app
+          const match = linkTarget.match(/\/Versions\/\d+\/(.+)$/);
+          if (match) {
+            const relToVersionRoot = match[1];
+            const targetInDest = path.join(baseDir, relToVersionRoot);
+            const relativePath = path.relative(currentDir, targetInDest);
+            fs.unlinkSync(fullPath);
+            fs.symlinkSync(relativePath, fullPath);
+            fixedCount++;
+          }
+        }
+      } else if (entry.isDirectory()) {
+        traverse(fullPath);
+      }
+    }
+  }
+
+  traverse(baseDir);
+  if (fixedCount > 0) {
+    console.log(`[Symlinks] ${fixedCount} liens symboliques absolus convertis en liens relatifs dans ${baseDir}.`);
+  }
+}
+
 async function processJRE(target, config, force) {
   const destDir = path.join(electronDir, 'resources', 'jre', target);
   const javaBinaryName = target.startsWith('win32') ? 'java.exe' : 'java';
@@ -181,6 +215,7 @@ async function processPostgres(target, config, force) {
       console.log(`Copie de PostgreSQL depuis ${appSource} vers ${destDir} ...`);
       fs.cpSync(appSource, destDir, { recursive: true });
       fixPermissions(destDir);
+      fixRelativeSymlinks(destDir);
       console.log(`[PostgreSQL] Installé avec succès pour ${target} !`);
     } finally {
       console.log(`Démontage de ${mountPoint} ...`);
