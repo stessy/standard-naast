@@ -115,9 +115,9 @@ class ImportedDatabaseLiquibaseTest {
     @Test
     void initializesEmptyDatabaseAndDoesNotReplayChanges() throws Exception {
         update();
-        assertThat(scalar("SELECT count(*) FROM databasechangelog")).isEqualTo(8);
+        assertThat(scalar("SELECT count(*) FROM databasechangelog")).isEqualTo(13);
         update();
-        assertThat(scalar("SELECT count(*) FROM databasechangelog")).isEqualTo(8);
+        assertThat(scalar("SELECT count(*) FROM databasechangelog")).isEqualTo(13);
         assertThat(scalar("SELECT count(*) FROM information_schema.columns "
                 + "WHERE table_name = 'personnes' AND column_name = 'roboticket_id'")).isEqualTo(1);
     }
@@ -132,6 +132,113 @@ class ImportedDatabaseLiquibaseTest {
         update();
         assertImportedData(sequenceValue);
         assertThat(scalar("SELECT nextval('person_seq')")).isEqualTo(sequenceValue + 50);
+    }
+
+    @Test
+    void restoresLegacyNumericPaidFlagToBooleanBeforeHibernateValidation() throws Exception {
+        importH2(false, true);
+        update();
+
+        assertThat(scalar("SELECT count(*) FROM information_schema.columns "
+                + "WHERE table_name = 'abonnement' AND column_name = 'paye' AND data_type = 'boolean'"))
+                .isEqualTo(1);
+        assertThat(scalar("SELECT count(*) FROM abonnement WHERE paye = false")).isEqualTo(1);
+        assertThat(scalar("SELECT count(*) FROM abonnement WHERE paye = true")).isEqualTo(1);
+    }
+
+    @Test
+    void restoresImportedTimestampsToLocalDateColumnsWithoutLosingDates() throws Exception {
+        importH2();
+        update();
+        try (Connection connection = connect(); Statement statement = connection.createStatement()) {
+            statement.execute("ALTER TABLE saison ALTER COLUMN date_debut TYPE TIMESTAMP USING date_debut::timestamp");
+            statement.execute("ALTER TABLE personnes ALTER COLUMN date_naissance TYPE TIMESTAMP "
+                    + "USING date_naissance::timestamp");
+            statement.execute("ALTER TABLE benevolat ALTER COLUMN date_benevolat TYPE TIMESTAMP "
+                    + "USING date_benevolat::timestamp");
+            statement.execute("ALTER TABLE personnes_cotisations ALTER COLUMN date_paiement TYPE TIMESTAMP "
+                    + "USING date_paiement::timestamp");
+            statement.execute("UPDATE saison SET date_debut = TIMESTAMP '2026-07-01 08:30:00' "
+                    + "WHERE saison_id = '2026'");
+            statement.execute("UPDATE personnes SET date_naissance = TIMESTAMP '2000-05-12 11:45:00' "
+                    + "WHERE personne_id = 42");
+            statement.execute("DELETE FROM databasechangelog WHERE id = '021-restore-imported-date-types'");
+        }
+
+        update();
+
+        assertThat(scalar("SELECT count(*) FROM information_schema.columns "
+                + "WHERE (table_name, column_name) IN (('saison', 'date_debut'), "
+                + "('personnes', 'date_naissance'), ('benevolat', 'date_benevolat'), "
+                + "('personnes_cotisations', 'date_paiement')) AND data_type = 'date'"))
+                .isEqualTo(4);
+        assertThat(scalar("SELECT count(*) FROM saison WHERE saison_id = '2026' "
+                + "AND date_debut = DATE '2026-07-01'")).isEqualTo(1);
+        assertThat(scalar("SELECT count(*) FROM personnes WHERE personne_id = 42 "
+                + "AND date_naissance = DATE '2000-05-12'")).isEqualTo(1);
+    }
+
+    @Test
+    void restoresImportedNumericBooleanColumnsWithoutChangingNullsOrValues() throws Exception {
+        importH2();
+        update();
+        try (Connection connection = connect(); Statement statement = connection.createStatement()) {
+            statement.execute("ALTER TABLE personnes ALTER COLUMN etudiant TYPE NUMERIC USING "
+                    + "CASE WHEN etudiant THEN 1 ELSE 0 END");
+            statement.execute("ALTER TABLE saison ALTER COLUMN europeens TYPE NUMERIC USING "
+                    + "CASE WHEN europeens THEN 1 ELSE 0 END");
+            statement.execute("ALTER TABLE personnes_cotisations ALTER COLUMN carte_membre_envoyee "
+                    + "TYPE NUMERIC USING CASE WHEN carte_membre_envoyee THEN 1 ELSE 0 END");
+            statement.execute("UPDATE personnes SET etudiant = 1 WHERE personne_id = 42");
+            statement.execute("UPDATE saison SET europeens = 0 WHERE saison_id = '2026'");
+            statement.execute("DELETE FROM databasechangelog WHERE id = '022-restore-imported-boolean-types'");
+        }
+
+        update();
+
+        assertThat(scalar("SELECT count(*) FROM information_schema.columns WHERE "
+                + "(table_name, column_name) IN (('personnes', 'etudiant'), ('saison', 'europeens'), "
+                + "('personnes_cotisations', 'carte_membre_envoyee')) AND data_type = 'boolean'"))
+                .isEqualTo(3);
+        assertThat(scalar("SELECT count(*) FROM personnes WHERE personne_id = 42 AND etudiant IS TRUE")).isEqualTo(1);
+        assertThat(scalar("SELECT count(*) FROM saison WHERE saison_id = '2026' AND europeens IS FALSE")).isEqualTo(1);
+    }
+
+    @Test
+    void widensLegacyIntegerTravelAmountToBigintWithoutChangingValues() throws Exception {
+        importH2();
+        update();
+        try (Connection connection = connect(); Statement statement = connection.createStatement()) {
+            statement.execute("ALTER TABLE personne_match ALTER COLUMN car_travel_amount TYPE INTEGER "
+                    + "USING car_travel_amount::integer");
+            statement.execute("DELETE FROM databasechangelog WHERE id = '023-restore-imported-travel-amount-type'");
+        }
+
+        update();
+
+        assertThat(scalar("SELECT count(*) FROM information_schema.columns "
+                + "WHERE table_name = 'personne_match' AND column_name = 'car_travel_amount' "
+                + "AND data_type = 'bigint'")).isEqualTo(1);
+    }
+
+    @Test
+    void restoresImportedNumericTravelPriceMemberFlagToBoolean() throws Exception {
+        importH2();
+        update();
+        try (Connection connection = connect(); Statement statement = connection.createStatement()) {
+            statement.execute("ALTER TABLE travel_price ALTER COLUMN membre TYPE NUMERIC "
+                    + "USING CASE WHEN membre THEN 1 ELSE 0 END");
+            statement.execute("UPDATE travel_price SET membre = 1 WHERE id = 21");
+            statement.execute("DELETE FROM databasechangelog "
+                    + "WHERE id = '024-restore-imported-travel-price-member-type'");
+        }
+
+        update();
+
+        assertThat(scalar("SELECT count(*) FROM information_schema.columns "
+                + "WHERE table_name = 'travel_price' AND column_name = 'membre' "
+                + "AND data_type = 'boolean'")).isEqualTo(1);
+        assertThat(scalar("SELECT count(*) FROM travel_price WHERE id = 21 AND membre IS TRUE")).isEqualTo(1);
     }
 
     @Test
@@ -324,13 +431,21 @@ class ImportedDatabaseLiquibaseTest {
     }
 
     private void importH2(boolean includeExistingEvolutions) throws Exception {
+        importH2(includeExistingEvolutions, false);
+    }
+
+    private void importH2(boolean includeExistingEvolutions, boolean numericPaidFlag) throws Exception {
         String sourceUrl = "jdbc:h2:mem:" + database + ";DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE,USER,ROLE";
         try (Connection source = DriverManager.getConnection(sourceUrl, "sa", "");
              Statement statement = source.createStatement()) {
             String schema = new ClassPathResource("db/changelog/liquibaseChangelog/000_initial_schema.sql")
                     .getContentAsString(StandardCharsets.UTF_8);
             // Legacy H2 schemas use unconstrained NUMERIC for Java integer properties too.
-            statement.execute(schema.replaceAll("\\bBIGINT\\b|\\bINT\\b", "NUMERIC"));
+            String importedSchema = schema.replaceAll("\\bBIGINT\\b|\\bINT\\b", "NUMERIC");
+            if (numericPaidFlag) {
+                importedSchema = importedSchema.replace("PAYE BOOLEAN", "PAYE NUMERIC");
+            }
+            statement.execute(importedSchema);
             for (var sequence : expectedSequenceIncrements().entrySet()) {
                 if (!sequence.getKey().equals("user_seq")) {
                     statement.execute("ALTER SEQUENCE " + sequence.getKey()
@@ -344,7 +459,13 @@ class ImportedDatabaseLiquibaseTest {
             statement.execute("INSERT INTO PERSONNES (PERSONNE_ID, NOM, NUMERO_MEMBRE) "
                     + "VALUES (42, 'Migration test', 9223372036854775807)");
             statement.execute("INSERT INTO ABONNEMENT (ABONNEMENT_ID, PERSONNE_ID, SAISON, REDUCTION, PAYE, ACOMPTE) "
-                    + "VALUES (2, 42, '2026', 0, false, -9223372036854775808)");
+                    + "VALUES (2, 42, '2026', 0, " + (numericPaidFlag ? "0" : "false")
+                    + ", -9223372036854775808)");
+            if (numericPaidFlag) {
+                statement.execute("INSERT INTO ABONNEMENT "
+                        + "(ABONNEMENT_ID, PERSONNE_ID, SAISON, REDUCTION, PAYE) "
+                        + "VALUES (3, 42, '2026', 0, 1)");
+            }
         }
         if (includeExistingEvolutions) {
             SpringLiquibase sourceLiquibase = new SpringLiquibase();
@@ -365,7 +486,8 @@ class ImportedDatabaseLiquibaseTest {
                         .setH2Password("").setPgUrl(url).setPgUser(user).setPgPassword(""));
         assertThat(result.isSuccess()).as(result.toString()).isTrue();
         assertThat(result.getWarnings()).isEmpty();
-        assertThat(result.getTotalRowsMigrated()).isEqualTo(includeExistingEvolutions ? 5 : 3);
+        assertThat(result.getTotalRowsMigrated()).isEqualTo(
+                (includeExistingEvolutions ? 5 : 3) + (numericPaidFlag ? 1 : 0));
     }
 
     private void assertImportedData(long sequenceValue) throws Exception {
@@ -374,7 +496,7 @@ class ImportedDatabaseLiquibaseTest {
         assertThat(scalar("SELECT numero_membre FROM personnes WHERE personne_id = 42")).isEqualTo(Long.MAX_VALUE);
         assertThat(scalar("SELECT acompte FROM abonnement WHERE abonnement_id = 2")).isEqualTo(Long.MIN_VALUE);
         assertThat(scalar("SELECT last_value FROM person_seq")).isEqualTo(sequenceValue);
-        assertThat(scalar("SELECT count(*) FROM databasechangelog")).isEqualTo(8);
+        assertThat(scalar("SELECT count(*) FROM databasechangelog")).isEqualTo(13);
         for (var sequence : expectedSequenceIncrements().entrySet()) {
             assertThat(scalar("SELECT increment_by FROM pg_sequences WHERE schemaname = 'public' "
                     + "AND sequencename = '" + sequence.getKey() + "'"))

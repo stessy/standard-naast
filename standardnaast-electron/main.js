@@ -281,12 +281,12 @@ async function checkAndPerformInitialH2Migration() {
   }
 
   // Proposer à l'utilisateur de migrer les données
-  let buttons = ['Parcourir pour sélectionner une base H2...', 'Démarrer avec une base vierge'];
+  let buttons = ['Parcourir pour sélectionner une base H2 ou sa sauvegarde...', 'Démarrer avec une base vierge'];
   let defaultId = 0;
-  let message = "C'est la première fois que vous lancez Standard de Naast.\n\nSouhaitez-vous migrer vos données depuis une ancienne base de données H2 (.mv.db) vers PostgreSQL ?";
+  let message = "C'est la première fois que vous lancez Standard de Naast.\n\nSouhaitez-vous migrer vos données depuis une base H2 (.mv.db) ou une sauvegarde SQL H2 vers PostgreSQL ?";
 
   if (detectedH2File) {
-    buttons = ['Migrer la base H2 détectée', 'Choisir un autre fichier...', 'Base vierge'];
+    buttons = ['Migrer la base H2 détectée', 'Choisir une base ou sauvegarde...', 'Base vierge'];
     message = `Une ancienne base H2 a été détectée :\n${detectedH2File}\n\nSouhaitez-vous migrer ces données vers PostgreSQL ?`;
   }
 
@@ -306,12 +306,8 @@ async function checkAndPerformInitialH2Migration() {
     selectedH2File = detectedH2File;
   } else if ((detectedH2File && choice === 1) || (!detectedH2File && choice === 0)) {
     const fileSelection = dialog.showOpenDialogSync({
-      title: 'Sélectionner la base de données H2 (.mv.db)',
-      properties: ['openFile'],
-      filters: [
-        { name: 'Base de données H2 (*.mv.db, *.db)', extensions: ['mv.db', 'db'] },
-        { name: 'Tous les fichiers', extensions: ['*'] }
-      ]
+      title: 'Sélectionner une base H2 ou une sauvegarde SQL H2',
+      properties: ['openFile']
     });
 
     if (fileSelection && fileSelection.length > 0) {
@@ -433,6 +429,112 @@ function startSpringBoot() {
   });
 }
 
+function runInitialAdminCommand(create, credentials) {
+  const native = fs.existsSync(nativeExecutable);
+  const command = native ? nativeExecutable : (fs.existsSync(javaExecutable) ? javaExecutable : 'java');
+  const args = native ? [] : ['-jar', jarFile];
+  args.push(create ? '--create-initial-admin' : '--initial-admin-status');
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, {
+      windowsHide: true,
+      env: {
+        ...process.env,
+        SPRING_DATASOURCE_URL: `jdbc:postgresql://localhost:${PG_PORT}/standardnaast`,
+        SPRING_DATASOURCE_USERNAME: 'standardnaast',
+        SPRING_DATASOURCE_PASSWORD: 'standardnaast_password'
+      }
+    });
+    let output = '';
+    let error = '';
+    const timeout = setTimeout(() => {
+      child.kill();
+      reject(new Error("Délai dépassé pour l'initialisation du compte."));
+    }, 30000);
+    child.stdout.on('data', data => { output += data.toString(); });
+    child.stderr.on('data', data => { error += data.toString(); });
+    child.on('error', () => {
+      clearTimeout(timeout);
+      reject(new Error("Impossible de lancer l'initialisation du compte."));
+    });
+    child.stdin.on('error', () => {
+      error = "Impossible de transmettre les identifiants au backend.";
+    });
+    child.on('close', code => {
+      clearTimeout(timeout);
+      if (code !== 0) {
+        reject(new Error(error.trim() || "L'initialisation du compte a échoué."));
+      } else if (output.includes(create ? 'ADMIN_SETUP:CREATED' : 'ADMIN_SETUP:REQUIRED')) {
+        resolve(true);
+      } else if (!create && output.includes('ADMIN_SETUP:EXISTS')) {
+        resolve(false);
+      } else {
+        reject(new Error("Réponse d'initialisation inconnue. Reconstruisez le backend."));
+      }
+    });
+    child.stdin.end(create ? `${credentials.username}\n${credentials.password}\n` : '');
+  });
+}
+
+async function ensureInitialAdmin() {
+  if (!await runInitialAdminCommand(false)) return;
+  updateSplashStatus('Création du premier compte administrateur...');
+  await new Promise((resolve, reject) => {
+    const window = new BrowserWindow({
+      width: 540,
+      height: 650,
+      resizable: false,
+      parent: mainWindow || splashWindow,
+      modal: true,
+      autoHideMenuBar: true,
+      webPreferences: {
+        preload: path.join(__dirname, 'admin-setup-preload.js'),
+        nodeIntegration: false,
+        contextIsolation: true,
+        sandbox: true
+      }
+    });
+    let created = false;
+    let submitting = false;
+    window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+    window.webContents.on('will-navigate', event => event.preventDefault());
+    ipcMain.handle('initial-admin:create', async (event, credentials) => {
+      if (event.sender !== window.webContents || event.senderFrame !== window.webContents.mainFrame) {
+        throw new Error('Requête non autorisée.');
+      }
+      if (submitting) return { success: false, error: 'Création en cours.' };
+      if (!credentials || typeof credentials.username !== 'string' || typeof credentials.password !== 'string'
+          || credentials.username.trim().length < 3 || credentials.username.trim().length > 50
+          || /[\r\n]/.test(credentials.username) || /[\r\n]/.test(credentials.password)
+          || credentials.password.length < 8 || Buffer.byteLength(credentials.password, 'utf8') > 72) {
+        return { success: false, error: 'Identifiant : 3 à 50 caractères. Mot de passe : 8 caractères minimum, 72 octets UTF-8 maximum.' };
+      }
+      submitting = true;
+      try {
+        await runInitialAdminCommand(true, credentials);
+        created = true;
+        window.close();
+        return { success: true };
+      } catch (error) {
+        return { success: false, error: error.message };
+      } finally {
+        submitting = false;
+      }
+    });
+    window.on('close', event => {
+      if (submitting && !created) event.preventDefault();
+    });
+    window.on('closed', () => {
+      ipcMain.removeHandler('initial-admin:create');
+      if (created) resolve();
+      else reject(new Error("Création du premier administrateur annulée. Elle sera proposée au prochain démarrage."));
+    });
+    window.loadFile(path.join(__dirname, 'admin-setup.html')).catch(() => {
+      reject(new Error("Impossible de charger le formulaire de création du compte administrateur."));
+      window.destroy();
+    });
+  });
+}
+
 // 4. Création des fenêtres et Menus
 function buildApplicationMenu() {
   const isMac = process.platform === 'darwin';
@@ -488,13 +590,13 @@ function buildApplicationMenu() {
           label: 'Migrer des données depuis une base H2...',
           click: async () => {
             const fileSelection = dialog.showOpenDialogSync({
-              title: 'Sélectionner le fichier H2 (.mv.db)',
-              properties: ['openFile'],
-              filters: [{ name: 'Base H2 (*.mv.db, *.db)', extensions: ['mv.db', 'db'] }]
+              title: 'Sélectionner une base H2 ou une sauvegarde SQL H2',
+              properties: ['openFile']
             });
             if (fileSelection && fileSelection.length > 0) {
               try {
                 await executeH2Migration(fileSelection[0]);
+                await ensureInitialAdmin();
                 dialog.showMessageBoxSync({
                   type: 'info',
                   title: 'Migration réussie',
@@ -707,6 +809,7 @@ app.on('ready', async () => {
     await startPostgreSQL();
     await checkAndPerformInitialH2Migration();
     await startSpringBoot();
+    await ensureInitialAdmin();
     updateSplashStatus('Ouverture de Standard de Naast...');
     createMainWindow();
   } catch (err) {

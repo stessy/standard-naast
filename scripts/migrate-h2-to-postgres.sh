@@ -2,7 +2,7 @@
 set -e
 
 # ==============================================================================
-# Script de migration dynamique de base de données H2 vers PostgreSQL
+# Migration d'une base H2 (.mv.db) ou d'une sauvegarde SQL H2 vers PostgreSQL
 # Standard Naast Application
 # ==============================================================================
 
@@ -17,12 +17,12 @@ PG_PASSWORD="${PG_PASSWORD:-standardnaast_password}"
 PG_URL="jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DATABASE}"
 
 echo "=== Migration dynamique H2 vers PostgreSQL ==="
-echo "Base H2 source : ${H2_FILE}"
+echo "Source H2 (fichier ou sauvegarde SQL) : ${H2_FILE}"
 echo "PostgreSQL cible : ${PG_URL}"
 
 if [ ! -f "${H2_FILE}" ] && [ ! -f "${H2_FILE}.mv.db" ]; then
     echo "Erreur : Fichier H2 introuvable : ${H2_FILE}"
-    echo "Usage : $0 [chemin_vers_base_h2.mv.db]"
+    echo "Usage : $0 [chemin_vers_base_h2.mv.db|chemin_vers_sauvegarde_sql]"
     exit 1
 fi
 

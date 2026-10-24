@@ -3,12 +3,17 @@ package standardNaast.backend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import standardNaast.backend.migration.H2ToPostgresMigrator;
+import standardNaast.backend.security.InitialAdminSetup;
 
 @SpringBootApplication
 public class StandardNaastApplication {
 
     public static void main(String[] args) {
         for (String arg : args) {
+            if (arg.equals("--initial-admin-status") || arg.equals("--create-initial-admin")) {
+                InitialAdminSetup.run(arg.equals("--create-initial-admin"));
+                return;
+            }
             if (arg.startsWith("--migrate-from-h2=") || arg.startsWith("--migrate-h2=")) {
                 String h2Path = arg.substring(arg.indexOf('=') + 1);
                 System.out.println(">>> Mode migration H2 vers PostgreSQL activé.");

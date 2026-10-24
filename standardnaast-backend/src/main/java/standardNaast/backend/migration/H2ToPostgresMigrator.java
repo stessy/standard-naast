@@ -1,6 +1,11 @@
 package standardNaast.backend.migration;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -13,6 +18,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -21,10 +27,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import org.h2.tools.RunScript;
+
 /**
- * Moteur complet et autonome de migration de base de données H2 vers PostgreSQL.
- * Lit les schémas, tables, colonnes, contraintes (PK, FK, Unique), séquences et données
- * depuis une base H2 existante (.mv.db) et les reproduit fidèlement dans PostgreSQL.
+ * Migre les schémas, tables, contraintes, séquences et données d'une base H2 ou d'une
+ * sauvegarde SQL H2 restaurée temporairement vers PostgreSQL.
  */
 public class H2ToPostgresMigrator {
 
@@ -152,12 +159,9 @@ public class H2ToPostgresMigrator {
     public MigrationResult migrate(MigrationConfig config) {
         long startTime = System.currentTimeMillis();
         MigrationResult result = new MigrationResult();
+        Path temporaryDirectory = null;
 
         notify(config, "Démarrage de la migration H2 vers PostgreSQL...", 0.0);
-
-        String h2JdbcUrl = normalizeH2Url(config.getH2PathOrUrl());
-        System.out.println("[MIGRATION] URL H2 Source: " + h2JdbcUrl);
-        System.out.println("[MIGRATION] URL PostgreSQL Cible: " + config.getPgUrl());
 
         try {
             Class.forName("org.h2.Driver");
@@ -175,6 +179,47 @@ public class H2ToPostgresMigrator {
             return result;
         }
 
+        try {
+            String h2Source = config.getH2PathOrUrl();
+            String h2JdbcUrl;
+            if (isH2SqlScript(h2Source)) {
+                temporaryDirectory = Files.createTempDirectory("standardnaast-h2-import-");
+                h2JdbcUrl = restoreH2Backup(Path.of(h2Source), temporaryDirectory.resolve("restored").toString());
+                notify(config, "Sauvegarde SQL H2 restaurée dans une base temporaire.", 3.0);
+            } else {
+                h2JdbcUrl = normalizeH2Url(h2Source);
+            }
+
+            System.out.println("[MIGRATION] URL H2 Source: " + h2JdbcUrl);
+            System.out.println("[MIGRATION] URL PostgreSQL Cible: " + config.getPgUrl());
+
+            migrateConnections(config, result, h2JdbcUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("Erreur lors de la migration: " + e.getMessage());
+            notify(config, "Erreur migration: " + e.getMessage(), -1.0);
+        } finally {
+            if (temporaryDirectory != null) {
+                try (var paths = Files.walk(temporaryDirectory)) {
+                    for (Path path : paths.sorted(Comparator.reverseOrder()).toList()) {
+                        Files.deleteIfExists(path);
+                    }
+                } catch (IOException e) {
+                    result.getWarnings().add("Nettoyage de la base H2 temporaire impossible: " + e.getMessage());
+                    if (result.isSuccess()) {
+                        result.setSuccess(false);
+                        result.setMessage("Migration terminée, mais le nettoyage de la base temporaire a échoué.");
+                    }
+                }
+            }
+            result.setDurationMillis(System.currentTimeMillis() - startTime);
+        }
+
+        return result;
+    }
+
+    private void migrateConnections(MigrationConfig config, MigrationResult result, String h2JdbcUrl) throws Exception {
         try (Connection h2Conn = openH2Connection(h2JdbcUrl, config);
              Connection pgConn = DriverManager.getConnection(config.getPgUrl(), config.getPgUser(), config.getPgPassword())) {
 
@@ -239,17 +284,45 @@ public class H2ToPostgresMigrator {
             result.setSuccess(true);
             result.setMessage("Migration terminée avec succès.");
             notify(config, "Migration réussie (" + totalRows + " enregistrements transférés).", 100.0);
+        }
+    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.setSuccess(false);
-            result.setMessage("Erreur lors de la migration: " + e.getMessage());
-            notify(config, "Erreur migration: " + e.getMessage(), -1.0);
-        } finally {
-            result.setDurationMillis(System.currentTimeMillis() - startTime);
+    static boolean isH2SqlScript(String rawPathOrUrl) throws IOException {
+        if (rawPathOrUrl == null || rawPathOrUrl.startsWith("jdbc:h2:")) {
+            return false;
+        }
+        Path path = Path.of(rawPathOrUrl);
+        if (!Files.isRegularFile(path)) {
+            return false;
         }
 
-        return result;
+        byte[] prefix;
+        try (var input = Files.newInputStream(path)) {
+            prefix = input.readNBytes(8192);
+        }
+        for (byte value : prefix) {
+            if (value == 0) {
+                return false;
+            }
+        }
+
+        String text = new String(prefix, StandardCharsets.UTF_8).replaceFirst("^\\uFEFF", "").stripLeading();
+        return text.matches("(?is)^(?:--[^\\r\\n]*(?:\\r?\\n|$)\\s*)*"
+                + "(?:CREATE\\s+(?:USER|SEQUENCE|(?:MEMORY|CACHED)\\s+TABLE|TABLE)\\b"
+                + "|SET\\s+(?:LOCK_MODE|UNDO_LOG|REFERENTIAL_INTEGRITY|WRITE_DELAY|CACHE_SIZE|AUTOCOMMIT)\\b).*");
+    }
+
+    String restoreH2Backup(Path backupFile, String temporaryDatabasePath) throws Exception {
+        String url = normalizeH2Url(temporaryDatabasePath);
+        String sql = Files.readString(backupFile, StandardCharsets.UTF_8)
+                .replaceAll("(?i)\\bDECIMAL\\s*\\(\\s*0\\s*\\)", "DECIMAL")
+                .replaceAll("(?i)(\\b[A-Z_][A-Z0-9_$]*\\s+)NUMBER\\b", "$1NUMERIC");
+
+        try (Connection connection = DriverManager.getConnection(url, "sa", "");
+             StringReader reader = new StringReader(sql)) {
+            RunScript.execute(connection, reader);
+        }
+        return url;
     }
 
     private Connection openH2Connection(String h2JdbcUrl, MigrationConfig config) throws SQLException {

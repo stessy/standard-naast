@@ -10,6 +10,28 @@ L'utilisateur final (particulier) n'a qu'à installer le fichier `.dmg` (sur mac
 
 ---
 
+## Premier compte administrateur
+
+Apres le demarrage du backend et l'application de Liquibase, le lanceur verifie
+si `APP_USERS` contient un compte. Si la table est vide (notamment apres un import
+d'un ancien backup H2), une fenetre demande un identifiant, un mot de passe et sa
+confirmation. Le compte cree est actif et possede le role `ROLE_ADMIN`.
+Cette verification couvre aussi les migrations deja effectuees et les bases vierges.
+Un compte existant n'est jamais remplace et aucun mot de passe par defaut n'est utilise.
+
+Le mot de passe doit contenir au moins 8 caracteres et au plus 72 octets UTF-8.
+Il est transmis au sous-processus local par son entree standard, jamais par les
+arguments de commande ni dans un fichier de configuration, puis hache avec BCrypt.
+La creation est transactionnelle et refuse toute insertion si un autre compte
+existe deja. Aucun endpoint HTTP de provisioning administrateur n'est ajoute.
+Annuler ferme le demarrage ; la demande reapparait au prochain lancement tant
+qu'aucun compte n'existe. Apres creation, connectez-vous avec les identifiants choisis.
+
+Reconstruisez le backend (natif ou JAR) et le package Electron ensemble pour utiliser
+ce parcours. Les commandes locales `--initial-admin-status` et
+`--create-initial-admin` utilisent les variables `SPRING_DATASOURCE_*` du lanceur ;
+la seconde lit l'identifiant et le mot de passe sur deux lignes de l'entree standard.
+
 ## 1. Arborescence du module
 
 ```text

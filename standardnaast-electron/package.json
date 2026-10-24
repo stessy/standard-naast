@@ -7,6 +7,7 @@
   "scripts": {
     "start": "electron .",
     "test:ui": "electron scripts/test-ui.js",
+    "test:admin-setup": "electron scripts/test-admin-setup.js",
     "migrate:h2": "node scripts/migrate-h2.js",
     "download:binaries": "node scripts/download-binaries.js",
     "download:binaries:all": "node scripts/download-binaries.js --all",
@@ -41,6 +42,8 @@
     "files": [
       "main.js",
       "splash.html",
+      "admin-setup*.js",
+      "admin-setup.html",
       "ui/**/*"
     ],
     "extraResources": [

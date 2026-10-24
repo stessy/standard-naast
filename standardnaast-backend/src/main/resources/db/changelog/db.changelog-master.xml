@@ -38,6 +38,41 @@
                  stripComments="true"/>
     </changeSet>
 
+    <changeSet id="020-restore-imported-boolean-types" author="standardnaast" dbms="postgresql">
+        <sqlFile path="liquibaseChangelog/020_restore_imported_boolean_types.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+    <changeSet id="021-restore-imported-date-types" author="standardnaast" dbms="postgresql">
+        <sqlFile path="liquibaseChangelog/021_restore_imported_date_types.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+    <changeSet id="022-restore-imported-boolean-types" author="standardnaast" dbms="postgresql">
+        <sqlFile path="liquibaseChangelog/022_restore_imported_boolean_types.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+    <changeSet id="023-restore-imported-travel-amount-type" author="standardnaast" dbms="postgresql">
+        <sqlFile path="liquibaseChangelog/023_restore_imported_travel_amount_type.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+    <changeSet id="024-restore-imported-travel-price-member-type" author="standardnaast" dbms="postgresql">
+        <sqlFile path="liquibaseChangelog/024_restore_imported_travel_price_member_type.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
     <!--&lt;!&ndash; 3. Initial / Migrated Data from H2 (executed once on fresh installation) &ndash;&gt;
     <changeSet id="099-initial-data" author="standardnaast">
         <preConditions onFail="MARK_RAN">

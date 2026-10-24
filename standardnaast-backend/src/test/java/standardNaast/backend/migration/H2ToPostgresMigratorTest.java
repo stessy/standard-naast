@@ -6,6 +6,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,6 +25,41 @@ class H2ToPostgresMigratorTest {
 
     @TempDir
     Path tempDir;
+
+    @Test
+    void detectsAndRestoresLegacyH2SqlBackup() throws Exception {
+        Path backup = tempDir.resolve("backup_without_extension");
+        Files.writeString(backup, """
+                CREATE SEQUENCE TEST_SEQ START WITH 8;
+                CREATE MEMORY TABLE LEGACY_TEST (ID DECIMAL(0), AMOUNT NUMBER);
+                INSERT INTO LEGACY_TEST VALUES (7, 12);
+                """);
+
+        assertThat(H2ToPostgresMigrator.isH2SqlScript(backup.toString())).isTrue();
+        String restoredUrl = new H2ToPostgresMigrator()
+                .restoreH2Backup(backup, tempDir.resolve("restored").toString());
+
+        try (Connection restored = DriverManager.getConnection(restoredUrl, "sa", "");
+             Statement statement = restored.createStatement();
+             ResultSet rows = statement.executeQuery("SELECT ID, AMOUNT FROM LEGACY_TEST")) {
+            assertThat(rows.next()).isTrue();
+            assertThat(rows.getBigDecimal("ID").intValueExact()).isEqualTo(7);
+            assertThat(rows.getBigDecimal("AMOUNT").intValueExact()).isEqualTo(12);
+            assertThat(rows.next()).isFalse();
+        }
+    }
+
+    @Test
+    void doesNotDetectH2MvDbAsSqlBackup() throws Exception {
+        Path databaseBase = tempDir.resolve("binary_h2");
+        try (Connection connection = DriverManager.getConnection(
+                "jdbc:h2:file:" + databaseBase + ";DB_CLOSE_DELAY=-1", "sa", "");
+             Statement statement = connection.createStatement()) {
+            statement.execute("CREATE TABLE H2_BINARY_TEST (ID INTEGER)");
+        }
+
+        assertThat(H2ToPostgresMigrator.isH2SqlScript(databaseBase + ".mv.db")).isFalse();
+    }
 
     @Test
     @EnabledIfEnvironmentVariable(named = "MIGRATION_TEST_PG_URL", matches = ".+")
