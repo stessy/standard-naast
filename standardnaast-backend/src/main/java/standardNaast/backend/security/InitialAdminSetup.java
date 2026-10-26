@@ -39,15 +39,15 @@ public final class InitialAdminSetup {
         }
     }
 
-    static boolean hasUsers(Connection connection) throws SQLException {
+    public static boolean hasUsers(Connection connection) throws SQLException {
         try (var statement = connection.createStatement();
-             var rows = statement.executeQuery("SELECT EXISTS (SELECT 1 FROM public.app_users)")) {
+             var rows = statement.executeQuery("SELECT EXISTS (SELECT 1 FROM app_users)")) {
             rows.next();
             return rows.getBoolean(1);
         }
     }
 
-    static void createAdmin(Connection connection, String username, String password) throws SQLException {
+    public static void createAdmin(Connection connection, String username, String password) throws SQLException {
         if (username == null || username.isBlank() || username.strip().length() < 3
                 || username.strip().length() > 50 || username.contains("\n") || username.contains("\r")) {
             throw new IllegalArgumentException("L'identifiant doit comporter entre 3 et 50 caracteres.");
@@ -58,21 +58,30 @@ public final class InitialAdminSetup {
             throw new IllegalArgumentException("Le mot de passe doit comporter au moins 8 caracteres et au plus 72 octets UTF-8.");
         }
         String hash = new BCryptPasswordEncoder().encode(password);
+        boolean sqlite = "SQLite".equals(connection.getMetaData().getDatabaseProductName());
         connection.setAutoCommit(false);
         try {
-            try (var statement = connection.createStatement()) {
-                statement.execute("LOCK TABLE public.app_users IN EXCLUSIVE MODE");
+            if (!sqlite) {
+                try (var statement = connection.createStatement()) {
+                    statement.execute("LOCK TABLE public.app_users IN EXCLUSIVE MODE");
+                }
             }
             if (hasUsers(connection)) {
                 throw new IllegalStateException("Un compte existe deja. Aucun compte n'a ete modifie.");
             }
             long id;
-            try (var statement = connection.prepareStatement("""
+            String insert = sqlite ? """
+                    INSERT INTO app_users
+                        (username, password, enabled, created_at, updated_at)
+                    VALUES (?, ?, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                    RETURNING user_id
+                    """ : """
                     INSERT INTO public.app_users
                         (user_id, username, password, enabled, created_at, updated_at)
                     VALUES (nextval('public.user_seq'), ?, ?, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
                     RETURNING user_id
-                    """)) {
+                    """;
+            try (var statement = connection.prepareStatement(insert)) {
                 statement.setString(1, username.strip());
                 statement.setString(2, hash);
                 try (var rows = statement.executeQuery()) {
@@ -81,7 +90,7 @@ public final class InitialAdminSetup {
                 }
             }
             try (var statement = connection.prepareStatement(
-                    "INSERT INTO public.app_user_roles (user_id, role) VALUES (?, 'ROLE_ADMIN')")) {
+                    "INSERT INTO app_user_roles (user_id, role) VALUES (?, 'ROLE_ADMIN')")) {
                 statement.setLong(1, id);
                 statement.executeUpdate();
             }

@@ -1,78 +1,54 @@
 @echo off
-REM ==============================================================================
-REM Script de build et packaging complet de l'application Desktop Standard Naast (Windows)
-REM ==============================================================================
+setlocal
+set "ROOT=%~dp0"
+set "TYPE=%~1"
+if "%TYPE%"=="" set "TYPE=app-image"
+if /i "%TYPE%"=="win" set "TYPE=exe"
+if /i "%TYPE%"=="app-image" goto typeok
+if /i "%TYPE%"=="exe" goto typeok
+if /i "%TYPE%"=="msi" goto typeok
+echo Usage: build-desktop.bat [app-image^|exe^|msi]
+exit /b 1
 
-setlocal enabledelayedexpansion
-
-set "SCRIPT_DIR=%~dp0"
-set "ELECTRON_DIR=%SCRIPT_DIR%standardnaast-electron"
-set "NG_DIR=%SCRIPT_DIR%standardnaast-ng"
-set "BACKEND_DIR=%SCRIPT_DIR%standardnaast-backend"
-
-set "TARGET=%~1"
-if "%TARGET%"=="" set "TARGET=win"
-
-echo =================================================================
-echo   Build ^& Packaging Desktop - Standard de Naast (Windows)
-echo =================================================================
-
-REM 1. Verification de Node.js et pnpm
-where node >nul 2>nul
-if %errorlevel% neq 0 (
-    echo [ERREUR] Node.js est introuvable dans le PATH.
-    pause
+:typeok
+set "PATH=%ROOT%standardnaast-ng\node;%PATH%"
+for %%T in (java jpackage mvn node pnpm) do (
+    where %%T >nul 2>nul
+    if errorlevel 1 (
+        echo Missing build tool: %%T. Use JDK 25, Maven, Node and pnpm.
+        exit /b 1
+    )
+)
+if /i "%TYPE%"=="app-image" if exist "%ROOT%dist-desktop\Standard Naast" (
+    echo An app image already exists. Move or remove it before rebuilding.
     exit /b 1
 )
-
-where pnpm >nul 2>nul
-if %errorlevel% neq 0 (
-    echo [ERREUR] pnpm est introuvable dans le PATH.
-    pause
-    exit /b 1
+pushd "%ROOT%standardnaast-ng"
+if not exist node_modules (
+    call pnpm install
+    if errorlevel 1 goto fail
 )
+call pnpm run build
+if errorlevel 1 goto fail
+if not exist dist\standardnaast-ng\browser\index.html goto fail
+popd
 
-REM 2. Verification de Maven
-where mvn >nul 2>nul
-if %errorlevel% neq 0 (
-    echo [ERREUR] Maven (mvn) est introuvable dans le PATH.
-    pause
-    exit /b 1
-)
+pushd "%ROOT%"
+call mvn -f standardnaast-backend\pom.xml -Pdesktop clean package
+if errorlevel 1 goto fail
+mkdir "standardnaast-backend\target\jpackage-input"
+copy /y "standardnaast-backend\target\standardnaast-backend-1.0.0-SNAPSHOT.jar" "standardnaast-backend\target\jpackage-input\standardnaast.jar" >nul
+if errorlevel 1 goto fail
+> "standardnaast-backend\target\stop-launcher.properties" echo arguments=--desktop-stop
+set "INSTALL_OPTIONS="
+if /i not "%TYPE%"=="app-image" set "INSTALL_OPTIONS=--win-menu --win-shortcut --win-dir-chooser"
+call jpackage --type "%TYPE%" --name "Standard Naast" --app-version 1.0.0 --vendor "Standard de Naast" --dest dist-desktop --input standardnaast-backend\target\jpackage-input --main-jar standardnaast.jar --arguments "--desktop" --java-options "-Dfile.encoding=UTF-8" --add-modules java.se,jdk.unsupported,jdk.crypto.ec,jdk.charsets,jdk.management,jdk.zipfs --add-launcher "Quitter Standard Naast=standardnaast-backend\target\stop-launcher.properties" %INSTALL_OPTIONS%
+if errorlevel 1 goto fail
+echo Package created in dist-desktop. Java is included.
+popd
+exit /b 0
 
-REM 3. Installation des dependances si necessaire
-if not exist "%ELECTRON_DIR%\node_modules" (
-    echo [INFO] Installation des dependances Electron...
-    cd /d "%ELECTRON_DIR%" && call pnpm install
-)
-
-if not exist "%NG_DIR%\node_modules" (
-    echo [INFO] Installation des dependances Angular...
-    cd /d "%NG_DIR%" && call pnpm install
-)
-
-REM 4. Lancement du packaging
-cd /d "%ELECTRON_DIR%"
-
-if /i "%TARGET%"=="win" (
-    echo [INFO] Packaging Windows NSIS (x64)...
-    call pnpm run dist:win
-) else if /i "%TARGET%"=="all" (
-    echo [INFO] Packaging multi-plateformes...
-    call pnpm run dist:all
-) else (
-    echo [INFO] Packaging selon cible: %TARGET%...
-    call pnpm run dist
-)
-
-if %errorlevel% neq 0 (
-    echo [ERREUR] Le packaging a echoue.
-    pause
-    exit /b %errorlevel%
-)
-
-echo =================================================================
-echo   Build termine avec succes !
-echo   Dossier de sortie : %ELECTRON_DIR%\dist-package\
-echo =================================================================
-endlocal
+:fail
+popd
+echo Desktop build failed.
+exit /b 1

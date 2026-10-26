@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:${app.desktop.data-dir}/standardnaast.sqlite
+    driver-class-name: org.sqlite.JDBC
+    username: ""
+    password: ""
+    hikari:
+      maximum-pool-size: 1
+      minimum-idle: 1
+      connection-init-sql: PRAGMA foreign_keys=ON
+      data-source-properties:
+        busy_timeout: 10000
+  jpa:
+    database-platform: standardNaast.backend.config.StandardNaastSQLiteDialect
+    mapping-resources: META-INF/orm-sqlite.xml
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  liquibase:
+    change-log: db/changelog/db.changelog-sqlite.xml
+  main:
+    headless: false
+
+server:
+  address: 127.0.0.1
+  port: 0
+
+app:
+  cors:
+    allowed-origins: http://127.0.0.1:*,http://localhost:*
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

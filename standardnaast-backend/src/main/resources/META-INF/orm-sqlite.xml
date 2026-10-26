@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence/orm https://jakarta.ee/xml/ns/persistence/orm/orm_3_2.xsd"
+                 version="3.2">
+    <!-- Override only ID generation for SQLite; server profiles retain their sequences. -->
+    <package>standardNaast.backend.domain</package>
+    <entity class="Person"><attributes><id name="id"><column name="PERSONNE_ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="Team"><attributes><id name="id"><column name="EQUIPE_ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="Match"><attributes><id name="id"><column name="MATCH_ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="SeasonTeam"><attributes><id name="id"><column name="SAISON_EQUIPE_ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="PersonCotisation"><attributes><id name="id"><column name="ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="PersonTravel"><attributes><id name="id"><column name="ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="Benevolat"><attributes><id name="id"><column name="BENEVOLAT_ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="Accounting"><attributes><id name="id"><column name="ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="Prices"><attributes><id name="id"><column name="ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="TravelPrice"><attributes><id name="id"><column name="ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="Abonnement"><attributes><id name="id"><column name="ABONNEMENT_ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+    <entity class="AppUser"><attributes><id name="id"><column name="USER_ID" column-definition="INTEGER"/><generated-value strategy="IDENTITY"/></id></attributes></entity>
+</entity-mappings>
