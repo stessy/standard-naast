@@ -5,4 +5,13 @@
     <changeSet id="sqlite-001-schema" author="standardnaast" dbms="sqlite">
         <sqlFile path="sqlite/001-schema.sql" relativeToChangelogFile="true"/>
     </changeSet>
+    <changeSet id="sqlite-002-legacy-tables" author="standardnaast" dbms="sqlite">
+        <sqlFile path="sqlite/002-legacy-tables.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+    <changeSet id="sqlite-003-legacy-archive-relations" author="standardnaast" dbms="sqlite">
+        <sqlFile path="sqlite/003-legacy-archive-relations.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+    <changeSet id="sqlite-004-import-orphan-archives" author="standardnaast" dbms="sqlite">
+        <sqlFile path="sqlite/004-import-orphan-archives.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>

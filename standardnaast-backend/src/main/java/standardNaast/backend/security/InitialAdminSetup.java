@@ -47,6 +47,20 @@ public final class InitialAdminSetup {
         }
     }
 
+    public static boolean hasAdmin(Connection connection) throws SQLException {
+        try (var statement = connection.createStatement();
+             var rows = statement.executeQuery("""
+                     SELECT EXISTS (
+                         SELECT 1 FROM app_users u
+                         JOIN app_user_roles r ON r.user_id = u.user_id
+                         WHERE r.role = 'ROLE_ADMIN'
+                     )
+                     """)) {
+            rows.next();
+            return rows.getBoolean(1);
+        }
+    }
+
     public static void createAdmin(Connection connection, String username, String password) throws SQLException {
         if (username == null || username.isBlank() || username.strip().length() < 3
                 || username.strip().length() > 50 || username.contains("\n") || username.contains("\r")) {
@@ -57,8 +71,8 @@ public final class InitialAdminSetup {
                 || password.contains("\n") || password.contains("\r")) {
             throw new IllegalArgumentException("Le mot de passe doit comporter au moins 8 caracteres et au plus 72 octets UTF-8.");
         }
-        String hash = new BCryptPasswordEncoder().encode(password);
         boolean sqlite = "SQLite".equals(connection.getMetaData().getDatabaseProductName());
+        String hash = new BCryptPasswordEncoder().encode(password);
         connection.setAutoCommit(false);
         try {
             if (!sqlite) {
@@ -66,8 +80,10 @@ public final class InitialAdminSetup {
                     statement.execute("LOCK TABLE public.app_users IN EXCLUSIVE MODE");
                 }
             }
-            if (hasUsers(connection)) {
-                throw new IllegalStateException("Un compte existe deja. Aucun compte n'a ete modifie.");
+            if (sqlite ? hasAdmin(connection) : hasUsers(connection)) {
+                throw new IllegalStateException(sqlite
+                        ? "Un administrateur existe deja. Aucun compte n'a ete modifie."
+                        : "Un compte existe deja. Aucun compte n'a ete modifie.");
             }
             long id;
             String insert = sqlite ? """

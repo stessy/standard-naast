@@ -101,8 +101,23 @@ class SqliteDesktopIntegrationTest {
             assertThatThrownBy(() -> statement.executeUpdate(
                     "INSERT INTO APP_USER_ROLES(USER_ID, ROLE) VALUES (-1, 'ROLE_ADMIN')"))
                     .isInstanceOf(java.sql.SQLException.class);
+            statement.executeUpdate("""
+                    INSERT INTO APP_USERS (USERNAME, PASSWORD, ENABLED, CREATED_AT, UPDATED_AT)
+                    VALUES ('membre-import', 'hash-existant', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                    """);
+            long importedUserId;
+            try (var rows = statement.executeQuery("SELECT USER_ID FROM APP_USERS WHERE USERNAME='membre-import'")) {
+                assertThat(rows.next()).isTrue();
+                importedUserId = rows.getLong(1);
+            }
+            try (var role = connection.prepareStatement(
+                    "INSERT INTO APP_USER_ROLES(USER_ID, ROLE) VALUES (?, 'ROLE_MEMBER')")) {
+                role.setLong(1, importedUserId);
+                role.executeUpdate();
+            }
             InitialAdminSetup.createAdmin(connection, "admin-test", "password-test-123");
             assertThat(InitialAdminSetup.hasUsers(connection)).isTrue();
+            assertThat(InitialAdminSetup.hasAdmin(connection)).isTrue();
             assertThatThrownBy(() -> InitialAdminSetup.createAdmin(connection, "autre-admin", "password-test-456"))
                     .isInstanceOf(IllegalStateException.class);
             try (var rows = statement.executeQuery("SELECT COUNT(*) FROM APP_USER_ROLES WHERE ROLE='ROLE_ADMIN'")) {

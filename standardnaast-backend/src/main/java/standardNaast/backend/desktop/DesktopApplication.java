@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.web.server.context.WebServerApplicationContext;
 import standardNaast.backend.StandardNaastApplication;
+import standardNaast.backend.migration.H2ToSqliteMigrator;
 import standardNaast.backend.security.InitialAdminSetup;
 
 import javax.sql.DataSource;
@@ -11,11 +12,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -38,10 +43,18 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.imageio.ImageIO;
 
 public final class DesktopApplication {
     public static final int PORT = 8080;
+
+    enum InitialDataChoice { IMPORT, EMPTY, CANCEL }
+
+    private record ImportProgress(String message, int percent) {}
 
     private DesktopApplication() {}
 
@@ -105,6 +118,12 @@ public final class DesktopApplication {
             try {
                 Files.deleteIfExists(directory.resolve("desktop.properties"));
                 System.setProperty("app.desktop.data-dir", directory.toString().replace('\\', '/'));
+                try {
+                    prepareInitialImport(directory, noBrowser);
+                } catch (CancellationException e) {
+                    session.close();
+                    return;
+                }
                 System.setProperty("app.jwt.secret", secret(directory.resolve("jwt.secret")));
                 var application = new SpringApplication(StandardNaastApplication.class);
                 application.addListeners(event -> {
@@ -202,6 +221,118 @@ public final class DesktopApplication {
         Desktop.getDesktop().browse(uri);
     }
 
+    static boolean shouldOfferInitialImport(Path database, boolean noBrowser) {
+        return !noBrowser && !GraphicsEnvironment.isHeadless()
+                && !Files.exists(database, java.nio.file.LinkOption.NOFOLLOW_LINKS);
+    }
+
+    private static void prepareInitialImport(Path directory, boolean noBrowser) throws IOException {
+        Path database = directory.resolve("standardnaast.sqlite");
+        if (!shouldOfferInitialImport(database, noBrowser)) {
+            return;
+        }
+
+        Object[] options = {"Importer une sauvegarde H2...", "Demarrer avec une base vierge", "Annuler"};
+        int choice = JOptionPane.showOptionDialog(null,
+                "Choisissez comment initialiser les donnees locales avant de creer le premier administrateur.",
+                "Premier lancement - donnees Standard Naast",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        InitialDataChoice decision = switch (choice) {
+            case 0 -> InitialDataChoice.IMPORT;
+            case 1 -> InitialDataChoice.EMPTY;
+            default -> InitialDataChoice.CANCEL;
+        };
+        if (decision == InitialDataChoice.CANCEL) {
+            throw new CancellationException("Initialisation annulee.");
+        }
+        if (decision == InitialDataChoice.EMPTY) {
+            return;
+        }
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Selectionner une sauvegarde SQL H2");
+        chooser.setFileFilter(new FileNameExtensionFilter(
+                "Sauvegarde SQL H2 (*.sql ; utiliser Tous les fichiers pour les sauvegardes sans extension)", "sql"));
+        if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+            throw new CancellationException("Selection de la sauvegarde annulee.");
+        }
+
+        var progress = new JDialog((java.awt.Frame) null, "Import de la sauvegarde H2", true);
+        var status = new JLabel("Preparation de l'import...");
+        var bar = new JProgressBar(0, 100);
+        bar.setStringPainted(true);
+        var panel = new JPanel(new BorderLayout(8, 8));
+        panel.add(status, BorderLayout.NORTH);
+        panel.add(bar, BorderLayout.CENTER);
+        panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(16, 16, 16, 16));
+        progress.setContentPane(panel);
+        progress.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        progress.setSize(500, 120);
+        progress.setLocationRelativeTo(null);
+
+        SwingWorker<Void, ImportProgress> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                applyInitialDataChoice(database, decision, chooser.getSelectedFile().toPath(),
+                        (message, percent) -> publish(new ImportProgress(message, percent)));
+                return null;
+            }
+
+            @Override
+            protected void process(java.util.List<ImportProgress> updates) {
+                ImportProgress latest = updates.getLast();
+                status.setText(latest.message());
+                bar.setValue(latest.percent());
+            }
+
+            @Override
+            protected void done() {
+                progress.dispose();
+            }
+        };
+        try {
+            Runnable showProgress = () -> {
+                worker.execute();
+                progress.setVisible(true);
+            };
+            if (javax.swing.SwingUtilities.isEventDispatchThread()) {
+                showProgress.run();
+            } else {
+                javax.swing.SwingUtilities.invokeAndWait(showProgress);
+            }
+            worker.get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IOException("Import interrompu. Aucune base ne sera demarree.", e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            throw new IOException("Impossible d'afficher la progression de l'import.", e.getCause());
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause() == null ? e : e.getCause();
+            String detail = cause instanceof IOException ? cause.getMessage()
+                    : cause instanceof java.sql.SQLException sql
+                    ? "Erreur SQL (etat " + sql.getSQLState() + ", code " + sql.getErrorCode() + ")."
+                    : "Erreur technique (" + cause.getClass().getSimpleName() + ").";
+            org.slf4j.LoggerFactory.getLogger(DesktopApplication.class)
+                    .error("Import H2 impossible : {}", detail);
+            throw new IOException("Echec de l'import H2 : " + detail
+                    + "\nConsultez les journaux de l'application pour les details.", cause);
+        }
+    }
+
+    static void applyInitialDataChoice(Path database, InitialDataChoice choice, Path backup,
+                                       H2ToSqliteMigrator.ProgressListener progress) throws Exception {
+        if (choice == InitialDataChoice.CANCEL) {
+            throw new CancellationException("Initialisation annulee.");
+        }
+        if (choice == InitialDataChoice.EMPTY) {
+            return;
+        }
+        if (backup == null) {
+            throw new CancellationException("Selection de la sauvegarde annulee.");
+        }
+        H2ToSqliteMigrator.importBackup(backup, database, progress);
+    }
+
     private static final class Session {
         private final Path directory;
         private final FileChannel channel;
@@ -224,7 +355,7 @@ public final class DesktopApplication {
             boolean provisioned = true;
             if (!noBrowser) {
                 try (var connection = context.getBean(DataSource.class).getConnection()) {
-                    provisioned = InitialAdminSetup.hasUsers(connection) || provision(connection);
+                    provisioned = InitialAdminSetup.hasAdmin(connection) || provision(connection);
                 }
             }
             if (!provisioned) {

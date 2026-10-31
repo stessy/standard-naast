@@ -1,12 +1,18 @@
 package standardNaast.backend.desktop;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DesktopApplicationTest {
+    @TempDir
+    Path directory;
+
     @Test
     void loadsTheClubIconWithTransparency() throws Exception {
         var image = DesktopApplication.loadIcon();
@@ -27,5 +33,19 @@ class DesktopApplicationTest {
                 .isEqualTo(home.resolve("AppData/Local/Standard Naast"));
         assertThat(DesktopApplication.dataDirectory("Linux", home, null))
                 .isEqualTo(home.resolve(".local/share/standardnaast"));
+    }
+
+    @Test
+    void offersImportOnlyForFreshInteractiveDataAndCancellationDoesNotCreateDatabase() throws Exception {
+        Path database = directory.resolve("standardnaast.sqlite");
+        assertThat(DesktopApplication.shouldOfferInitialImport(database, true)).isFalse();
+        assertThat(DesktopApplication.shouldOfferInitialImport(database, false))
+                .isEqualTo(!java.awt.GraphicsEnvironment.isHeadless());
+        assertThatThrownBy(() -> DesktopApplication.applyInitialDataChoice(database,
+                DesktopApplication.InitialDataChoice.CANCEL, null, null))
+                .isInstanceOf(java.util.concurrent.CancellationException.class);
+        assertThat(database).doesNotExist();
+        Files.createFile(database);
+        assertThat(DesktopApplication.shouldOfferInitialImport(database, false)).isFalse();
     }
 }

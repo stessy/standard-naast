@@ -68,9 +68,14 @@ réactiver pour alimenter les tests.
 Lancer **Standard Naast** :
 
 1. Un verrou empêche deux instances d'utiliser le même dossier de données.
-2. Le backend démarre sur `127.0.0.1:8080`, avec un port fixe.
-3. Au premier lancement, une boîte de dialogue demande la création du premier
-   administrateur. Aucun mot de passe par défaut n'est créé.
+2. Si la base SQLite n'existe pas, le premier lancement propose d'importer une
+   sauvegarde H2 ou de démarrer avec une base vierge. Après l'import (ou le choix
+   d'une base vierge), une boîte de dialogue demande la création du premier
+   administrateur uniquement si aucun compte avec le rôle `ROLE_ADMIN` n'a été
+   importé. Les autres comptes importés restent inchangés. Aucun mot de passe par
+   défaut n'est créé.
+3. Le backend démarre sur `127.0.0.1:8080`, avec un port fixe ; le formulaire de
+   création d'administrateur s'affiche si nécessaire.
 4. Lorsque l'application est prête, le navigateur par défaut s'ouvre.
 
 Si aucune saison n'existe, l'API `/api/seasons/current` retourne un 404 avec
@@ -120,11 +125,45 @@ desktop ; les mappings de séquences des profils serveur restent inchangés.
 Les clés étrangères sont activées à chaque connexion, le pool est limité à une
 connexion et un délai d'attente SQLite est configuré.
 
-**Cette première étape ne transfère pas les données H2/PostgreSQL existantes.**
-La nouvelle distribution crée une base SQLite vide et ne lit, ne modifie, ni ne
-supprime les anciennes bases. L'import contrôlé de l'historique reste une étape
-distincte à réaliser avant de basculer les données réelles. Ne pas utiliser une
-base SQLite vide comme remplacement de l'historique sans cet import.
+Au premier lancement interactif, l'import de sauvegarde H2 vers SQLite est
+disponible avant le provisioning administrateur. Le flux SQL restaure uniquement
+dans une base H2 temporaire locale ; les commandes qui créent des alias Java,
+exécutent des scripts/appels ou ouvrent des ressources externes sont refusées.
+La base SQLite est créée en staging avec Liquibase, puis publiée atomiquement
+seulement après validation des tables, colonnes, identifiants, volumes et clés
+étrangères. Une structure historique inconnue ou incohérente échoue explicitement
+sans publier de destination.
+
+Une base SQLite déjà présente n'est jamais proposée à l'import et aucune donnée
+existante n'est écrasée. La sauvegarde SQL H2 (avec ou sans extension `.sql`)
+est uniquement lue et restaurée dans un dossier temporaire ; elle n'est jamais
+modifiée ni supprimée. Les fichiers `.mv.db` ne sont pas acceptés dans ce parcours.
+Annuler le choix ferme le démarrage, sans bascule silencieuse vers une base vide. Pour
+choisir une base vierge, utilisez explicitement cette option dans le dialogue.
+Après un import sans rôle `ROLE_ADMIN`, le formulaire ajoute un compte
+administrateur sans supprimer ni modifier les comptes importés.
+
+Les tables historiques connues (`COMMANDE_PLACE`, `PRIX_PLACE`, `TYPE_COMPETITION`,
+`TYPE_MATCH`, `TYPE_PERSONNE`) sont conservées, même si l'interface actuelle ne
+les utilise pas. Les valeurs copiées sont comparées à la source avant publication.
+Ces archives reprennent le schéma historique sans ajouter de clés étrangères :
+une ancienne référence sans ligne correspondante est conservée et signalée
+dans les logs, sans création de données fictives. Une clé étrangère explicitement
+déclarée dans la sauvegarde reste vérifiée lors de l'import ; les contraintes
+des tables utilisées par l'application restent actives.
+À l'import, les cotisations et déplacements (`PERSONNES_COTISATIONS`,
+`PERSONNE_MATCH`) qui référencent une personne absente sont conservés, avec
+leurs identifiants et toutes leurs valeurs, dans les tables dédiées
+`PERSONNES_COTISATIONS_IMPORT_ARCHIVE` et `PERSONNE_MATCH_IMPORT_ARCHIVE`.
+La raison `PERSONNE_ABSENTE` et les volumes archivés sont signalés dans les logs.
+Ces lignes ne sont pas affichées dans les écrans métier ; les lignes valides
+sont importées normalement et les autres violations de contraintes restent
+bloquantes. Les archives sont incluses dans la base SQLite et sa sauvegarde.
+Une perte de précision monétaire ou temporelle provoque un refus explicite.
+Les anciennes colonnes numériques `PRICES.RANG` et `PRICES.PLACE` sont converties
+explicitement en texte sans perte de valeur (par exemple `12.00` devient `12`).
+Les positions déjà textuelles et leurs zéros initiaux restent inchangés.
+Cette compatibilité ne permet pas de convertir arbitrairement les autres colonnes.
 
 Pour une sauvegarde manuelle, quitter complètement l'application puis copier le
 dossier de données. Garder les sauvegardes hors du dossier d'installation.
@@ -140,7 +179,7 @@ maintenu, pas en utilisant un Java installé chez l'utilisateur.
 
 ```sh
 mvn -f standardnaast-backend/pom.xml \
-  -Dtest=SqliteDesktopIntegrationTest,DesktopApplicationTest,InitialAdminSetupTest test
+  -Dtest=SqliteDesktopIntegrationTest,DesktopApplicationTest,InitialAdminSetupTest,H2ToSqliteMigratorTest test
 
 # Build desktop effectué au préalable ; Node 24+ et Java 25 pour le test
 node --test scripts/test-desktop.mjs
@@ -166,6 +205,38 @@ java -jar standardnaast-backend/target/standardnaast-backend-1.0.0-SNAPSHOT.jar 
 
 L'option `--desktop-no-browser` désactive le navigateur et les dialogues pour les
 tests automatisés ; elle ne crée pas de compte administrateur.
+
+## Import initial d'une sauvegarde H2
+
+Au premier lancement interactif, avant toute création de compte administrateur,
+Standard Naast propose soit d'importer une sauvegarde SQL H2 (avec ou sans
+extension `.sql`), soit de démarrer avec une base vierge. Annuler la
+question ou le choix du fichier ferme le parcours de démarrage ; aucune base vide
+n'est créée en remplacement. Après un import, un administrateur présent dans la
+sauvegarde est conservé et la création du premier compte est ignorée. Si aucun
+compte administrateur n'a été importé, l'étape habituelle de création d'administrateur suit
+l'import.
+
+L'import restaure les sauvegardes SQL dans une base H2 temporaire locale, puis
+construit une base SQLite de staging avec le changelog Liquibase du profil
+desktop. Les tables, colonnes, clés, nombres de lignes, identifiants, intégrité
+SQLite et références sont vérifiés avant publication atomique. Une table, colonne
+ou relation historique inconnue provoque un échec explicite : aucune donnée source
+n'est ignorée silencieusement et la base cible n'est pas publiée. Les instructions
+SQL permettant l'accès aux fichiers/ressources externes, les alias Java, appels,
+scripts et opérations similaires sont rejetées avant restauration.
+
+Une base SQLite déjà présente n'est jamais proposée à l'import ni remplacée.
+L'import est limité à une destination neuve ; en cas d'erreur, les fichiers de
+staging sont supprimés et l'application affiche l'échec au lieu de continuer
+silencieusement avec une base vierge. Le fichier source n'est jamais exécuté sur
+son emplacement d'origine, modifié ou supprimé. Gardez une copie indépendante de
+la sauvegarde avant toute opération de maintenance.
+
+`--desktop-no-browser` saute uniquement le dialogue interactif pour les tests ;
+le moteur d'import est couvert séparément par des sauvegardes synthétiques.
+Les tests ne lisent pas les sauvegardes privées de l'utilisateur et ne touchent
+pas à une base utilisateur.
 
 GraalVM Native Image reste une évolution ultérieure : le packaging actuel
 embarque bien une JVM et ne prétend pas être une image native.
