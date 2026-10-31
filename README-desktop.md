@@ -32,6 +32,12 @@ Les images existantes ne sont pas supprimées automatiquement : les déplacer av
 de reconstruire une image. Une image peut être conservée lors de la construction
 d'un installateur.
 
+Sur macOS, le build DMG garantit la présence d'un raccourci **Applications** dans
+le volume, même si la personnalisation Finder de `jpackage` n'a pas été exécutée.
+Après ouverture du DMG, glisser **Standard Naast.app** sur **Applications**, puis
+éjecter le volume et lancer l'application depuis le dossier Applications.
+Le DMG n'installe pas automatiquement l'application.
+
 Le build compile Angular en production, exécute les tests Java et copie
 `dist/standardnaast-ng/browser` dans `target/classes/static` via le profil Maven
 `desktop`. Aucun fichier Angular généré n'est ajouté aux sources Java.

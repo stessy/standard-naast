@@ -63,4 +63,8 @@ jpackage \
     --add-launcher "Quitter Standard Naast=${BACKEND_DIR}/target/stop-launcher.properties" \
     "${PACKAGE_OPTIONS[@]}"
 
+if [ "$(uname -s)" = Darwin ] && [ "${TYPE}" = dmg ]; then
+    bash "${ROOT}/scripts/add-macos-applications-link.sh" "${OUTPUT}/Standard Naast-1.0.0.dmg"
+fi
+
 echo "Package created in ${OUTPUT}. Java is included; no user-side Java installation is needed."
