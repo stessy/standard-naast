@@ -47,7 +47,7 @@ if /i "%TYPE%"=="app-image" if exist "%ROOT%dist-desktop\Standard Naast" (
     rmdir /s /q "%ROOT%dist-desktop\Standard Naast"
     if exist "%ROOT%dist-desktop\Standard Naast" goto fail
 )
-call jpackage --type "%TYPE%" --name "Standard Naast" --app-version 1.0.0 --vendor "Standard de Naast" --dest dist-desktop --input standardnaast-backend\target\jpackage-input --main-jar standardnaast.jar --arguments "--desktop" --java-options "-Dfile.encoding=UTF-8" --add-modules java.se,jdk.unsupported,jdk.crypto.ec,jdk.charsets,jdk.management,jdk.zipfs --add-launcher "Quitter Standard Naast=standardnaast-backend\target\stop-launcher.properties" %INSTALL_OPTIONS%
+call jpackage --type "%TYPE%" --name "Standard Naast" --app-version 1.0.0 --vendor "Standard de Naast" --icon "%ROOT%scripts\icons\standardnaast.ico" --dest dist-desktop --input standardnaast-backend\target\jpackage-input --main-jar standardnaast.jar --arguments "--desktop" --java-options "-Dfile.encoding=UTF-8" --add-modules java.se,jdk.unsupported,jdk.crypto.ec,jdk.charsets,jdk.management,jdk.zipfs --add-launcher "Quitter Standard Naast=standardnaast-backend\target\stop-launcher.properties" %INSTALL_OPTIONS%
 if errorlevel 1 goto fail
 echo Package created in dist-desktop. Java is included.
 popd

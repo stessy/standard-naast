@@ -4,6 +4,7 @@ import { once } from 'node:events';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { createServer } from 'node:net';
 import { setTimeout as delay } from 'node:timers/promises';
 import { after, before, test } from 'node:test';
 
@@ -48,6 +49,7 @@ async function start() {
     const ready = output.match(/DESKTOP_READY (http:\/\/127\.0\.0\.1:\d+\/)/);
     if (ready) {
       baseUrl = ready[1];
+      assert.equal(baseUrl, 'http://127.0.0.1:8080/');
       const health = await fetch(`${baseUrl}actuator/health`);
       assert.equal(health.status, 200);
       assert.equal((await health.json()).status, 'UP');
@@ -109,6 +111,11 @@ test('embedded Angular, deep links and API security remain distinct', async () =
     assert.match(await response.text(), /<app-root/);
   }
   const index = await (await fetch(baseUrl)).text();
+  const favicon = await fetch(`${baseUrl}favicon.ico`);
+  assert.equal(favicon.status, 200);
+  const icon = Buffer.from(await favicon.arrayBuffer());
+  assert.equal(icon.readUInt16LE(2), 1);
+  assert.equal(icon.readUInt16LE(4), 6);
   const script = index.match(/src="([^"]+\.js)"/)[1];
   const javascript = await fetch(`${baseUrl}${script}`);
   assert.equal(javascript.status, 200);
@@ -190,4 +197,25 @@ test('single instance, clean stop and restart preserve data and credentials', as
   assert.equal((await fetch(`${baseUrl}api/seasons/2026-2027`, { headers })).status, 200);
   assert.equal((await fetch(`${baseUrl}api/seasons/2026-2027`, { method: 'DELETE', headers })).status, 204);
   await stop();
+});
+
+test('an occupied fixed port rejects startup instead of changing the bookmark URL', async () => {
+  const blocker = createServer();
+  blocker.listen(8080, '127.0.0.1');
+  await once(blocker, 'listening');
+  let rejected;
+  try {
+    output = '';
+    rejected = desktop(['--desktop', '--desktop-no-browser', `--desktop-data-dir=${directory}`]);
+    const [code] = await once(rejected, 'exit', { signal: AbortSignal.timeout(60000) });
+    assert.notEqual(code, 0, output);
+    assert.match(output, /Port 8080 was already in use/);
+    assert.doesNotMatch(output, /DESKTOP_READY/);
+  } finally {
+    if (rejected && rejected.exitCode === null) {
+      rejected.kill('SIGTERM');
+      await once(rejected, 'exit', { signal: AbortSignal.timeout(15000) });
+    }
+    await new Promise((resolve, reject) => blocker.close(error => error ? reject(error) : resolve()));
+  }
 });

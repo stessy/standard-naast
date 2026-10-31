@@ -4,18 +4,31 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.jdbc.core.JdbcTemplate;
 import standardNaast.backend.domain.*;
 import standardNaast.backend.repository.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 class LiquibaseMigrationIntegrationTest {
+
+    private static final String DATABASE_URL = "jdbc:h2:mem:liquibase_" + UUID.randomUUID()
+            + ";DB_CLOSE_DELAY=-1";
+
+    @DynamicPropertySource
+    static void databaseProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", () -> DATABASE_URL);
+    }
 
     @Autowired
     private PersonRepository personRepository;
@@ -54,41 +67,29 @@ class LiquibaseMigrationIntegrationTest {
     private AppUserRepository appUserRepository;
 
     @Autowired
-    private org.springframework.context.ApplicationContext applicationContext;
+    private JdbcTemplate jdbcTemplate;
 
     @Test
     void testAllRepositoriesAfterLiquibaseMigration() {
-        System.out.println("Liquibase beans: " + java.util.Arrays.toString(applicationContext.getBeanNamesForType(Object.class)));
-        // Verify tables are created and populated by Liquibase
-        long personCount = personRepository.count();
-        assertThat(personCount).isGreaterThan(1000);
+        assertThat(jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID = '000-initial-schema' AND EXECTYPE = 'EXECUTED'",
+                Long.class)).isEqualTo(1L);
+        assertThat(jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM DATABASECHANGELOG WHERE ID = '099-initial-data'",
+                Long.class)).isZero();
 
-        long seasonCount = seasonRepository.count();
-        assertThat(seasonCount).isGreaterThan(10);
-
-        long teamCount = teamRepository.count();
-        assertThat(teamCount).isGreaterThan(10);
-
-        long matchCount = matchRepository.count();
-        assertThat(matchCount).isGreaterThan(100);
-
-        long abonnementCount = abonnementRepository.count();
-        assertThat(abonnementCount).isGreaterThan(1000);
-
-        long accountingCount = accountingRepository.count();
-        assertThat(accountingCount).isGreaterThan(1000);
-
-        long travelPriceCount = travelPriceRepository.count();
-        assertThat(travelPriceCount).isGreaterThan(50);
-
-        long cotisationCount = cotisationRepository.count();
-        assertThat(cotisationCount).isGreaterThan(5);
-
-        long personCotisationCount = personCotisationRepository.count();
-        assertThat(personCotisationCount).isGreaterThan(1000);
-
-        long personTravelCount = personTravelRepository.count();
-        assertThat(personTravelCount).isGreaterThan(5000);
+        assertThat(personRepository.count()).isZero();
+        assertThat(seasonRepository.count()).isZero();
+        assertThat(teamRepository.count()).isZero();
+        assertThat(matchRepository.count()).isZero();
+        assertThat(abonnementRepository.count()).isZero();
+        assertThat(accountingRepository.count()).isZero();
+        assertThat(benevolatRepository.count()).isZero();
+        assertThat(travelPriceRepository.count()).isZero();
+        assertThat(cotisationRepository.count()).isZero();
+        assertThat(personCotisationRepository.count()).isZero();
+        assertThat(personTravelRepository.count()).isZero();
+        assertThat(appUserRepository.count()).isZero();
     }
 
     @Test
@@ -102,7 +103,7 @@ class LiquibaseMigrationIntegrationTest {
                 .student(false)
                 .build();
 
-        Person saved = personRepository.save(newPerson);
+        Person saved = personRepository.saveAndFlush(newPerson);
         assertThat(saved.getId()).isNotNull();
         assertThat(saved.getId()).isGreaterThan(10000000L);
     }
@@ -116,7 +117,7 @@ class LiquibaseMigrationIntegrationTest {
                 .amount(new BigDecimal("150.00"))
                 .build();
 
-        Accounting saved = accountingRepository.save(newEntry);
+        Accounting saved = accountingRepository.saveAndFlush(newEntry);
         assertThat(saved.getId()).isNotNull();
         assertThat(saved.getId()).isGreaterThanOrEqualTo(3956L);
     }

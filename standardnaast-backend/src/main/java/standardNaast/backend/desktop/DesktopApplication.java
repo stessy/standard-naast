@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import java.awt.AWTException;
-import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -39,9 +38,25 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Locale;
 import java.util.Properties;
+import javax.imageio.ImageIO;
 
 public final class DesktopApplication {
+    public static final int PORT = 8080;
+
     private DesktopApplication() {}
+
+    static BufferedImage loadIcon() throws IOException {
+        try (var input = DesktopApplication.class.getResourceAsStream("/desktop/club-icon.png")) {
+            if (input == null) {
+                throw new IOException("Icone de l'application introuvable.");
+            }
+            BufferedImage image = ImageIO.read(input);
+            if (image == null) {
+                throw new IOException("Icone de l'application invalide.");
+            }
+            return image;
+        }
+    }
 
     public static Path dataDirectory(String os, Path home, String localAppData) {
         if (os.toLowerCase(Locale.ROOT).contains("mac")) {
@@ -104,7 +119,7 @@ public final class DesktopApplication {
                 var arguments = new ArrayList<>(Arrays.asList(args));
                 arguments.add("--spring.profiles.active=desktop");
                 arguments.add("--server.address=127.0.0.1");
-                arguments.add("--server.port=0");
+                arguments.add("--server.port=" + PORT);
                 application.run(arguments.toArray(String[]::new));
             } catch (RuntimeException e) {
                 session.close();
@@ -117,8 +132,15 @@ public final class DesktopApplication {
             org.slf4j.LoggerFactory.getLogger(DesktopApplication.class)
                     .error("Lancement desktop impossible. Donnees : {}", directory, e);
             if (!noBrowser && !GraphicsEnvironment.isHeadless()) {
+                String detail = e.getMessage();
+                for (Throwable cause = e; cause != null; cause = cause.getCause()) {
+                    if (cause instanceof org.springframework.boot.web.server.PortInUseException) {
+                        detail = "Le port " + PORT + " est deja utilise. Fermez le programme qui l'utilise, puis relancez Standard Naast.";
+                        break;
+                    }
+                }
                 JOptionPane.showMessageDialog(null,
-                        "Impossible de lancer Standard Naast.\n" + e.getMessage()
+                        "Impossible de lancer Standard Naast.\n" + detail
                                 + "\nConsultez les journaux dans : " + directory.resolve("logs"),
                         "Standard Naast", JOptionPane.ERROR_MESSAGE);
             }
@@ -223,13 +245,7 @@ public final class DesktopApplication {
             org.slf4j.LoggerFactory.getLogger(DesktopApplication.class).info("DESKTOP_READY {}", uri);
             if (!noBrowser) {
                 if (SystemTray.isSupported()) {
-                    var image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
-                    var graphics = image.createGraphics();
-                    graphics.setColor(new Color(190, 0, 0));
-                    graphics.fillRect(0, 0, 32, 32);
-                    graphics.setColor(Color.WHITE);
-                    graphics.drawString("SN", 6, 21);
-                    graphics.dispose();
+                    var image = loadIcon();
                     var menu = new PopupMenu();
                     var open = new MenuItem("Ouvrir Standard Naast");
                     open.addActionListener(action -> {

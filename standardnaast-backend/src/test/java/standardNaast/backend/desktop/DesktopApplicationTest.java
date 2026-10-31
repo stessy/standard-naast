@@ -8,6 +8,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DesktopApplicationTest {
     @Test
+    void loadsTheClubIconWithTransparency() throws Exception {
+        var image = DesktopApplication.loadIcon();
+        assertThat(image.getWidth()).isEqualTo(512);
+        assertThat(image.getHeight()).isEqualTo(512);
+        assertThat(image.getColorModel().hasAlpha()).isTrue();
+        assertThat(image.getRGB(0, 0) >>> 24).isZero();
+    }
+
+    @Test
     void storesDataOutsideTheApplicationOnEachPlatform() {
         Path home = Path.of("/users/test");
         assertThat(DesktopApplication.dataDirectory("Mac OS X", home, null))

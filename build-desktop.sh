@@ -42,7 +42,9 @@ printf 'arguments=--desktop-stop\n' > "${BACKEND_DIR}/target/stop-launcher.prope
 
 PACKAGE_OPTIONS=()
 if [ "$(uname -s)" = Darwin ]; then
-    PACKAGE_OPTIONS+=(--mac-package-identifier be.standardnaast.desktop)
+    PACKAGE_OPTIONS+=(--mac-package-identifier be.standardnaast.desktop --icon "${ROOT}/scripts/icons/standardnaast.icns")
+else
+    PACKAGE_OPTIONS+=(--icon "${ROOT}/scripts/icons/standardnaast.png")
 fi
 if [ "${TYPE}" = app-image ]; then
     if [ -L "${OUTPUT}" ]; then

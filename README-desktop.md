@@ -52,27 +52,23 @@ les scripts pour une distribution complète.
 Les anciennes sources Electron et les profils H2/PostgreSQL sont conservés pour
 la transition, mais les nouveaux scripts desktop ne les utilisent plus.
 
-### État des tests historiques
+### Tests de migration
 
-Le test `LiquibaseMigrationIntegrationTest.testAllRepositoriesAfterLiquibaseMigration`
-exige des milliers de lignes historiques, alors que l'import `099-initial-data`
-est actuellement désactivé dans le changelog serveur. Sur une base de test neuve,
-ce test échoue indépendamment de SQLite. Le build standard signale cet échec.
-Pour construire en excluant explicitement cette seule méthode :
+`LiquibaseMigrationIntegrationTest` utilise une base H2 de test isolée et vérifie
+l'exécution du schéma Liquibase, l'absence d'import historique, l'accès aux tables
+via les repositories et l'insertion avec les séquences. Les écritures de test
+sont annulées après chaque méthode. Le build standard exécute ce test sans
+exclusion et sans dépendre des données utilisateur.
 
-```sh
-MAVEN_OPTS='-Dtest=*,!LiquibaseMigrationIntegrationTest#testAllRepositoriesAfterLiquibaseMigration' \
-  bash ./build-desktop.sh app-image
-```
-
-Ne pas réactiver l'import historique pour contourner ce test.
+L'import `099-initial-data` reste désactivé dans le changelog serveur ; ne pas le
+réactiver pour alimenter les tests.
 
 ## Utilisation
 
 Lancer **Standard Naast** :
 
 1. Un verrou empêche deux instances d'utiliser le même dossier de données.
-2. Le backend démarre sur `127.0.0.1`, avec un port attribué par le système.
+2. Le backend démarre sur `127.0.0.1:8080`, avec un port fixe.
 3. Au premier lancement, une boîte de dialogue demande la création du premier
    administrateur. Aucun mot de passe par défaut n'est créé.
 4. Lorsque l'application est prête, le navigateur par défaut s'ouvre.
@@ -80,6 +76,17 @@ Lancer **Standard Naast** :
 Si aucune saison n'existe, l'API `/api/seasons/current` retourne un 404 avec
 le message « Aucune saison configurée » et l'indication d'ouvrir **Saisons →
 Nouvelle Saison**, affichés par la notification Angular.
+
+L'adresse **http://127.0.0.1:8080/** peut être ajoutée aux favoris du navigateur.
+L'application doit être démarrée pour que le favori fonctionne. Si le port 8080
+est occupé, le lancement échoue explicitement sans choisir un autre port :
+fermer le programme concerné, puis relancer l'application. Les tests du lanceur
+utilisent également 8080 ; quitter l'application avant de les exécuter.
+
+L'écusson de droite de `img/banniere_club.png` est utilisé comme icône de
+l'application (ICNS macOS, ICO Windows, PNG Linux), de notification et comme
+favicon du navigateur. Les formats de packaging sont dans `scripts/icons/` ;
+le PNG est également embarqué dans les ressources du backend pour la notification.
 
 Un deuxième lancement rouvre l'interface de l'instance existante. Si le premier
 lancement n'est pas encore prêt, un message d'erreur l'indique au lieu de démarrer
