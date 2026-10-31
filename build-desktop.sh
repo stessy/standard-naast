@@ -27,11 +27,6 @@ for tool in java jpackage mvn node pnpm; do
         exit 1
     fi
 done
-if [ "${TYPE}" = app-image ] && { [ -e "${OUTPUT}/Standard Naast.app" ] || [ -e "${OUTPUT}/Standard Naast" ]; }; then
-    echo "An app image already exists in ${OUTPUT}. Move or remove that image before rebuilding." >&2
-    exit 1
-fi
-
 cd "${NG_DIR}"
 if [ ! -d node_modules ]; then
     pnpm install
@@ -49,6 +44,26 @@ PACKAGE_OPTIONS=()
 if [ "$(uname -s)" = Darwin ]; then
     PACKAGE_OPTIONS+=(--mac-package-identifier be.standardnaast.desktop)
 fi
+if [ "${TYPE}" = app-image ]; then
+    if [ -L "${OUTPUT}" ]; then
+        echo "Refusing to use a symlinked output directory: ${OUTPUT}" >&2
+        exit 1
+    fi
+    IMAGE="${OUTPUT}/Standard Naast"
+    CONFIG="${IMAGE}/lib/app/Standard Naast.cfg"
+    if [ "$(uname -s)" = Darwin ]; then
+        IMAGE="${OUTPUT}/Standard Naast.app"
+        CONFIG="${IMAGE}/Contents/app/Standard Naast.cfg"
+    fi
+    if [ -e "${IMAGE}" ] || [ -L "${IMAGE}" ]; then
+        if [ -L "${OUTPUT}" ] || [ -L "${IMAGE}" ] || [ ! -d "${IMAGE}" ] || [ ! -f "${CONFIG}" ]; then
+            echo "Refusing to remove an unexpected app image: ${IMAGE}" >&2
+            exit 1
+        fi
+        echo "Removing previous app image: ${IMAGE}"
+        rm -rf -- "${IMAGE}"
+    fi
+fi
 jpackage \
     --type "${TYPE}" \
     --name "Standard Naast" \
@@ -61,7 +76,7 @@ jpackage \
     --java-options "-Dfile.encoding=UTF-8" \
     --add-modules java.se,jdk.unsupported,jdk.crypto.ec,jdk.charsets,jdk.management,jdk.zipfs \
     --add-launcher "Quitter Standard Naast=${BACKEND_DIR}/target/stop-launcher.properties" \
-    "${PACKAGE_OPTIONS[@]}"
+    "${PACKAGE_OPTIONS[@]+${PACKAGE_OPTIONS[@]}}"
 
 if [ "$(uname -s)" = Darwin ] && [ "${TYPE}" = dmg ]; then
     bash "${ROOT}/scripts/add-macos-applications-link.sh" "${OUTPUT}/Standard Naast-1.0.0.dmg"

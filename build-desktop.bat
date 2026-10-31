@@ -19,10 +19,6 @@ for %%T in (java jpackage mvn node pnpm) do (
         exit /b 1
     )
 )
-if /i "%TYPE%"=="app-image" if exist "%ROOT%dist-desktop\Standard Naast" (
-    echo An app image already exists. Move or remove it before rebuilding.
-    exit /b 1
-)
 pushd "%ROOT%standardnaast-ng"
 if not exist node_modules (
     call pnpm install
@@ -42,6 +38,15 @@ if errorlevel 1 goto fail
 > "standardnaast-backend\target\stop-launcher.properties" echo arguments=--desktop-stop
 set "INSTALL_OPTIONS="
 if /i not "%TYPE%"=="app-image" set "INSTALL_OPTIONS=--win-menu --win-shortcut --win-dir-chooser"
+if /i "%TYPE%"=="app-image" if exist "%ROOT%dist-desktop\Standard Naast" (
+    if not exist "%ROOT%dist-desktop\Standard Naast\app\Standard Naast.cfg" (
+        echo Refusing to remove an unexpected app image.
+        goto fail
+    )
+    echo Removing previous app image: "%ROOT%dist-desktop\Standard Naast"
+    rmdir /s /q "%ROOT%dist-desktop\Standard Naast"
+    if exist "%ROOT%dist-desktop\Standard Naast" goto fail
+)
 call jpackage --type "%TYPE%" --name "Standard Naast" --app-version 1.0.0 --vendor "Standard de Naast" --dest dist-desktop --input standardnaast-backend\target\jpackage-input --main-jar standardnaast.jar --arguments "--desktop" --java-options "-Dfile.encoding=UTF-8" --add-modules java.se,jdk.unsupported,jdk.crypto.ec,jdk.charsets,jdk.management,jdk.zipfs --add-launcher "Quitter Standard Naast=standardnaast-backend\target\stop-launcher.properties" %INSTALL_OPTIONS%
 if errorlevel 1 goto fail
 echo Package created in dist-desktop. Java is included.

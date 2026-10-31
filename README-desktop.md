@@ -28,9 +28,13 @@ build-desktop.bat exe
 
 Les installateurs Windows exigent aussi une version des outils WiX compatible
 avec le JDK utilisé. Les distributions sont générées dans `dist-desktop`.
-Les images existantes ne sont pas supprimées automatiquement : les déplacer avant
-de reconstruire une image. Une image peut être conservée lors de la construction
-d'un installateur.
+Pour `app-image`, l'ancienne image de l'OS cible est supprimée automatiquement
+juste avant le packaging, après la réussite des builds Angular et Java.
+Le script vérifie la présence de la configuration du lanceur avant de supprimer
+l'image ; un dossier inattendu est refusé. Les autres fichiers de `dist-desktop`,
+les installateurs et les données utilisateur sont conservés. Si le packaging
+échoue après cette suppression, il faut le relancer pour recréer l'image.
+Une image est conservée lors de la construction d'un installateur.
 
 Sur macOS, le build DMG garantit la présence d'un raccourci **Applications** dans
 le volume, même si la personnalisation Finder de `jpackage` n'a pas été exécutée.
