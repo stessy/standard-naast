@@ -1,0 +1,106 @@
+name: Build Windows x64 installer
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Windows x64 EXE
+    runs-on: windows-2022
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Java 25 x64
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          architecture: x64
+          cache: maven
+          cache-dependency-path: standardnaast-backend/pom.xml
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          architecture: x64
+          cache: npm
+          cache-dependency-path: standardnaast-ng/package-lock.json
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10.11.0'
+          run_install: false
+
+      - name: Verify Windows packaging tools
+        shell: pwsh
+        run: |
+          if ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture -ne 'X64') {
+            throw 'A Windows x64 runner is required.'
+          }
+          if (-not $env:WIX) {
+            throw 'The Windows runner must provide WiX Toolset 3.'
+          }
+          $wixBin = Join-Path $env:WIX 'bin'
+          foreach ($tool in @('candle.exe', 'light.exe')) {
+            if (-not (Test-Path (Join-Path $wixBin $tool) -PathType Leaf)) {
+              throw "Missing WiX tool: $tool"
+            }
+          }
+          $wixBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          foreach ($tool in @('java', 'jpackage', 'mvn', 'node', 'pnpm')) {
+            Get-Command $tool -ErrorAction Stop | Select-Object Name, Source
+          }
+          java -version
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          jpackage --version
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          mvn --version
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Install locked Angular dependencies
+        working-directory: standardnaast-ng
+        shell: cmd
+        run: npm ci --no-audit --no-fund
+
+      - name: Build and test Windows installer
+        shell: cmd
+        run: call build-desktop.bat exe
+
+      - name: Verify installer output
+        shell: pwsh
+        run: |
+          $installer = Join-Path $env:GITHUB_WORKSPACE 'dist-desktop\Standard Naast-1.0.0.exe'
+          if (-not (Test-Path $installer -PathType Leaf)) {
+            throw "Installer was not generated: $installer"
+          }
+          if ((Get-Item $installer).Length -eq 0) {
+            throw 'The generated installer is empty.'
+          }
+          Get-FileHash $installer -Algorithm SHA256
+
+      - name: Upload Windows x64 installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: standard-naast-windows-x64-exe
+          path: dist-desktop/Standard Naast-1.0.0.exe
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+
+      - name: Upload Java test reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64-java-test-reports
+          path: standardnaast-backend/target/surefire-reports/
+          retention-days: 14

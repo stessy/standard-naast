@@ -28,6 +28,34 @@ build-desktop.bat exe
 
 Les installateurs Windows exigent aussi une version des outils WiX compatible
 avec le JDK utilisé. Les distributions sont générées dans `dist-desktop`.
+
+### Build Windows x64 avec GitHub Actions
+
+Le workflow [Build Windows x64 installer](.github/workflows/build-windows-x64.yml)
+permet de générer l'installateur depuis un Mac, sans machine Windows locale :
+
+1. Pousser le workflow sur la branche par défaut du dépôt.
+2. Ouvrir **Actions → Build Windows x64 installer → Run workflow**.
+3. Sélectionner la branche à construire, puis lancer le workflow.
+4. Après réussite, télécharger l'artifact **standard-naast-windows-x64-exe**
+   dans la page de l'exécution et décompresser le ZIP pour récupérer
+   **Standard Naast-1.0.0.exe**.
+
+Le runner `windows-2022` x64 fournit Maven et WiX 3. Le workflow configure
+Temurin JDK 25 x64, Node.js 22 et pnpm, installe les dépendances Angular avec
+`npm ci` à partir du `package-lock.json` suivi dans Git, puis appelle
+`build-desktop.bat exe`. pnpm sert ensuite à exécuter le script de build existant ;
+aucun lockfile pnpm local non suivi n'est nécessaire.
+Le script compile Angular, exécute les tests Java et inclut le runtime Java
+Windows dans l'installateur. Les rapports de tests sont également disponibles
+en artifact, y compris en cas d'échec du build.
+
+Les artifacts sont conservés 14 jours. Ce workflow est manuel : il ne publie
+pas de GitHub Release et ne signe pas l'exécutable. Un avertissement SmartScreen
+reste donc possible. Un test d'installation sur Windows reste nécessaire.
+
+### Reconstruction locale
+
 Pour `app-image`, l'ancienne image de l'OS cible est supprimée automatiquement
 juste avant le packaging, après la réussite des builds Angular et Java.
 Le script vérifie la présence de la configuration du lanceur avant de supprimer
