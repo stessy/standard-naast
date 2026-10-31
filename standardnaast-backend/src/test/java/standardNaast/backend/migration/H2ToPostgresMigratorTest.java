@@ -53,7 +53,7 @@ class H2ToPostgresMigratorTest {
     void doesNotDetectH2MvDbAsSqlBackup() throws Exception {
         Path databaseBase = tempDir.resolve("binary_h2");
         try (Connection connection = DriverManager.getConnection(
-                "jdbc:h2:file:" + databaseBase + ";DB_CLOSE_DELAY=-1", "sa", "");
+                "jdbc:h2:file:" + databaseBase + ";DB_CLOSE_DELAY=0", "sa", "");
              Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE H2_BINARY_TEST (ID INTEGER)");
         }
