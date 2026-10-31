@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import standardNaast.backend.dto.SeasonCreateUpdateDto;
 import standardNaast.backend.dto.SeasonDto;
 import standardNaast.backend.dto.TeamDto;
+import standardNaast.backend.exception.ResourceNotFoundException;
 import standardNaast.backend.service.SeasonService;
 
 import java.util.List;
@@ -31,9 +32,10 @@ public class SeasonController {
     @GetMapping("/current")
     @Operation(summary = "Obtenir la saison en cours selon la date du jour")
     public ResponseEntity<SeasonDto> getCurrentSeason() {
-        return this.seasonService.getCurrentSeason()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        final SeasonDto season = this.seasonService.getCurrentSeason()
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Aucune saison configurée. Ouvrez « Saisons », puis « Nouvelle Saison » pour en créer une."));
+        return ResponseEntity.ok(season);
     }
 
     @GetMapping("/{id}")

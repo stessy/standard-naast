@@ -106,6 +106,20 @@ class SeasonControllerIntegrationTest {
     }
 
     @Test
+    void getCurrentSeason_whenNoSeasonConfigured_shouldReturnExplicit404() throws Exception {
+        when(this.seasonService.getCurrentSeason()).thenReturn(Optional.empty());
+
+        this.mockMvc.perform(get("/api/seasons/current")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.status", is(404)))
+                .andExpect(jsonPath("$.detail", is(
+                        "Aucune saison configurée. Ouvrez « Saisons », puis « Nouvelle Saison » pour en créer une.")))
+                .andExpect(jsonPath("$.type", is("https://api.standard-naast.be/errors/not-found")));
+    }
+
+    @Test
     void createSeason_shouldReturnCreated() throws Exception {
         final SeasonCreateUpdateDto createDto = new SeasonCreateUpdateDto(
                 "2024-2025",

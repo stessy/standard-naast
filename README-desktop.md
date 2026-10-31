@@ -67,6 +67,10 @@ Lancer **Standard Naast** :
    administrateur. Aucun mot de passe par défaut n'est créé.
 4. Lorsque l'application est prête, le navigateur par défaut s'ouvre.
 
+Si aucune saison n'existe, l'API `/api/seasons/current` retourne un 404 avec
+le message « Aucune saison configurée » et l'indication d'ouvrir **Saisons →
+Nouvelle Saison**, affichés par la notification Angular.
+
 Un deuxième lancement rouvre l'interface de l'instance existante. Si le premier
 lancement n'est pas encore prêt, un message d'erreur l'indique au lieu de démarrer
 un deuxième backend.
