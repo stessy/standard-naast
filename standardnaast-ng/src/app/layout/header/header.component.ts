@@ -4,7 +4,8 @@ import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
 import { MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { DesktopService } from '../../core/services/desktop.service';
 import { AuthService } from '../../core/services/auth.service';
 import { SeasonService } from '../../core/services/season.service';
 
@@ -37,6 +38,11 @@ import { SeasonService } from '../../core/services/season.service';
 
         <!-- User Profile -->
         <div class="flex align-items-center gap-3">
+          @if (desktop.available()) {
+            <button pButton icon="pi pi-power-off" label="Quitter l'application"
+                    class="p-button-text text-white" [disabled]="desktop.stopping()"
+                    [loading]="desktop.stopping()" (click)="quitApplication()"></button>
+          }
           @if (authService.currentUser(); as user) {
             <div class="flex align-items-center gap-2 pl-2 border-left-1 border-red-600">
               <span class="font-medium text-sm text-white hidden sm:inline">{{ user.firstname }} {{ user.lastname }}</span>
@@ -75,10 +81,20 @@ export class HeaderComponent implements OnInit {
   authService = inject(AuthService);
   seasonService = inject(SeasonService);
   router = inject(Router);
+  readonly desktop = inject(DesktopService);
+  private readonly confirmation = inject(ConfirmationService);
+  private readonly messages = inject(MessageService);
 
   userMenuItems: MenuItem[] = [];
 
   ngOnInit(): void {
+    this.desktop.loadRuntime().subscribe({
+      error: () => this.messages.add({
+        severity: 'error',
+        summary: 'Mode application indisponible',
+        detail: "Impossible de vérifier si l'application peut être arrêtée depuis cette interface."
+      })
+    });
     this.seasonService.getCurrentSeason().subscribe({
       error: () => {
         if (!this.seasonService.selectedSeason()) {
@@ -98,6 +114,29 @@ export class HeaderComponent implements OnInit {
   toggleSidebar(): void {
     // Custom event to notify layout
     window.dispatchEvent(new CustomEvent('toggle-sidebar'));
+  }
+
+  quitApplication(): void {
+    if (this.desktop.stopping() || !this.desktop.available()) return;
+    this.confirmation.confirm({
+      header: "Quitter l'application",
+      message: "L'application sera arrêtée pour tous les onglets. Les modifications non enregistrées seront perdues. Continuer ?",
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Quitter',
+      rejectLabel: 'Annuler',
+      accept: () => {
+        if (this.desktop.stopping()) return;
+        this.desktop.quit().subscribe({
+          error: () => {
+            this.messages.add({
+              severity: 'error',
+              summary: 'Arrêt impossible',
+              detail: "L'arrêt n'a pas pu être confirmé. Réessayez ou utilisez le lanceur Quitter Standard Naast."
+            });
+          }
+        });
+      }
+    });
   }
 
   initUserMenu(): void {

@@ -124,6 +124,8 @@ test('embedded Angular, deep links and API security remain distinct', async () =
   assert.equal(missingAsset.status, 404);
   assert.doesNotMatch(await missingAsset.text(), /<app-root/);
   assert.equal((await fetch(`${baseUrl}api/members`)).status, 401);
+  assert.equal((await fetch(`${baseUrl}api/application/runtime`)).status, 401);
+  assert.equal((await fetch(`${baseUrl}api/desktop/quit`, { method: 'POST' })).status, 401);
   assert.equal((await fetch(`${baseUrl}api/desktop/stop`, { method: 'POST' })).status, 403);
   const invalid = await fetch(`${baseUrl}api/auth/login`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -131,6 +133,11 @@ test('embedded Angular, deep links and API security remain distinct', async () =
   });
   assert.equal(invalid.status, 401);
   await login();
+  const runtime = await fetch(`${baseUrl}api/application/runtime`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  assert.equal(runtime.status, 200);
+  assert.deepEqual(await runtime.json(), { desktop: true });
   const missingApi = await fetch(`${baseUrl}api/missing-endpoint`, {
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -218,4 +225,20 @@ test('an occupied fixed port rejects startup instead of changing the bookmark UR
     }
     await new Promise((resolve, reject) => blocker.close(error => error ? reject(error) : resolve()));
   }
+});
+
+test('authenticated browser quit stops the backend and releases the data directory', async () => {
+  await start();
+  await login();
+  const response = await fetch(`${baseUrl}api/desktop/quit`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: '{}'
+  });
+  assert.equal(response.status, 202);
+  await waitForExit(application);
+  await assert.rejects(readFile(path.join(directory, 'desktop.properties')), { code: 'ENOENT' });
+  await start();
+  await login();
+  await stop();
 });

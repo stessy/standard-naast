@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -33,6 +34,17 @@ public class DesktopControl {
             org.slf4j.LoggerFactory.getLogger(DesktopControl.class).warn("Commande d'arret desktop refusee");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+        return scheduleStop();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/api/desktop/quit")
+    public ResponseEntity<Void> quit() {
+        return scheduleStop();
+    }
+
+    private ResponseEntity<Void> scheduleStop() {
+        org.slf4j.LoggerFactory.getLogger(DesktopControl.class).info("Arret desktop demande");
         new Thread(() -> {
             try {
                 Thread.sleep(300);

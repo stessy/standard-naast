@@ -126,6 +126,13 @@ lancement n'est pas encore prêt, un message d'erreur l'indique au lieu de déma
 un deuxième backend.
 
 Fermer l'onglet du navigateur **ne quitte pas** l'application. Utiliser le menu
+**Quitter l'application** dans l'en-tête Angular : après confirmation, le backend
+et SQLite s'arrêtent proprement et l'onglet affiche **Application arrêtée**.
+Ce bouton est réservé au profil desktop et aux utilisateurs connectés ; il
+arrête l'instance entière, y compris les autres onglets. Les modifications non
+enregistrées sont perdues. Le navigateur ne ferme pas automatiquement l'onglet.
+L'arrêt utilise l'authentification JWT, sans exposer le jeton local du lanceur.
+En alternative, utiliser le menu
 **Quitter Standard Naast** de l'icône de notification quand le système la prend en
 charge, ou le lanceur **Quitter Standard Naast** fourni dans la distribution
 (sur macOS, dans `Standard Naast.app/Contents/MacOS`).
