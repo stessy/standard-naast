@@ -132,7 +132,14 @@ l'application (ICNS macOS, ICO Windows, PNG Linux), de notification et comme
 favicon du navigateur. Les formats de packaging sont dans `scripts/icons/` ;
 le PNG est également embarqué dans les ressources du backend pour la notification.
 
-Un deuxième lancement rouvre l'interface de l'instance existante. Si le premier
+Un deuxième lancement affiche **Standard Naast est déjà démarré**, puis rouvre
+l'interface de l'instance existante dans le navigateur après un clic sur **OK**.
+Il ne démarre pas de second backend et ne modifie pas les données.
+Sur macOS, la réactivation de l'application existante par Finder ou le Dock
+est également prise en charge, même si le système ne lance pas de second processus.
+Le navigateur choisit d'ouvrir un nouvel onglet ou de réutiliser une fenêtre
+selon ses réglages ; l'application lui demande d'afficher son adresse.
+Si le premier
 lancement n'est pas encore prêt, un message d'erreur l'indique au lieu de démarrer
 un deuxième backend.
 

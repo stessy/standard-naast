@@ -111,8 +111,10 @@ public final class DesktopApplication {
                     channel.close();
                     Properties running = readProperties(directory.resolve("desktop.properties"));
                     if (!noBrowser) {
+                        URI url = URI.create(running.getProperty("url"));
                         splash.update("Ouverture de l'application deja demarree...");
-                        browse(URI.create(running.getProperty("url")));
+                        splash.visible(false);
+                        reopen(url);
                     }
                     return;
                 }
@@ -236,6 +238,23 @@ public final class DesktopApplication {
             throw new IOException("Ouverture du navigateur indisponible. Adresse : " + uri);
         }
         desktop.browse(uri);
+    }
+
+    private static void reopen(URI uri) throws IOException {
+        JOptionPane.showMessageDialog(null,
+                "Standard Naast est deja demarre.\n"
+                        + "Cliquez sur OK pour ouvrir l'application dans votre navigateur.\n"
+                        + "Adresse : " + uri,
+                "Standard Naast - Application deja demarree",
+                JOptionPane.INFORMATION_MESSAGE);
+        browse(uri);
+    }
+
+    static java.awt.desktop.AppReopenedListener registerReopen(Desktop desktop, Runnable action) {
+        if (!desktop.isSupported(Desktop.Action.APP_EVENT_REOPENED)) return null;
+        java.awt.desktop.AppReopenedListener listener = event -> action.run();
+        desktop.addAppEventListener(listener);
+        return listener;
     }
 
     static String startupMessage(org.springframework.context.ApplicationEvent event) {
@@ -374,6 +393,8 @@ public final class DesktopApplication {
         private final FileChannel channel;
         private final FileLock lock;
         private TrayIcon tray;
+        private Desktop desktop;
+        private java.awt.desktop.AppReopenedListener reopenListener;
         private boolean closed;
 
         private Session(Path directory, FileChannel channel, FileLock lock) {
@@ -417,6 +438,20 @@ public final class DesktopApplication {
             org.slf4j.LoggerFactory.getLogger(DesktopApplication.class).info("DESKTOP_READY {}", uri);
             if (!noBrowser) {
                 splash.update("Ouverture du navigateur par defaut...");
+                if (Desktop.isDesktopSupported()) {
+                    desktop = Desktop.getDesktop();
+                    reopenListener = registerReopen(desktop, () -> javax.swing.SwingUtilities.invokeLater(() -> {
+                        try {
+                            reopen(uri);
+                        } catch (IOException e) {
+                            org.slf4j.LoggerFactory.getLogger(DesktopApplication.class)
+                                    .error("Reouverture du navigateur impossible : {}", uri, e);
+                            JOptionPane.showMessageDialog(null,
+                                    "Impossible d'ouvrir le navigateur.\nOuvrez cette adresse : " + uri,
+                                    "Standard Naast", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }));
+                }
                 if (SystemTray.isSupported()) {
                     var image = loadIcon();
                     var menu = new PopupMenu();
@@ -481,6 +516,9 @@ public final class DesktopApplication {
                 return;
             }
             closed = true;
+            if (reopenListener != null) {
+                desktop.removeAppEventListener(reopenListener);
+            }
             if (tray != null) {
                 SystemTray.getSystemTray().remove(tray);
             }

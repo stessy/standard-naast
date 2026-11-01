@@ -15,6 +15,24 @@ class DesktopApplicationTest {
     Path directory;
 
     @Test
+    void nativeApplicationReopenRequestsTheExistingInterface() {
+        var desktop = mock(java.awt.Desktop.class);
+        var action = mock(Runnable.class);
+        when(desktop.isSupported(java.awt.Desktop.Action.APP_EVENT_REOPENED)).thenReturn(true);
+        var listener = DesktopApplication.registerReopen(desktop, action);
+        verify(desktop).addAppEventListener(listener);
+        listener.appReopened(mock(java.awt.desktop.AppReopenedEvent.class));
+        verify(action).run();
+    }
+
+    @Test
+    void platformsWithoutNativeReopenKeepTheSecondLaunchPath() {
+        var desktop = mock(java.awt.Desktop.class);
+        assertThat(DesktopApplication.registerReopen(desktop, mock(Runnable.class))).isNull();
+        verify(desktop, never()).addAppEventListener(any());
+    }
+
+    @Test
     void requestsTheDefaultBrowserWithoutDependingOnAnExistingBrowserWindow() throws Exception {
         var desktop = mock(java.awt.Desktop.class);
         when(desktop.isSupported(java.awt.Desktop.Action.BROWSE)).thenReturn(true);
