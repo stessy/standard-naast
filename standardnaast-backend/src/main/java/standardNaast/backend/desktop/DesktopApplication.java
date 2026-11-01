@@ -102,47 +102,57 @@ public final class DesktopApplication {
                 stopExisting(directory);
                 return;
             }
-            var channel = FileChannel.open(directory.resolve("desktop.lock"),
-                    StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-            FileLock lock = channel.tryLock();
-            if (lock == null) {
-                channel.close();
-                Properties running = readProperties(directory.resolve("desktop.properties"));
-                if (!noBrowser) {
-                    browse(URI.create(running.getProperty("url")));
-                }
-                return;
-            }
-            var session = new Session(directory, channel, lock);
-            Runtime.getRuntime().addShutdownHook(new Thread(session::close, "desktop-cleanup"));
-            try {
-                Files.deleteIfExists(directory.resolve("desktop.properties"));
-                System.setProperty("app.desktop.data-dir", directory.toString().replace('\\', '/'));
-                try {
-                    prepareInitialImport(directory, noBrowser);
-                } catch (CancellationException e) {
-                    session.close();
+            try (var splash = StartupSplash.open(noBrowser)) {
+                splash.update("Verification de l'instance locale...");
+                var channel = FileChannel.open(directory.resolve("desktop.lock"),
+                        StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                FileLock lock = channel.tryLock();
+                if (lock == null) {
+                    channel.close();
+                    Properties running = readProperties(directory.resolve("desktop.properties"));
+                    if (!noBrowser) {
+                        splash.update("Ouverture de l'application deja demarree...");
+                        browse(URI.create(running.getProperty("url")));
+                    }
                     return;
                 }
-                System.setProperty("app.jwt.secret", secret(directory.resolve("jwt.secret")));
-                var application = new SpringApplication(StandardNaastApplication.class);
-                application.addListeners(event -> {
-                    if (event instanceof ApplicationReadyEvent ready) {
-                        try {
-                            session.ready(ready, noBrowser);
-                        } catch (IOException | java.sql.SQLException | AWTException e) {
-                            throw new IllegalStateException("Initialisation desktop impossible", e);
-                        }
+                var session = new Session(directory, channel, lock);
+                Runtime.getRuntime().addShutdownHook(new Thread(session::close, "desktop-cleanup"));
+                try {
+                    Files.deleteIfExists(directory.resolve("desktop.properties"));
+                    System.setProperty("app.desktop.data-dir", directory.toString().replace('\\', '/'));
+                    try {
+                        boolean importing = shouldOfferInitialImport(directory.resolve("standardnaast.sqlite"), noBrowser);
+                        if (importing) splash.visible(false);
+                        prepareInitialImport(directory, noBrowser);
+                        if (importing) splash.visible(true);
+                    } catch (CancellationException e) {
+                        session.close();
+                        return;
                     }
-                });
-                var arguments = new ArrayList<>(Arrays.asList(args));
-                arguments.add("--spring.profiles.active=desktop");
-                arguments.add("--server.address=127.0.0.1");
-                arguments.add("--server.port=" + PORT);
-                application.run(arguments.toArray(String[]::new));
-            } catch (RuntimeException e) {
-                session.close();
-                throw e;
+                    splash.update("Preparation de la configuration locale...");
+                    System.setProperty("app.jwt.secret", secret(directory.resolve("jwt.secret")));
+                    var application = new SpringApplication(StandardNaastApplication.class);
+                    application.addListeners(event -> {
+                        String message = startupMessage(event);
+                        if (message != null) splash.update(message);
+                        if (event instanceof ApplicationReadyEvent ready) {
+                            try {
+                                session.ready(ready, noBrowser, splash);
+                            } catch (IOException | java.sql.SQLException | AWTException e) {
+                                throw new IllegalStateException("Initialisation desktop impossible", e);
+                            }
+                        }
+                    });
+                    var arguments = new ArrayList<>(Arrays.asList(args));
+                    arguments.add("--spring.profiles.active=desktop");
+                    arguments.add("--server.address=127.0.0.1");
+                    arguments.add("--server.port=" + PORT);
+                    application.run(arguments.toArray(String[]::new));
+                } catch (IOException | RuntimeException e) {
+                    session.close();
+                    throw e;
+                }
             }
         } catch (IOException | InterruptedException | RuntimeException e) {
             if (e instanceof InterruptedException) {
@@ -215,10 +225,36 @@ public final class DesktopApplication {
     }
 
     private static void browse(URI uri) throws IOException {
-        if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+        if (!Desktop.isDesktopSupported()) {
             throw new IOException("Ouverture du navigateur indisponible. Adresse : " + uri);
         }
-        Desktop.getDesktop().browse(uri);
+        browse(uri, Desktop.getDesktop());
+    }
+
+    static void browse(URI uri, Desktop desktop) throws IOException {
+        if (!desktop.isSupported(Desktop.Action.BROWSE)) {
+            throw new IOException("Ouverture du navigateur indisponible. Adresse : " + uri);
+        }
+        desktop.browse(uri);
+    }
+
+    static String startupMessage(org.springframework.context.ApplicationEvent event) {
+        if (event instanceof org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent) {
+            return "Chargement de la configuration...";
+        }
+        if (event instanceof org.springframework.boot.context.event.ApplicationPreparedEvent) {
+            return "Initialisation de la base SQLite et des services...";
+        }
+        if (event instanceof org.springframework.boot.web.server.context.WebServerInitializedEvent) {
+            return "Serveur local demarre - finalisation...";
+        }
+        if (event instanceof org.springframework.boot.context.event.ApplicationStartedEvent) {
+            return "Verification de l'application...";
+        }
+        if (event instanceof ApplicationReadyEvent) {
+            return "Application prete...";
+        }
+        return null;
     }
 
     static boolean shouldOfferInitialImport(Path database, boolean noBrowser) {
@@ -346,7 +382,7 @@ public final class DesktopApplication {
             this.lock = lock;
         }
 
-        private void ready(ApplicationReadyEvent event, boolean noBrowser) throws IOException, java.sql.SQLException, AWTException {
+        private void ready(ApplicationReadyEvent event, boolean noBrowser, StartupSplash splash) throws IOException, java.sql.SQLException, AWTException {
             var context = event.getApplicationContext();
             int port = ((WebServerApplicationContext) context).getWebServer().getPort();
             URI uri = URI.create("http://127.0.0.1:" + port + "/");
@@ -354,8 +390,13 @@ public final class DesktopApplication {
             context.getBean(DesktopControl.class).initialize(token);
             boolean provisioned = true;
             if (!noBrowser) {
+                splash.update("Verification du compte administrateur...");
                 try (var connection = context.getBean(DataSource.class).getConnection()) {
-                    provisioned = InitialAdminSetup.hasAdmin(connection) || provision(connection);
+                    if (!InitialAdminSetup.hasAdmin(connection)) {
+                        splash.visible(false);
+                        provisioned = provision(connection);
+                        splash.visible(true);
+                    }
                 }
             }
             if (!provisioned) {
@@ -375,6 +416,7 @@ public final class DesktopApplication {
             }
             org.slf4j.LoggerFactory.getLogger(DesktopApplication.class).info("DESKTOP_READY {}", uri);
             if (!noBrowser) {
+                splash.update("Ouverture du navigateur par defaut...");
                 if (SystemTray.isSupported()) {
                     var image = loadIcon();
                     var menu = new PopupMenu();

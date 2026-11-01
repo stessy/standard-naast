@@ -8,10 +8,60 @@ import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
 class DesktopApplicationTest {
     @TempDir
     Path directory;
+
+    @Test
+    void requestsTheDefaultBrowserWithoutDependingOnAnExistingBrowserWindow() throws Exception {
+        var desktop = mock(java.awt.Desktop.class);
+        when(desktop.isSupported(java.awt.Desktop.Action.BROWSE)).thenReturn(true);
+        var url = java.net.URI.create("http://127.0.0.1:8080/");
+        DesktopApplication.browse(url, desktop);
+        verify(desktop).browse(url);
+    }
+
+    @Test
+    void reportsBrowserOpeningFailuresWithTheApplicationAddress() throws Exception {
+        var desktop = mock(java.awt.Desktop.class);
+        var url = java.net.URI.create("http://127.0.0.1:8080/");
+        assertThatThrownBy(() -> DesktopApplication.browse(url, desktop))
+                .isInstanceOf(java.io.IOException.class).hasMessageContaining(url.toString());
+        verify(desktop, never()).browse(url);
+        when(desktop.isSupported(java.awt.Desktop.Action.BROWSE)).thenReturn(true);
+        doThrow(new java.io.IOException("System browser unavailable")).when(desktop).browse(url);
+        assertThatThrownBy(() -> DesktopApplication.browse(url, desktop))
+                .isInstanceOf(java.io.IOException.class).hasMessage("System browser unavailable");
+    }
+
+    @Test
+    void startupMessagesFollowSpringLifecycleEvents() {
+        assertThat(DesktopApplication.startupMessage(mock(
+                org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent.class)))
+                .isEqualTo("Chargement de la configuration...");
+        assertThat(DesktopApplication.startupMessage(mock(
+                org.springframework.boot.context.event.ApplicationPreparedEvent.class)))
+                .isEqualTo("Initialisation de la base SQLite et des services...");
+        assertThat(DesktopApplication.startupMessage(mock(
+                org.springframework.boot.context.event.ApplicationStartedEvent.class)))
+                .isEqualTo("Verification de l'application...");
+        assertThat(DesktopApplication.startupMessage(mock(
+                org.springframework.boot.context.event.ApplicationReadyEvent.class)))
+                .isEqualTo("Application prete...");
+    }
+
+    @Test
+    void noBrowserModeDoesNotCreateSplashWindows() throws Exception {
+        var before = java.awt.Window.getWindows().length;
+        try (var splash = StartupSplash.open(true)) {
+            splash.update("Test");
+            splash.visible(true);
+            splash.visible(false);
+        }
+        assertThat(java.awt.Window.getWindows()).hasSize(before);
+    }
 
     @Test
     void loadsTheClubIconWithTransparency() throws Exception {

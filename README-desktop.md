@@ -95,6 +95,14 @@ réactiver pour alimenter les tests.
 
 Lancer **Standard Naast** :
 
+Une fenêtre de démarrage affiche les étapes réelles (configuration,
+initialisation SQLite et services, serveur local, vérification du compte,
+ouverture du navigateur). La barre animée indique que le démarrage est en cours,
+sans pourcentage artificiel : la durée de chaque étape varie selon la machine.
+La fenêtre s'efface pendant les dialogues d'import et de création de compte,
+puis se ferme une fois la demande d'ouverture du navigateur envoyée au système.
+En cas d'erreur, elle se ferme et le message de diagnostic habituel s'affiche.
+
 1. Un verrou empêche deux instances d'utiliser le même dossier de données.
 2. Si la base SQLite n'existe pas, le premier lancement propose d'importer une
    sauvegarde H2 ou de démarrer avec une base vierge. Après l'import (ou le choix
@@ -111,6 +119,9 @@ le message « Aucune saison configurée » et l'indication d'ouvrir **Saisons �
 Nouvelle Saison**, affichés par la notification Angular.
 
 L'adresse **http://127.0.0.1:8080/** peut être ajoutée aux favoris du navigateur.
+L'ouverture utilise le navigateur par défaut du système : celui-ci est lancé
+même s'il n'est pas déjà ouvert. Si aucun navigateur compatible n'est configuré
+ou si le système refuse l'ouverture, une erreur indique l'adresse et les logs.
 L'application doit être démarrée pour que le favori fonctionne. Si le port 8080
 est occupé, le lancement échoue explicitement sans choisir un autre port :
 fermer le programme concerné, puis relancer l'application. Les tests du lanceur
@@ -239,7 +250,7 @@ java -jar standardnaast-backend/target/standardnaast-backend-1.0.0-SNAPSHOT.jar 
 ```
 
 L'option `--desktop-no-browser` désactive le navigateur et les dialogues pour les
-tests automatisés ; elle ne crée pas de compte administrateur.
+tests automatisés, y compris la fenêtre de démarrage ; elle ne crée pas de compte administrateur.
 
 ## Import initial d'une sauvegarde H2
 
