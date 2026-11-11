@@ -11,6 +11,15 @@ Sur la machine de build : JDK 25 avec `jpackage`, Maven, Node.js et pnpm.
 Le script utilise aussi le Node local de `standardnaast-ng/node` s'il existe.
 Les installateurs doivent être construits sur leur OS cible.
 
+Les résolutions de sécurité des dépendances de build Angular sont déclarées
+dans `standardnaast-ng/package.json` (`overrides`, pour npm) et
+`standardnaast-ng/pnpm-workspace.yaml` (`overrides`, pour pnpm).
+Elles imposent des versions corrigées de `follow-redirects`, `glob`, `minimatch`
+et `uuid` en attendant leur adoption par les dépendances parentes. Garder ces
+déclarations et les deux lockfiles synchronisés lors des mises à jour ; les
+résolutions ciblent les versions affectées sans remplacer les anciennes
+branches non concernées de `glob` et `minimatch`.
+
 ```sh
 # macOS : image application, puis installateur DMG ou PKG
 bash ./build-desktop.sh app-image

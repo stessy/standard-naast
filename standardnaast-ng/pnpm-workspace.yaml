@@ -1,3 +1,9 @@
+overrides:
+  follow-redirects: ^1.16.3
+  'glob@>=9 <14.0.2': 14.0.2
+  'minimatch@>=7 <11.0.1': 11.0.1
+  'uuid@<11.1.1': 11.1.1
+
 allowBuilds:
   '@parcel/watcher': set this to true or false
   esbuild: set this to true or false

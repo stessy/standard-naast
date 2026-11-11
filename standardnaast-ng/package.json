@@ -26,6 +26,12 @@
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
+  "overrides": {
+    "follow-redirects": "^1.16.3",
+    "glob@>=9 <14.0.2": "14.0.2",
+    "minimatch@>=7 <11.0.1": "11.0.1",
+    "uuid@<11.1.1": "11.1.1"
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.2.29",
     "@angular/cli": "^21.2.29",
