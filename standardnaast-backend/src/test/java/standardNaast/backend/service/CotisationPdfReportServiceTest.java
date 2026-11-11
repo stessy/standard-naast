@@ -65,14 +65,6 @@ class CotisationPdfReportServiceTest {
                 .montantCotisation(BigDecimal.valueOf(15))
                 .build();
 
-        Season season2023 = Season.builder()
-                .id("2023-2024")
-                .dateStart(LocalDate.of(2023, 7, 1))
-                .dateEnd(LocalDate.of(2024, 6, 30))
-                .european(true)
-                .montantCotisation(BigDecimal.valueOf(15))
-                .build();
-
         Person member1 = Person.builder().id(1L).memberNumber(10L).name("Witsel").firstname("Axel").build();
         Person member2 = Person.builder().id(2L).memberNumber(28L).name("Fellaini").firstname("Marouane").build();
 
@@ -85,7 +77,6 @@ class CotisationPdfReportServiceTest {
                 .build();
 
         when(seasonRepository.findById("2024-2025")).thenReturn(Optional.of(season2024));
-        when(seasonRepository.findAll()).thenReturn(List.of(season2024, season2023));
         when(personCotisationRepository.findBySeasonIdIn(anyCollection())).thenReturn(List.of(cot1));
         when(personRepository.findByMemberNumberLessThanOrderByMemberNumberAsc(1000L)).thenReturn(List.of(member1, member2));
 
@@ -104,6 +95,7 @@ class CotisationPdfReportServiceTest {
         assertThat(text).contains("Fellaini Marouane");
         assertThat(text).contains("10");
         assertThat(text).contains("28");
+        assertThat(text).doesNotMatch("(?s).*\\b1\\b.*");
         var resources = reader.getPageN(1).getAsDict(PdfName.RESOURCES);
         var fonts = resources.getAsDict(PdfName.FONT);
         assertThat(fonts.getKeys()).isNotEmpty();
@@ -132,7 +124,6 @@ class CotisationPdfReportServiceTest {
 
         when(seasonService.getCurrentSeason()).thenReturn(Optional.of(currentSeasonDto));
         when(seasonRepository.findById("2024-2025")).thenReturn(Optional.of(season2024));
-        when(seasonRepository.findAll()).thenReturn(List.of(season2024));
         when(personCotisationRepository.findBySeasonIdIn(anyCollection())).thenReturn(List.of());
         when(personRepository.findByMemberNumberLessThanOrderByMemberNumberAsc(1000L)).thenReturn(List.of());
 
