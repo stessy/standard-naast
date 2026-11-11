@@ -1,7 +1,12 @@
 name: Build macOS Intel installer
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag (for example v1.1.0)'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -17,6 +22,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+
+      - name: Validate release tag
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: bash .github/scripts/publish-release.sh --validate-tag
 
       - name: Set up Java 25 x64
         uses: actions/setup-java@v4
@@ -93,3 +103,30 @@ jobs:
           name: macos-intel-java-test-reports
           path: standardnaast-backend/target/surefire-reports/
           retention-days: 14
+
+  release:
+    name: Publish macOS installer
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: desktop-release-${{ inputs.release_tag }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Download macOS installer
+        uses: actions/download-artifact@v4
+        with:
+          name: standard-naast-macos-intel-dmg
+          path: release-assets
+
+      - name: Create or update release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: bash .github/scripts/publish-release.sh "release-assets/Standard Naast-1.1.0.dmg"
