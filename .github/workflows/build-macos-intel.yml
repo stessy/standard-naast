@@ -72,7 +72,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          installer="dist-desktop/Standard Naast-1.0.0.dmg"
+          installer="dist-desktop/Standard Naast-1.1.0.dmg"
           test -s "$installer"
           hdiutil verify "$installer"
           shasum -a 256 "$installer"
@@ -81,7 +81,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: standard-naast-macos-intel-dmg
-          path: dist-desktop/Standard Naast-1.0.0.dmg
+          path: dist-desktop/Standard Naast-1.1.0.dmg
           if-no-files-found: error
           retention-days: 14
           compression-level: 0

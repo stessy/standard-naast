@@ -37,7 +37,7 @@ test -f dist/standardnaast-ng/browser/index.html
 cd "${ROOT}"
 mvn -f "${BACKEND_DIR}/pom.xml" -Pdesktop clean package
 mkdir -p "${INPUT}" "${OUTPUT}"
-cp "${BACKEND_DIR}/target/standardnaast-backend-1.0.0-SNAPSHOT.jar" "${INPUT}/standardnaast.jar"
+cp "${BACKEND_DIR}/target/standardnaast-backend-1.1.0.jar" "${INPUT}/standardnaast.jar"
 printf 'arguments=--desktop-stop\n' > "${BACKEND_DIR}/target/stop-launcher.properties"
 
 PACKAGE_OPTIONS=()
@@ -69,7 +69,7 @@ fi
 jpackage \
     --type "${TYPE}" \
     --name "Standard Naast" \
-    --app-version 1.0.0 \
+    --app-version 1.1.0 \
     --vendor "Standard de Naast" \
     --dest "${OUTPUT}" \
     --input "${INPUT}" \
@@ -81,7 +81,7 @@ jpackage \
     "${PACKAGE_OPTIONS[@]+${PACKAGE_OPTIONS[@]}}"
 
 if [ "$(uname -s)" = Darwin ] && [ "${TYPE}" = dmg ]; then
-    bash "${ROOT}/scripts/add-macos-applications-link.sh" "${OUTPUT}/Standard Naast-1.0.0.dmg"
+    bash "${ROOT}/scripts/add-macos-applications-link.sh" "${OUTPUT}/Standard Naast-1.1.0.dmg"
 fi
 
 echo "Package created in ${OUTPUT}. Java is included; no user-side Java installation is needed."

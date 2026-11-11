@@ -8,7 +8,7 @@ import { createServer } from 'node:net';
 import { setTimeout as delay } from 'node:timers/promises';
 import { after, before, test } from 'node:test';
 
-const jar = path.resolve(process.argv[2] ?? 'standardnaast-backend/target/standardnaast-backend-1.0.0-SNAPSHOT.jar');
+const jar = path.resolve(process.argv[2] ?? 'standardnaast-backend/target/standardnaast-backend-1.1.0.jar');
 const launcher = process.env.DESKTOP_LAUNCHER;
 const java = process.env.JAVA ?? 'java';
 let directory;

@@ -39,7 +39,7 @@ interface NavItem {
 
       <!-- Footer Info -->
       <div class="p-3 border-top-1 border-200 text-xs text-500 text-center">
-        <span>Standard de Naast v1.0.0</span>
+        <span>Standard de Naast v1.1.0</span>
       </div>
     </aside>
   `,
