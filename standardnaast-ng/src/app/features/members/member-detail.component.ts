@@ -52,11 +52,6 @@ import { Season } from '../../core/models/season.model';
                 @if (member.memberNumber) {
                   <span class="bg-red-100 text-red-800 font-bold px-2 py-1 border-round text-sm">N° {{ member.memberNumber }}</span>
                 }
-                @if (member.redCard) {
-                  <p-tag severity="danger" value="Carte Rouge"></p-tag>
-                } @else {
-                  <p-tag severity="success" value="Membre actif"></p-tag>
-                }
               </div>
               <span class="text-500 text-xs">{{ member.email || 'Pas d\\'adresse email' }}</span>
             </div>
