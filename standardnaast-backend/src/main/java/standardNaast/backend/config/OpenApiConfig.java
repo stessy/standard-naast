@@ -19,7 +19,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Standard Naast API")
                         .description("API REST pour l'application de gestion Standard Naast")
-                        .version("1.0.0")
+                        .version("1.1.0")
                         .contact(new Contact().name("Standard Naast").email("contact@standard-naast.be")))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()

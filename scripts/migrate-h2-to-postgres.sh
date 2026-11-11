@@ -26,7 +26,7 @@ if [ ! -f "${H2_FILE}" ] && [ ! -f "${H2_FILE}.mv.db" ]; then
     exit 1
 fi
 
-BACKEND_JAR="${PROJECT_DIR}/standardnaast-backend/target/standardnaast-backend-1.0.0-SNAPSHOT.jar"
+BACKEND_JAR="${PROJECT_DIR}/standardnaast-backend/target/standardnaast-backend-1.1.0.jar"
 
 if [ ! -f "${BACKEND_JAR}" ]; then
     echo "Compilation du backend..."
