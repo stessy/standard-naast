@@ -149,11 +149,6 @@ import { Season } from '../../core/models/season.model';
                   N° {{ selectedMember.memberNumber }}
                 </span>
               }
-              @if (selectedMember.redCard) {
-                <p-tag severity="danger" value="Carte Rouge"></p-tag>
-              } @else {
-                <p-tag severity="success" value="Actif"></p-tag>
-              }
             </div>
             <div class="flex gap-2">
               <button
