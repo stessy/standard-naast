@@ -1,11 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -22,10 +22,11 @@ import { Accounting, AccountingCreateUpdate, AccountingType, AccountingSummary }
     ButtonModule,
     InputTextModule,
     InputNumberModule,
-    DropdownModule,
+    SelectModule,
     DialogModule,
     TagModule
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="accounting-page flex flex-column gap-2">
       <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
@@ -35,31 +36,33 @@ import { Accounting, AccountingCreateUpdate, AccountingType, AccountingSummary }
         </div>
         <button pButton label="Nouvelle Écriture" icon="pi pi-plus" class="p-button-danger p-button-sm font-bold" (click)="openNewDialog()"></button>
       </div>
-
+    
       <!-- KPI Summary Cards -->
-      <div class="grid" *ngIf="summary">
-        <div class="col-12 sm:col-4">
-          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-green-600 text-sm">Total Recettes</span>
-            <div class="text-green-600 font-bold text-2xl mt-1">{{ summary.totalEntries | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
+      @if (summary) {
+        <div class="grid">
+          <div class="col-12 sm:col-4">
+            <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
+              <span class="text-500 font-medium text-green-600 text-sm">Total Recettes</span>
+              <div class="text-green-600 font-bold text-2xl mt-1">{{ summary.totalEntries | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
+            </div>
           </div>
-        </div>
-        <div class="col-12 sm:col-4">
-          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-red-600 text-sm">Total Dépenses</span>
-            <div class="text-red-600 font-bold text-2xl mt-1">{{ summary.totalExits | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
+          <div class="col-12 sm:col-4">
+            <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
+              <span class="text-500 font-medium text-red-600 text-sm">Total Dépenses</span>
+              <div class="text-red-600 font-bold text-2xl mt-1">{{ summary.totalExits | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
+            </div>
           </div>
-        </div>
-        <div class="col-12 sm:col-4">
-          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
-            <span class="text-500 font-medium text-sm">Solde Net</span>
-            <div class="text-900 font-bold text-2xl mt-1" [class.text-green-600]="summary.balance >= 0" [class.text-red-600]="summary.balance < 0">
-              {{ summary.balance | currency:'EUR':'symbol':'1.2-2':'fr' }}
+          <div class="col-12 sm:col-4">
+            <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1">
+              <span class="text-500 font-medium text-sm">Solde Net</span>
+              <div class="text-900 font-bold text-2xl mt-1" [class.text-green-600]="summary.balance >= 0" [class.text-red-600]="summary.balance < 0">
+                {{ summary.balance | currency:'EUR':'symbol':'1.2-2':'fr' }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
+      }
+    
       <div class="surface-card p-2 sm:p-3 border-round-xl border-1 border-200 shadow-1">
         <p-table
           [value]="accountings"
@@ -105,7 +108,7 @@ import { Accounting, AccountingCreateUpdate, AccountingType, AccountingSummary }
           </ng-template>
         </p-table>
       </div>
-
+    
       <!-- Accounting Dialog -->
       <p-dialog [(visible)]="dialogVisible" [header]="isEditMode ? 'Modifier l\\'écriture' : 'Nouvelle écriture'" [modal]="true" [style]="{ width: '480px' }">
         <form [formGroup]="form" (ngSubmit)="saveAccounting()" class="flex flex-column gap-3 mt-2">
@@ -113,23 +116,23 @@ import { Accounting, AccountingCreateUpdate, AccountingType, AccountingSummary }
             <label class="font-semibold text-sm">Date *</label>
             <input type="date" pInputText formControlName="date" />
           </div>
-
+    
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Description *</label>
             <input type="text" pInputText formControlName="description" placeholder="Ex: Vente boissons..." />
           </div>
-
+    
           <div class="grid">
             <div class="col-12 md:col-6 flex flex-column gap-2">
               <label class="font-semibold text-sm">Type *</label>
-              <p-dropdown [options]="typeOptions" formControlName="type"></p-dropdown>
+              <p-select [options]="typeOptions" formControlName="type"></p-select>
             </div>
             <div class="col-12 md:col-6 flex flex-column gap-2">
               <label class="font-semibold text-sm">Montant (€) *</label>
               <p-inputNumber formControlName="amount" mode="currency" currency="EUR" locale="fr-FR"></p-inputNumber>
             </div>
           </div>
-
+    
           <div class="flex justify-content-end gap-2 mt-4">
             <button pButton type="button" label="Annuler" icon="pi pi-times" [text]="true" (click)="dialogVisible = false"></button>
             <button pButton type="submit" label="Enregistrer" icon="pi pi-check" class="p-button-danger font-bold"></button>
@@ -137,7 +140,7 @@ import { Accounting, AccountingCreateUpdate, AccountingType, AccountingSummary }
         </form>
       </p-dialog>
     </div>
-  `
+    `
 })
 export class AccountingListComponent implements OnInit {
   private accountingService = inject(AccountingService);

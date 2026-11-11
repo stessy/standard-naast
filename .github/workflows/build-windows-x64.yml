@@ -30,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '26'
           architecture: x64
           cache: npm
           cache-dependency-path: standardnaast-ng/package-lock.json

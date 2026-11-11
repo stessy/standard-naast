@@ -1,10 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -23,10 +23,11 @@ import { Team } from '../../core/models/team.model';
     TableModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule,
+    SelectModule,
     DialogModule,
     TagModule
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="matches-page flex flex-column gap-2">
       <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
@@ -67,7 +68,7 @@ import { Team } from '../../core/models/team.model';
               </td>
               <td>{{ match.competitionType }}</td>
               <td>
-                <p-tag [severity]="match.priceType === 'TOP' ? 'warning' : 'secondary'" [value]="match.priceType"></p-tag>
+                <p-tag [severity]="match.priceType === 'TOP' ? 'warn' : 'secondary'" [value]="match.priceType"></p-tag>
               </td>
               <td class="text-center">
                 <div class="flex justify-content-center gap-2">
@@ -90,7 +91,7 @@ import { Team } from '../../core/models/team.model';
             </div>
             <div class="col-12 md:col-6 flex flex-column gap-2">
               <label class="font-semibold text-sm">Adversaire *</label>
-              <p-dropdown [options]="teams" optionLabel="name" optionValue="id" formControlName="opponentId" placeholder="Sélectionner une équipe"></p-dropdown>
+              <p-select [options]="teams" optionLabel="name" optionValue="id" formControlName="opponentId" placeholder="Sélectionner une équipe"></p-select>
             </div>
           </div>
 
@@ -101,22 +102,22 @@ import { Team } from '../../core/models/team.model';
             </div>
             <div class="col-12 md:col-6 flex flex-column gap-2">
               <label class="font-semibold text-sm">Lieu *</label>
-              <p-dropdown [options]="placeOptions" formControlName="place"></p-dropdown>
+              <p-select [options]="placeOptions" formControlName="place"></p-select>
             </div>
           </div>
 
           <div class="grid">
             <div class="col-12 md:col-4 flex flex-column gap-2">
               <label class="font-semibold text-sm">Compétition</label>
-              <p-dropdown [options]="competitionOptions" formControlName="competitionType"></p-dropdown>
+              <p-select [options]="competitionOptions" formControlName="competitionType"></p-select>
             </div>
             <div class="col-12 md:col-4 flex flex-column gap-2">
               <label class="font-semibold text-sm">Type Match</label>
-              <p-dropdown [options]="matchTypeOptions" formControlName="matchType"></p-dropdown>
+              <p-select [options]="matchTypeOptions" formControlName="matchType"></p-select>
             </div>
             <div class="col-12 md:col-4 flex flex-column gap-2">
               <label class="font-semibold text-sm">Tarif</label>
-              <p-dropdown [options]="priceTypeOptions" formControlName="priceType"></p-dropdown>
+              <p-select [options]="priceTypeOptions" formControlName="priceType"></p-select>
             </div>
           </div>
 

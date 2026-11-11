@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CardModule } from 'primeng/card';
@@ -13,13 +13,12 @@ import { AuthService } from '../../core/services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     CardModule,
     InputTextModule,
     PasswordModule,
     ButtonModule
-  ],
+],
   template: `
     <div class="login-container flex align-items-center justify-content-center min-h-screen bg-red-800 p-3">
       <div class="login-card surface-card p-5 shadow-4 border-round-xl w-full max-w-30rem">
@@ -79,6 +78,7 @@ import { AuthService } from '../../core/services/auth.service';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [`
     .login-container {
       background: linear-gradient(135deg, #991b1b 0%, #dc2626 50%, #7f1d1d 100%);

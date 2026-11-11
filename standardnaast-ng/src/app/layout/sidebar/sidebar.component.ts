@@ -1,5 +1,5 @@
-import { Component, Input, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, inject, ChangeDetectionStrategy } from '@angular/core';
+
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../core/services/auth.service';
@@ -14,7 +14,7 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule],
+  imports: [RouterModule, ButtonModule],
   template: `
     <aside class="app-sidebar bg-white border-right-1 border-200 h-full flex flex-column">
       <!-- Nav menu items -->
@@ -43,6 +43,7 @@ interface NavItem {
       </div>
     </aside>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [`
     .app-sidebar {
       width: 240px;

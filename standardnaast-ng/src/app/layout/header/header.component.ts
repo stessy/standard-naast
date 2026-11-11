@@ -1,5 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
@@ -13,12 +13,11 @@ import { SeasonService } from '../../core/services/season.service';
   selector: 'app-header',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     ButtonModule,
     AvatarModule,
     MenuModule
-  ],
+],
   template: `
     <header class="app-header shadow-1">
       <div class="header-container flex align-items-center justify-content-between px-4 py-2">
@@ -59,6 +58,7 @@ import { SeasonService } from '../../core/services/season.service';
       </div>
     </header>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [`
     .app-header {
       position: sticky;

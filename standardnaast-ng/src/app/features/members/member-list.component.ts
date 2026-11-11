@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
@@ -37,7 +37,7 @@ import { Season } from '../../core/models/season.model';
     InputNumberModule,
     IconFieldModule,
     InputIconModule,
-    DropdownModule,
+    SelectModule,
     DialogModule,
     CheckboxModule,
     TagModule,
@@ -341,7 +341,7 @@ import { Season } from '../../core/models/season.model';
                     <td><span class="font-bold">{{ cot.seasonId }}</span></td>
                     <td>{{ cot.datePaiement ? (cot.datePaiement | date:'dd/MM/yyyy') : 'Non payé' }}</td>
                     <td>
-                      <p-tag [severity]="cot.carteMembreEnvoyee ? 'success' : 'warning'" [value]="cot.carteMembreEnvoyee ? 'Oui' : 'Non'"></p-tag>
+                      <p-tag [severity]="cot.carteMembreEnvoyee ? 'success' : 'warn'" [value]="cot.carteMembreEnvoyee ? 'Oui' : 'Non'"></p-tag>
                     </td>
                     <td class="text-center">
                       <button
@@ -447,24 +447,24 @@ import { Season } from '../../core/models/season.model';
         <form [formGroup]="abonnementForm" (ngSubmit)="saveAbonnement()" class="flex flex-column gap-3 mt-2">
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Saison *</label>
-            <p-dropdown
+            <p-select
               [options]="seasons"
               optionLabel="id"
               optionValue="id"
               formControlName="seasonId"
               placeholder="Sélectionner une saison">
-            </p-dropdown>
+            </p-select>
           </div>
 
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Bloc *</label>
-            <p-dropdown
+            <p-select
               [options]="availableBlocs"
               formControlName="bloc"
               [filter]="true"
               placeholder="Choisir un bloc"
               [style]="{ width: '100%' }">
-            </p-dropdown>
+            </p-select>
           </div>
 
           <div class="grid">
@@ -496,13 +496,13 @@ import { Season } from '../../core/models/season.model';
         <form [formGroup]="cotisationForm" (ngSubmit)="saveCotisation()" class="flex flex-column gap-3 mt-2">
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Saison *</label>
-            <p-dropdown
+            <p-select
               [options]="seasons"
               optionLabel="id"
               optionValue="id"
               formControlName="seasonId"
               placeholder="Sélectionner une saison">
-            </p-dropdown>
+            </p-select>
           </div>
 
           <div class="flex flex-column gap-2">
@@ -523,6 +523,7 @@ import { Season } from '../../core/models/season.model';
       </p-dialog>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [`
     :host ::ng-deep .p-datatable-sm .p-datatable-thead > tr > th {
       padding: 0.25rem 0.5rem !important;

@@ -42,7 +42,7 @@ permet de générer l'installateur depuis un Mac, sans machine Windows locale :
    **Standard Naast-1.0.0.exe**.
 
 Le runner `windows-2022` x64 fournit Maven et WiX 3. Le workflow configure
-Temurin JDK 25 x64, Node.js 22 et pnpm, installe les dépendances Angular avec
+Temurin JDK 25 x64, Node.js 26 et pnpm, installe les dépendances Angular avec
 `npm ci` à partir du `package-lock.json` suivi dans Git, puis appelle
 `build-desktop.bat exe`. pnpm sert ensuite à exécuter le script de build existant ;
 aucun lockfile pnpm local non suivi n'est nécessaire.

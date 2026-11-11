@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -10,13 +10,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   selector: 'app-layout',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     HeaderComponent,
     SidebarComponent,
     ToastModule,
     ConfirmDialogModule
-  ],
+],
   template: `
     <div class="layout-wrapper flex flex-column h-screen overflow-hidden">
       <!-- Global Header -->
@@ -37,6 +36,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
       <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [`
     .layout-wrapper {
       background-color: #f8fafc;

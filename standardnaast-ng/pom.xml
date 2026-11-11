@@ -16,8 +16,8 @@
     <description>Frontend Angular + PrimeNG application for Standard de Naast</description>
 
     <properties>
-        <node.version>v24.14.1</node.version>
-        <npm.version>11.2.0</npm.version>
+        <node.version>v26.13.0</node.version>
+        <npm.version>12.2.2</npm.version>
         <frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
     </properties>
 

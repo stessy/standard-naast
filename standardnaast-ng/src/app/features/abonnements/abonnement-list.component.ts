@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Table, TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AbonnementService } from '../../core/services/abonnement.service';
@@ -18,15 +18,15 @@ import { Member } from '../../core/models/member.model';
   selector: 'app-abonnement-list',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     TableModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule,
+    SelectModule,
     DialogModule
-  ],
+],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="abonnements-page flex flex-column gap-2">
       <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
@@ -37,7 +37,7 @@ import { Member } from '../../core/models/member.model';
         <div class="flex flex-wrap align-items-center gap-2">
           <div class="flex align-items-center gap-2">
             <label class="font-semibold text-sm text-700 white-space-nowrap">Saison :</label>
-            <p-dropdown
+            <p-select
               [options]="seasons"
               optionLabel="id"
               optionValue="id"
@@ -47,7 +47,7 @@ import { Member } from '../../core/models/member.model';
               [showClear]="true"
               styleClass="p-inputtext-sm"
               [style]="{ 'min-width': '160px' }">
-            </p-dropdown>
+            </p-select>
           </div>
           <button pButton label="Nouvel Abonnement" icon="pi pi-plus" class="p-button-danger p-button-sm font-bold" (click)="openNewDialog()"></button>
         </div>
@@ -109,7 +109,7 @@ import { Member } from '../../core/models/member.model';
           <div class="grid">
             <div class="col-12 md:col-6 flex flex-column gap-2">
               <label class="font-semibold text-sm">Membre *</label>
-              <p-dropdown
+              <p-select
                 [options]="members"
                 optionLabel="displayName"
                 optionValue="id"
@@ -119,29 +119,29 @@ import { Member } from '../../core/models/member.model';
                 placeholder="Choisir un membre"
                 (onChange)="onDialogMemberChange($event.value)"
                 [style]="{ width: '100%' }">
-              </p-dropdown>
+              </p-select>
             </div>
             <div class="col-12 md:col-6 flex flex-column gap-2">
               <label class="font-semibold text-sm">Saison *</label>
-              <p-dropdown
+              <p-select
                 [options]="seasons"
                 optionLabel="id"
                 optionValue="id"
                 formControlName="seasonId"
                 placeholder="Choisir une saison">
-              </p-dropdown>
+              </p-select>
             </div>
           </div>
 
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Bloc *</label>
-            <p-dropdown
+            <p-select
               [options]="availableBlocs"
               formControlName="bloc"
               [filter]="true"
               placeholder="Choisir un bloc"
               [style]="{ width: '100%' }">
-            </p-dropdown>
+            </p-select>
           </div>
 
           <div class="grid">

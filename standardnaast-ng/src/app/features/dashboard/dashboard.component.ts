@@ -1,5 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+
 import { RouterModule } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -12,12 +12,12 @@ import { CotisationService } from '../../core/services/cotisation.service';
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     CardModule,
     ButtonModule,
     TagModule
-  ],
+],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="dashboard-page flex flex-column gap-4">
       <!-- Welcome Header -->

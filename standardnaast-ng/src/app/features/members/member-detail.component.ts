@@ -1,11 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
@@ -32,7 +32,7 @@ import { Season } from '../../core/models/season.model';
     ButtonModule,
     InputTextModule,
     InputNumberModule,
-    DropdownModule,
+    SelectModule,
     DialogModule,
     CheckboxModule,
     TableModule,
@@ -40,326 +40,313 @@ import { Season } from '../../core/models/season.model';
     TooltipModule
   ],
   template: `
-    <div class="member-detail-page flex flex-column gap-3" *ngIf="member">
-      <!-- Top Bar -->
-      <div class="flex justify-content-between align-items-center bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
-        <div class="flex align-items-center gap-3">
-          <button pButton icon="pi pi-arrow-left" [text]="true" routerLink="/members" class="p-button-rounded p-button-sm"></button>
-          <div>
-            <div class="flex align-items-center gap-2">
-              <h1 class="text-xl font-bold text-900 m-0">{{ member.firstname }} {{ member.name }}</h1>
-              @if (member.memberNumber) {
-                <span class="bg-red-100 text-red-800 font-bold px-2 py-1 border-round text-sm">N° {{ member.memberNumber }}</span>
-              }
-              @if (member.redCard) {
-                <p-tag severity="danger" value="Carte Rouge"></p-tag>
-              } @else {
-                <p-tag severity="success" value="Membre actif"></p-tag>
-              }
-            </div>
-            <span class="text-500 text-xs">{{ member.email || 'Pas d\\'adresse email' }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 1. Données du membre (Formulaire modifiable - Pleine largeur) -->
-      <div class="surface-card p-3 sm:p-4 border-round-xl border-1 border-200 shadow-1 flex flex-column gap-3">
-        <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 pb-2 border-bottom-1 border-200">
-          <div class="flex align-items-center gap-2 flex-wrap">
-            <i class="pi pi-id-card text-red-700 text-xl"></i>
-            <h2 class="text-base sm:text-lg font-bold text-900 m-0">
-              Données du membre
-            </h2>
-          </div>
-          <div class="flex gap-2">
-            <button
-              pButton
-              type="button"
-              label="Modifier"
-              icon="pi pi-check"
-              class="p-button-danger p-button-sm font-bold"
-              [loading]="savingMember"
-              (click)="saveMember()">
-            </button>
-          </div>
-        </div>
-
-        <!-- Formulaire Modifiable -->
-        <form [formGroup]="memberForm" (ngSubmit)="saveMember()" class="flex flex-column gap-2">
-          <!-- Row 1: Nom, Prénom, N° de membre -->
-          <div class="grid -mt-1 -mb-1">
-            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
-              <label for="detail_name" class="font-semibold text-xs text-700">Nom *</label>
-              <input id="detail_name" type="text" pInputText formControlName="name" class="p-inputtext-sm w-full" />
-            </div>
-            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
-              <label for="detail_firstname" class="font-semibold text-xs text-700">Prénom *</label>
-              <input id="detail_firstname" type="text" pInputText formControlName="firstname" class="p-inputtext-sm w-full" />
-            </div>
-            <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
-              <label for="detail_memberNumber" class="font-semibold text-xs text-700">N° de membre</label>
-              <input id="detail_memberNumber" type="number" pInputText formControlName="memberNumber" [readonly]="true" class="p-inputtext-sm w-full surface-100 text-600 font-semibold cursor-not-allowed" />
-            </div>
-          </div>
-
-          <!-- Row 2: Adresse, Code postal, Ville -->
-          <div class="grid -mt-1 -mb-1">
-            <div class="col-12 md:col-6 py-1 flex flex-column gap-1">
-              <label for="detail_address" class="font-semibold text-xs text-700">Adresse</label>
-              <input id="detail_address" type="text" pInputText formControlName="address" class="p-inputtext-sm w-full" />
-            </div>
-            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
-              <label for="detail_postalCode" class="font-semibold text-xs text-700">Code postal</label>
-              <input id="detail_postalCode" type="text" pInputText formControlName="postalCode" class="p-inputtext-sm w-full" />
-            </div>
-            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
-              <label for="detail_city" class="font-semibold text-xs text-700">Ville</label>
-              <input id="detail_city" type="text" pInputText formControlName="city" class="p-inputtext-sm w-full" />
-            </div>
-          </div>
-
-          <!-- Row 3: Email, GSM, Date de naissance, Roboticket ID -->
-          <div class="grid -mt-1 -mb-1">
-            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
-              <label for="detail_email" class="font-semibold text-xs text-700">Email</label>
-              <input id="detail_email" type="email" pInputText formControlName="email" class="p-inputtext-sm w-full" />
-            </div>
-            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
-              <label for="detail_mobilePhone" class="font-semibold text-xs text-700">GSM</label>
-              <input id="detail_mobilePhone" type="text" pInputText formControlName="mobilePhone" class="p-inputtext-sm w-full" />
-            </div>
-            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
-              <label for="detail_birthdate" class="font-semibold text-xs text-700">Date de naissance</label>
-              <input id="detail_birthdate" type="date" pInputText formControlName="birthdate" class="p-inputtext-sm w-full" />
-            </div>
-            <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
-              <label for="detail_roboticketId" class="font-semibold text-xs text-700">Roboticket ID</label>
-              <input id="detail_roboticketId" type="text" pInputText formControlName="roboticketId" class="p-inputtext-sm w-full" />
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <!-- 2. Tableaux Abonnements et Cotisations (sur la même ligne) -->
-      <div class="grid">
-        <!-- Abonnements du membre (Gauche) -->
-        <div class="col-12 lg:col-6">
-          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1 flex flex-column gap-2 h-full">
-            <div class="flex justify-content-between align-items-center pb-2 border-bottom-1 border-200">
+    @if (member) {
+      <div class="member-detail-page flex flex-column gap-3">
+        <!-- Top Bar -->
+        <div class="flex justify-content-between align-items-center bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
+          <div class="flex align-items-center gap-3">
+            <button pButton icon="pi pi-arrow-left" [text]="true" routerLink="/members" class="p-button-rounded p-button-sm"></button>
+            <div>
               <div class="flex align-items-center gap-2">
-                <i class="pi pi-ticket text-red-700 font-bold"></i>
-                <h3 class="text-sm sm:text-base font-bold text-900 m-0">Abonnements du membre</h3>
+                <h1 class="text-xl font-bold text-900 m-0">{{ member.firstname }} {{ member.name }}</h1>
+                @if (member.memberNumber) {
+                  <span class="bg-red-100 text-red-800 font-bold px-2 py-1 border-round text-sm">N° {{ member.memberNumber }}</span>
+                }
+                @if (member.redCard) {
+                  <p-tag severity="danger" value="Carte Rouge"></p-tag>
+                } @else {
+                  <p-tag severity="success" value="Membre actif"></p-tag>
+                }
               </div>
+              <span class="text-500 text-xs">{{ member.email || 'Pas d\\'adresse email' }}</span>
+            </div>
+          </div>
+        </div>
+        <!-- 1. Données du membre (Formulaire modifiable - Pleine largeur) -->
+        <div class="surface-card p-3 sm:p-4 border-round-xl border-1 border-200 shadow-1 flex flex-column gap-3">
+          <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 pb-2 border-bottom-1 border-200">
+            <div class="flex align-items-center gap-2 flex-wrap">
+              <i class="pi pi-id-card text-red-700 text-xl"></i>
+              <h2 class="text-base sm:text-lg font-bold text-900 m-0">
+                Données du membre
+              </h2>
+            </div>
+            <div class="flex gap-2">
               <button
                 pButton
                 type="button"
-                label="Ajouter"
-                icon="pi pi-plus"
-                class="p-button-danger p-button-sm font-semibold"
-                (click)="openAddAbonnementDialog()">
+                label="Modifier"
+                icon="pi pi-check"
+                class="p-button-danger p-button-sm font-bold"
+                [loading]="savingMember"
+                (click)="saveMember()">
               </button>
             </div>
-
-            <p-table
-              [value]="abonnements"
-              sortField="seasonId"
-              [sortOrder]="-1"
-              [scrollable]="true"
-              scrollHeight="220px"
-              [paginator]="true"
-              [rows]="5"
-              [rowsPerPageOptions]="[5, 10, 20]"
-              responsiveLayout="stack"
-              styleClass="p-datatable-sm p-datatable-striped">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th pSortableColumn="seasonId">Saison <p-sortIcon field="seasonId"></p-sortIcon></th>
-                  <th>Bloc</th>
-                  <th>Rang</th>
-                  <th>Place</th>
-                  <th class="text-center" style="width: 3rem"></th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-abo>
-                <tr>
-                  <td><span class="font-bold">{{ abo.seasonId }}</span></td>
-                  <td>{{ abo.bloc || abo.abonnementPrice?.bloc || '-' }}</td>
-                  <td>{{ abo.rang || '-' }}</td>
-                  <td>{{ abo.place || '-' }}</td>
-                  <td class="text-center">
-                    <button
-                      pButton
-                      type="button"
-                      icon="pi pi-trash"
-                      class="p-button-rounded p-button-text p-button-sm p-button-danger"
-                      (click)="confirmDeleteAbonnement(abo)"
-                      pTooltip="Supprimer l'abonnement">
-                    </button>
-                  </td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="5" class="text-center p-3 text-500">Aucun abonnement pour ce membre.</td>
-                </tr>
-              </ng-template>
-            </p-table>
           </div>
-        </div>
-
-        <!-- Cotisations membre (Droite) -->
-        <div class="col-12 lg:col-6">
-          <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1 flex flex-column gap-2 h-full">
-            <div class="flex justify-content-between align-items-center pb-2 border-bottom-1 border-200">
-              <div class="flex align-items-center gap-2">
-                <i class="pi pi-credit-card text-red-700 font-bold"></i>
-                <h3 class="text-sm sm:text-base font-bold text-900 m-0">Cotisations membre</h3>
+          <!-- Formulaire Modifiable -->
+          <form [formGroup]="memberForm" (ngSubmit)="saveMember()" class="flex flex-column gap-2">
+            <!-- Row 1: Nom, Prénom, N° de membre -->
+            <div class="grid -mt-1 -mb-1">
+              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
+                <label for="detail_name" class="font-semibold text-xs text-700">Nom *</label>
+                <input id="detail_name" type="text" pInputText formControlName="name" class="p-inputtext-sm w-full" />
               </div>
-              <button
-                pButton
-                type="button"
-                label="Ajouter"
-                icon="pi pi-plus"
-                class="p-button-danger p-button-sm font-semibold"
-                (click)="openAddCotisationDialog()">
-              </button>
+              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
+                <label for="detail_firstname" class="font-semibold text-xs text-700">Prénom *</label>
+                <input id="detail_firstname" type="text" pInputText formControlName="firstname" class="p-inputtext-sm w-full" />
+              </div>
+              <div class="col-12 md:col-4 py-1 flex flex-column gap-1">
+                <label for="detail_memberNumber" class="font-semibold text-xs text-700">N° de membre</label>
+                <input id="detail_memberNumber" type="number" pInputText formControlName="memberNumber" [readonly]="true" class="p-inputtext-sm w-full surface-100 text-600 font-semibold cursor-not-allowed" />
+              </div>
             </div>
-
-            <p-table
-              [value]="cotisations"
-              sortField="seasonId"
-              [sortOrder]="-1"
-              [scrollable]="true"
-              scrollHeight="220px"
-              [paginator]="true"
-              [rows]="5"
-              [rowsPerPageOptions]="[5, 10, 20]"
-              responsiveLayout="stack"
-              styleClass="p-datatable-sm p-datatable-striped">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th pSortableColumn="seasonId">Saison <p-sortIcon field="seasonId"></p-sortIcon></th>
-                  <th>Date Paiement</th>
-                  <th>Carte envoyée</th>
-                  <th class="text-center" style="width: 3rem"></th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-cot>
-                <tr>
-                  <td><span class="font-bold">{{ cot.seasonId }}</span></td>
-                  <td>{{ cot.datePaiement ? (cot.datePaiement | date:'dd/MM/yyyy') : 'Non payé' }}</td>
-                  <td>
-                    <p-tag [severity]="cot.carteMembreEnvoyee ? 'success' : 'warning'" [value]="cot.carteMembreEnvoyee ? 'Oui' : 'Non'"></p-tag>
-                  </td>
-                  <td class="text-center">
-                    <button
-                      pButton
-                      type="button"
-                      icon="pi pi-trash"
-                      class="p-button-rounded p-button-text p-button-sm p-button-danger"
-                      (click)="confirmDeleteCotisation(cot)"
-                      pTooltip="Supprimer la cotisation">
-                    </button>
-                  </td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="4" class="text-center p-3 text-500">Aucune cotisation pour ce membre.</td>
-                </tr>
-              </ng-template>
-            </p-table>
+            <!-- Row 2: Adresse, Code postal, Ville -->
+            <div class="grid -mt-1 -mb-1">
+              <div class="col-12 md:col-6 py-1 flex flex-column gap-1">
+                <label for="detail_address" class="font-semibold text-xs text-700">Adresse</label>
+                <input id="detail_address" type="text" pInputText formControlName="address" class="p-inputtext-sm w-full" />
+              </div>
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
+                <label for="detail_postalCode" class="font-semibold text-xs text-700">Code postal</label>
+                <input id="detail_postalCode" type="text" pInputText formControlName="postalCode" class="p-inputtext-sm w-full" />
+              </div>
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
+                <label for="detail_city" class="font-semibold text-xs text-700">Ville</label>
+                <input id="detail_city" type="text" pInputText formControlName="city" class="p-inputtext-sm w-full" />
+              </div>
+            </div>
+            <!-- Row 3: Email, GSM, Date de naissance, Roboticket ID -->
+            <div class="grid -mt-1 -mb-1">
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
+                <label for="detail_email" class="font-semibold text-xs text-700">Email</label>
+                <input id="detail_email" type="email" pInputText formControlName="email" class="p-inputtext-sm w-full" />
+              </div>
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
+                <label for="detail_mobilePhone" class="font-semibold text-xs text-700">GSM</label>
+                <input id="detail_mobilePhone" type="text" pInputText formControlName="mobilePhone" class="p-inputtext-sm w-full" />
+              </div>
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
+                <label for="detail_birthdate" class="font-semibold text-xs text-700">Date de naissance</label>
+                <input id="detail_birthdate" type="date" pInputText formControlName="birthdate" class="p-inputtext-sm w-full" />
+              </div>
+              <div class="col-12 md:col-3 py-1 flex flex-column gap-1">
+                <label for="detail_roboticketId" class="font-semibold text-xs text-700">Roboticket ID</label>
+                <input id="detail_roboticketId" type="text" pInputText formControlName="roboticketId" class="p-inputtext-sm w-full" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- 2. Tableaux Abonnements et Cotisations (sur la même ligne) -->
+        <div class="grid">
+          <!-- Abonnements du membre (Gauche) -->
+          <div class="col-12 lg:col-6">
+            <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1 flex flex-column gap-2 h-full">
+              <div class="flex justify-content-between align-items-center pb-2 border-bottom-1 border-200">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi pi-ticket text-red-700 font-bold"></i>
+                  <h3 class="text-sm sm:text-base font-bold text-900 m-0">Abonnements du membre</h3>
+                </div>
+                <button
+                  pButton
+                  type="button"
+                  label="Ajouter"
+                  icon="pi pi-plus"
+                  class="p-button-danger p-button-sm font-semibold"
+                  (click)="openAddAbonnementDialog()">
+                </button>
+              </div>
+              <p-table
+                [value]="abonnements"
+                sortField="seasonId"
+                [sortOrder]="-1"
+                [scrollable]="true"
+                scrollHeight="220px"
+                [paginator]="true"
+                [rows]="5"
+                [rowsPerPageOptions]="[5, 10, 20]"
+                responsiveLayout="stack"
+                styleClass="p-datatable-sm p-datatable-striped">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th pSortableColumn="seasonId">Saison <p-sortIcon field="seasonId"></p-sortIcon></th>
+                    <th>Bloc</th>
+                    <th>Rang</th>
+                    <th>Place</th>
+                    <th class="text-center" style="width: 3rem"></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-abo>
+                  <tr>
+                    <td><span class="font-bold">{{ abo.seasonId }}</span></td>
+                    <td>{{ abo.bloc || abo.abonnementPrice?.bloc || '-' }}</td>
+                    <td>{{ abo.rang || '-' }}</td>
+                    <td>{{ abo.place || '-' }}</td>
+                    <td class="text-center">
+                      <button
+                        pButton
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-text p-button-sm p-button-danger"
+                        (click)="confirmDeleteAbonnement(abo)"
+                        pTooltip="Supprimer l'abonnement">
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="5" class="text-center p-3 text-500">Aucun abonnement pour ce membre.</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+          <!-- Cotisations membre (Droite) -->
+          <div class="col-12 lg:col-6">
+            <div class="surface-card p-3 border-round-xl border-1 border-200 shadow-1 flex flex-column gap-2 h-full">
+              <div class="flex justify-content-between align-items-center pb-2 border-bottom-1 border-200">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi pi-credit-card text-red-700 font-bold"></i>
+                  <h3 class="text-sm sm:text-base font-bold text-900 m-0">Cotisations membre</h3>
+                </div>
+                <button
+                  pButton
+                  type="button"
+                  label="Ajouter"
+                  icon="pi pi-plus"
+                  class="p-button-danger p-button-sm font-semibold"
+                  (click)="openAddCotisationDialog()">
+                </button>
+              </div>
+              <p-table
+                [value]="cotisations"
+                sortField="seasonId"
+                [sortOrder]="-1"
+                [scrollable]="true"
+                scrollHeight="220px"
+                [paginator]="true"
+                [rows]="5"
+                [rowsPerPageOptions]="[5, 10, 20]"
+                responsiveLayout="stack"
+                styleClass="p-datatable-sm p-datatable-striped">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th pSortableColumn="seasonId">Saison <p-sortIcon field="seasonId"></p-sortIcon></th>
+                    <th>Date Paiement</th>
+                    <th>Carte envoyée</th>
+                    <th class="text-center" style="width: 3rem"></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-cot>
+                  <tr>
+                    <td><span class="font-bold">{{ cot.seasonId }}</span></td>
+                    <td>{{ cot.datePaiement ? (cot.datePaiement | date:'dd/MM/yyyy') : 'Non payé' }}</td>
+                    <td>
+                      <p-tag [severity]="cot.carteMembreEnvoyee ? 'success' : 'warn'" [value]="cot.carteMembreEnvoyee ? 'Oui' : 'Non'"></p-tag>
+                    </td>
+                    <td class="text-center">
+                      <button
+                        pButton
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-text p-button-sm p-button-danger"
+                        (click)="confirmDeleteCotisation(cot)"
+                        pTooltip="Supprimer la cotisation">
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="4" class="text-center p-3 text-500">Aucune cotisation pour ce membre.</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
           </div>
         </div>
+        <!-- POPUP : Ajouter un Abonnement au membre -->
+        <p-dialog
+          [(visible)]="addAbonnementDialogVisible"
+          [header]="'Ajouter un abonnement - ' + (member ? member.firstname + ' ' + member.name : '')"
+          [modal]="true"
+          [closable]="true"
+          [dismissableMask]="true"
+          [style]="{ width: '600px' }">
+          <form [formGroup]="abonnementForm" (ngSubmit)="saveAbonnement()" class="flex flex-column gap-3 mt-2">
+            <div class="flex flex-column gap-2">
+              <label class="font-semibold text-sm">Saison *</label>
+              <p-select
+                [options]="seasons"
+                optionLabel="id"
+                optionValue="id"
+                formControlName="seasonId"
+                placeholder="Sélectionner une saison">
+              </p-select>
+            </div>
+            <div class="flex flex-column gap-2">
+              <label class="font-semibold text-sm">Bloc *</label>
+              <p-select
+                [options]="availableBlocs"
+                formControlName="bloc"
+                [filter]="true"
+                placeholder="Choisir un bloc"
+                [style]="{ width: '100%' }">
+              </p-select>
+            </div>
+            <div class="grid">
+              <div class="col-12 md:col-6 flex flex-column gap-2">
+                <label class="font-semibold text-sm">Rang</label>
+                <input type="text" pInputText formControlName="rang" />
+              </div>
+              <div class="col-12 md:col-6 flex flex-column gap-2">
+                <label class="font-semibold text-sm">Place</label>
+                <input type="text" pInputText formControlName="place" />
+              </div>
+            </div>
+            <div class="flex justify-content-end gap-2 mt-4">
+              <button pButton type="button" label="Annuler" icon="pi pi-times" [text]="true" (click)="addAbonnementDialogVisible = false"></button>
+              <button pButton type="submit" label="Enregistrer" icon="pi pi-check" class="p-button-danger font-bold" [loading]="savingAbonnement"></button>
+            </div>
+          </form>
+        </p-dialog>
+        <!-- POPUP : Ajouter une Cotisation au membre -->
+        <p-dialog
+          [(visible)]="addCotisationDialogVisible"
+          [header]="'Ajouter une cotisation - ' + (member ? member.firstname + ' ' + member.name : '')"
+          [modal]="true"
+          [closable]="true"
+          [dismissableMask]="true"
+          [style]="{ width: '480px' }">
+          <form [formGroup]="cotisationForm" (ngSubmit)="saveCotisation()" class="flex flex-column gap-3 mt-2">
+            <div class="flex flex-column gap-2">
+              <label class="font-semibold text-sm">Saison *</label>
+              <p-select
+                [options]="seasons"
+                optionLabel="id"
+                optionValue="id"
+                formControlName="seasonId"
+                placeholder="Sélectionner une saison">
+              </p-select>
+            </div>
+            <div class="flex flex-column gap-2">
+              <label class="font-semibold text-sm">Date de paiement</label>
+              <input type="date" pInputText formControlName="datePaiement" />
+            </div>
+            <div class="flex align-items-center gap-2 mt-2">
+              <p-checkbox formControlName="carteMembreEnvoyee" [binary]="true" inputId="detail_cot_carteMembreEnvoyee"></p-checkbox>
+              <label for="detail_cot_carteMembreEnvoyee" class="text-sm font-medium">Carte membre envoyée</label>
+            </div>
+            <div class="flex justify-content-end gap-2 mt-4">
+              <button pButton type="button" label="Annuler" icon="pi pi-times" [text]="true" (click)="addCotisationDialogVisible = false"></button>
+              <button pButton type="submit" label="Enregistrer" icon="pi pi-check" class="p-button-danger font-bold" [loading]="savingCotisation"></button>
+            </div>
+          </form>
+        </p-dialog>
       </div>
-
-      <!-- POPUP : Ajouter un Abonnement au membre -->
-      <p-dialog
-        [(visible)]="addAbonnementDialogVisible"
-        [header]="'Ajouter un abonnement - ' + (member ? member.firstname + ' ' + member.name : '')"
-        [modal]="true"
-        [closable]="true"
-        [dismissableMask]="true"
-        [style]="{ width: '600px' }">
-        <form [formGroup]="abonnementForm" (ngSubmit)="saveAbonnement()" class="flex flex-column gap-3 mt-2">
-          <div class="flex flex-column gap-2">
-            <label class="font-semibold text-sm">Saison *</label>
-            <p-dropdown
-              [options]="seasons"
-              optionLabel="id"
-              optionValue="id"
-              formControlName="seasonId"
-              placeholder="Sélectionner une saison">
-            </p-dropdown>
-          </div>
-
-          <div class="flex flex-column gap-2">
-            <label class="font-semibold text-sm">Bloc *</label>
-            <p-dropdown
-              [options]="availableBlocs"
-              formControlName="bloc"
-              [filter]="true"
-              placeholder="Choisir un bloc"
-              [style]="{ width: '100%' }">
-            </p-dropdown>
-          </div>
-
-          <div class="grid">
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Rang</label>
-              <input type="text" pInputText formControlName="rang" />
-            </div>
-            <div class="col-12 md:col-6 flex flex-column gap-2">
-              <label class="font-semibold text-sm">Place</label>
-              <input type="text" pInputText formControlName="place" />
-            </div>
-          </div>
-
-          <div class="flex justify-content-end gap-2 mt-4">
-            <button pButton type="button" label="Annuler" icon="pi pi-times" [text]="true" (click)="addAbonnementDialogVisible = false"></button>
-            <button pButton type="submit" label="Enregistrer" icon="pi pi-check" class="p-button-danger font-bold" [loading]="savingAbonnement"></button>
-          </div>
-        </form>
-      </p-dialog>
-
-      <!-- POPUP : Ajouter une Cotisation au membre -->
-      <p-dialog
-        [(visible)]="addCotisationDialogVisible"
-        [header]="'Ajouter une cotisation - ' + (member ? member.firstname + ' ' + member.name : '')"
-        [modal]="true"
-        [closable]="true"
-        [dismissableMask]="true"
-        [style]="{ width: '480px' }">
-        <form [formGroup]="cotisationForm" (ngSubmit)="saveCotisation()" class="flex flex-column gap-3 mt-2">
-          <div class="flex flex-column gap-2">
-            <label class="font-semibold text-sm">Saison *</label>
-            <p-dropdown
-              [options]="seasons"
-              optionLabel="id"
-              optionValue="id"
-              formControlName="seasonId"
-              placeholder="Sélectionner une saison">
-            </p-dropdown>
-          </div>
-
-          <div class="flex flex-column gap-2">
-            <label class="font-semibold text-sm">Date de paiement</label>
-            <input type="date" pInputText formControlName="datePaiement" />
-          </div>
-
-          <div class="flex align-items-center gap-2 mt-2">
-            <p-checkbox formControlName="carteMembreEnvoyee" [binary]="true" inputId="detail_cot_carteMembreEnvoyee"></p-checkbox>
-            <label for="detail_cot_carteMembreEnvoyee" class="text-sm font-medium">Carte membre envoyée</label>
-          </div>
-
-          <div class="flex justify-content-end gap-2 mt-4">
-            <button pButton type="button" label="Annuler" icon="pi pi-times" [text]="true" (click)="addCotisationDialogVisible = false"></button>
-            <button pButton type="submit" label="Enregistrer" icon="pi pi-check" class="p-button-danger font-bold" [loading]="savingCotisation"></button>
-          </div>
-        </form>
-      </p-dialog>
-    </div>
-  `,
+    }
+    `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [`
     :host ::ng-deep .p-datatable-sm .p-datatable-thead > tr > th {
       padding: 0.25rem 0.5rem !important;

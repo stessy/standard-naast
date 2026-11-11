@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -26,6 +26,7 @@ import { Season, SeasonCreateUpdate } from '../../core/models/season.model';
     DialogModule,
     TagModule
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="seasons-page flex flex-column gap-2">
       <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">

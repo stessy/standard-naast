@@ -1,10 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
@@ -24,20 +24,19 @@ import { Member } from '../../core/models/member.model';
   selector: 'app-cotisation-list',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     TableModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule,
+    SelectModule,
     DialogModule,
     CheckboxModule,
     TagModule,
     TooltipModule,
     IconFieldModule,
     InputIconModule
-  ],
+],
   template: `
     <div class="cotisations-container flex flex-column gap-2">
       <!-- Top Header Card -->
@@ -46,7 +45,7 @@ import { Member } from '../../core/models/member.model';
           <!-- Saison Selector -->
           <div class="flex align-items-center gap-2">
             <label class="font-semibold text-sm text-700 white-space-nowrap">Saison :</label>
-            <p-dropdown
+            <p-select
               [options]="seasons"
               optionLabel="id"
               optionValue="id"
@@ -55,7 +54,7 @@ import { Member } from '../../core/models/member.model';
               placeholder="Choisir..."
               styleClass="p-inputtext-sm"
               [style]="{ 'min-width': '130px' }">
-            </p-dropdown>
+            </p-select>
           </div>
 
           <!-- Payé -->
@@ -286,7 +285,7 @@ import { Member } from '../../core/models/member.model';
         <form [formGroup]="form" (ngSubmit)="saveCotisation()" class="flex flex-column gap-3 mt-2">
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Membre *</label>
-            <p-dropdown
+            <p-select
               [options]="members"
               optionLabel="displayName"
               optionValue="id"
@@ -295,19 +294,19 @@ import { Member } from '../../core/models/member.model';
               filterBy="name,firstname,displayName"
               placeholder="Choisir un membre"
               [style]="{ width: '100%' }">
-            </p-dropdown>
+            </p-select>
           </div>
 
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Saison *</label>
-            <p-dropdown
+            <p-select
               [options]="seasons"
               optionLabel="id"
               optionValue="id"
               formControlName="seasonId"
               placeholder="Choisir une saison"
               [style]="{ width: '100%' }">
-            </p-dropdown>
+            </p-select>
           </div>
 
           <div class="flex flex-column gap-2">
@@ -328,6 +327,7 @@ import { Member } from '../../core/models/member.model';
       </p-dialog>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [`
     .cotisations-container {
       height: 100%;

@@ -1,9 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TravelService } from '../../core/services/travel.service';
@@ -22,9 +22,10 @@ import { Member } from '../../core/models/member.model';
     ReactiveFormsModule,
     TableModule,
     ButtonModule,
-    DropdownModule,
+    SelectModule,
     DialogModule
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="travels-page flex flex-column gap-2">
       <div class="flex flex-column sm:flex-row justify-content-between align-items-start sm:align-items-center gap-2 bg-white px-3 py-2 border-round-xl border-1 border-200 shadow-1">
@@ -79,17 +80,17 @@ import { Member } from '../../core/models/member.model';
         <form [formGroup]="form" (ngSubmit)="saveTravel()" class="flex flex-column gap-3 mt-2">
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Match *</label>
-            <p-dropdown [options]="matches" optionLabel="opponentName" optionValue="id" formControlName="matchId" placeholder="Sélectionner un match"></p-dropdown>
+            <p-select [options]="matches" optionLabel="opponentName" optionValue="id" formControlName="matchId" placeholder="Sélectionner un match"></p-select>
           </div>
 
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Passager / Membre *</label>
-            <p-dropdown [options]="members" optionLabel="name" optionValue="id" formControlName="personId" [filter]="true" placeholder="Sélectionner une personne"></p-dropdown>
+            <p-select [options]="members" optionLabel="name" optionValue="id" formControlName="personId" [filter]="true" placeholder="Sélectionner une personne"></p-select>
           </div>
 
           <div class="flex flex-column gap-2">
             <label class="font-semibold text-sm">Tarif Voyage *</label>
-            <p-dropdown [options]="prices" optionLabel="montant" optionValue="id" formControlName="travelPriceId" placeholder="Sélectionner un tarif"></p-dropdown>
+            <p-select [options]="prices" optionLabel="montant" optionValue="id" formControlName="travelPriceId" placeholder="Sélectionner un tarif"></p-select>
           </div>
 
           <div class="flex justify-content-end gap-2 mt-4">
