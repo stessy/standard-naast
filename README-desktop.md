@@ -45,9 +45,10 @@ construit un DMG sur un runner macOS Intel :
 
 1. Pousser le workflow sur la branche par défaut du dépôt.
 2. Ouvrir **Actions → Build macOS Intel installer → Run workflow**.
-3. Sélectionner la branche à construire, puis lancer le workflow.
-4. Après réussite, télécharger l'artifact **standard-naast-macos-intel-dmg**
-   et décompresser le ZIP pour récupérer **Standard Naast-1.0.0.dmg**.
+3. Sélectionner la branche à construire, saisir le tag de release (par exemple
+   `v1.1.0`), puis lancer le workflow.
+4. Après réussite, télécharger **Standard Naast-1.1.0.dmg** dans la release
+   correspondante, ou dans l'artifact **standard-naast-macos-intel-dmg**.
 
 Le workflow utilise `macos-15-intel`, JDK 25 x64, Node.js 26 et pnpm. Il installe
 les dépendances Angular avec `npm ci`, puis exécute `build-desktop.sh dmg`.
@@ -66,10 +67,10 @@ permet de générer l'installateur depuis un Mac, sans machine Windows locale :
 
 1. Pousser le workflow sur la branche par défaut du dépôt.
 2. Ouvrir **Actions → Build Windows x64 installer → Run workflow**.
-3. Sélectionner la branche à construire, puis lancer le workflow.
-4. Après réussite, télécharger l'artifact **standard-naast-windows-x64-exe**
-   dans la page de l'exécution et décompresser le ZIP pour récupérer
-   **Standard Naast-1.0.0.exe**.
+3. Sélectionner la branche à construire, saisir le même tag de release que pour
+   macOS, puis lancer le workflow.
+4. Après réussite, télécharger **Standard Naast-1.1.0.exe** dans la release
+   correspondante, ou dans l'artifact **standard-naast-windows-x64-exe**.
 
 Le runner `windows-2022` x64 fournit Maven et WiX 3. Le workflow configure
 Temurin JDK 25 x64, Node.js 26 et pnpm, installe les dépendances Angular avec
@@ -80,9 +81,25 @@ Le script compile Angular, exécute les tests Java et inclut le runtime Java
 Windows dans l'installateur. Les rapports de tests sont également disponibles
 en artifact, y compris en cas d'échec du build.
 
-Les artifacts sont conservés 14 jours. Ce workflow est manuel : il ne publie
-pas de GitHub Release et ne signe pas l'exécutable. Un avertissement SmartScreen
-reste donc possible. Un test d'installation sur Windows reste nécessaire.
+Les artifacts sont conservés 14 jours. Le workflow ne signe pas l'exécutable :
+un avertissement SmartScreen reste donc possible. Un test d'installation sur
+Windows reste nécessaire.
+
+### Publication des releases
+
+Chaque workflow crée la release si nécessaire et y ajoute son installateur.
+Utiliser un tag de la forme `v1.2.3` correspondant à la version des installateurs
+(actuellement `v1.1.0`). Pour réunir les deux installateurs dans une même
+release, lancer les deux workflows avec le même tag et sur le même commit.
+Si le tag existe déjà sur un autre commit, la publication échoue. Relancer un
+workflow sur le même commit remplace son installateur dans la release.
+
+Le job de publication demande la permission `contents: write` pour le
+`GITHUB_TOKEN` fourni par GitHub Actions ; elle est déclarée dans les workflows.
+Les règles de l'organisation ou de l'entreprise ne doivent pas empêcher cette
+permission. Les éventuelles règles de protection des tags doivent également
+autoriser leur création par GitHub Actions. Une release rendue immuable ne peut
+pas être complétée ou modifiée par un second workflow.
 
 ### Reconstruction locale
 
