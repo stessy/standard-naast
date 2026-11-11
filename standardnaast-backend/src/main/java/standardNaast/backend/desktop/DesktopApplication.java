@@ -96,7 +96,11 @@ public final class DesktopApplication {
                 Files.setPosixFilePermissions(directory,
                         java.nio.file.attribute.PosixFilePermissions.fromString("rwx------"));
             }
-            System.setProperty("LOG_DIR", directory.resolve("logs").toString());
+            var storage = new DesktopBackupStore(directory);
+            Path logs = Path.of(storage.settings().logsDirectory());
+            Files.createDirectories(logs);
+            DesktopBackupStore.requireWritable(logs);
+            System.setProperty("LOG_DIR", logs.toString());
             System.setProperty("java.awt.headless", Boolean.toString(noBrowser));
             if (stop) {
                 stopExisting(directory);
@@ -119,11 +123,25 @@ public final class DesktopApplication {
                     return;
                 }
                 var session = new Session(directory, channel, lock);
-                Runtime.getRuntime().addShutdownHook(new Thread(session::close, "desktop-cleanup"));
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    if (!session.managed) session.close();
+                }, "desktop-cleanup"));
                 try {
                     Files.deleteIfExists(directory.resolve("desktop.properties"));
                     System.setProperty("app.desktop.data-dir", directory.toString().replace('\\', '/'));
                     try {
+                        splash.update("Verification des sauvegardes partagees...");
+                        splash.visible(false);
+                        try {
+                            storage.prepare((versions, dirty) -> {
+                                if (noBrowser) throw new IOException("Conflit ou donnees locales non sauvegardees : lancement interactif requis.");
+                                return DesktopStorage.chooseRestore(versions, dirty);
+                            });
+                        } catch (IOException e) {
+                            org.slf4j.LoggerFactory.getLogger(DesktopApplication.class).error("Restauration partagee impossible", e);
+                            if (noBrowser || !Files.exists(storage.database()) || !DesktopStorage.confirmLocalStart(e)) throw e;
+                        }
+                        splash.visible(true);
                         boolean importing = shouldOfferInitialImport(directory.resolve("standardnaast.sqlite"), noBrowser);
                         if (importing) splash.visible(false);
                         prepareInitialImport(directory, noBrowser);
@@ -133,6 +151,7 @@ public final class DesktopApplication {
                         return;
                     }
                     splash.update("Preparation de la configuration locale...");
+                    storage.markActive();
                     System.setProperty("app.jwt.secret", secret(directory.resolve("jwt.secret")));
                     var application = new SpringApplication(StandardNaastApplication.class);
                     application.addListeners(event -> {
@@ -396,6 +415,7 @@ public final class DesktopApplication {
         private Desktop desktop;
         private java.awt.desktop.AppReopenedListener reopenListener;
         private boolean closed;
+        private volatile boolean managed;
 
         private Session(Path directory, FileChannel channel, FileLock lock) {
             this.directory = directory;
@@ -405,6 +425,16 @@ public final class DesktopApplication {
 
         private void ready(ApplicationReadyEvent event, boolean noBrowser, StartupSplash splash) throws IOException, java.sql.SQLException, AWTException {
             var context = event.getApplicationContext();
+            var factory = context.getBeanFactory();
+            if (!(factory instanceof org.springframework.beans.factory.support.DefaultSingletonBeanRegistry registry)) {
+                throw new IllegalStateException("Gestion du cycle de vie desktop indisponible.");
+            }
+            factory.registerSingleton("desktopSessionCleanup", this);
+            registry.registerDisposableBean("desktopSessionCleanup", this::close);
+            // Retain the single-instance lock until the pool has released the SQLite file.
+            factory.registerDependentBean("desktopSessionCleanup", "dataSource");
+            context.getBean(DesktopStorage.class).activate(!noBrowser);
+            managed = true;
             int port = ((WebServerApplicationContext) context).getWebServer().getPort();
             URI uri = URI.create("http://127.0.0.1:" + port + "/");
             String token = randomToken();
@@ -467,8 +497,14 @@ public final class DesktopApplication {
                     menu.add(open);
                     var quit = new MenuItem("Quitter Standard Naast");
                     quit.addActionListener(action -> new Thread(() -> {
+                        try {
+                            context.getBean(DesktopStorage.class).preflight();
+                        } catch (IOException e) {
+                            org.slf4j.LoggerFactory.getLogger(DesktopApplication.class).error("Sauvegarde indisponible, arret annule", e);
+                            JOptionPane.showMessageDialog(null, e.getMessage(), "Sauvegarde indisponible", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
                         context.close();
-                        close();
                     }, "desktop-stop").start());
                     menu.add(quit);
                     tray = new TrayIcon(image, "Standard Naast", menu);
@@ -477,11 +513,6 @@ public final class DesktopApplication {
                 }
                 browse(uri);
             }
-            context.addApplicationListener(eventToHandle -> {
-                if (eventToHandle instanceof org.springframework.context.event.ContextClosedEvent) {
-                    close();
-                }
-            });
         }
 
         private boolean provision(java.sql.Connection connection) throws java.sql.SQLException {

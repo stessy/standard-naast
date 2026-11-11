@@ -104,7 +104,7 @@ after(async () => {
 });
 
 test('embedded Angular, deep links and API security remain distinct', async () => {
-  for (const route of ['', 'login', 'members/123', 'seasons']) {
+  for (const route of ['', 'login', 'members/123', 'seasons', 'settings']) {
     const response = await fetch(`${baseUrl}${route}`);
     assert.equal(response.status, 200, route);
     assert.match(response.headers.get('content-type'), /text\/html/);

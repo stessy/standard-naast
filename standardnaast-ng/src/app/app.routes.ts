@@ -13,6 +13,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
+        path: 'settings',
+        loadComponent: () => import('./features/settings/desktop-settings.component').then(m => m.DesktopSettingsComponent)
+      },
+      {
         path: '',
         loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
       },

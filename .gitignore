@@ -21,6 +21,10 @@ standardnaast-backend/target/
 /standardnaast-ng/node_modules/
 /standardnaast-ng/node/
 /standardnaast-backend/data/
+/standardnaast-backend/logs/
 /standardnaast-ng/.angular/
 /standardnaast-ng/dist/
 /dist-desktop/
+backup_*
+logs
+.vscode/

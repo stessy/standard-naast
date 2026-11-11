@@ -1,0 +1,42 @@
+project:
+  scope_path: "."
+  loc: 402683
+  languages: [java, javascript]
+  git: true
+  structure:
+    standardnaast-backend: "Existing Spring Boot backend"
+    standardnaast-ng: "Existing Angular client"
+    standardnaast-desktop: "Existing untracked desktop work; preserve"
+    standardnaast-electron: "Legacy Electron path; preserve"
+  notes: "Structural local desktop migration limited to backend, Angular integration and packaging. Coarse whole-repository sizing includes legacy/generated sources."
+assessment:
+  change_type: upgrade
+  rationale: |
+    Retain existing Angular and Spring Boot JVM application, add SQLite LOCAL mode and jpackage distribution.
+    Scope is explicitly bounded to local-mode infrastructure and compatibility, not a whole-repository rewrite.
+  transformations:
+    - fromStack: "Spring Boot JVM, H2/Postgres, Angular, Electron"
+      fromStackVersion: "Reported Boot4.1.1 Java25 Angular19; worker must verify"
+      toStack: "local Angular + Spring Boot JVM + SQLite + jpackage embedded runtime"
+      toStackVersion: "Preserve existing framework versions; Java25 reported, verify"
+  grouping_needed: false
+  deep_planning: false
+progress_sync:
+  run_id: "07F99760-47CD-44D7-957A-A5111F082C5F"
+  grouping_mode: none
+  execution_mode: saved
+  plan_start_time: "2026-10-25T07:50:56Z"
+  plan_completed_time: "2026-10-25T07:53:34Z"
+  execution_start_time: null
+  execution_completed_time: null
+  validation_start_time: null
+  validation_completed_time: null
+  total_phases: 8
+  completed_phases: 0
+  total_modules: 4
+  completed_modules: 0
+  total_tasks: 12
+  completed_tasks: 0
+  total_commits: 116
+  build_verified: false
+  test_verified: false

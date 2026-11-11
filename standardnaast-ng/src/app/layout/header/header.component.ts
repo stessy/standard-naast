@@ -38,6 +38,10 @@ import { SeasonService } from '../../core/services/season.service';
         <!-- User Profile -->
         <div class="flex align-items-center gap-3">
           @if (desktop.available()) {
+            @if (authService.isAdmin()) {
+              <button pButton icon="pi pi-cog" label="Paramètres" routerLink="/settings"
+                      class="p-button-text text-white" [disabled]="desktop.stopping()"></button>
+            }
             <button pButton icon="pi pi-power-off" label="Quitter l'application"
                     class="p-button-text text-white" [disabled]="desktop.stopping()"
                     [loading]="desktop.stopping()" (click)="quitApplication()"></button>
@@ -127,11 +131,11 @@ export class HeaderComponent implements OnInit {
       accept: () => {
         if (this.desktop.stopping()) return;
         this.desktop.quit().subscribe({
-          error: () => {
+          error: (error) => {
             this.messages.add({
               severity: 'error',
               summary: 'Arrêt impossible',
-              detail: "L'arrêt n'a pas pu être confirmé. Réessayez ou utilisez le lanceur Quitter Standard Naast."
+              detail: error.error?.detail ?? "L'arrêt n'a pas pu être confirmé. Vérifiez le dossier de sauvegarde et réessayez."
             });
           }
         });

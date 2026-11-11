@@ -168,9 +168,81 @@ protection. Les API métier conservent leur authentification JWT.
 | Linux | `~/.local/share/standardnaast` |
 
 Ce dossier contient `standardnaast.sqlite`, `jwt.secret`, les journaux dans
-`logs/` et les fichiers de coordination de l'instance. Il est indépendant du
+`logs/` par défaut, les paramètres locaux et les fichiers de coordination de l'instance. Il est indépendant du
 dossier d'installation et doit être conservé lors des mises à jour.
 Le secret JWT est propre à l'installation et persiste entre les lancements.
+
+### Sauvegardes partagées et répertoire des logs
+
+En mode desktop, un administrateur peut ouvrir **Paramètres** dans l'en-tête
+Angular et choisir les répertoires avec **Parcourir…**, via le sélecteur natif
+macOS ou Windows.
+Le sélecteur s'affiche au premier plan au-dessus du navigateur. Pendant la
+sélection, les boutons de paramètres sont désactivés ; choisir un dossier ou
+fermer/annuler le dialogue les réactive. Une seule sélection peut être ouverte
+à la fois, même avec plusieurs onglets.
+
+Les chemins sont propres à chaque ordinateur : sélectionner
+sur chacun le dossier local correspondant au même dossier **Google Drive**.
+Choisir un dossier distinct des données locales, idéalement disponible hors
+connexion. L'application n'accède pas à l'API Google Drive : la synchronisation
+est assurée par le client Google Drive installé sur chaque machine.
+
+La base **active reste locale**, jamais directement dans Google Drive.
+Une fois le répertoire configuré, chaque arrêt propre (bouton Angular, menu
+de notification, lanceur d'arrêt ou arrêt normal du processus) crée une archive
+`standardnaast-<date>-<identifiant>.snbak`. Elle contient un instantané SQLite
+cohérent, y compris les transactions validées en mode WAL, un manifeste,
+une somme SHA-256 et les identifiants des versions dont elle est issue.
+Les requêtes sont arrêtées avant la copie finale. L'archive est vérifiée
+(somme de contrôle, intégrité SQLite, clés étrangères) puis publiée par renommage
+atomique. Les fichiers temporaires `.partial` ne sont pas des sauvegardes.
+Toutes les anciennes versions sont conservées ; aucune purge automatique.
+Le système de fichiers doit permettre le renommage atomique ; sinon la sauvegarde
+échoue explicitement et la base locale reste conservée.
+
+Au démarrage, **avant Spring/Liquibase et avant l'import H2**, l'application
+restaure automatiquement la dernière version visible et valide, si la base
+locale a été sauvegardée proprement. Une version descendante a priorité sur son
+ancêtre, même si les horloges des ordinateurs diffèrent.
+Si la dernière version est déjà celle de la base locale, elle n'est pas recopiée.
+Avant tout remplacement, une copie SQLite locale est conservée sous `recovery/`.
+Elle ne contient pas le secret JWT ni les paramètres propres à l'installation.
+
+En cas de fermeture anormale, de modification externe de la base ou d'échec de
+sauvegarde, les données locales ne sont pas remplacées silencieusement par une
+nouvelle version partagée : un dialogue propose la restauration, la conservation
+de la base locale ou l'annulation. Si aucune nouvelle version n'existe, les
+données locales sont conservées. Des sessions simultanées ou hors connexion
+créent des branches distinctes, sans écraser les archives de l'autre ordinateur.
+Au prochain démarrage, un choix explicite est demandé ; l'arrêt suivant enregistre
+ce choix comme résolution des versions visibles. Ce mécanisme ne fusionne pas
+les données métier. Configurer pour la première fois un dossier déjà alimenté
+conserve également la base locale comme branche distincte.
+
+**Une seule application à la fois.** Après avoir quitté, attendre la fin de la
+synchronisation Google Drive avant de lancer sur l'autre ordinateur.
+L'application ne peut pas savoir si une sauvegarde non encore synchronisée existe
+ailleurs, ni garantir un verrou partagé via Google Drive. Les archives sont
+compressées, **pas chiffrées** : protéger les accès au dossier partagé.
+
+Un dossier indisponible ou une archive invalide produit une erreur explicite.
+Avec une base locale existante, le démarrage interactif permet de l'ouvrir pour
+corriger les paramètres sans prétendre avoir restauré la sauvegarde.
+Le bouton Quitter et le lanceur d'arrêt refusent l'arrêt si le dossier est déjà
+indisponible. En cas d'échec pendant la copie finale, les logs et une fenêtre
+native signalent que la base locale reste à récupérer : ne pas basculer sur
+l'autre ordinateur. Un arrêt forcé ou une coupure de courant ne peuvent pas
+garantir une sauvegarde. En mode `--desktop-no-browser`, une restauration
+nécessitant un choix est refusée plutôt que décidée automatiquement.
+
+Le nouveau dossier des **logs** prend effet au prochain démarrage ; les anciens
+fichiers ne sont pas déplacés. La rotation existante (14 jours, 100 Mo au total)
+reste inchangée. Si les logs sont aussi synchronisés, utiliser un sous-dossier
+différent par ordinateur pour éviter que deux processus écrivent le même fichier.
+Les paramètres sont conservés dans `storage-settings.properties` dans le dossier
+local. Un répertoire de sauvegarde vide désactive les sauvegardes partagées ;
+un chemin de logs vide lors de l'enregistrement rétablit le dossier par défaut.
 
 SQLite dispose d'un changelog Liquibase distinct. Les identifiants utilisent
 `INTEGER PRIMARY KEY AUTOINCREMENT` avec des overrides ORM limités au profil
