@@ -38,6 +38,27 @@ build-desktop.bat exe
 Les installateurs Windows exigent aussi une version des outils WiX compatible
 avec le JDK utilisé. Les distributions sont générées dans `dist-desktop`.
 
+### Build macOS Intel avec GitHub Actions
+
+Le workflow [Build macOS Intel installer](.github/workflows/build-macos-intel.yml)
+construit un DMG sur un runner macOS Intel :
+
+1. Pousser le workflow sur la branche par défaut du dépôt.
+2. Ouvrir **Actions → Build macOS Intel installer → Run workflow**.
+3. Sélectionner la branche à construire, puis lancer le workflow.
+4. Après réussite, télécharger l'artifact **standard-naast-macos-intel-dmg**
+   et décompresser le ZIP pour récupérer **Standard Naast-1.0.0.dmg**.
+
+Le workflow utilise `macos-15-intel`, JDK 25 x64, Node.js 26 et pnpm. Il installe
+les dépendances Angular avec `npm ci`, puis exécute `build-desktop.sh dmg`.
+Le DMG contient le runtime Java Intel ; les rapports de tests Java sont aussi
+disponibles en artifact. Les artifacts sont conservés 14 jours.
+
+Le workflow ne signe ni ne notarise l'application. macOS peut donc afficher un
+avertissement de sécurité ; un test d'installation sur Mac Intel reste nécessaire.
+Pour un dépôt privé, l'utilisation du runner peut être facturée selon l'offre
+et le quota disponibles.
+
 ### Build Windows x64 avec GitHub Actions
 
 Le workflow [Build Windows x64 installer](.github/workflows/build-windows-x64.yml)
