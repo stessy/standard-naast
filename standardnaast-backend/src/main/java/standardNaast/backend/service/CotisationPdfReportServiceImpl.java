@@ -29,9 +29,7 @@ import standardNaast.backend.repository.SeasonRepository;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -75,25 +73,13 @@ public class CotisationPdfReportServiceImpl implements CotisationPdfReportServic
                     .orElseThrow(() -> new ResourceNotFoundException("Saison non trouvée avec l'identifiant : " + currentSeasonId));
         }
 
-        List<Season> allSeasons = this.seasonRepository.findAll();
-        List<Season> europeanCycleSeasons = this.getCotisationsEuropeanSeasons(targetSeason, allSeasons);
+        List<PersonCotisation> cotisations = this.personCotisationRepository
+                .findBySeasonIdIn(Collections.singleton(targetSeason.getId()));
 
-        Set<String> cycleSeasonIds = europeanCycleSeasons.stream()
-                .map(Season::getId)
-                .collect(Collectors.toSet());
-
-        Set<String> allInvolvedSeasonIds = new HashSet<>(cycleSeasonIds);
-        allInvolvedSeasonIds.add(targetSeason.getId());
-
-        List<PersonCotisation> cotisations = this.personCotisationRepository.findBySeasonIdIn(allInvolvedSeasonIds);
-
-        // Map: memberId -> Set of season IDs where member paid cotisation
-        Map<Long, Set<String>> paidSeasonsByMember = new HashMap<>();
+        Set<Long> paidMemberIds = new HashSet<>();
         for (PersonCotisation pc : cotisations) {
             if (pc.getPerson() != null && pc.getSeason() != null) {
-                paidSeasonsByMember
-                        .computeIfAbsent(pc.getPerson().getId(), k -> new HashSet<>())
-                        .add(pc.getSeason().getId());
+                paidMemberIds.add(pc.getPerson().getId());
             }
         }
 
@@ -106,22 +92,7 @@ public class CotisationPdfReportServiceImpl implements CotisationPdfReportServic
             row.name = StringUtils.defaultString(member.getName());
             row.firstname = StringUtils.defaultString(member.getFirstname());
 
-            Set<String> memberPaidSeasons = paidSeasonsByMember.getOrDefault(member.getId(), Collections.emptySet());
-
-            int bonusCounter = 0;
-            if (memberPaidSeasons.contains(targetSeason.getId())) {
-                row.paid = "P";
-                bonusCounter++;
-            } else {
-                row.paid = "";
-            }
-
-            for (Season s : europeanCycleSeasons) {
-                if (!s.getId().equals(targetSeason.getId()) && memberPaidSeasons.contains(s.getId())) {
-                    bonusCounter++;
-                }
-            }
-            row.bonus = bonusCounter > 0 ? String.valueOf(bonusCounter) : "";
+            row.paid = paidMemberIds.contains(member.getId()) ? "P" : "";
             rows.add(row);
         }
 
@@ -129,31 +100,6 @@ public class CotisationPdfReportServiceImpl implements CotisationPdfReportServic
         rows.sort(Comparator.comparing(r -> r.memberNumber != null ? r.memberNumber : Long.MAX_VALUE));
 
         return this.buildPdfDocument(targetSeason.getId(), rows);
-    }
-
-    private List<Season> getCotisationsEuropeanSeasons(Season targetSeason, List<Season> allSeasons) {
-        List<Season> sorted = new ArrayList<>(allSeasons);
-        sorted.sort(Comparator.comparing(Season::getDateStart).reversed());
-
-        LocalDate refDate = targetSeason.getDateStart() != null ? targetSeason.getDateStart() : LocalDate.now();
-        List<Season> subSeasonList = new ArrayList<>();
-        boolean passedOnce = false;
-
-        for (Season season : sorted) {
-            if (refDate.compareTo(season.getDateStart()) >= 0) {
-                if (Boolean.TRUE.equals(season.getEuropean())) {
-                    if (passedOnce) {
-                        break;
-                    } else {
-                        subSeasonList.add(season);
-                    }
-                } else {
-                    subSeasonList.add(season);
-                }
-                passedOnce = true;
-            }
-        }
-        return subSeasonList;
     }
 
     private byte[] buildPdfDocument(String seasonId, List<PersonCotisationRow> rows) {
@@ -170,18 +116,18 @@ public class CotisationPdfReportServiceImpl implements CotisationPdfReportServic
             Font comicBold8Black = this.getComicBoldFont(8F, BLACK_COLOR);
             Font comicBold12Blue = this.getComicBoldFont(12F, BLUE_COLOR);
 
-            PdfPTable mainTable = new PdfPTable(108);
+            PdfPTable mainTable = new PdfPTable(100);
             mainTable.setWidthPercentage(100);
 
             // Banner Image
             Image logoImage = this.getLogoImage();
             PdfPCell cell = new PdfPCell();
-            cell.setColspan(20);
+            cell.setColspan(18);
             cell.setBorder(0);
             mainTable.addCell(cell);
 
             cell = new PdfPCell();
-            cell.setColspan(68);
+            cell.setColspan(64);
             if (logoImage != null) {
                 cell.setImage(logoImage);
             }
@@ -189,28 +135,28 @@ public class CotisationPdfReportServiceImpl implements CotisationPdfReportServic
             mainTable.addCell(cell);
 
             cell = new PdfPCell();
-            cell.setColspan(20);
+            cell.setColspan(18);
             cell.setBorder(0);
             mainTable.addCell(cell);
 
             // Title
             cell = new PdfPCell(new Paragraph("Cotisations Saison " + seasonId, comicBold24));
-            cell.setColspan(108);
+            cell.setColspan(100);
             cell.setBorder(0);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             mainTable.addCell(cell);
 
             // Spacer
             cell = new PdfPCell();
-            cell.setColspan(108);
+            cell.setColspan(100);
             cell.setBorder(0);
             cell.setFixedHeight(5F);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             mainTable.addCell(cell);
 
             // Headers (repeated 4 times)
-            String[] headerNames = {"N°", "Noms", "C", "P"};
-            int[] colspan = {4, 19, 2, 2};
+            String[] headerNames = {"N°", "Noms", "C"};
+            int[] colspan = {4, 19, 2};
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < headerNames.length; j++) {
                     PdfPCell headerCell = new PdfPCell(new Paragraph(headerNames[j], comicBold12Black));
@@ -226,7 +172,6 @@ public class CotisationPdfReportServiceImpl implements CotisationPdfReportServic
                 String fullName = (r.name + " " + r.firstname).trim();
                 this.writeCell(mainTable, fullName, 19, Element.ALIGN_LEFT, comicBold8Black);
                 this.writeCell(mainTable, r.paid, 2, Element.ALIGN_CENTER, comicBold12Blue);
-                this.writeCell(mainTable, r.bonus, 2, Element.ALIGN_CENTER, comicBold12Blue);
             }
 
             // Modulo padding to complete 4 columns per row
@@ -234,7 +179,6 @@ public class CotisationPdfReportServiceImpl implements CotisationPdfReportServic
             for (int i = 0; i < resteModulo; i++) {
                 this.writeCell(mainTable, "", 4, Element.ALIGN_CENTER, comicBold12Green);
                 this.writeCell(mainTable, "", 19, Element.ALIGN_LEFT, comicBold8Black);
-                this.writeCell(mainTable, "", 2, Element.ALIGN_CENTER, comicBold12Blue);
                 this.writeCell(mainTable, "", 2, Element.ALIGN_CENTER, comicBold12Blue);
             }
 
@@ -289,6 +233,5 @@ public class CotisationPdfReportServiceImpl implements CotisationPdfReportServic
         String name;
         String firstname;
         String paid;
-        String bonus;
     }
 }
