@@ -32,9 +32,6 @@
             "scripts": []
           },
           "configurations": {
-            "electron": {
-              "baseHref": "./index.html"
-            },
             "production": {
               "fileReplacements": [
                 {

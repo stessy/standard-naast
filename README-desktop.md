@@ -77,8 +77,8 @@ Le build compile Angular en production, exécute les tests Java et copie
 Le profil Maven `desktop` suppose que le build Angular a déjà réussi : utiliser
 les scripts pour une distribution complète.
 
-Les anciennes sources Electron et les profils H2/PostgreSQL sont conservés pour
-la transition, mais les nouveaux scripts desktop ne les utilisent plus.
+L'ancienne distribution Electron a été supprimée. Les profils H2/PostgreSQL
+restent disponibles pour la transition ; les scripts desktop utilisent SQLite.
 
 ### Tests de migration
 

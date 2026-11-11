@@ -24,10 +24,3 @@ standardnaast-backend/target/
 /standardnaast-ng/.angular/
 /standardnaast-ng/dist/
 /dist-desktop/
-/standardnaast-electron/node_modules/
-/standardnaast-electron/dist-package/
-/standardnaast-electron/.tmp-binaries/
-/standardnaast-electron/ui/
-/standardnaast-electron/resources/backend/
-/standardnaast-electron/resources/jre/
-/standardnaast-electron/resources/postgres/
